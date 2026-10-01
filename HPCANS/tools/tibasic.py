@@ -738,6 +738,9 @@ class Machine:
             j += 1
         raise TIError(f"{name}:{i}: ERR:SYNTAX no matching End")
 
+    def after_return(self, name):
+        """Hook: program `name` just returned to self.frames[-1] (tools/poison.py uses it)."""
+
     def run(self, actions, start="HPCANS"):
         self.actions, self.ai = list(actions), 0
         self.frames = [Frame(start)]
@@ -754,6 +757,7 @@ class Machine:
                     if f.blocks:
                         self.problems.append(f"{f.name}: program ended inside a block")
                     self.frames.pop()
+                    self.after_return(f.name)
                     continue
                 self.covered.add((f.name, f.pc))
                 self.exec(f)
@@ -897,6 +901,7 @@ class Machine:
             if f.blocks:
                 self.problems.append(f"{self.where()}: Return inside a block")
             self.frames.pop()
+            self.after_return(f.name)
             return
         elif k == "Stop":
             raise Halt(("stop", None))
