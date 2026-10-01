@@ -485,7 +485,7 @@ def rand_ivl(rng, inf_ok=True):
         if v == INF:
             return "I"
         if v == -INF:
-            return rng.choice(["-I", "⁻I"])
+            return rng.choice(["-I", "⁻I", "I"])  # HAIVL: an I typed at the left end means -INF
         return typed(rng, v)
 
     a, b = tx(lo), tx(hi)
@@ -493,7 +493,8 @@ def rand_ivl(rng, inf_ok=True):
         a = "0"
     if b == "":
         b = "0"
-    acts = [t(a), t(b)] if rng.random() < 0.9 else [t(b), t(a)]  # ends typed in the wrong order
+    finite = lo != -INF and hi != INF
+    acts = [t(a), t(b)] if (rng.random() < 0.9 or not finite) else [t(b), t(a)]  # finite ends: either order
     if not (lo == -INF and hi == INF):
         acts.append(f"k{br}")
     return [lo, hi, lc, rc], acts

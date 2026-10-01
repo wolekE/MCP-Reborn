@@ -140,32 +140,33 @@ Goto F
 Lbl 6
 ClrHome
 Disp Str4+"(X)=TOP/BOTTOM"
-Disp "TOP=AX²+BX+C"
-Disp "EX: X-3 GIVES A=0 B=1 C=-3"
+Disp "EX: A TOP OF X-3 GIVES"
+Disp "  X² 0, X 1, NUMBER -3"
 Disp "NO NUMBER IN FRONT? ENTER"
 Disp "NO X² OR X TERM? TYPE 0"
-Input "A (X² COEF)=",Str8
+Input "TOP X² COEF=",Str8
 prgmHANUM
 θ+Z→ʟFNC(4)
-Input "B (X COEF)=",Str8
+Input "TOP X COEF=",Str8
 prgmHANUM
 θ+Z→ʟFNC(5)
-Input "C (NUMBER ALONE)=",Str8
+Input "TOP NUMBER=",Str8
 prgmHANUM
 θ→ʟFNC(6)
 ClrHome
-Disp "BOTTOM=DX²+EX+F"
-Disp "EX: X² GIVES D=1 E=0 F=0"
+Disp "NOW THE BOTTOM."
+Disp "EX: A BOTTOM OF X² GIVES"
+Disp "  X² 1, X 0, NUMBER 0"
 Disp "NO NUMBER IN FRONT? ENTER"
 Disp "NO X² OR X TERM? TYPE 0"
 Lbl 6B
-Input "D (X² COEF)=",Str8
+Input "BOTTOM X² COEF=",Str8
 prgmHANUM
 θ+Z→ʟFNC(9)
-Input "E (X COEF)=",Str8
+Input "BOTTOM X COEF=",Str8
 prgmHANUM
 θ+Z→ʟFNC(10)
-Input "F (NUMBER ALONE)=",Str8
+Input "BOTTOM NUMBER=",Str8
 prgmHANUM
 θ→ʟFNC(11)
 If ʟFNC(9)=0 and ʟFNC(10)=0 and ʟFNC(11)=0

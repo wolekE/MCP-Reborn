@@ -34,6 +34,10 @@ If ʟFNC(1)=1
 Return
 "√("+Str5+")"→Str5
 ʟFNC(12)→P
+P→θ
+prgmHAFRAC
+If Z
+X/Y→P
 ʟFNC(13)→Q
 If P=0
 ""→Str5
