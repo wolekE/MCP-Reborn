@@ -23,7 +23,8 @@ and result. Only HAANS/HAPAGE/HAOUT touch W (the answer-screen row).
 * **HADIG** — Y (integer ≥ 0) → Str8 digits. (Used by HAFRAC.)
 * **HANUM** — Str8 (text the student typed with `Input "…",Str8`) → θ.
   Empty → θ = 0 and Z = 1 (so a caller can apply a default); otherwise Z = 0.
-  A leading subtraction minus is turned into the (-) sign; `-` or `(-)` alone means -1;
+  A subtraction minus typed first or right after `(`, an operator, `√(`, `³√(` or `,` is turned into
+  the (-) sign (so `-3`, `2*-3`, `(-1/2)` all work); `-` or `(-)` alone means -1;
   any `I` in the text means infinity (±1ᴇ99). Pattern:
   ```
   Input "B (X COEF)=",Str8
@@ -41,7 +42,9 @@ and result. Only HAANS/HAPAGE/HAOUT touch W (the answer-screen row).
   θ = number of choices → shows it on row 10 and returns θ = chosen digit (0 = CLEAR).
   Always treat 0 like HOME.
 * **HAROOT** — ʟQC = {a,b,c} → real roots of ax²+bx+c in ʟRT (sorted), θ = count
-  (0, 1, 2; −1 if 0 = 0 for every x). Works for a = 0 (linear).
+  (0, 1, 2; −1 if 0 = 0 for every x). Works for a = 0 (linear). Coefficients smaller than
+  1ᴇ-12 × the largest are treated as 0 (rounding residue), and the roots use the stable
+  formula q = −(b + sign(b)√disc)/2, roots q/a and c/q.
 
 ## Mid
 
@@ -61,13 +64,13 @@ and result. Only HAANS/HAPAGE/HAOUT touch W (the answer-screen row).
     `(-INF,-1)U(-1,5]`, `[-3,3]`, `NO REAL NUMBERS`.
 * **HAIVL** — asks the student for an interval. Str9 = heading (e.g.
   `"ORIGINAL DOMAIN OF F:"`) → S, T (ends; ±1ᴇ99 for infinity), U, V (closed 1/0).
-  Clears the screen itself.
+  Clears the screen itself. CLEAR at the bracket question is ignored (it asks again).
 
 ## High
 
 * **HAPTS** — Str9 = heading → asks for corner/end points of a graph (how many, then
   X and Y of each) and whether the end dots are solid → ʟHX, ʟHY (sorted by x),
-  ʟHC = {left closed, right closed}.
+  ʟHC = {left closed, right closed}. The count is asked again until it is a whole number 1–50.
 * **HAABCK** — Str9 = template line (e.g. `"Y=A*F(BX+C)+K"`) → asks A (front),
   B (x coefficient, not 0), C (inside number), K (end number); ENTER = 1 for A and B,
   0 for C and K → N=A, O=B, P=C, Q=K.

@@ -372,19 +372,6 @@
   ]
  },
  {
-  "item_id": "ICAN-04",
-  "what_question_gives": "Section 4 I Can (also S4-ICAN): HLT, find inverse incl. rational, verify by composition",
-  "solver_path": "All four HAINV choices",
-  "student_enters": "see the rows above",
-  "calculator_shows": "see the rows above",
-  "expected_answer": "I Can item",
-  "test_ids": [
-   "EX-4.1b",
-   "PR-4.3",
-   "PR-4.5"
-  ]
- },
- {
   "item_id": "ICAN-08",
   "what_question_gives": "Find the inverse of a function (including rational inverses)",
   "solver_path": "3 → 1:FIND F⁻¹(X), 7 shapes",
@@ -621,6 +608,19 @@
   "test_ids": [
    "CRAM-8f",
    "FIG-4-GRAPHS"
+  ]
+ },
+ {
+  "item_id": "S4-ICAN",
+  "what_question_gives": "Section 4 I Can (also S4-ICAN): HLT, find inverse incl. rational, verify by composition",
+  "solver_path": "All four HAINV choices",
+  "student_enters": "see the rows above",
+  "calculator_shows": "see the rows above",
+  "expected_answer": "I Can item",
+  "test_ids": [
+   "EX-4.1b",
+   "PR-4.3",
+   "PR-4.5"
   ]
  }
 ]

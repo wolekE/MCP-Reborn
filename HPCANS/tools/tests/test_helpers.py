@@ -460,7 +460,7 @@ HCASES = [
          + ["{1,0,0,0,0,1,0,0,0,0,0,1,0}→ʟF3"] + show_str(3, "BAD") + dom_of(3, "BAD D"),
          expect=["ROOT X³=0", "X³ DOM=1", "X³ BAND=0", "BAD=", "BAD D=NO REAL NUMBERS"], official="(extra)"),
     dict(id="EXTRA-helpers-24", source="0 graph points is asked again; √(3x-1) at x=1/3 is 0, not an error",
-         actions=["k7", "t:0", "k1"] + typed_graph([(0, 1), (2, 3)]) + ["k5", "t:", "t:3", "t:-1", "t:"],
+         actions=["k7", "t:0"] + typed_graph([(0, 1), (2, 3)]) + ["k5", "t:", "t:3", "t:-1", "t:"],
          driver=enter(1, "F") + enter(2, "G") + ANS + dom_of(1) + show_val(1, "1", "F(1)") + show_val(2, "1/3", "G(1/3)"),
          expect=["D=[0,2]", "F(1)=2", "G(1/3)=0"], official="(extra)"),
     dict(id="EXTRA-helpers-25", source="composition domains: 1/(x-3) of √x; graph f of 2x+1; words [0,4] of x²",

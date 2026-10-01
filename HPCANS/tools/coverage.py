@@ -38,6 +38,8 @@ def main():
     inv = json.loads((ROOT / "audit" / "inventory_raw.json").read_text(encoding="utf-8"))
     items, seen = [], set()
     for it in inv["items"] + inv.get("critic_items", []):
+        if it["kind"] == "ican" and it["section"][:2] in ("1 ", "2 ", "3 ", "4 ", "5 ", "6 ", "7 "):
+            continue  # the same text as the S#-ICAN rule items; their ids collide with the 0.4 list
         key = (it["id"], it["statement"][:60])
         if key in seen:
             continue

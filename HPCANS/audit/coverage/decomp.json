@@ -290,23 +290,6 @@
   ]
  },
  {
-  "item_id": "ICAN-03",
-  "what_question_gives": "Section-3 I Can sentence (p8-12 id; the critic renamed it S3-ICAN): decompose (no graphing)",
-  "expected_answer": "",
-  "solver_path": "7:DECOMPOSE H(X)",
-  "student_enters": "STUFF + outside numbers (no graph needed)",
-  "calculator_shows": "G(X)/F(X) answers",
-  "test_ids": [
-   "EX-3.1",
-   "EX-3.2",
-   "EX-3.3a",
-   "PR-3.1",
-   "PR-3.2",
-   "PR-3.3",
-   "PR-3.4"
-  ]
- },
- {
   "item_id": "S3-ICAN",
   "what_question_gives": "same sentence as ICAN-03 (critic id)",
   "expected_answer": "",

@@ -2,9 +2,12 @@ ClrHome
 Disp Str9
 Disp "TYPE EACH CORNER AND END"
 Disp "POINT, LEFT TO RIGHT."
+0→N
+Repeat N≥1 and N≤50 and not(fPart(N))
 Input "HOW MANY POINTS=",Str8
 prgmHANUM
 θ→N
+End
 {0}→ʟHX
 {0}→ʟHY
 N→dim(ʟHX)

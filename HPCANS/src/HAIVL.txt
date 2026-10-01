@@ -20,8 +20,11 @@ Then
 Disp "BRACKETS?"
 Disp "1:[ ]   2:[ )"
 Disp "3:( ]   4:( )"
+0→θ
+Repeat θ
 4→θ
 prgmHAKEY
+End
 (θ≤2)→U
 (θ=0 or θ=1 or θ=3)→V
 End

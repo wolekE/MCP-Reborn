@@ -549,6 +549,8 @@ class Machine:
                 self.reals.pop(var[1], None)
             else:
                 self.reals[var[1]] = old
+            if not out:
+                raise TIError(f"{self.where()}: ERR:INVALID DIM seq( gives no elements")
             return out
         v = [self.ev(a) for a in args]
         if f == "abs(":
@@ -604,6 +606,8 @@ class Machine:
         if f == "augment(":
             if not (isinstance(v[0], list) and isinstance(v[1], list)):
                 raise TIError(f"{self.where()}: ERR:DATA TYPE augment(")
+            if not v[0] or not v[1]:
+                raise TIError(f"{self.where()}: ERR:INVALID DIM augment( of an empty list")
             return v[0] + v[1]
         if f == "length(":
             if not isinstance(v[0], TIStr):
@@ -664,7 +668,7 @@ class Machine:
                 lst[int(i) - 1] = self.real(val)
         elif k == "dim":
             n = self.real(val)
-            if not is_int(n) or n < 0 or n > 999:
+            if not is_int(n) or n < 1 or n > 999:
                 raise TIError(f"{self.where()}: ERR:INVALID DIM")
             lst = self.lists.get(tgt[1], [])
             n = int(n)
@@ -892,6 +896,8 @@ class Machine:
         elif k == "SortA":
             names = st[1]
             base = self.getvar("lvar", names[0])
+            if not base:
+                raise TIError(f"{self.where()}: ERR:INVALID DIM SortA( of an empty list")
             order = sorted(range(len(base)), key=lambda j: base[j])
             for nm in names:
                 lst = self.getvar("lvar", nm)

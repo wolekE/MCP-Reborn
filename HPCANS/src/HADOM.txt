@@ -250,6 +250,7 @@ Return
 1→U
 1→X
 0→Y
+0→V
 For(T,1,dim(ʟDL))
 If ʟDL(T)≤ʟDR(T)
 Then

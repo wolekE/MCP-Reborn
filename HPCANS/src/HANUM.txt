@@ -8,6 +8,13 @@ If Str8="⁻" or Str8="-"
 "⁻1"→Str8
 If sub(Str8,1,1)="-" and length(Str8)>1
 "⁻"+sub(Str8,2,length(Str8)-1)→Str8
+For(X,2,length(Str8)-1)
+If sub(Str8,X,1)="-"
+Then
+If inString("(+-*/^⁻√(³√(,",sub(Str8,X-1,1))
+sub(Str8,1,X-1)+"⁻"+sub(Str8,X+1,length(Str8)-X)→Str8
+End
+End
 If inString(Str8,"I")
 Then
 ᴇ99→θ
