@@ -493,10 +493,11 @@ Disp "POINT TOOL"
 Disp "Y=A*F(B(X-H))+K"
 Disp "FACTOR B FIRST."
 Disp "F(X+3) MEANS"
-Disp " H=-3"
-Disp "FRACTIONS OK"
-Disp " LIKE -4/3"
+Disp " H=⁻3"
+Disp "USE (⁻) FOR NEG."
+Disp "FRACTION OK ⁻4/3"
 Pause
+Menu("POINT TOOL","START",T3,"TRANSFORM MENU",C0,"MAIN MENU",M0)
 Lbl T3
 ClrHome
 Input "A=",A
@@ -513,6 +514,8 @@ Input "OLD X=",P
 Input "OLD Y=",Q
 P/B+H→U
 A*Q+K→V
+U*(abs(U)≥ᴇ⁻9)→U
+V*(abs(V)≥ᴇ⁻9)→V
 ClrHome
 Disp "NEW POINT"
 Disp "X=X/B+H"
@@ -530,12 +533,13 @@ ClrHome
 Disp "D/R TOOL"
 Disp "Y=A*F(B(X-H))+K"
 Disp "FACTOR B FIRST."
-Disp "ENTER THE ENDS"
-Disp "OF DF AND RF."
+Disp "ENTER DF,RF ENDS"
+Disp "USE (⁻) FOR NEG."
 Disp "BRACKET TYPE"
 Disp "STAYS WITH ITS"
 Disp "OWN ENDPOINT."
 Pause
+Menu("D/R TOOL","START",T5,"TRANSFORM MENU",C0,"MAIN MENU",M0)
 Lbl T5
 ClrHome
 Input "A=",A
@@ -555,6 +559,10 @@ C/B+H→M
 D/B+H→N
 A*R+K→U
 A*S+K→V
+M*(abs(M)≥ᴇ⁻9)→M
+N*(abs(N)≥ᴇ⁻9)→N
+U*(abs(U)≥ᴇ⁻9)→U
+V*(abs(V)≥ᴇ⁻9)→V
 min(M,N)→I
 max(M,N)→J
 min(U,V)→F
@@ -806,8 +814,9 @@ Disp "ENTER K, THEN"
 Disp "A=TOP, B=BOTTOM"
 Disp "(INTEGERS)."
 Disp "AUTO-REDUCES."
-Disp "X^-2  A=-2, B=1"
+Disp "X^-2  A=⁻2, B=1"
 Pause
+Menu("CLASSIFIER","START",E7,"POWER MENU",E0,"MAIN MENU",M0)
 Lbl E7
 ClrHome
 Input "K=",K
@@ -941,6 +950,7 @@ If A>0
 Output(5,1,"THROUGH (0,0)")
 Output(6,1,"THROUGH (1,K)")
 Pause
+Lbl Q0
 Menu("CLASSIFIER","NEW FUNCTION",E7,"POWER MENU",E0,"MAIN MENU",M0)
 Lbl Q1
 ClrHome
@@ -949,14 +959,14 @@ Disp "K CANNOT BE 0."
 Disp "(K*X^P WOULD BE"
 Disp " JUST Y=0)"
 Pause
-Goto E0
+Goto Q0
 Lbl Q2
 ClrHome
 Disp "ERROR"
 Disp "B CANNOT BE 0."
 Disp "(A/B UNDEFINED)"
 Pause
-Goto E0
+Goto Q0
 Lbl Q3
 ClrHome
 Disp "ERROR"
@@ -964,7 +974,7 @@ Disp "A AND B MUST BE"
 Disp "INTEGERS."
 Disp "X^(2/3)  A=2,B=3"
 Pause
-Goto E0
+Goto Q0
 Lbl Q4
 ClrHome
 Disp "ERROR"
@@ -972,14 +982,14 @@ Disp "A=0 MEANS P=0."
 Disp "Y=K IS CONSTANT,"
 Disp "NOT A POWER FUNC"
 Pause
-Goto E0
+Goto Q0
 Lbl Q5
 ClrHome
 Disp "ERROR"
 Disp "KEEP A AND B"
 Disp "UNDER 1000."
 Pause
-Goto E0
+Goto Q0
 Lbl F0
 Menu("TOP MISTAKES","READ ALL 12",F1,"1-5 TRANSFORMS",F2,"6-9 DOMAIN/INV",F4,"10-12 POWER",F6,"MAIN MENU",M0)
 Lbl F1

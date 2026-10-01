@@ -49,7 +49,7 @@ STRING_SINGLE.update({
     "+": b"\x70", "-": b"\x71", "*": b"\x82", "/": b"\x83", "^": b"\xF0",
     "=": b"\x6A", "<": b"\x6B", ">": b"\x6C", "≤": b"\x6D", "≥": b"\x6E",
     "≠": b"\x6F", "?": b"\xAF", "[": b"\x06", "]": b"\x07",
-    "²": b"\x0D", "³": b"\x0F",
+    "²": b"\x0D", "³": b"\x0F", "⁻": b"\xB0",  # ⁻ is the (-) key: how to type a negative
 })
 
 

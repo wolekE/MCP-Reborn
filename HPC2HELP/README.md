@@ -31,8 +31,9 @@ MAIN: U1 TOPIC 2 HELP
 
 * Reference topics are short pages (the title shows `page/total`); press **ENTER** for the next
   page. After the last page you go back to that section's menu.
-* Every section menu has **MAIN MENU**; every tool ends with a menu to run it again,
-  go back to its section, or go to the main menu. You never have to quit to switch topics.
+* Every section menu has **MAIN MENU**. Each tool shows a reminder page and then a
+  START / back / MAIN MENU menu, and ends with a menu to run it again, go back to its section,
+  or go to the main menu. You never have to quit to switch topics.
 * Absolute value is written `ABS(...)` on screen because the TI-84 keypad has no `|` character:
   `ABS(F(X))` means |f(x)| and `F(ABS(X))` means f(|x|).
 * `DF`, `DG`, `RF`, `DH` mean D<sub>f</sub>, D<sub>g</sub>, R<sub>f</sub>, D<sub>h</sub>. `INF` means ∞.
@@ -55,7 +56,7 @@ calculator-to-computer cable. TI Connect CE works with both the TI-84 Plus and t
    list (or use the *Actions* menu → add/send files from the computer and pick `HPC2HELP.8xp`;
    menu wording varies a little between versions). In the *Send to Calculators* window choose
    **RAM** as the location if it asks, then click **Send**.
-4. **Check memory if the transfer fails.** The program is about **14.7 KB**. A TI-84 Plus has about
+4. **Check memory if the transfer fails.** The program is about **14 KB**. A TI-84 Plus has about
    24 KB of user RAM, so if it says there isn't enough memory, archive (don't delete) other
    programs: `2nd` `MEM` → `2:Mem Mgmt/Del` shows free RAM. A TI-84 Plus CE has plenty of room.
 5. **Run it.** On the calculator press `PRGM`, stay on the **EXEC** tab, choose **HPC2HELP**
@@ -67,7 +68,7 @@ If the PRGM list shows a `*` next to HPC2HELP, it went to Archive. Move it to RA
 
 ## If you have to type it in by hand
 
-The `.8xp` file is the easy way. Typing the source in by hand works, but it is about 1,070 lines
+The `.8xp` file is the easy way. Typing the source in by hand works, but it is about 1,080 lines
 (613 of them `Disp` lines), so expect several hours.
 
 1. `PRGM` → **NEW** → `1:Create New`, type the name `HPC2HELP` (alpha-lock is already on), `ENTER`.
@@ -90,8 +91,9 @@ The `.8xp` file is the easy way. Typing the source in by hand works, but it is a
 | `=` `≠` `>` `≥` `<` `≤` | `2nd` `TEST` → `1`…`6` (also used inside quotes) |
 | `and` `or` `xor` `not(` | `2nd` `TEST` → LOGIC → `1` / `2` / `3` / `4` |
 | `→` | `STO►` |
-| `⁻` (a negative, e.g. `⁻A→A`) | `(−)` key |
+| `⁻` (a negative, e.g. `⁻A→A`, or `(⁻)` inside quotes) | `(−)` key |
 | `-` inside quotes | the `−` (subtract) key |
+| `ᴇ` (as in `ᴇ⁻9`) | `2nd` `EE` (above the comma key) |
 | `"` | `ALPHA` `+` |
 | space | `ALPHA` `0` |
 | `?` | `ALPHA` `(−)` |
@@ -109,16 +111,16 @@ Run the program, then try these. Menu numbers are the keys to press.
 
 | Test | Keys and inputs | You should see |
 |---|---|---|
-| Transform point | `3` TRANSFORM → `5` POINT TOOL → `ENTER`; A=`2`, B=`(−)4÷3`, H=`3`, K=`(−)3`, OLD X=`(−)4`, OLD Y=`2` | `NEW POINT`, `X=X/B+H` **6**, `Y=A*Y+K` **1**, so the new point is (6, 1). Then menu: NEXT POINT / NEW A,B,H,K / TRANSFORM MENU / MAIN MENU |
-| Transform D/R | `3` → `6` D/R TOOL → `ENTER`; A=`2`, B=`(−)4÷3`, H=`3`, K=`(−)3`; DOMAIN LOW=`(−)4`, HIGH=`8`; RANGE LOW=`(−)2`, HIGH=`4` | Page 1: `NEW DOMAIN` LOW END **−3**, HIGH END **6**, `B<0 ENDS SWAPPED`. Page 2: `NEW RANGE` LOW END **−7**, HIGH END **5**. So D = [−3, 6], R = [−7, 5]. |
-| Fractional power, odd/odd | `5` POWER FUNCS → `6` CLASSIFIER → `ENTER`; K=`1`, TOP A=`3`, BOTTOM B=`7` | `P=3/7`, `A IS ODD`, `B IS ODD`, `0<P<1  POSITIVE`, `ODD SYMMETRY`, `IN QI AND QIII`; page 2 ALL REALS / ALL REALS; page 3 INCREASING, CURVES DOWN |
-| Fractional power, even/odd | K=`1`, A=`4`, B=`7` | `A IS EVEN`, `EVEN SYMMETRY`, `IN QI AND QII`; range `[0,INF)` |
+| Transform point | `3` TRANSFORM → `5` POINT TOOL → `ENTER` → `1` START; A=`2`, B=`(−)4÷3`, H=`3`, K=`(−)3`, OLD X=`(−)4`, OLD Y=`2` | `NEW POINT`, `X=X/B+H` **6**, `Y=A*Y+K` **1**, so the new point is (6, 1). Then menu: NEXT POINT / NEW A,B,H,K / TRANSFORM MENU / MAIN MENU |
+| Transform D/R | `3` → `6` D/R TOOL → `ENTER` → `1` START; A=`2`, B=`(−)4÷3`, H=`3`, K=`(−)3`; DOMAIN LOW=`(−)4`, HIGH=`8`; RANGE LOW=`(−)2`, HIGH=`4` | Page 1: `NEW DOMAIN` LOW END **−3**, HIGH END **6**, `B<0 ENDS SWAPPED`. Page 2: `NEW RANGE` LOW END **−7**, HIGH END **5**. So D = [−3, 6], R = [−7, 5]. |
+| Fractional power, odd/odd | `5` POWER FUNCS → `6` CLASSIFIER → `ENTER` → `1` START; K=`1`, TOP A=`3`, BOTTOM B=`7` | `P=3/7`, `A IS ODD`, `B IS ODD`, `0<P<1  POSITIVE`, `ODD SYMMETRY`, `IN QI AND QIII`; page 2 ALL REALS / ALL REALS; page 3 INCREASING, CURVES DOWN |
+| Fractional power, even/odd | `1` NEW FUNCTION; K=`1`, A=`4`, B=`7` | `A IS EVEN`, `EVEN SYMMETRY`, `IN QI AND QII`; range `[0,INF)` |
 | Positive power > 1, even root | K=`1`, A=`3`, B=`2` | `B IS EVEN`, `P>1  POSITIVE`, `UNDEFINED X<0`, `IN QI ONLY`; domain `[0,INF)`; CURVES UP |
 | k < 0 | K=`(−)1`, A=`4`, B=`7` | `EVEN SYMMETRY`, `K<0 FLIP X-AXIS`, `IN QIII AND QIV`; range `(-INF,0]`; page 3 `QIV PIECE (K<0)`, DECREASING |
 | Negative power | K=`1`, A=`(−)2`, B=`1` | `P=−2/1`, `A IS EVEN`, `P<0  NEGATIVE`, `EVEN SYMMETRY`, `IN QI AND QII`; page 2 `ALL REALS, X≠0`, `(0,INF)`, `X=0 EXCLUDED`, `ASYMPTOTES` `X=0 AND Y=0`, `NOT CONT AT X=0` |
 | Not in lowest terms | K=`1`, A=`2`, B=`4` | `P=1/2`, `B IS EVEN`, `(P WAS REDUCED)` |
-| Bad B = 0 (classifier) | K=`1`, A=`2`, B=`0` | `ERROR` / `B CANNOT BE 0.`, then ENTER returns to the POWER FUNCS menu |
-| Bad B = 0 (tools) | POINT TOOL with B=`0` | Menu titled `B CANNOT BE 0`: RE-ENTER / TRANSFORM MENU / MAIN MENU |
+| Bad B = 0 (classifier) | K=`1`, A=`2`, B=`0` | `ERROR` / `B CANNOT BE 0.`, then ENTER shows the CLASSIFIER menu (NEW FUNCTION / POWER MENU / MAIN MENU) |
+| Bad B = 0 (tools) | POINT TOOL, START, A=`2`, B=`0`, H=`3`, K=`(−)3` | Menu titled `B CANNOT BE 0`: RE-ENTER / TRANSFORM MENU / MAIN MENU |
 | Navigation | Open each main-menu item, read one topic, choose MAIN MENU; finally `7` EXIT | Every topic returns to its section menu; EXIT ends the program |
 
 ## How it was checked
@@ -138,8 +140,9 @@ the `tivars` package (`pip install tivars`, from TI-Toolkit's tivars_lib_py).
   * it walks every option of every menu, and checks every page for scrolling, wrapping and the
     busy-indicator cell
   * it runs the sample validations, tests the classifier on 2,304 (k, a, b) inputs against an
-    independent numeric oracle, and runs 800 random transform-tool trials against exact fractions
-  * every one of the 1,069 lines executes in at least one test, and it writes `SCREENS.txt`
+    independent numeric oracle, and runs 2,400 random transform-tool trials, with exact and with 14-digit calculator
+    arithmetic, against exact fractions
+  * every line executes in at least one test, and it writes `SCREENS.txt`
 
 These checks use a simulator, not a physical calculator, so run through the checklist above once
 on your own calculator too.

@@ -620,13 +620,21 @@ with the numbers the calculator adds. Tool pages use the sample inputs.
 |Y=A*F(B(X-H))+K |
 |FACTOR B FIRST. |
 |F(X+3) MEANS    |
-| H=-3           |
-|FRACTIONS OK    |
-| LIKE -4/3      |
+| H=⁻3           |
+|USE (⁻) FOR NEG.|
+|FRACTION OK ⁻4/3|
 |                |
 +----------------+
 
---- page (Lbl T4, Pause at line 522) ---
+--- MENU (line 500) ---
++----------------+
+|POINT TOOL      |
+|1:START         |  -> Lbl T3
+|2:TRANSFORM MENU|  -> Lbl C0
+|3:MAIN MENU     |  -> Lbl M0
++----------------+
+
+--- page (Lbl T4, Pause at line 525) ---
 +----------------+
 |NEW POINT       |
 |X=X/B+H         |
@@ -638,7 +646,7 @@ with the numbers the calculator adds. Tool pages use the sample inputs.
 |                |
 +----------------+
 
---- MENU (line 523) ---
+--- MENU (line 526) ---
 +----------------+
 |POINT TOOL      |
 |1:NEXT POINT    |  -> Lbl T4
@@ -647,7 +655,7 @@ with the numbers the calculator adds. Tool pages use the sample inputs.
 |4:MAIN MENU     |  -> Lbl M0
 +----------------+
 
---- MENU (line 525) ---
+--- MENU (line 528) ---
 +----------------+
 |B CANNOT BE 0   |
 |1:RE-ENTER      |  -> Lbl T3
@@ -655,7 +663,7 @@ with the numbers the calculator adds. Tool pages use the sample inputs.
 |3:MAIN MENU     |  -> Lbl M0
 +----------------+
 
---- MENU (line 527) ---
+--- MENU (line 530) ---
 +----------------+
 |A CANNOT BE 0   |
 |1:RE-ENTER      |  -> Lbl T3
@@ -663,19 +671,27 @@ with the numbers the calculator adds. Tool pages use the sample inputs.
 |3:MAIN MENU     |  -> Lbl M0
 +----------------+
 
---- page (Lbl T2, Pause at line 538) ---
+--- page (Lbl T2, Pause at line 541) ---
 +----------------+
 |D/R TOOL        |
 |Y=A*F(B(X-H))+K |
 |FACTOR B FIRST. |
-|ENTER THE ENDS  |
-|OF DF AND RF.   |
+|ENTER DF,RF ENDS|
+|USE (⁻) FOR NEG.|
 |BRACKET TYPE    |
 |STAYS WITH ITS  |
 |OWN ENDPOINT.   |
 +----------------+
 
---- page (Lbl T5, Pause at line 570) ---
+--- MENU (line 542) ---
++----------------+
+|D/R TOOL        |
+|1:START         |  -> Lbl T5
+|2:TRANSFORM MENU|  -> Lbl C0
+|3:MAIN MENU     |  -> Lbl M0
++----------------+
+
+--- page (Lbl T5, Pause at line 578) ---
 +----------------+
 |NEW DOMAIN      |
 |LOW END         |
@@ -687,7 +703,7 @@ with the numbers the calculator adds. Tool pages use the sample inputs.
 |                |
 +----------------+
 
---- page (Lbl T5, Pause at line 579) ---
+--- page (Lbl T5, Pause at line 587) ---
 +----------------+
 |NEW RANGE       |
 |LOW END         |
@@ -699,7 +715,7 @@ with the numbers the calculator adds. Tool pages use the sample inputs.
 |                |
 +----------------+
 
---- MENU (line 580) ---
+--- MENU (line 588) ---
 +----------------+
 |D/R TOOL        |
 |1:NEW VALUES    |  -> Lbl T5
@@ -707,7 +723,7 @@ with the numbers the calculator adds. Tool pages use the sample inputs.
 |3:MAIN MENU     |  -> Lbl M0
 +----------------+
 
---- MENU (line 582) ---
+--- MENU (line 590) ---
 +----------------+
 |B CANNOT BE 0   |
 |1:RE-ENTER      |  -> Lbl T5
@@ -715,7 +731,7 @@ with the numbers the calculator adds. Tool pages use the sample inputs.
 |3:MAIN MENU     |  -> Lbl M0
 +----------------+
 
---- MENU (line 584) ---
+--- MENU (line 592) ---
 +----------------+
 |A CANNOT BE 0   |
 |1:RE-ENTER      |  -> Lbl T5
@@ -723,7 +739,7 @@ with the numbers the calculator adds. Tool pages use the sample inputs.
 |3:MAIN MENU     |  -> Lbl M0
 +----------------+
 
---- MENU (line 586) ---
+--- MENU (line 594) ---
 +----------------+
 |ABS VALUE       |
 |1:ABS(F(X)) ON Y|  -> Lbl D1
@@ -733,7 +749,7 @@ with the numbers the calculator adds. Tool pages use the sample inputs.
 |5:MAIN MENU     |  -> Lbl M0
 +----------------+
 
---- page (Lbl D1, Pause at line 596) ---
+--- page (Lbl D1, Pause at line 604) ---
 +----------------+
 |ABS(F(X)) 1/2   |
 |ABS VALUE OF    |
@@ -745,7 +761,7 @@ with the numbers the calculator adds. Tool pages use the sample inputs.
 |                |
 +----------------+
 
---- page (Lbl D1, Pause at line 606) ---
+--- page (Lbl D1, Pause at line 614) ---
 +----------------+
 |ABS(F(X)) 2/2   |
 |KEEP THE        |
@@ -757,7 +773,7 @@ with the numbers the calculator adds. Tool pages use the sample inputs.
 |R=[0,4]         |
 +----------------+
 
---- page (Lbl D2, Pause at line 618) ---
+--- page (Lbl D2, Pause at line 626) ---
 +----------------+
 |F(ABS(X)) 1/2   |
 |ABS VALUE OF    |
@@ -769,7 +785,7 @@ with the numbers the calculator adds. Tool pages use the sample inputs.
 |THE Y-AXIS.     |
 +----------------+
 
---- page (Lbl D2, Pause at line 628) ---
+--- page (Lbl D2, Pause at line 636) ---
 +----------------+
 |F(ABS(X)) 2/2   |
 |ALWAYS EVEN     |
@@ -781,7 +797,7 @@ with the numbers the calculator adds. Tool pages use the sample inputs.
 |D=[-5,5]        |
 +----------------+
 
---- page (Lbl D3, Pause at line 640) ---
+--- page (Lbl D3, Pause at line 648) ---
 +----------------+
 |MNEMONIC        |
 |BARS OUTSIDE = Y|
@@ -793,7 +809,7 @@ with the numbers the calculator adds. Tool pages use the sample inputs.
 |RIGHT TO LEFT   |
 +----------------+
 
---- page (Lbl D4, Pause at line 652) ---
+--- page (Lbl D4, Pause at line 660) ---
 +----------------+
 |COMBOS 1/4      |
 |INSIDE (X) STEPS|
@@ -805,7 +821,7 @@ with the numbers the calculator adds. Tool pages use the sample inputs.
 |AND INTERCEPTS. |
 +----------------+
 
---- page (Lbl D4, Pause at line 661) ---
+--- page (Lbl D4, Pause at line 669) ---
 +----------------+
 |COMBOS 2/4      |
 |2ABS(F(X+1))-1  |
@@ -817,7 +833,7 @@ with the numbers the calculator adds. Tool pages use the sample inputs.
 |                |
 +----------------+
 
---- page (Lbl D4, Pause at line 671) ---
+--- page (Lbl D4, Pause at line 679) ---
 +----------------+
 |COMBOS 3/4      |
 |ABS(F(X)-1)+2   |
@@ -829,7 +845,7 @@ with the numbers the calculator adds. Tool pages use the sample inputs.
 |AFTER DOWN 1.   |
 +----------------+
 
---- page (Lbl D4, Pause at line 680) ---
+--- page (Lbl D4, Pause at line 688) ---
 +----------------+
 |COMBOS 4/4      |
 |F(ABS(X)-3)     |
@@ -841,7 +857,7 @@ with the numbers the calculator adds. Tool pages use the sample inputs.
 |                |
 +----------------+
 
---- MENU (line 683) ---
+--- MENU (line 691) ---
 +----------------+
 |POWER FUNCS     |
 |1:DEFINITIONS   |  -> Lbl E1
@@ -853,7 +869,7 @@ with the numbers the calculator adds. Tool pages use the sample inputs.
 |7:MAIN MENU     |  -> Lbl M0
 +----------------+
 
---- page (Lbl E1, Pause at line 693) ---
+--- page (Lbl E1, Pause at line 701) ---
 +----------------+
 |POWER 1/2       |
 |F(X)=K*X^P      |
@@ -865,7 +881,7 @@ with the numbers the calculator adds. Tool pages use the sample inputs.
 |                |
 +----------------+
 
---- page (Lbl E1, Pause at line 703) ---
+--- page (Lbl E1, Pause at line 711) ---
 +----------------+
 |POWER 2/2       |
 |NOT POWER FUNCS |
@@ -877,7 +893,7 @@ with the numbers the calculator adds. Tool pages use the sample inputs.
 |(1,K).          |
 +----------------+
 
---- page (Lbl E2, Pause at line 715) ---
+--- page (Lbl E2, Pause at line 723) ---
 +----------------+
 |QI SHAPE 1/2    |
 |(SHOWN FOR K>0) |
@@ -889,7 +905,7 @@ with the numbers the calculator adds. Tool pages use the sample inputs.
 | (CONCAVE DOWN) |
 +----------------+
 
---- page (Lbl E2, Pause at line 725) ---
+--- page (Lbl E2, Pause at line 733) ---
 +----------------+
 |QI SHAPE 2/2    |
 |P<0  DECREASES  |
@@ -901,7 +917,7 @@ with the numbers the calculator adds. Tool pages use the sample inputs.
 |ALL PASS (1,K). |
 +----------------+
 
---- page (Lbl E3, Pause at line 737) ---
+--- page (Lbl E3, Pause at line 745) ---
 +----------------+
 |SYMMETRY 1/3    |
 |REDUCE P=A/B    |
@@ -913,7 +929,7 @@ with the numbers the calculator adds. Tool pages use the sample inputs.
 | P<0 EXCLUDES 0 |
 +----------------+
 
---- page (Lbl E3, Pause at line 747) ---
+--- page (Lbl E3, Pause at line 755) ---
 +----------------+
 |SYMMETRY 2/3    |
 |B ODD, A EVEN   |
@@ -925,7 +941,7 @@ with the numbers the calculator adds. Tool pages use the sample inputs.
 |(FOR K>0)       |
 +----------------+
 
---- page (Lbl E3, Pause at line 757) ---
+--- page (Lbl E3, Pause at line 765) ---
 +----------------+
 |SYMMETRY 3/3    |
 |A=TOP  SETS     |
@@ -937,7 +953,7 @@ with the numbers the calculator adds. Tool pages use the sample inputs.
 |IS EVEN.        |
 +----------------+
 
---- page (Lbl E4, Pause at line 769) ---
+--- page (Lbl E4, Pause at line 777) ---
 +----------------+
 |K<0 1/2         |
 |K<0 REFLECTS    |
@@ -949,7 +965,7 @@ with the numbers the calculator adds. Tool pages use the sample inputs.
 |CONCAVITY FLIPS.|
 +----------------+
 
---- page (Lbl E4, Pause at line 778) ---
+--- page (Lbl E4, Pause at line 786) ---
 +----------------+
 |REWRITE 2/2     |
 |NTH ROOT OF X^M |
@@ -961,7 +977,7 @@ with the numbers the calculator adds. Tool pages use the sample inputs.
 |                |
 +----------------+
 
---- page (Lbl E5, Pause at line 789) ---
+--- page (Lbl E5, Pause at line 797) ---
 +----------------+
 |MISTAKES 1/2    |
 |-NOT REDUCING P |
@@ -973,7 +989,7 @@ with the numbers the calculator adds. Tool pages use the sample inputs.
 |                |
 +----------------+
 
---- page (Lbl E5, Pause at line 799) ---
+--- page (Lbl E5, Pause at line 807) ---
 +----------------+
 |MISTAKES 2/2    |
 |-NUMBER INSIDE A|
@@ -985,7 +1001,7 @@ with the numbers the calculator adds. Tool pages use the sample inputs.
 | CONTINUOUS AT 0|
 +----------------+
 
---- page (Lbl E6, Pause at line 810) ---
+--- page (Lbl E6, Pause at line 818) ---
 +----------------+
 |CLASSIFIER      |
 |F(X)=K*X^(A/B)  |
@@ -993,11 +1009,19 @@ with the numbers the calculator adds. Tool pages use the sample inputs.
 |A=TOP, B=BOTTOM |
 |(INTEGERS).     |
 |AUTO-REDUCES.   |
-|X^-2  A=-2, B=1 |
+|X^-2  A=⁻2, B=1 |
 |                |
 +----------------+
 
---- page (Lbl E7, Pause at line 882) ---
+--- MENU (line 819) ---
++----------------+
+|CLASSIFIER      |
+|1:START         |  -> Lbl E7
+|2:POWER MENU    |  -> Lbl E0
+|3:MAIN MENU     |  -> Lbl M0
++----------------+
+
+--- page (Lbl E7, Pause at line 891) ---
 +----------------+
 |P=3/7           |
 |A IS ODD        |
@@ -1009,7 +1033,7 @@ with the numbers the calculator adds. Tool pages use the sample inputs.
 |                |
 +----------------+
 
---- page (Lbl E7, Pause at line 917) ---
+--- page (Lbl E7, Pause at line 926) ---
 +----------------+
 |DOMAIN          |
 |ALL REALS       |
@@ -1021,7 +1045,7 @@ with the numbers the calculator adds. Tool pages use the sample inputs.
 |                |
 +----------------+
 
---- page (Lbl E7, Pause at line 943) ---
+--- page (Lbl E7, Pause at line 952) ---
 +----------------+
 |QIV PIECE (K<0) |
 |DECREASING      |
@@ -1033,7 +1057,7 @@ with the numbers the calculator adds. Tool pages use the sample inputs.
 |                |
 +----------------+
 
---- MENU (line 944) ---
+--- MENU (line 954) ---
 +----------------+
 |CLASSIFIER      |
 |1:NEW FUNCTION  |  -> Lbl E7
@@ -1041,7 +1065,7 @@ with the numbers the calculator adds. Tool pages use the sample inputs.
 |3:MAIN MENU     |  -> Lbl M0
 +----------------+
 
---- page (Lbl Q1, Pause at line 951) ---
+--- page (Lbl Q1, Pause at line 961) ---
 +----------------+
 |ERROR           |
 |K CANNOT BE 0.  |
@@ -1053,7 +1077,7 @@ with the numbers the calculator adds. Tool pages use the sample inputs.
 |                |
 +----------------+
 
---- page (Lbl Q2, Pause at line 958) ---
+--- page (Lbl Q2, Pause at line 968) ---
 +----------------+
 |ERROR           |
 |B CANNOT BE 0.  |
@@ -1065,7 +1089,7 @@ with the numbers the calculator adds. Tool pages use the sample inputs.
 |                |
 +----------------+
 
---- page (Lbl Q3, Pause at line 966) ---
+--- page (Lbl Q3, Pause at line 976) ---
 +----------------+
 |ERROR           |
 |A AND B MUST BE |
@@ -1077,7 +1101,7 @@ with the numbers the calculator adds. Tool pages use the sample inputs.
 |                |
 +----------------+
 
---- page (Lbl Q4, Pause at line 974) ---
+--- page (Lbl Q4, Pause at line 984) ---
 +----------------+
 |ERROR           |
 |A=0 MEANS P=0.  |
@@ -1089,7 +1113,7 @@ with the numbers the calculator adds. Tool pages use the sample inputs.
 |                |
 +----------------+
 
---- page (Lbl Q5, Pause at line 981) ---
+--- page (Lbl Q5, Pause at line 991) ---
 +----------------+
 |ERROR           |
 |KEEP A AND B    |
@@ -1101,7 +1125,7 @@ with the numbers the calculator adds. Tool pages use the sample inputs.
 |                |
 +----------------+
 
---- MENU (line 984) ---
+--- MENU (line 994) ---
 +----------------+
 |TOP MISTAKES    |
 |1:READ ALL 12   |  -> Lbl F1
@@ -1111,7 +1135,7 @@ with the numbers the calculator adds. Tool pages use the sample inputs.
 |5:MAIN MENU     |  -> Lbl M0
 +----------------+
 
---- page (Lbl F3, Pause at line 999) ---
+--- page (Lbl F3, Pause at line 1009) ---
 +----------------+
 |TOP MISTAKES 1  |
 |1) F(4X-8)      |
@@ -1123,7 +1147,7 @@ with the numbers the calculator adds. Tool pages use the sample inputs.
 |                |
 +----------------+
 
---- page (Lbl F3, Pause at line 1009) ---
+--- page (Lbl F3, Pause at line 1019) ---
 +----------------+
 |TOP MISTAKES 2  |
 |3) REORDER ENDS |
@@ -1135,7 +1159,7 @@ with the numbers the calculator adds. Tool pages use the sample inputs.
 | HORIZONTAL     |
 +----------------+
 
---- page (Lbl F3, Pause at line 1016) ---
+--- page (Lbl F3, Pause at line 1026) ---
 +----------------+
 |TOP MISTAKES 3  |
 |5) KEEP THE     |
@@ -1147,7 +1171,7 @@ with the numbers the calculator adds. Tool pages use the sample inputs.
 |                |
 +----------------+
 
---- page (Lbl F5, Pause at line 1031) ---
+--- page (Lbl F5, Pause at line 1041) ---
 +----------------+
 |TOP MISTAKES 4  |
 |6) FIND DOMAIN  |
@@ -1159,7 +1183,7 @@ with the numbers the calculator adds. Tool pages use the sample inputs.
 |                |
 +----------------+
 
---- page (Lbl F5, Pause at line 1040) ---
+--- page (Lbl F5, Pause at line 1050) ---
 +----------------+
 |TOP MISTAKES 5  |
 |8) VERIFY F⁻¹    |
@@ -1171,7 +1195,7 @@ with the numbers the calculator adds. Tool pages use the sample inputs.
 |                |
 +----------------+
 
---- page (Lbl F7, Pause at line 1055) ---
+--- page (Lbl F7, Pause at line 1065) ---
 +----------------+
 |TOP MISTAKES 6  |
 |10) REDUCE      |
@@ -1183,7 +1207,7 @@ with the numbers the calculator adds. Tool pages use the sample inputs.
 |                |
 +----------------+
 
---- page (Lbl F7, Pause at line 1063) ---
+--- page (Lbl F7, Pause at line 1073) ---
 +----------------+
 |TOP MISTAKES 7  |
 |12) KEEP EXACT  |

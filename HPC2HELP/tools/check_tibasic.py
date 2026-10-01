@@ -30,6 +30,7 @@ Writes SCREENS.txt (every page and menu as it appears on a TI-84 Plus).
 Exit code 0 only if everything passes.
 """
 
+import decimal
 import itertools
 import math
 import random
@@ -72,7 +73,7 @@ def width(s):
     return len(cells(s))
 
 
-ALLOWED_STR = set("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 (),.+-*/^=<>≤≥≠?[]²³√") | {"⁻¹"}
+ALLOWED_STR = set("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 (),.+-*/^=<>≤≥≠?[]²³√⁻") | {"⁻¹"}
 
 
 def check_string(s, where):
@@ -108,7 +109,7 @@ def lex(expr, where):
                 break
         else:
             c = expr[i]
-            m = re.match(r"\d+(?:\.\d+)?|\.\d+", expr[i:])
+            m = re.match(r"(?:\d+(?:\.\d*)?|\.\d+)?ᴇ⁻?\d+|\d+(?:\.\d+)?|\.\d+", expr[i:])
             if m:
                 toks.append(("num", m.group()))
                 i += len(m.group())
@@ -252,7 +253,9 @@ def trunc(v):
 def ev(node, env):
     k = node[0]
     if k == "num":
-        return Fraction(node[1])
+        mant, _, exp = node[1].partition("ᴇ")
+        value = Fraction(mant or "1")
+        return value * Fraction(10) ** int(exp.replace("⁻", "-")) if exp else value
     if k == "var":
         name = node[1]
         if name not in env.assigned:
@@ -282,16 +285,17 @@ def ev(node, env):
                 raise TIError(f"ERR:DOMAIN gcd({a},{b}) needs nonnegative integers")
             return Fraction(math.gcd(int(a), int(b)))
     a, b = ev(node[1], env), ev(node[2], env)
+    rnd = round14 if getattr(env, "tifloat", False) else (lambda x: x)
     if k == "+":
-        return a + b
+        return rnd(a + b)
     if k == "-":
-        return a - b
+        return rnd(a - b)
     if k == "*":
-        return a * b
+        return rnd(a * b)
     if k == "/":
         if b == 0:
             raise TIError("ERR:DIVIDE BY 0")
-        return a / b
+        return rnd(a / b)
     if k == "^":
         if b.denominator != 1:
             raise TIError("non-integer power not simulated")
@@ -336,8 +340,17 @@ def fmt_num(v):
     return s.replace("-", "⁻")  # TI shows a raised negative sign
 
 
-def fmt_frac(v):
+def fmt_frac(v, tifloat=False):
+    """►Frac display.  With tifloat the value is a 14-digit decimal: it becomes a
+    fraction (denominator <= 9999) only if one matches it to 12 significant digits,
+    and a nonzero value is never shown as 0."""
     v = Fraction(v)
+    if tifloat:
+        f = v.limit_denominator(9999)
+        if (f != 0 or v == 0) and abs(v - f) <= Fraction(1, 10**12) * max(1, abs(v)):
+            v = f
+        else:
+            return fmt_num(v), False
     if v.denominator == 1:
         return fmt_num(v), False
     if v.denominator <= 9999:
@@ -583,12 +596,26 @@ def static_checks(lines, prog):
 # ----------------------------------------------------------------------------
 
 class Env:
-    def __init__(self, vars=None, assigned=None):
+    """Variables.  tifloat=True rounds every arithmetic result to 14 significant
+    digits like the calculator does (exact Fractions otherwise)."""
+
+    def __init__(self, vars=None, assigned=None, tifloat=False):
         self.vars = dict(vars or {})
         self.assigned = set(assigned or ())
+        self.tifloat = tifloat
 
     def copy(self):
-        return Env(self.vars, self.assigned)
+        return Env(self.vars, self.assigned, self.tifloat)
+
+
+_D14 = decimal.Context(prec=14, rounding=decimal.ROUND_HALF_EVEN)
+
+
+def round14(v):
+    v = Fraction(v)
+    if v == 0:
+        return v
+    return Fraction(_D14.divide(decimal.Decimal(v.numerator), decimal.Decimal(v.denominator)))
 
 
 class Screen:
@@ -700,7 +727,7 @@ class Run:
             else:
                 v = ev(st[2], env)
                 if st[1] == "frac":
-                    text, is_frac = fmt_frac(v)
+                    text, is_frac = fmt_frac(v, env.tifloat)
                     scr.fracs += is_frac
                 else:
                     text = fmt_num(v)
@@ -722,7 +749,7 @@ class Run:
                 raw = self.defaults[prompt]
             else:
                 raise Halt(f"no input for {prompt!r}")
-            val = ev(parse_expr(raw, f"input {raw!r}"), Env())
+            val = ev(parse_expr(raw, f"input {raw!r}"), Env(tifloat=env.tifloat))
             r = scr.newline_row()
             scr.put(r, 0, prompt + raw)
             env.vars[var] = val
@@ -849,7 +876,7 @@ def main():
         "power A=1000": dict(DEFAULTS, **{"TOP A=": "1000"}),
     }
     TOOLS = {"POINT TOOL", "D/R TOOL", "CLASSIFIER"}
-    REPEAT = {"NEXT POINT", "NEW A,B,H,K", "NEW VALUES", "NEW FUNCTION", "RE-ENTER"}
+    REPEAT = {"START", "NEXT POINT", "NEW A,B,H,K", "NEW VALUES", "NEW FUNCTION", "RE-ENTER"}
     GOES = {"TRANSFORM MENU": "TRANSFORM", "POWER MENU": "POWER FUNCS"}
     all_states = {}
     main_menu = None
@@ -923,15 +950,16 @@ def main():
             fail(f"menu at line {m + 1} was never reached by the walk")
 
     def menu_index(title, text):
-        m = find_menu_line(prog, title)
-        if not m:
+        lines_ = find_menu_line(prog, title)
+        if not lines_:
             fail(f"no menu titled {title!r}")
             return None
-        items = [t for t, _ in prog[m[0]][2]]
-        if text not in items:
-            fail(f"menu {title!r} has no option {text!r}")
-            return None
-        return items.index(text) + 1
+        for m in lines_:
+            items = [t for t, _ in prog[m][2]]
+            if text in items:
+                return items.index(text) + 1
+        fail(f"no menu {title!r} has an option {text!r}")
+        return None
 
     MAIN = "U1 TOPIC 2 HELP"
 
@@ -949,9 +977,9 @@ def main():
                 fail(f"{name}: no page shows all of {want}; pages were {texts[-3:]}")
         return r
 
-    to_point = path((MAIN, "TRANSFORM"), ("TRANSFORM", "POINT TOOL"))
-    to_dr = path((MAIN, "TRANSFORM"), ("TRANSFORM", "D/R TOOL"))
-    to_cls = path((MAIN, "POWER FUNCS"), ("POWER FUNCS", "CLASSIFIER"))
+    to_point = path((MAIN, "TRANSFORM"), ("TRANSFORM", "POINT TOOL"), ("POINT TOOL", "START"))
+    to_dr = path((MAIN, "TRANSFORM"), ("TRANSFORM", "D/R TOOL"), ("D/R TOOL", "START"))
+    to_cls = path((MAIN, "POWER FUNCS"), ("POWER FUNCS", "CLASSIFIER"), ("CLASSIFIER", "START"))
     exit_ = [menu_index(MAIN, "EXIT")]
 
     scripted("TRANSFORM POINT sample", to_point + [menu_index("POINT TOOL", "MAIN MENU")] + exit_,
@@ -1009,8 +1037,9 @@ def main():
         absorb(r, f"classifier error k={k} a={a} b={b}")
         if not r.pages or msg not in page_text(r.pages[-1]) or "ERROR" not in page_text(r.pages[-1]):
             fail(f"classifier error case {(k, a, b)}: expected error page with {msg!r}")
-        if not (isinstance(r.end, tuple) and prog[r.end[1]][1] == "POWER FUNCS"):
-            fail(f"classifier error case {(k, a, b)}: did not return to the POWER FUNCS menu (ended {r.end})")
+        if not (isinstance(r.end, tuple) and prog[r.end[1]][1] == "CLASSIFIER"
+                and [t for t, _ in prog[r.end[1]][2]] == ["NEW FUNCTION", "POWER MENU", "MAIN MENU"]):
+            fail(f"classifier error case {(k, a, b)}: did not return to the CLASSIFIER menu (ended {r.end})")
 
     # ---- TOP MISTAKES "READ ALL" shows all 7 pages in order ------------
     r = Run(prog, labels, match, menu_choices=path((MAIN, "TOP MISTAKES"), ("TOP MISTAKES", "READ ALL 12")))
@@ -1043,7 +1072,8 @@ def main():
                              ("POINT TOOL", ["0", "1", "3", "⁻3"], "A CANNOT BE 0"),
                              ("D/R TOOL", ["2", "0", "3", "⁻3"], "B CANNOT BE 0"),
                              ("D/R TOOL", ["0", "1", "3", "⁻3"], "A CANNOT BE 0")]:
-        r = Run(prog, labels, match, menu_choices=path((MAIN, "TRANSFORM"), ("TRANSFORM", tool), (title, "RE-ENTER")),
+        r = Run(prog, labels, match, menu_choices=path((MAIN, "TRANSFORM"), ("TRANSFORM", tool), (tool, "START"),
+                                                       (title, "RE-ENTER")),
                 inputs=bad, input_defaults=DEFAULTS)
         r.go(0)
         absorb(r, f"{tool} {title} then RE-ENTER")
@@ -1074,36 +1104,47 @@ def main():
     print(f"classifier oracle: {count} (k, a, b) combinations checked")
 
     # ---- randomized transform tools vs exact arithmetic --------------------
+    # Each trial runs twice: with exact arithmetic and with the calculator's
+    # 14-digit arithmetic.  Either way the screen must show the exact answer.
     rng = random.Random(2026)
     t3, t5 = labels["T3"], labels["T5"]
-    nums = [Fraction(n, d) for n in range(-9, 10) for d in (1, 2, 3, 4)]
-    for trial in range(400):
+    nums = [Fraction(n, d) for n in range(-9, 10) for d in (1, 2, 3, 4, 6, 7)]
+    trials = 0
+    for trial in range(600):
         A = rng.choice([n for n in nums if n != 0])
         B = rng.choice([n for n in nums if n != 0])
         H, K, X, Y = (rng.choice(nums) for _ in range(4))
-        r = Run(prog, labels, match, env=Env(), inputs=[ti_input(v) for v in (A, B, H, K, X, Y)], stop_at_menu=True)
-        r.go(t3)
-        absorb(r, f"point tool trial {trial}")
-        want = [fmt_frac(X / B + H)[0], fmt_frac(A * Y + K)[0]]
-        t = page_text(r.pages[-1])
-        if t[2] != want[0] or t[4] != want[1]:
-            fail(f"point tool A={A} B={B} H={H} K={K} ({X},{Y}): showed {t}, want {want}")
+        if trial % 5 == 0:  # make some answers exactly 0 (where rounding residue shows up)
+            H, K = -X / B, -A * Y
         lo, hi = sorted([rng.choice(nums), rng.choice(nums)])
         rlo, rhi = sorted([rng.choice(nums), rng.choice(nums)])
-        r = Run(prog, labels, match, env=Env(), inputs=[ti_input(v) for v in (A, B, H, K, lo, hi, rlo, rhi)],
-                stop_at_menu=True)
-        r.go(t5)
-        absorb(r, f"D/R tool trial {trial}")
-        d = sorted([lo / B + H, hi / B + H])
-        rr = sorted([A * rlo + K, A * rhi + K])
-        p1, p2 = page_text(r.pages[-2]), page_text(r.pages[-1])
-        if p1[2] != fmt_frac(d[0])[0] or p1[4] != fmt_frac(d[1])[0]:
-            fail(f"D/R domain A={A} B={B} H={H} [{lo},{hi}]: showed {p1}, want {d}")
-        if p2[2] != fmt_frac(rr[0])[0] or p2[4] != fmt_frac(rr[1])[0]:
-            fail(f"D/R range A={A} K={K} [{rlo},{rhi}]: showed {p2}, want {rr}")
-        if (B < 0) != ("B<0 ENDS SWAPPED" in p1) or (A < 0) != ("A<0 ENDS SWAPPED" in p2):
-            fail(f"D/R swap note wrong for A={A} B={B}")
-    print("transform tools: 400 point + 400 domain/range trials checked")
+        if trial % 7 == 0:
+            H, K = -lo / B, -A * rhi
+        for tifloat in (False, True):
+            trials += 1
+            tag = f"(A={A} B={B} H={H} K={K}{' 14-digit' if tifloat else ''})"
+            r = Run(prog, labels, match, env=Env(tifloat=tifloat),
+                    inputs=[ti_input(v) for v in (A, B, H, K, X, Y)], stop_at_menu=True)
+            r.go(t3)
+            absorb(r, f"point tool trial {trial} {tag}")
+            want = [fmt_frac(X / B + H)[0], fmt_frac(A * Y + K)[0]]
+            t = page_text(r.pages[-1])
+            if t[2] != want[0] or t[4] != want[1]:
+                fail(f"point tool {tag} ({X},{Y}): showed {t}, want {want}")
+            r = Run(prog, labels, match, env=Env(tifloat=tifloat),
+                    inputs=[ti_input(v) for v in (A, B, H, K, lo, hi, rlo, rhi)], stop_at_menu=True)
+            r.go(t5)
+            absorb(r, f"D/R tool trial {trial} {tag}")
+            d = sorted([lo / B + H, hi / B + H])
+            rr = sorted([A * rlo + K, A * rhi + K])
+            p1, p2 = page_text(r.pages[-2]), page_text(r.pages[-1])
+            if p1[2] != fmt_frac(d[0])[0] or p1[4] != fmt_frac(d[1])[0]:
+                fail(f"D/R domain {tag} [{lo},{hi}]: showed {p1}, want {d}")
+            if p2[2] != fmt_frac(rr[0])[0] or p2[4] != fmt_frac(rr[1])[0]:
+                fail(f"D/R range {tag} [{rlo},{rhi}]: showed {p2}, want {rr}")
+            if (B < 0) != ("B<0 ENDS SWAPPED" in p1) or (A < 0) != ("A<0 ENDS SWAPPED" in p2):
+                fail(f"D/R swap note wrong {tag}")
+    print(f"transform tools: {trials} point + {trials} domain/range runs checked (exact and 14-digit)")
 
     # ---- coverage ------------------------------------------------------------
     for i in range(len(prog)):
