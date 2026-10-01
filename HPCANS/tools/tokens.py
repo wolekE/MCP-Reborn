@@ -50,7 +50,7 @@ STRING = {
     "=": b"\x6A", "<": b"\x6B", ">": b"\x6C", "≤": b"\x6D", "≥": b"\x6E", "≠": b"\x6F",
     "?": b"\xAF", "[": b"\x06", "]": b"\x07", "²": b"\x0D", "³": b"\x0F",
     "⁻¹": b"\x0C", "⁻": b"\xB0", "√(": b"\xBC", "³√(": b"\xBD", "|": b"\xBB\xD8",
-    "𝑒^(": b"\xBF", "θ": b"\x5B", ":": b"\x3E",
+    "𝑒^(": b"\xBF", "θ": b"\x5B", ":": b"\x3E", "𝑖": b"\x2C",
 }
 for _ch in "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ":
     STRING[_ch] = bytes([ord(_ch)])

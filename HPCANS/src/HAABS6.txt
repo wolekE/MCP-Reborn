@@ -13,4 +13,6 @@ If length(Str8)>1
 sub(Str8,1,length(Str8)-1)→Str8
 End
 End
+If Str8="+"
+""→Str8
 prgmHANUM

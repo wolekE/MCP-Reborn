@@ -26,7 +26,8 @@ and result. Only HAANS/HAPAGE/HAOUT touch W (the answer-screen row).
   Empty → θ = 0 and Z = 1 (so a caller can apply a default); otherwise Z = 0.
   A subtraction minus typed first or right after `(`, an operator, `√(`, `³√(` or `,` is turned into
   the (-) sign (so `-3`, `2*-3`, `(-1/2)` all work); `-` or `(-)` alone means -1;
-  any `I` in the text means infinity (±1ᴇ99). Pattern:
+  a leading + is dropped (`+3` → 3, `+` alone → 1); an X in the text counts as 1 (`3X` → 3);
+  any `I` (or the 𝑖 key) in the text means infinity (±1ᴇ99). Pattern:
   ```
   Input "B (X COEF)=",Str8
   prgmHANUM
@@ -37,8 +38,11 @@ and result. Only HAANS/HAPAGE/HAOUT touch W (the answer-screen row).
   `ClrHome` + `Disp` lines first (26 chars max per line, 10 rows).
 * **HAANS** — starts an answer screen: ClrHome, `ANSWER:` on row 1, W = 1.
 * **HAPAGE** — like HAANS but row 1 shows Str9 (e.g. `"WHY:"`).
-* **HAOUT** — prints Str9 on the next row (W+1). Wraps at 26 columns; after row 8 it
-  shows `ENTER=MORE`, waits for ENTER, clears and continues. Use one call per line.
+* **HAOUT** — prints Str9 on the next row (W+1). A line wider than 26 columns is broken at
+  the last space (dropped) or union U that fits, else after a comma, else before a + or - that
+  joins terms, else at column 26. After row 8 it shows `ENTER=MORE  CLEAR=SKIP`: ENTER clears
+  and continues; CLEAR skips the rest of this answer (later HAOUT calls print nothing until the
+  next HAANS/HAPAGE), so the footer comes next. Use one call per line.
 * **HAEND** — footer: Str9 = footer text (≤ 26 chars, e.g. `"1:AGAIN  2:HOME  3:WHY"`),
   θ = number of choices → shows it on row 10 and returns θ = chosen digit (0 = CLEAR).
   Always treat 0 like HOME.
@@ -74,9 +78,12 @@ and result. Only HAANS/HAPAGE/HAOUT touch W (the answer-screen row).
   ʟHC = {left closed, right closed}. The count is asked again until it is a whole number 1–50.
 * **HAABCK** — Str9 = template line (e.g. `"Y=A*F(BX+C)+K"`) → asks A (front),
   B (x coefficient, not 0), C (inside number), K (end number); ENTER = 1 for A and B,
-  0 for C and K → N=A, O=B, P=C, Q=K.
+  0 for C and K; A = 0 or B = 0 redraws the screen (`A AND B CAN NOT BE 0`) and asks again;
+  a leading + is dropped and an X typed at B counts as 1 (3X → 3, X/2 → 1/2)
+  → N=A, O=B, P=C, Q=K. Uses Str4, Str5.
 * **HAEQN** — N=A, O=B, P=H, Q=K → Str5 = `Y=2F(-4/3(X-3))-3`-style factored form,
-  Str4 = `Y=2F((-4/3)X+4)-3`-style expanded form.
+  Str4 = `Y=2F((-4/3)X+4)-3`-style expanded form, Str9 = `A=2  B=-4/3  H=3  K=-3`.
+  |H|, |K| < 1ᴇ-9 count as 0; an A or B that HAFRAC shows as 1 / -1 prints as no coefficient / -.
 * **HAPTXT** — N, O → Str5 = `(x,y)` with exact numbers.
 
 ## Saved data (named lists, kept between runs)

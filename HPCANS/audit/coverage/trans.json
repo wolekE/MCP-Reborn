@@ -2,12 +2,14 @@
  {
   "item_id": "EX-5.1",
   "what_question_gives": "h(x)=2f(x+1)-3 and the base graph",
-  "solver_path": "4:A*F(BX+C)+K → 1:LIST CHANGES; then 4:A*F(BX+C)+K → 2:NEW POINT(S) → ALL CORNERS",
+  "solver_path": "4:A*F(BX+C)+K → 1:LIST CHANGES → 3:SAME EQ → 2:NEW POINTS → 2:ALL CORNERS",
   "student_enters": "A=2 B=ENTER C=1 K=-3; saved or typed corners",
   "calculator_shows": "",
   "test_ids": [
    "EX-5.1a",
-   "EX-5.1b"
+   "EX-5.1b",
+   "REV-trans-2",
+   "REV-trans-6"
   ]
  },
  {
@@ -43,12 +45,13 @@
  {
   "item_id": "EX-5.3",
   "what_question_gives": "h(x)=-1/2 f(-2x+4)+1 and the base graph",
-  "solver_path": "4:A*F(BX+C)+K → 1:LIST CHANGES; 4:A*F(BX+C)+K → 2:NEW POINT(S) → ALL CORNERS",
+  "solver_path": "4:A*F(BX+C)+K → 1:LIST CHANGES → 3:SAME EQ → 2:NEW POINTS → 2:ALL CORNERS → 1:USE SAVED",
   "student_enters": "A=-1/2 B=-2 C=4 K=1",
   "calculator_shows": "",
   "test_ids": [
    "EX-5.3a",
-   "EX-5.3b"
+   "EX-5.3b",
+   "REV-trans-10"
   ]
  },
  {
@@ -65,17 +68,18 @@
   "item_id": "EX-5.5-i",
   "what_question_gives": "Horizontal stretch by 3, then left 2",
   "solver_path": "4:A*F(BX+C)+K → 4:WRITE EQUATION",
-  "student_enters": "4 then 3; 5 then -2; 7:DONE",
+  "student_enters": "4 then 3; 5:LEFT then 2; 9:DONE",
   "calculator_shows": "",
   "test_ids": [
-   "EX-5.5i"
+   "EX-5.5i",
+   "REV-trans-12"
   ]
  },
  {
   "item_id": "EX-5.5-ii",
   "what_question_gives": "Reflect over the x-axis, then down 4",
   "solver_path": "4:A*F(BX+C)+K → 4:WRITE EQUATION",
-  "student_enters": "1; 6 then -4; 7:DONE",
+  "student_enters": "1; 8:DOWN then 4; 9:DONE",
   "calculator_shows": "",
   "test_ids": [
    "EX-5.5ii"
@@ -85,7 +89,7 @@
   "item_id": "EX-5.5-iii",
   "what_question_gives": "Down 4, THEN reflect over the x-axis",
   "solver_path": "4:A*F(BX+C)+K → 4:WRITE EQUATION",
-  "student_enters": "6 then -4; 1; 7:DONE (steps in the order the words say)",
+  "student_enters": "8:DOWN then 4; 1; 9:DONE (steps in the order the words say)",
   "calculator_shows": "",
   "test_ids": [
    "EX-5.5iii"
@@ -95,7 +99,7 @@
   "item_id": "PR-5.1",
   "what_question_gives": "y=-f(x-5)+2",
   "solver_path": "4:A*F(BX+C)+K → 1:LIST CHANGES",
-  "student_enters": "A=(-) B=ENTER C=-5 K=2",
+  "student_enters": "A=(-) (just a minus) B=ENTER C=-5 K=2",
   "calculator_shows": "",
   "test_ids": [
    "PR-5.1"
@@ -135,10 +139,11 @@
   "item_id": "PR-5.5",
   "what_question_gives": "vertical stretch 5, horizontal compression 1/2, right 3, down 1",
   "solver_path": "4:A*F(BX+C)+K → 4:WRITE EQUATION",
-  "student_enters": "3 then 5; 4 then 1/2; 5 then 3; 6 then -1; 7:DONE",
+  "student_enters": "3 then 5; 4 then 1/2; 6:RIGHT then 3; 8:DOWN then 1; 9:DONE",
   "calculator_shows": "",
   "test_ids": [
-   "PR-5.5"
+   "PR-5.5",
+   "REV-trans-11"
   ]
  },
  {
@@ -214,12 +219,13 @@
  {
   "item_id": "CRAM-EX-5a",
   "what_question_gives": "h=2f(-4/3x+4)-3, D_f=[-4,8], R_f=[-2,4]",
-  "solver_path": "4:A*F(BX+C)+K → 1:LIST CHANGES; 4:A*F(BX+C)+K → 3:DOMAIN/RANGE",
+  "solver_path": "4:A*F(BX+C)+K → 1:LIST CHANGES → 3:SAME EQ → 3:DOMAIN/RANGE",
   "student_enters": "A=2 B=-4/3 C=4 K=-3; D -4, 8; R -2, 4",
   "calculator_shows": "",
   "test_ids": [
    "CRAM-5a",
-   "REG-T4"
+   "REG-T4",
+   "REV-trans-9"
   ]
  },
  {
@@ -272,7 +278,11 @@
   "solver_path": "4:A*F(BX+C)+K → 3:DOMAIN/RANGE (computes the ends exactly, so no sign is misread)",
   "student_enters": "A, B, C, K and the D ends",
   "calculator_shows": "",
-  "test_ids": []
+  "test_ids": [
+   "PR-5.4",
+   "EX-5.4",
+   "CRAM-5b"
+  ]
  },
  {
   "item_id": "ICAN-11",

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Randomized differential testing of the absolute-value solver (main menu 5: HAABS, HAABS2..HAABS6).
+Randomized differential testing of the absolute-value solver (main menu 5: HAABS, HAABS2..HAABS7).
 
 Every case is a session typed from the main menu exactly as a student would press keys:
   * shapes 1:A|F(BX+C)+D|+K  2:A*F(B|X|+C)+K  3:A*F(|BX+C|)+K with negative / fractional / zero
@@ -33,7 +33,10 @@ Oracle (independent of the TI code; Python Fractions, infinity = float('inf')):
     [C,inf) or (-inf,C]; |Bx+C| covers [0,inf)), NO REAL NUMBERS when nothing is reachable, and
     "can not be found" otherwise (Example 6.5 d);
   * order of the steps: the class rules (Cram 6.3): inside steps in reverse (shape 3 mirrors first,
-    shape 2 mirrors last; reflect / horizontal factor 1/|B| / shift -C/B), then D, |y|, A, K.
+    shape 2 mirrors last; reflect / horizontal factor 1/|B| / shift -C/B), then D, |y|, A, K,
+    numbered (1), (2), ... as in Example 6.3; |Bx+C| = |-Bx-C|, so shape 3 never needs a reflection;
+    the WHY page after 2:DOMAIN ONLY lists only the x steps, after 3:RANGE ONLY only the y steps
+    (NO CHANGE when there are none).
   Sets are written in the class notation (ALL REALS, ALL REALS, X≠a, unions with U, INF).
 
 Run from tools/:   python3 fuzz/fuzz_abs.py [-n SESSIONS] [-s SEED] [--kind pts,dom,rng,dr,order] [-v]

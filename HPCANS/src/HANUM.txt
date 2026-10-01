@@ -6,6 +6,10 @@ Then
 Else
 If Str8="⁻" or Str8="-"
 "⁻1"→Str8
+If Str8="+"
+"1"→Str8
+If sub(Str8,1,1)="+" and length(Str8)>1
+sub(Str8,2,length(Str8)-1)→Str8
 If sub(Str8,1,1)="-" and length(Str8)>1
 "⁻"+sub(Str8,2,length(Str8)-1)→Str8
 For(X,2,length(Str8)-1)
@@ -15,12 +19,13 @@ If inString("(+-*/^⁻√(³√(,",sub(Str8,X-1,1))
 sub(Str8,1,X-1)+"⁻"+sub(Str8,X+1,length(Str8)-X)→Str8
 End
 End
-If inString(Str8,"I")
+If inString(Str8,"I") or inString(Str8,"𝑖")
 Then
 ᴇ99→θ
 If sub(Str8,1,1)="⁻"
 ⁻ᴇ99→θ
 Else
+1→X
 expr(Str8)→θ
 End
 End

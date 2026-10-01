@@ -37,6 +37,13 @@ While θ>X+7 and sub(Str9,θ-1,1)≠","
 θ-1→θ
 End
 End
+If θ≤X+7
+Then
+Y→θ
+While θ>X+7 and not((sub(Str9,θ,1)="+" or sub(Str9,θ,1)="-") and not(inString("(,=[≠*/^<>≤≥",sub(Str9,θ-1,1))))
+θ-1→θ
+End
+End
 If θ>X+7
 θ→Y
 End
