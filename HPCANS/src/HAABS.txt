@@ -36,7 +36,7 @@ If I=2
 Disp "Y=A*F(B|X|+C)+K","EX: 3F(|X|-1)+2 HAS","  A=3 C=-1 K=2"
 If I=3
 Disp "Y=A*F(|BX+C|)+K","EX: 3F(|X-1|)+2 HAS","  A=3 C=-1 K=2"
-Disp "NO NUMBER? PRESS ENTER"
+Disp "NO NUMBER=ENTER, MINUS=(⁻)"
 If E
 Disp "A AND B CAN NOT BE 0"
 1→E

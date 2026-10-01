@@ -19,7 +19,7 @@ CODE = {
     "If ": b"\xCE", "Then": b"\xCF", "Else": b"\xD0", "End": b"\xD4", "Stop": b"\xD9",
     "For(": b"\xD3", "While ": b"\xD1", "Repeat ": b"\xD2", "Return": b"\xD5",
     "prgm": b"\x5F", "getKey": b"\xAD", "DelVar ": b"\xBB\x54",
-    "Float": b"\x69", "Normal": b"\x66", "SortA(": b"\xE3", "SetUpEditor ": b"\xBB\x4A", "SetUpEditor": b"\xBB\x4A",
+    "Float": b"\x69", "Normal": b"\x66", "Func": b"\x76", "SortA(": b"\xE3", "SetUpEditor ": b"\xBB\x4A", "SetUpEditor": b"\xBB\x4A",
     # functions
     "abs(": b"\xB2", "fPart(": b"\xBA", "iPart(": b"\xB9", "int(": b"\xB1",
     "round(": b"\x12", "gcd(": b"\xBB\x09", "lcm(": b"\xBB\x08", "min(": b"\x1A",

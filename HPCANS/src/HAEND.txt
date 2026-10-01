@@ -1,2 +1,3 @@
+getKey→Z
 Output(10,1,Str9)
 prgmHAKEY

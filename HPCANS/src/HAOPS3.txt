@@ -8,6 +8,13 @@ Str2→Str9
 prgmHAOUT
 ""→Str2
 End
+If length(Str2)+T≤26
+Then
+Str2+Str3→Str9
+""→Str2
+""→Str3
+prgmHAOUT
+End
 Str2+Str3→Str3
 ""→Str2
 0→T

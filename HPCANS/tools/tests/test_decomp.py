@@ -4,7 +4,8 @@ Shape menu "WHAT DOES H(X) LOOK LIKE?":
   1:K(STUFF)^N+C  2:K√(STUFF)+C  3:K/(STUFF)^N+C  4:K/√(STUFF)+C  5:K|STUFF|+C
   6:A(STUFF)²+B(STUFF)+C  7:K𝑒^(STUFF)+C  8:K/(M+𝑒^(STUFF))  9:√(K/STUFF)
 STUFF (the inside chunk) is typed as text with the X key; then the outside numbers in the order they are
-printed. ENTER gives K=1, N=1, ROOT INDEX=2, C=0, M=0 (shape 6: A=1, B=1, C=0).
+printed. ENTER gives K=1, N=1, ROOT INDEX=2, C=0, M=0 (shape 6: A=1, B=1, C=0); ENTER alone at STUFF=
+goes back to the shape menu. A closing parenthesis left off at the end of STUFF is added (as the TI does).
 The answer lists g first (the inside chunk), then f; more ways follow on "OR" lines.
 Never G(X)=X or F(X)=X.
 """
@@ -15,7 +16,7 @@ SHAPES = {
     3: ("3:K/(STUFF)^N+C", ["K (TOP NUMBER)=", "N (POWER)=", "C (END NUMBER)="]),
     4: ("4:K/√(STUFF)+C", ["K (TOP NUMBER)=", "ROOT INDEX=", "C (END NUMBER)="]),
     5: ("5:K|STUFF|+C", ["K (FRONT)=", "C (END NUMBER)="]),
-    6: ("6:A(STUFF)²+B(STUFF)+C", ["A (FRONT)=", "B (MIDDLE)=", "C (END NUMBER)="]),
+    6: ("6:A(STUFF)²+B(STUFF)+C", ["A (FRONT)=", "B (BEFORE 2ND STUFF)=", "C (END NUMBER)="]),
     7: ("7:K𝑒^(STUFF)+C", ["K (FRONT)=", "C (END NUMBER)="]),
     8: ("8:K/(M+𝑒^(STUFF))", ["K (TOP NUMBER)=", "M (BOTTOM NUMBER)="]),
     9: ("9:√(K/STUFF)", ["K (TOP NUMBER)="]),
@@ -170,4 +171,54 @@ CASES = [
                  "F(X)=3𝑒^(X)-1", "F(X)=2/(1+X)", "F(X)=√(1/X)"],
          official="(one answer per shape; see the single-shape cases)",
          path="7 → each shape 1..9 in turn → 3:WHY → 1:AGAIN; last WHY → 2:HOME"),
+    dec("EXTRA-decomp-22", "Shape 6 with only the square, STUFF just X: h=x^2 (the X+1 shift)", 6, "X", ["", "0", ""],
+        ["G(X)=X+1", "F(X)=(X-1)²", "G(X)=X IS NOT ALLOWED, SO"], "g = x+1, f = (x-1)^2"),
+    # ---- adversarial review (decomp): one case per bug fixed; tools/fuzz/fuzz_decomp.py checks the rest ----
+    dec("REV-decomp-1", "STUFF typed with its last ) left off, as TI users do: h=(2+sqrt(x))^3 typed 2+√(X",
+        1, "2+√(X", ["", "3", ""],
+        ["G(X)=2+√(X)", "F(X)=X³", "OR G(X)=√(X)", "F(X)=(2+X)³"],
+        "g = 2+sqrt(x), f = x^3 (was: G(X)=2+√(X with no ), and a split G(X)=√(X, F(X)=(2+X)³ read "
+        "the open root wrong)"),
+    dec("REV-decomp-2", "Chunk with implied multiplication under 1/: h=1/(x*sqrt(x))^2 (was G(X)=1/X√(X), "
+        "which the TI reads as (1/X)√(X))", 3, "X√(X)", ["", "2", ""],
+        ["G(X)=X√(X)", "F(X)=1/X²", "OR G(X)=(X√(X))²", "F(X)=1/X", "OR G(X)=1/(X√(X))", "F(X)=X²"],
+        "g = x*sqrt(x), f = 1/x^2; or g = 1/(x*sqrt(x)), f = x^2"),
+    dec("REV-decomp-3", "Implied multiplication under K/ in shape 9: h=sqrt(1/(x^2*sqrt(x))) "
+        "(was G(X)=1/X²√(X))", 9, "X²√(X)", [""],
+        ["G(X)=X²√(X)", "F(X)=√(1/X)", "OR G(X)=1/(X²√(X))", "F(X)=√(X)"],
+        "g = x^2*sqrt(x), f = sqrt(1/x); or g = 1/(x^2*sqrt(x)), f = sqrt(x)"),
+    dec("REV-decomp-4", "Negative power in shape 3: h=1/(x^2+1)^-1 is x^2+1 (was F(X)=1/X^(-1), which is just X)",
+        3, "X²+1", ["", "-1", ""], ["G(X)=X²", "F(X)=X+1"],
+        "h = x^2+1: g = x^2, f = x+1 (never f(x) = x)"),
+    dec("REV-decomp-5", "Negative power in shape 3 with numbers: h=2/(x+3)^-2+1 = 2(x+3)^2+1", 3, "X+3",
+        ["2", "-2", "1"], ["G(X)=X+3", "F(X)=2X²+1", "OR G(X)=(X+3)²", "F(X)=2X+1"],
+        "g = x+3, f = 2x^2+1; or g = (x+3)^2, f = 2x+1"),
+    dec("REV-decomp-6", "STUFF 1/X in shape 3: no G(X)=1/(1/X) (that is just X): h=-3/(1/x)^4", 3, "1/X",
+        ["-3", "4", ""], ["G(X)=1/X", "F(X)=-3/X^4", "OR G(X)=(1/X)^4", "F(X)=-3/X"],
+        "g = 1/x, f = -3/x^4; or g = (1/x)^4, f = -3/x (the fuzzer checks G(X)=1/(1/X) is gone)"),
+    dec("REV-decomp-7", "STUFF 2/X in shape 9: no G(X)=2/(2/X): h=sqrt(2/(2/x))", 9, "2/X", ["2"],
+        ["G(X)=2/X", "F(X)=√(2/X)"], "g = 2/x, f = sqrt(2/x) (the fuzzer checks G(X)=2/(2/X) is gone)"),
+    dec("REV-decomp-8", "A sign typed twice is folded: STUFF 4-⁻X (4 minus negative x) is 4+X (was G(X)=4--X)",
+        4, "4-⁻X", ["⁻", "4", ""], ["G(X)=4+X", "F(X)=-1/X^(1/4)", "OR G(X)=(4+X)^(1/4)", "F(X)=-1/X"],
+        "g = 4+x, f = -1/x^(1/4)"),
+    dec("REV-decomp-9", "Linear h=3x+5 typed as STUFF X, power 1 (was NONE: H(X) HAS NO CHUNK)", 1, "X",
+        ["3", "", "5"], ["G(X)=3X", "F(X)=X+5"], "g = 3x, f = x+5"),
+    dec("REV-decomp-10", "h=x+5 typed as STUFF X, power 1 (was NONE)", 1, "X", ["", "", "5"],
+        ["G(X)=2X", "F(X)=(1/2)X+5"], "g = 2x, f = (1/2)x+5 (any pair with neither piece just x)"),
+    dec("REV-decomp-12", "h=x+1 typed as 1/(STUFF)^-1+1 with STUFF X (was G(X)=X+1, F(X)=(X-1)+1, which is just X)",
+        3, "X", ["", "-1", "1"], ["G(X)=2X", "F(X)=(1/2)X+1"], "g = 2x, f = (1/2)x+1"),
+    dec("REV-decomp-13", "h=3x typed as STUFF X, power 1: the X+1 shift keeps the 3 (was NONE)", 1, "X",
+        ["3", "", ""], ["G(X)=X+1", "F(X)=3(X-1)"], "g = x+1, f = 3(x-1)"),
+    dec("REV-decomp-14", "A cube root that undoes the chunk's cube: h=cbrt(x^3)+8 (no G(X)=³√(X^3), which is X)",
+        2, "X^3", ["", "3", "8"], ["G(X)=X^3", "F(X)=³√(X)+8"],
+        "g = x^3, f = cbrt(x)+8 (the fuzzer checks the way G(X)=³√(X^3), F(X)=X+8 is gone)"),
+    dec("REV-decomp-15", "A fifth root that undoes the chunk's power: h=2*5th root(x^5)", 2, "X^5", ["2", "5", ""],
+        ["G(X)=X^5", "F(X)=2X^(1/5)"], "g = x^5, f = 2x^(1/5) (no G(X)=(X^5)^(1/5), which is X)"),
+    dec("REV-decomp-16", "Power -1 on the bottom with an end number: h=1/(x^2-2)^-1+2 = (x^2-2)+2 "
+        "(no split F(X)=(X-2)+2, which is X)", 3, "X^2-2", ["", "-1", "2"], ["G(X)=X^2-2", "F(X)=X+2"],
+        "g = x^2-2, f = x+2"),
+    dict(id="REV-decomp-11", source="ENTER alone at STUFF= goes back to the shape menu (was: asked again forever)",
+         actions=["k7", "k1", "t:", "k2", "t:7-2X", "t:", "t:", "t:", "k2"],
+         expect=["G(X)=7-2X", "F(X)=√(X)"], official="g = 7-2x, f = sqrt(x)",
+         path="7 → 1, STUFF=ENTER (back to the shapes) → 2, STUFF=7-2X, ENTER ×3"),
 ]

@@ -25,6 +25,12 @@ Input "Y=",Str8
 prgmHANUM
 θ→ʟHY(O)
 End
+0→P
+For(O,2,N)
+If ʟHX(O)<ʟHX(O-1)
+1→P
+End
+If P
 SortA(ʟHX,ʟHY)
 ClrHome
 Disp "THE END DOTS ARE"

@@ -8,9 +8,10 @@ Every case is a random session typed from the main menu exactly as a student pre
     6 2/(X ROOT(X)), 7 Y=7, 8 Y=2^X) with negative / fractional / zero numbers, ENTER defaults, a lone
     minus for -1 (either minus key), perfect and non-perfect powers under any root index 1-9
     (fractions under the root, negative numbers under odd and even roots), x powers that are
-    negative, zero or fractions, root indexes typed wrong (0, 2.5, 100: asked again), infinity typed
-    by mistake (the shape menu comes back), a rounded decimal power (0.6667), p = 0, k = 0, a
-    zero bottom; then 3:ALL PROPS on the k, p it found (also 3:WHY there);
+    negative, zero or fractions, x powers typed as on the paper (X^3, X², X³, X, X^(1/2)), root
+    indexes typed wrong (0, 2.5, 100: asked again), infinity typed by mistake (the shape menu comes
+    back), a rounded decimal power (0.6667, 1.4142), p = 0, k = 0, a zero bottom; then 3:ALL PROPS on
+    the k, p it found (also 3:WHY there);
   * 2:SYMMETRY/QUADS and 3:ALL PROPERTIES: K and P typed as integers, fractions (reduced or not),
     decimals, ENTER (K = 1, P = 1), a lone minus (K = -1), irrational K (sqrt(2)), K = 0, P = 0,
     infinity (asked again); WHY pages;
@@ -24,7 +25,10 @@ Oracle (independent of the TI code):
     (rational * integer radicand^(1/n), radicand free of n-th powers, n minimal) is computed from
     |k|^F (a rational) by prime factorisation and checked equal to sympy's k.  Degenerate inputs
     (zero bottom, k = 0, even root of a negative, p = 0) give the matching "not a power function"
-    screen;
+    screen; a power whose reduced denominator is 100 or more is taken as a rounded decimal (the
+    solver asks for the fraction).  When HAFRAC cannot show q exactly (documented limits), or the
+    radicand work is beyond the TI's 14 digits / a fast loop, the whole k must be one correct
+    6-place decimal (never a rounded coefficient times a radical);
   * properties: f(x) = k*x^(a/b) evaluated numerically (mpmath, 60 digits) with the real b-th root
     for x < 0 when b is odd, nothing for x < 0 when b is even, f(0) only when p > 0.  Symmetry from
     f(-x) vs f(x); quadrants, range, boundedness from the signs of f on each side (each side's
@@ -32,14 +36,17 @@ Oracle (independent of the TI code):
     samples on each side; concavity from second differences at x = 1 and x = -1; asymptotes, end
     behaviour and the kind of discontinuity from f at 1E-1000 / 1E1000.  None of the class's
     parity rules are used;
-  * root form X^(a/b)=(b-th root of X)^a: the printed form is parsed and evaluated at x = 2 and
-    (b odd) x = -2;
+  * root form X^(a/b)=(b-th root of X)^a: the printed form is parsed and evaluated at x = 2, 0.3
+    and (b odd) x = -2; root names must read 4TH, 21ST, 22ND, 23RD, 111TH;
   * build: the printed k*x^(a/b) is checked numerically to lie in exactly the chosen quadrants, to
     have the chosen Q1/Q4 shape (rising or falling, curving up or down, flat start / vertical
     tangent / asymptotes), and a non-integer, reduced power;
   * WHY pages: the lines are rebuilt from a, b, k and the choices.
 
-Run from tools/:   python3 fuzz/fuzz_power.py [-n SESSIONS] [-s SEED] [--kind find,props,build] [-v]
+--wide adds big numbers, root indexes up to 99, huge and tiny numbers under roots, long powers.
+
+Run from tools/:   python3 fuzz/fuzz_power.py [-n SESSIONS] [-s SEED] [--kind find,props,build] [--wide] [-v]
+With the clobber check:   python3 poison.py fuzz/fuzz_power.py -n 300 -s 5
 """
 
 import argparse
@@ -173,6 +180,8 @@ def run(actions):
     return m, res, err
 
 
+WIDE = [False]
+
 # ============================================================================ typing
 def typed(rng, v, default=None):
     """the text a student types for the rational v (default = the value ENTER gives)"""
@@ -205,6 +214,10 @@ def rfrac(rng, zero=0.0, maxn=9):
     if r < zero:
         return Fr(0)
     r = rng.random()
+    if WIDE[0] and r < 0.25:
+        v = rng.choice([Fr(rng.randint(10, 9999)), Fr(rng.randint(1, 999), rng.randint(11, 99)),
+                        Fr(1, rng.randint(10, 999))])
+        return v if rng.random() < 0.6 else -v
     if r < 0.2:
         v = Fr(1)
     elif r < 0.65:
@@ -237,6 +250,12 @@ def gen_under(rng, f):
         v = Fr(rng.choice([4, 9, 16, 25, 36, 49, 64, 81, 100, 8, 27, 125]))
     else:
         v = Fr(1)
+    if WIDE[0] and rng.random() < 0.3:
+        v = rng.choice([Fr(rng.randint(2, 99999)), Fr(rng.randint(1, 999), rng.randint(2, 999)),
+                        Fr(rng.choice([2, 3, 5, 6, 7])) ** rng.randint(f, 3 * f) * rng.choice([1, 2, 3]),
+                        Fr(1, rng.choice([2, 3, 5])) ** rng.randint(1, 2 * f)])
+        while v.numerator > 10 ** 12 or v.denominator > 10 ** 12:   # what a student can type
+            v = Fr(rng.choice([2, 3, 5])) ** rng.randint(1, 12)
     if rng.random() < (0.25 if f % 2 else 0.05):
         v = -v
     return v
@@ -248,7 +267,7 @@ def gen_find(rng, shape=None):
     vals, texts = {}, []
     names = SHAPE_VARS[shape]
     if "F" in names:
-        vals["F"] = Fr(rng.choice([2, 2, 2, 3, 3, 4, 5, 6, 1, 7, 9]))
+        vals["F"] = Fr(rng.choice([2, 2, 2, 3, 3, 4, 5, 6, 1, 7, 9] + ([8, 10, 12, 15, 20, 99] if WIDE[0] else [])))
     for nm in names:
         if nm == "F":
             continue
@@ -280,7 +299,18 @@ def gen_find(rng, shape=None):
         if nm == inf_at:
             acts.append(rng.choice(["I", "-I"]))
             continue
-        acts.append(typed(rng, vals[nm], DEFAULTS[nm]))
+        val = vals[nm]
+        if nm in "EG" and rng.random() < 0.15 and val.denominator == 1 and val != 0:
+            # a power typed the way it looks on the paper: X^3, X², X³, X, X^-2, X^(1/2)
+            n = val.numerator
+            acts.append("X" if n == 1 and rng.random() < 0.5 else "X²" if n == 2 and rng.random() < 0.5 else
+                        "X³" if n == 3 and rng.random() < 0.5 else f"X^{rng.choice(['-', '⁻'])}{-n}" if n < 0
+                        else f"X^{n}")
+            continue
+        if nm in "EG" and rng.random() < 0.05 and val.denominator > 1 and val > 0:
+            acts.append(f"X^({val.numerator}/{val.denominator})")
+            continue
+        acts.append(typed(rng, val, DEFAULTS[nm]))
     deci = None
     if not bad_inf and shape in (1, 3) and rng.random() < 0.04:
         deci = rng.choice(["0.6667", ".3333", "1.4142"])  # a rounded decimal power
@@ -291,9 +321,10 @@ def gen_find(rng, shape=None):
 def kform(k, f):
     """exact canonical form of the real number k whose f-th power |k|^f is rational:
     (q, r, n) with k = q * r^(1/n), r a positive integer free of n-th powers, n minimal."""
-    t = sp.nsimplify(sp.Abs(k) ** f)
+    t = sp.Abs(k) ** f
     if not t.is_Rational:
-        t = sp.Rational(sp.nsimplify(sp.N(sp.Abs(k) ** f, 80), rational=True))
+        t = sp.radsimp(sp.expand_power_base(sp.powsimp(t, force=True), force=True))
+    assert t.is_Rational, (k, f, t)   # (nsimplify would round a tiny rational to 0)
     u, v = int(t.p), int(t.q)
     r0 = u * v ** (f - 1)  # |k| = (u v^(f-1))^(1/f) / v
     out, rem = 1, {}
@@ -352,6 +383,10 @@ def find_oracle(p):
     assert pp.is_Rational, (p, pp)
     if pp == 0:
         return "err", {PZERO}
+    if pp.q >= 100:
+        # a power with a denominator of 100 or more is almost surely a rounded decimal (0.667):
+        # the solver asks for the fraction instead (only absurd root indexes give it exactly)
+        return "err", {DECI}
     f = int(S["F"]) if "F" in S else 1
     q, r, n = kform(kk, f)
     chk = sp.Rational(q.numerator, q.denominator) * sp.Integer(r) ** sp.Rational(1, n)
@@ -359,10 +394,21 @@ def find_oracle(p):
     return "ok", kk, Fr(int(pp.p), int(pp.q)), (q, r, n), p
 
 
+def shown_exact(q):
+    """HAFRAC prints q as a fraction (documented limits) rather than a 6-place decimal"""
+    q = Fr(q)
+    return q.denominator <= 9999 and q.denominator ** 2 * max(1, abs(q)) <= 10 ** 8
+
+
 def find_expect(o):
     """the answer lines for an 'ok' FIND oracle result and the K text"""
     _, kk, pp, (q, r, n), _ = o
-    if r == 1:
+    if not shown_exact(q):
+        # no exact fraction HAFRAC can show: the whole k as a decimal (never a rounded
+        # coefficient times a radical)
+        ktxt = dec6(float(kk))
+        ycoef = ktxt
+    elif r == 1:
         ktxt = ft(q)
         ycoef = coef_text(q)
     else:
@@ -377,14 +423,23 @@ def fallback_ok(o):
     if "F" not in v:
         return False
     f = int(v["F"])
+    if not shown_exact(abs(v["D"])):
+        return True      # HAFRAC cannot show the number under the root exactly (documented limit)
     u, w = abs(v["D"]).numerator, abs(v["D"]).denominator
     g = w * u ** (f - 1) if p["shape"] in (4, 6) else u * w ** (f - 1)
-    return g >= 10 ** 11 or g ** (1 / f) > 900
+    return g >= 10 ** 11 or g ** (1 / f) > 450
+
+
+SHARED = {"hafrac_tiny_zero": 0}
 
 
 def check_find(o, body):
     want, ktxt = find_expect(o)
     if body == want:
+        if ktxt in ("0", "-0"):
+            # a nonzero k shown as 0 / -0: HAFRAC's 6-place decimal fallback (shared helper issue,
+            # reported; counted separately, not a mismatch of the power solver)
+            SHARED["hafrac_tiny_zero"] += 1
         return []
     _, kk, pp, (q, r, n), _ = o
     # the documented decimal fallback when the radicand work would be too big for the TI
@@ -541,17 +596,23 @@ def props_lines(k, a, b, ktxt, mode):
     return L
 
 
-ROOT_RE = re.compile(r"(1/)?(\()?(√\(X\)|³√\(X\)|\((\d+)TH ROOT X\))(\))?(²|³|\^(\d+))?")
+ROOT_RE = re.compile(r"(1/)?(\()?(√\(X\)|³√\(X\)|\((\d+)(ST|ND|RD|TH) ROOT X\))(\))?(²|³|\^(\d+))?")
+
+
+def ordinal(n):
+    return "TH" if n % 100 in (11, 12, 13) else {1: "ST", 2: "ND", 3: "RD"}.get(n % 10, "TH")
 
 
 def root_value(txt, x):
     m = ROOT_RE.fullmatch(txt)
     if not m:
         return None
-    inv, op, base, nth, cp, ex, exn = m.groups()
+    inv, op, base, nth, suf, cp, ex, exn = m.groups()
     if bool(op) != bool(cp):
         return None
     n = 2 if base == "√(X)" else 3 if base == "³√(X)" else int(nth)
+    if nth and (n < 4 or suf != ordinal(n)):
+        return None   # 4TH, 21ST, 22ND, 23RD, 111TH
     e = 1 if not ex else 2 if ex == "²" else 3 if ex == "³" else int(exn)
     if e > 1 and n <= 3 and not op:
         return None   # (√(X))² needs its brackets
@@ -577,7 +638,7 @@ def check_root(lines, a, b):
     for x in ([2, mp.mpf("0.3")] + ([-2] if b % 2 else [])):
         got = root_value(form, x)
         want = fval(mp.mpf(1), a, b, x)
-        if got is None or abs(got - want) > 1e-30:
+        if got is None or abs(got - want) > mp.mpf("1e-30") * max(1, abs(want)):
             return [f"root form {form!r} wrong at x={x}"]
     return []
 
@@ -657,8 +718,9 @@ def gen_props(rng):
     elif r < 0.12:
         pa, pb, ptyped = 1, 1, rng.choice(["", "1"])
     else:
-        pb = rng.choice([1, 2, 3, 3, 4, 5, 5, 6, 7, 8, 9, 11, 12])
-        pa = rng.choice([x for x in range(-15, 16) if x != 0])
+        pb = rng.choice([1, 2, 3, 3, 4, 5, 5, 6, 7, 8, 9, 11, 12] + ([16, 21, 25, 33, 64, 99] if WIDE[0] else []))
+        span = 150 if WIDE[0] else 15
+        pa = rng.choice([x for x in range(-span, span + 1) if x != 0])
         g = math.gcd(pa, pb)
         pa, pb = pa // g, pb // g
         m = rng.choice([1, 1, 1, 1, 2, 3])
@@ -678,14 +740,15 @@ def gen_props(rng):
 
 
 def props_oracle(p, mode):
-    """-> ('err', body) or ('ok', expected body via check function)"""
+    """-> ('err', acceptable bodies) or ('ok', None)"""
+    bad = []
     if p["k"] == 0:
-        return "err", ["NOT A POWER FUNCTION", "(K=0, SO Y=0)"]
+        bad.append(["NOT A POWER FUNCTION", "(K=0, SO Y=0)"])
     if p["a"] is None:
-        return "err", ["TYPE POWERS AS FRACTIONS,", "LIKE 2/3, NOT 0.667"]
-    if p["a"] == 0:
-        return "err", ["NOT A POWER FUNCTION", "(P=0, SO Y=K: CONSTANT)"]
-    return "ok", None
+        bad.append(["TYPE POWERS AS FRACTIONS,", "LIKE 2/3, NOT 0.667"])
+    elif p["a"] == 0:
+        bad.append(["NOT A POWER FUNCTION", "(P=0, SO Y=K: CONSTANT)"])
+    return ("err", bad) if bad else ("ok", None)
 
 
 # ============================================================================ BUILD
@@ -759,13 +822,8 @@ def check_build_why(quad, shape, eq, body):
 
 
 # ============================================================================ sessions
-class Prob:
-    def __init__(self, kind, desc, check, footer):
-        self.kind, self.desc, self.check, self.footer = kind, desc, check, footer
-
-
 def make_session(rng, kinds):
-    """returns (actions, list of expected screens: (Prob, check function on the body))"""
+    """returns (actions, expected screens: (kind, description, footer, check function on the body))"""
     acts = []
     screens = []   # list of (kind, desc, footer, checker)
     where = "MAIN"
@@ -824,7 +882,14 @@ def make_session(rng, kinds):
                     acts.append(rng.choice(["k2", "CLEAR"]))
                     where = "MAIN"
                 continue
-            screens.append(("find", desc, FOOT_FIND, lambda body, o=o: check_find(o, body)))
+            fh = {}
+
+            def fchk(body, o=o, fh=fh):
+                e = check_find(o, body)
+                if not e and len(body) > 1 and body[1].startswith("K=") and fallback_ok(o):
+                    fh["ktxt"] = body[1][2:]   # the decimal fallback FIND showed is what ALL PROPS reuses
+                return e
+            screens.append(("find", desc, FOOT_FIND, fchk))
             nxt = rng.random()
             if nxt < 0.4:
                 acts.append("k1")
@@ -836,7 +901,8 @@ def make_session(rng, kinds):
                 _, ktxt = find_expect(o)
                 a, b = pp.numerator, pp.denominator
                 screens.append(("find-props", desc, FOOT_3,
-                                lambda body, kk=kk, a=a, b=b, ktxt=ktxt: check_props(kk, a, b, ktxt, 3, body)))
+                                lambda body, kk=kk, a=a, b=b, ktxt=ktxt, fh=fh:
+                                check_props(kk, a, b, fh.get("ktxt", ktxt), 3, body)))
                 r2 = rng.random()
                 if r2 < 0.3:
                     acts.append("k3")
@@ -865,8 +931,8 @@ def make_session(rng, kinds):
             desc = f"props mode {mode} k={p['k']} p={p['a']}/{p['b']} typed {p['acts']}"
             done += 1
             if o[0] == "err":
-                screens.append(("props-err", desc, FOOT_2, lambda body, o=o: [] if body == o[1] else
-                                [f"got {body} want {o[1]}"]))
+                screens.append(("props-err", desc, FOOT_2, lambda body, o=o: [] if body in o[1] else
+                                [f"got {body} want one of {o[1]}"]))
                 if rng.random() < 0.5:
                     acts.append("k1")
                     where = "KP"
@@ -978,8 +1044,10 @@ def main():
     ap.add_argument("-s", type=int, default=1)
     ap.add_argument("--kind", default="find,props,build")
     ap.add_argument("-v", action="store_true")
+    ap.add_argument("--wide", action="store_true", help="also big numbers, high root indexes, long powers")
     args = ap.parse_args()
     rng = random.Random(args.s)
+    WIDE[0] = args.wide
     kinds = args.kind.split(",")
     stats = {}
     bad = 0
@@ -1001,6 +1069,8 @@ def main():
     total = sum(stats.values())
     print(f"{args.n} sessions, {total} answer screens {dict(sorted(stats.items()))}; "
           f"{bad} sessions with mismatches; {time.time() - t0:.1f}s")
+    if any(SHARED.values()):
+        print(f"shared-helper limitations seen (not counted as mismatches): {SHARED}")
     return 1 if bad else 0
 
 

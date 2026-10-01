@@ -7,7 +7,17 @@ If B≥4
 Then
 B→θ
 prgmHAFRAC
-"("+Str9+"TH ROOT X)"→Str3
+B-10int(B/10)→M
+"TH"→Str2
+If M=1
+"ST"→Str2
+If M=2
+"ND"→Str2
+If M=3
+"RD"→Str2
+If B-100int(B/100)≥11 and B-100int(B/100)≤13
+"TH"→Str2
+"("+Str9+Str2+" ROOT X)"→Str3
 End
 abs(A)→M
 If M>1 and B≤3

@@ -275,7 +275,7 @@ def parse_statement(toks, where):
 
     if head == "SetUpEditor" and len(toks) == 1:
         return ("SetUpEditor", [])
-    if head in ("ClrHome", "Then", "Else", "End", "Return", "Stop", "Float", "Normal") and len(toks) == 1:
+    if head in ("ClrHome", "Then", "Else", "End", "Return", "Stop", "Float", "Normal", "Func") and len(toks) == 1:
         return (head,)
     if head == "Pause":
         return ("Pause",) if len(toks) == 1 else done(("Pause", p.expr()))
@@ -342,7 +342,7 @@ def parse_statement(toks, where):
             names.append(p.take() if p.peek() in LISTVARS else p.listname())
         return done(("SetUpEditor", names))
     if head == "DelVar ":
-        return done(("DelVar", parse_target(P(toks, 1, where))))
+        return done(("DelVar", parse_target(p)))
     # expression [→ target]
     p = P(toks, 0, where)
     e = p.expr()
@@ -392,6 +392,7 @@ class Machine:
         self.screen = [[" "] * COLS for _ in range(ROWS)]
         self.row = 0
         self.events = []  # (kind, detail, screen lines)
+        self.nstmt, self.last_poll = 0, -100
         self.problems = []
         self.covered = set()
         self.max_steps = max_steps
@@ -693,6 +694,13 @@ class Machine:
         return self.actions[self.ai] if self.ai < len(self.actions) else None
 
     def getkey(self):
+        # A scripted key is a key pressed while the program WAITS for one, i.e. while it polls
+        # getKey in a loop.  A lone getKey (like the one HAEND/HAOUT use to throw away a key
+        # pressed during a long calculation) finds no key: it returns 0 and keeps the script.
+        polling = self.nstmt - self.last_poll <= 10
+        self.last_poll = self.nstmt
+        if not polling:
+            return D(0)
         a = self.next_action()
         if a in KEYCODES:
             self.snap("key", a)
@@ -766,6 +774,7 @@ class Machine:
             return h.args[0]
 
     def exec(self, f):
+        self.nstmt += 1
         st = self.stmt(f.name, f.pc)
         k = st[0]
         name, i = f.name, f.pc
@@ -905,7 +914,7 @@ class Machine:
             return
         elif k == "Stop":
             raise Halt(("stop", None))
-        elif k in ("Float", "Normal"):
+        elif k in ("Float", "Normal", "Func"):
             pass
         elif k == "SortA":
             names = st[1]

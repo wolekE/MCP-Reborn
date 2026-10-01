@@ -1,0 +1,22 @@
+If length(Str8)
+Then
+If sub(Str8,1,1)="X"
+Then
+If length(Str8)=1
+"1"→Str8
+If length(Str8)=2
+Then
+sub(Str8,2,1)→Str9
+If Str9="²"
+"2"→Str8
+If Str9="³"
+"3"→Str8
+End
+If length(Str8)>2
+Then
+If sub(Str8,2,1)="^"
+sub(Str8,3,length(Str8)-2)→Str8
+End
+End
+End
+prgmHANUM

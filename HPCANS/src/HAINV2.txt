@@ -30,7 +30,7 @@ Goto 4
 Lbl 1
 ClrHome
 Disp Str0+"(X)=AX+B  (A LINE)"
-Disp "TYPE IT WITH THE X KEY."
+Disp "TYPE IT WITH X,T,θ,N KEY."
 Disp "EX: -3X+9"
 Input "Y=",Str8
 prgmHAINV3
@@ -41,7 +41,7 @@ Return
 Lbl 2
 ClrHome
 Disp Str0+"(X)=TOP/BOTTOM"
-Disp "TYPE EACH WITH THE X KEY."
+Disp "TYPE EACH WITH X,T,θ,N."
 Disp "EX: (5X+2)/(X-4) GIVES"
 Disp "  TOP=5X+2  BOTTOM=X-4"
 Disp "EX: 6/(2X+1) GIVES TOP=6"
@@ -62,7 +62,7 @@ ClrHome
 Disp Str0+"(X)=A/(BX+C)+D"
 Disp "EX: 3/(X-2)+1 GIVES"
 Disp "  A=3 BOTTOM=X-2 D=1"
-Disp "NO NUMBER? PRESS ENTER"
+Disp "NO NUMBER=ENTER, MINUS=(⁻)"
 Input "A (TOP NUMBER)=",Str8
 prgmHANUM
 θ→A
@@ -126,7 +126,7 @@ Disp Str0+"(X)=A|BX+C|+D"
 Disp "EX: |X|+3 GIVES"
 Disp "  A=1 INSIDE=X D=3"
 End
-Disp "NO NUMBER? PRESS ENTER"
+Disp "NO NUMBER=ENTER, MINUS=(⁻)"
 If H≠7
 Goto 5
 Input "POWER=",Str8
@@ -170,7 +170,7 @@ ClrHome
 Disp "THAT DOES NOT FIT."
 Disp "A CAN NOT BE 0, AND EACH"
 Disp "X PART MUST LOOK LIKE"
-Disp "2X+5 (USE THE X KEY)."
+Disp "2X+5 (USE X,T,θ,N KEY)."
 Disp ""
 Disp "PRESS ENTER, TRY AGAIN."
 Pause

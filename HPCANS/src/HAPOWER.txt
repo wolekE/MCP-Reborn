@@ -30,15 +30,13 @@ prgmHANUM
 If Z
 1→K
 Input "P=",Str8
+0→D
+If length(Str8)
+inString(Str8,".")→D
 prgmHANUM
 θ→C
-0→D
 If Z
-Then
 1→C
-Else
-inString(Str8,".")→D
-End
 If abs(K)≥ᴇ98 or abs(C)≥ᴇ98
 Goto 2
 C→θ
@@ -156,7 +154,7 @@ End
 If I=1 or I=3
 Then
 Input "POWER ON X=",Str8
-prgmHANUM
+prgmHAPOWR5
 θ→E
 If Z
 1→E
@@ -164,7 +162,7 @@ End
 If I≥5
 Then
 Input "X POWER OUTSIDE ROOT=",Str8
-prgmHANUM
+prgmHAPOWR5
 θ→E
 If Z
 1→E
@@ -185,7 +183,7 @@ prgmHANUM
 If Z
 1→D
 Input "X POWER UNDER ROOT=",Str8
-prgmHANUM
+prgmHAPOWR5
 θ→G
 If Z
 1→G

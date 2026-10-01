@@ -41,7 +41,7 @@ Lbl 1
 ClrHome
 Disp Str4+"(X)=AX+B"
 Disp "EX: 3-X GIVES A=-1 B=3"
-Disp "NO NUMBER IN FRONT? ENTER"
+Disp "NO NUMBER=ENTER, MINUS=(⁻)"
 Disp "JUST A NUMBER LIKE 5? A=0"
 Input "A (X COEF)=",Str8
 prgmHANUM
@@ -55,12 +55,12 @@ ClrHome
 Disp Str4+"(X)=AX²+BX+C"
 Disp "EX: 2X²-1 GIVES"
 Disp "  A=2 B=0 C=-1"
-Disp "NO NUMBER IN FRONT? ENTER"
+Disp "NO NUMBER=ENTER, MINUS=(⁻)"
 Disp "NO X TERM? TYPE 0"
 Input "A (X² COEF)=",Str8
 prgmHANUM
 θ+Z→ʟFNC(4)
-Input "B (X COEF)=",Str8
+Input "B (X COEF, NONE=0)=",Str8
 prgmHANUM
 θ+Z→ʟFNC(5)
 Input "C (NUMBER ALONE)=",Str8
@@ -72,7 +72,7 @@ ClrHome
 Disp Str4+"(X)=(AX+B)/(CX+D)"
 Disp "EX: (X+2)/(4-X) GIVES"
 Disp "  A=1 B=2 C=-1 D=4"
-Disp "NO NUMBER IN FRONT? ENTER"
+Disp "NO NUMBER=ENTER, MINUS=(⁻)"
 Disp "NO X ON THE BOTTOM? C=0"
 Input "A (TOP X COEF)=",Str8
 prgmHANUM
@@ -81,7 +81,7 @@ Input "B (TOP NUMBER)=",Str8
 prgmHANUM
 θ→ʟFNC(6)
 Lbl 3B
-Input "C (BOTTOM X COEF)=",Str8
+Input "C (BOTTOM X, NONE=0)=",Str8
 prgmHANUM
 θ+Z→ʟFNC(10)
 Input "D (BOTTOM NUMBER)=",Str8
@@ -99,7 +99,7 @@ ClrHome
 Disp Str4+"(X)=K/(AX+B)"
 Disp "EX: 4/(X+1) GIVES"
 Disp "  K=4 A=1 B=1"
-Disp "NO NUMBER IN FRONT? ENTER"
+Disp "NO NUMBER=ENTER, MINUS=(⁻)"
 Input "K (TOP NUMBER)=",Str8
 prgmHANUM
 θ+Z→ʟFNC(6)
@@ -123,7 +123,7 @@ ClrHome
 Disp Str4+"(X)=K√(AX+B)+C"
 Disp "EX: -2√(5-X)+1 GIVES"
 Disp "  K=-2 A=-1 B=5 C=1"
-Disp "NO NUMBER IN FRONT? ENTER"
+Disp "NO NUMBER=ENTER, MINUS=(⁻)"
 Input "K (FRONT)=",Str8
 prgmHANUM
 θ+Z→ʟFNC(12)
@@ -142,12 +142,12 @@ ClrHome
 Disp Str4+"(X)=TOP/BOTTOM"
 Disp "EX: A TOP OF X-3 GIVES"
 Disp "  X² 0, X 1, NUMBER -3"
-Disp "NO NUMBER IN FRONT? ENTER"
+Disp "NO NUMBER=ENTER, MINUS=(⁻)"
 Disp "NO X² OR X TERM? TYPE 0"
-Input "TOP X² COEF=",Str8
+Input "TOP X² (NONE=0)=",Str8
 prgmHANUM
 θ+Z→ʟFNC(4)
-Input "TOP X COEF=",Str8
+Input "TOP X (NONE=0)=",Str8
 prgmHANUM
 θ+Z→ʟFNC(5)
 Input "TOP NUMBER=",Str8
@@ -157,13 +157,13 @@ ClrHome
 Disp "NOW THE BOTTOM."
 Disp "EX: A BOTTOM OF X² GIVES"
 Disp "  X² 1, X 0, NUMBER 0"
-Disp "NO NUMBER IN FRONT? ENTER"
+Disp "NO NUMBER=ENTER, MINUS=(⁻)"
 Disp "NO X² OR X TERM? TYPE 0"
 Lbl 6B
-Input "BOTTOM X² COEF=",Str8
+Input "BOTTOM X² (NONE=0)=",Str8
 prgmHANUM
 θ+Z→ʟFNC(9)
-Input "BOTTOM X COEF=",Str8
+Input "BOTTOM X (NONE=0)=",Str8
 prgmHANUM
 θ+Z→ʟFNC(10)
 Input "BOTTOM NUMBER=",Str8

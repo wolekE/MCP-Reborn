@@ -17,9 +17,29 @@ ClrHome
 Disp "GRAPH OF "+Str4+":"
 Disp "1:TYPE THE CORNER POINTS"
 If P
-Disp "2:USE SAVED GRAPH OF F"
+Then
+ʟGFX(1)→θ
+prgmHAFRAC
+"2:SAVED F X="+Str9+" TO "→Str5
+ʟGFX(P)→θ
+prgmHAFRAC
+Str5+Str9→Str5
+If length(Str5)>26
+"2:USE SAVED GRAPH OF F"→Str5
+Disp Str5
+End
 If Q
-Disp "3:USE SAVED GRAPH OF G"
+Then
+ʟGGX(1)→θ
+prgmHAFRAC
+"3:SAVED G X="+Str9+" TO "→Str5
+ʟGGX(Q)→θ
+prgmHAFRAC
+Str5+Str9→Str5
+If length(Str5)>26
+"3:USE SAVED GRAPH OF G"→Str5
+Disp Str5
+End
 3→θ
 prgmHAKEY
 If θ=0

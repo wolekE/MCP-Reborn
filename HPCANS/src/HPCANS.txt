@@ -1,5 +1,6 @@
 Float
 Normal
+Func
 SetUpEditor ʟGFX,ʟGFY,ʟGFC,ʟGGX,ʟGGY,ʟGGC,ʟBX,ʟBY,ʟBC
 SetUpEditor
 ClrHome
@@ -7,19 +8,19 @@ Disp "HPC ANSWER HELPER"
 Disp ""
 Disp "NEGATIVE: USE THE (⁻) KEY"
 Disp "FRACTION: TYPE 2/3"
-Disp "CLEAR = GO BACK"
+Disp "CLEAR = BACK (MENUS)"
 Disp ""
 Disp "PRESS ENTER"
 Pause
 Lbl M
 ClrHome
 Disp "WHAT DOES IT LOOK LIKE?"
-Disp "1:F+G  OR  F/G"
-Disp "2:F(G(X))"
+Disp "1:F+G  F-G  FG  F/G"
+Disp "2:F(G(X))  OR √(G(X))"
 Disp "3:F⁻¹(X)  INVERSE"
-Disp "4:A*F(BX+C)+K"
+Disp "4:A*F(BX+C)+K SHIFT/FLIP"
 Disp "5:ABS BARS |F(X)| F(|X|)"
-Disp "6:KX^P  OR  ROOTS"
+Disp "6:KX^P  POWER/ROOTS"
 Disp "7:DECOMPOSE H(X)"
 Disp ""
 Disp "CLEAR=QUIT"
@@ -65,5 +66,77 @@ Lbl 7
 prgmHADECOMP
 Goto M
 Lbl Q
+DelVar ʟCMB
+DelVar ʟCMC
+DelVar ʟCMD
+DelVar ʟCME
+DelVar ʟCMI
+DelVar ʟCMJ
+DelVar ʟCMN
+DelVar ʟCMO
+DelVar ʟCMP
+DelVar ʟCMQ
+DelVar ʟCMR
+DelVar ʟCMT
+DelVar ʟCMU
+DelVar ʟCMW
+DelVar ʟCP
+DelVar ʟDA
+DelVar ʟDB
+DelVar ʟDL
+DelVar ʟDR
+DelVar ʟEA
+DelVar ʟEB
+DelVar ʟEL
+DelVar ʟER
+DelVar ʟF1
+DelVar ʟF2
+DelVar ʟF3
+DelVar ʟFGA
+DelVar ʟFGB
+DelVar ʟFGL
+DelVar ʟFGR
+DelVar ʟFNA
+DelVar ʟFNB
+DelVar ʟFNC
+DelVar ʟFND
+DelVar ʟFNN
+DelVar ʟFNR
+DelVar ʟFNS
+DelVar ʟFNT
+DelVar ʟFNV
+DelVar ʟFNW
+DelVar ʟFNX
+DelVar ʟFNY
+DelVar ʟFR
+DelVar ʟFZL
+DelVar ʟFZR
+DelVar ʟHC
+DelVar ʟHX
+DelVar ʟHY
+DelVar ʟINVP
+DelVar ʟOPA
+DelVar ʟOPB
+DelVar ʟOPF
+DelVar ʟOPN
+DelVar ʟOPQ
+DelVar ʟOPR
+DelVar ʟOPS
+DelVar ʟOPT
+DelVar ʟOPU
+DelVar ʟOPV
+DelVar ʟOPW
+DelVar ʟPA
+DelVar ʟPB
+DelVar ʟPC
+DelVar ʟPLY
+DelVar ʟQC
+DelVar ʟRT
+DelVar ʟSD
+DelVar ʟSN
+DelVar ʟTA
+DelVar ʟTB
+DelVar ʟTL
+DelVar ʟTR
 ClrHome
 Stop

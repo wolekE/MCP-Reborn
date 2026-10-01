@@ -48,7 +48,7 @@ Disp "X: USE THE X,T,θ,N KEY"
 Input "STUFF=",Str1
 1→D
 If length(Str1)=0
-Goto S
+Goto M
 If not(inString(Str1,"X"))
 Goto S
 Disp "NO NUMBER? PRESS ENTER"
@@ -112,6 +112,11 @@ Then
 1/A→B
 G-1→G
 End
+If G=3 and B<0
+Then
+⁻B→B
+1→G
+End
 Goto 5
 Lbl 6
 Disp "NO B(STUFF) TERM? TYPE 0"
@@ -123,7 +128,7 @@ If Z
 2→D
 If A=0
 Goto S
-Input "B (MIDDLE)=",Str8
+Input "B (BEFORE 2ND STUFF)=",Str8
 prgmHANUM
 θ→B
 If Z
@@ -133,18 +138,32 @@ prgmHANUM
 θ→C
 Lbl 5
 "?"→Str0
+0→D
 For(I,1,length(Str1))
 sub(Str1,I,1)→Str8
 If Str8="⁻"
 "-"→Str8
+sub(Str0,length(Str0),1)→Str9
+If (Str8="-" or Str8="+") and (Str9="-" or Str9="+")
+Then
+sub("+-",1+(Str8≠Str9),1)→Str8
+sub(Str0,1,length(Str0)-1)→Str0
+End
+D+(Str8="(" or Str8="√(" or Str8="³√(" or Str8="𝑒^(")-(Str8=")")→D
 Str0+Str8→Str0
+End
+While D>0
+Str0+")"→Str0
+D-1→D
 End
 sub(Str0,2,length(Str0)-1)→Str1
 Lbl 3
 length(Str1)→L
+0→H
 If L<3
 Goto 4
-If sub(Str1,1,1)≠"(" or sub(Str1,L,1)≠")"
+sub(Str1,1,1)→Str0
+If sub(Str1,L,1)≠")" or not(Str0="(" or Str0="√(" or Str0="³√(" or Str0="𝑒^(")
 Goto 4
 1→D
 2→I
@@ -155,11 +174,25 @@ I+1→I
 End
 If D=0
 Goto 4
+1→H
+If Str0≠"("
+Goto 4
 sub(Str1,2,L-2)→Str1
 Goto 3
 Lbl 4
 (Str1="X")→E
-inString(Str1,"+") or inString(Str1,"-") or inString(Str1,"*") or inString(Str1,"/") or inString("0123456789.",sub(Str1,1,1))→F
+not(E or H or Str1="X²" or Str1="X³")→F
+If L≥3 and not(H)
+Then
+If sub(Str1,1,2)="X^"
+Then
+0→F
+For(I,3,L)
+If not(inString("0123456789",sub(Str1,I,1)))
+1→F
+End
+End
+End
 abs(K)→θ
 prgmHAFRAC
 If Y>1
@@ -208,6 +241,22 @@ Then
 If A=3
 "³√("→Str0
 End
+If G≠6
+Then
+0→A
+If Str0="³√(" or Str0="^(1/3)"
+Then
+If Str1="X³" or Str1="X^3"
+1→A
+End
+If Str0="³" and (Str1="³√(X)" or Str1="X^(1/3)")
+1→A
+If length(Str0)>5
+Then
+If sub(Str0,1,4)="^(1/" and Str1="X^"+sub(Str0,5,length(Str0)-5) and fPart(round(1/B,6)/2)
+1→A
+End
+End
 prgmHAANS
 0→J
 If G=1
@@ -235,7 +284,7 @@ prgmHADECMP2
 Str2+"X"+Str0+Str3→Str9
 prgmHADECMP2
 End
-If B≠1 and not(K=1 and C=0)
+If B≠1 and not(K=1 and C=0) and not(A)
 Then
 If E
 "X"+Str0→Str9
@@ -243,6 +292,20 @@ If not(E)
 "("+Str1+")"+Str0→Str9
 prgmHADECMP2
 Str2+"X"+Str3→Str9
+prgmHADECMP2
+End
+If E and B=1 and K≠1 and C≠0
+Then
+Str2+"X"→Str9
+prgmHADECMP2
+"X"+Str3→Str9
+prgmHADECMP2
+End
+If E and B=1 and K=1 and C≠0
+Then
+"2X"→Str9
+prgmHADECMP2
+"(1/2)X"+Str3→Str9
 prgmHADECMP2
 End
 Goto V
@@ -254,7 +317,7 @@ prgmHADECMP2
 Str2+Str0+"X)"+Str3→Str9
 prgmHADECMP2
 End
-If not(K=1 and C=0)
+If not(K=1 and C=0) and not(A)
 Then
 Str0+Str1+")"→Str9
 prgmHADECMP2
@@ -270,7 +333,7 @@ prgmHADECMP2
 Str2+"/X"+Str0+Str3→Str9
 prgmHADECMP2
 End
-If B≠1
+If B≠1 and not(A)
 Then
 If E
 "X"+Str0→Str9
@@ -280,7 +343,7 @@ prgmHADECMP2
 Str2+"/X"+Str3→Str9
 prgmHADECMP2
 End
-If B≠1 or not(K=1 and C=0)
+If (B≠1 or not(K=1 and C=0)) and Str1≠"1/X" and Str1≠"X⁻¹" and Str1≠"X^-1" and Str1≠"X^(-1)"
 Then
 If F
 "1/("+Str1+")"→Str9
@@ -304,10 +367,13 @@ prgmHADECMP2
 Str2+"/"+Str0+"X)"+Str3→Str9
 prgmHADECMP2
 End
+If not(A)
+Then
 Str0+Str1+")"→Str9
 prgmHADECMP2
 Str2+"/X"+Str3→Str9
 prgmHADECMP2
+End
 Goto V
 Lbl G5
 If E=0
@@ -407,6 +473,8 @@ prgmHADECMP2
 "√("+Str2+"/X)"→Str9
 prgmHADECMP2
 End
+If Str1=Str2+"/X" or Str2="1" and (Str1="X⁻¹" or Str1="X^-1" or Str1="X^(-1)")
+Goto V
 Str2+"/"+Str1→Str9
 If F
 Str2+"/("+Str1+")"→Str9
@@ -418,6 +486,8 @@ If G=6
 Goto 7
 If J≥6
 Goto W
+If G=1 and B=1 and not(K=1 and C=0)
+Goto Z
 length(Str1)→L
 0→I
 "?"+Str1→Str8
@@ -429,7 +499,7 @@ If D>L or D<3
 Goto Q
 If sub(Str8,D,1)≠"+" and sub(Str8,D,1)≠"-"
 Goto Q
-If inString("^(*/",sub(Str8,D-1,1)) or not(inString("0123456789",sub(Str8,D+1,1))) or not(inString("0123456789",sub(Str8,L+1,1)))
+If inString("^(*/+-",sub(Str8,D-1,1)) or not(inString("0123456789",sub(Str8,D+1,1))) or not(inString("0123456789",sub(Str8,L+1,1)))
 Goto Q
 D-1→H
 sub(Str1,1,H-1)→Str8
@@ -447,7 +517,7 @@ If D<2 or D≥L
 Goto Z
 If sub(Str8,D,1)≠"+" and sub(Str8,D,1)≠"-"
 Goto Z
-If not(inString("0123456789",sub(Str8,D-1,1)))
+If not(inString("0123456789",sub(Str8,D-1,1))) or inString("+-",sub(Str8,D+1,1))
 Goto Z
 D→H
 sub(Str1,H+1,L-H)→Str8
@@ -471,7 +541,7 @@ Goto T
 Lbl Z
 If J
 Goto W
-If G=1 and B=1
+If G=1 and B=1 and not(E)
 Goto N
 "X+1"→Str9
 prgmHADECMP2

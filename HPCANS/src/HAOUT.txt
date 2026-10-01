@@ -5,12 +5,16 @@ While X≤length(Str9)
 If W≥8
 Then
 Output(10,1,"ENTER=MORE  CLEAR=SKIP")
+getKey→Z
 0→θ
 Repeat θ=105 or θ=45
 getKey→θ
 End
-ClrHome
 0→W
+If θ=105
+ClrHome
+If θ=45
+Output(10,1,"                          ")
 If θ=45
 99→W
 End
@@ -18,10 +22,15 @@ If W<50
 Then
 X→Y
 0→θ
+If length(Str9)-X<26 and not(inString(Str9,"√(",X) or inString(Str9,"³√(",X) or inString(Str9,"𝑒^(",X))
+Then
+length(Str9)+1→Y
+Else
 Repeat Y>length(Str9) or θ>26
 sub(Str9,Y,1)→Str8
 θ+1+(Str8="√(")+2(Str8="³√(" or Str8="𝑒^(")→θ
 Y+1→Y
+End
 End
 If θ>26
 Then

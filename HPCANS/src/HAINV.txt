@@ -304,10 +304,10 @@ ClrHome
 Disp "WHAT DOES F LOOK LIKE?"
 Disp "1:LINE  AX+B"
 Disp "2:PARABOLA  X²"
-Disp "3:X³  ³√(X)  √(X)"
+Disp "3:(X-1)³+5  ³√(X)  √(X)"
 Disp "4:ABS VALUE  |X|"
-Disp "5:POWER X^(M/N) OR X^4"
-Disp "6:FRACTION  1/X"
+Disp "5:POWER X^4  X^(2/3)  1/X²"
+Disp "6:1/X  OR  2/(X-3)+1"
 Disp "7:𝑒^(X)  OR  LN X"
 Disp "8:[[X]] GREATEST INTEGER"
 Disp "9:A GRAPH"
@@ -339,7 +339,7 @@ prgmHAOUT
 Goto E
 Lbl 6
 ClrHome
-Disp "TYPE F(X) WITH THE X KEY"
+Disp "TYPE F(X) WITH X,T,θ,N KEY"
 Disp "EX: (X-1)²  OR  X²-2"
 Input "Y=",Str8
 If length(Str8)=0

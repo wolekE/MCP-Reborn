@@ -31,7 +31,7 @@
  {
   "item_id": "EX-1.3",
   "what_question_gives": "Graphs of f (corners (-6,2),(-3,-1),(1,3),(4,0),(7,3)) and g (corners (-5,3),(-2,0),(1,0),(3,2),(6,-1)), solid ends; (a) (f+g)(-3) (b) (fg)(3) (c) D f+g (d) D f/g (e) D g/f",
-  "solver_path": "(a),(b): 1:F+G OR F/G → 2:A VALUE → 1:F+G or 3:FG → X. (c)-(e): 1:DOMAIN → 1:F+G / 4:F/G / 5:G/F",
+  "solver_path": "(a),(b): 1:F+G OR F/G → 2:A VALUE → 1:F+G or 3:FG → X. (c)-(e): 1:DOMAIN → 1:F+G / 4:F/G / 5:G/F; values (a),(b): 1 → 4:A VALUE OFF GRAPHS (type only f(x) and g(x) read off the graphs)",
   "student_enters": "F: 7:A GRAPH → type 5 corners + 1:BOTH SOLID, or 2:USE SAVED GRAPH OF F; G: 7:A GRAPH → 1:TYPE (corners) or 3:USE SAVED GRAPH OF G; X=-3 / X=3",
   "calculator_shows": "(F+G)(-3)=0; (FG)(3)=2; D(F+G)=[-5,6]; D(F/G)=[-5,-2)U(1,5)U(5,6]; D(G/F)=[-5,-4)U(-4,-2)U / (-2,4)U(4,6] (2 rows)",
   "expected_answer": "(a) 0 (b) 2 (c) [−5,6] (d) [−5,−2)∪(1,5)∪(5,6] (e) [−5,−4)∪(−4,−2)∪(−2,4)∪(4,6]",
@@ -40,7 +40,9 @@
    "EX-1.3b",
    "EX-1.3c",
    "EX-1.3d",
-   "EX-1.3e"
+   "EX-1.3e",
+   "REV-ops-R1",
+   "REV-ops-R2"
   ]
  },
  {

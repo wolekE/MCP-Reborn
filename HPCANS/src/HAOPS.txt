@@ -6,9 +6,10 @@ Disp "WHAT DO THEY WANT?"
 Disp "1:DOMAIN   LIKE D(F/G)"
 Disp "2:A VALUE  LIKE (FG)(-2)"
 Disp "3:FORMULA  LIKE (F-G)(X)"
+Disp "4:A VALUE OFF GRAPHS"
 If H
 Disp "(SAME F AND G AS BEFORE)"
-3→θ
+4→θ
 prgmHAKEY
 θ→J
 If J=0
@@ -40,6 +41,8 @@ If K=6
 "G-F"→Str0
 If H
 Goto V
+If J=4
+Goto R
 1→N
 0→O
 "F"→Str9
@@ -55,6 +58,8 @@ Goto C
 1→H
 Lbl V
 If J=2
+Goto 2
+If J=4
 Goto 2
 If J=3
 Goto 3
@@ -86,6 +91,7 @@ prgmHANUM
 θ→E
 If abs(E)≥ᴇ98
 Goto 2
+Lbl 2V
 prgmHAOPS6
 prgmHAANS
 E→θ
@@ -141,7 +147,7 @@ Lbl W
 prgmHAPAGE
 If J=1
 Goto W1
-If J=2
+If J=2 or J=4
 Goto W2
 For(I,1,2)
 I→N
@@ -252,3 +258,29 @@ Goto A
 If θ≥3
 Goto M
 Return
+Lbl R
+ClrHome
+Disp "("+Str0+")(X)"
+Disp "WHAT NUMBER IS X?"
+Input "X=",Str8
+prgmHANUM
+θ→E
+If abs(E)≥ᴇ98
+Goto R
+For(I,1,2)
+E→θ
+prgmHAFRAC
+sub("FG",I,1)+"("+Str9+")=?"→Str1
+ClrHome
+Disp "READ IT OFF THE GRAPH:"
+Disp Str1
+Disp "(NOT ON THE GRAPH? ENTER)"
+Input "Y=",Str8
+prgmHANUM
+{1,0,0,0,0,θ,0,0,0,0,not(Z),1,0}→L₁
+If I=1
+L₁→ʟF1
+If I=2
+L₁→ʟF2
+End
+Goto 2V

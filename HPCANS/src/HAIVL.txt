@@ -9,6 +9,8 @@ If S≥ᴇ98
 Input "RIGHT END=",Str8
 prgmHANUM
 θ→T
+If T≤⁻ᴇ98
+ᴇ99→T
 If S>T
 Then
 S→U
