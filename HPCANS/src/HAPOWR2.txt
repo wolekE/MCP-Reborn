@@ -6,7 +6,7 @@ L*(E+G/F)→θ
 prgmHAFRAC
 X→A
 Y→B
-If not(Z)
+If not(Z) or B≥100
 5→M
 If C=0 or D=0 or H=0
 1→M
@@ -36,6 +36,7 @@ prgmHAFRAC
 If not(Z)
 Goto R
 Lbl E
+0→M
 K→I
 ""→Str2
 0→E
@@ -47,15 +48,19 @@ If not(Z)
 Goto E
 X→E
 Y→G
-If L>0
+If L<0
 Then
-C/G→I
-E*G^(F-1)→G
-Else
-H/(C*E)→I
-G*E^(F-1)→G
+E→θ
+G→E
+θ→G
 End
-If G≥ᴇ9
+C/G→I
+If L<0
+H/(C*G)→I
+If G>(ᴇ12/E)^((F-1)⁻¹)
+Goto E
+E*G^(F-1)→G
+If G^(F⁻¹)>999
 Goto E
 If D<0
 ⁻I→I
@@ -71,14 +76,17 @@ End
 End
 2→M
 While M≤F
-If not(fPart(F/M)) and abs(G^(M⁻¹)-round(G^(M⁻¹),0))<ᴇ⁻9
+round(G^(M⁻¹),0)→θ
+If not(fPart(F/M)) and θ^M=G
 Then
-round(G^(M⁻¹),0)→G
+θ→G
 F/M→F
 Else
 M+1→M
 End
 End
+If G=1
+Goto E
 0→M
 G→θ
 prgmHAFRAC

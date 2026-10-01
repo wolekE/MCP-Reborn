@@ -32,8 +32,13 @@ If Z
 Input "P=",Str8
 prgmHANUM
 θ→C
+0→D
 If Z
+Then
 1→C
+Else
+inString(Str8,".")→D
+End
 If abs(K)≥ᴇ98 or abs(C)≥ᴇ98
 Goto 2
 C→θ
@@ -41,7 +46,7 @@ prgmHAFRAC
 X→A
 Y→B
 0→M
-If not(Z)
+If not(Z) or B≥100 or D and B>16
 5→M
 If K=0
 1→M
