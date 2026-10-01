@@ -56,7 +56,8 @@ stack stays shallow. Only `HPCANS` uses `Stop` (when the student presses CLEAR o
 * **Answer screens** always start with `ANSWER:` on row 1, show the answer (rows 2–8),
   and end with a footer on row 10, e.g. `1:AGAIN 2:HOME 3:WHY`. Long answers page with
   `ENTER=MORE`. Nothing is explained before the answer.
-* Splash (once per run): `USE (-) FOR NEGATIVES`, `TYPE 2/3 AS 2÷3`, `CLEAR = BACK`.
+* Splash (once per run): `NEGATIVE: USE THE (⁻) KEY`, `FRACTION: TYPE 2/3`, `CLEAR = BACK (MENUS)`,
+  `ERR SCREEN? PRESS 1:QUIT`. HPCANS also sets Float, Normal and Func modes (Func so the X,T,θ,n key types X).
 
 ## Variables (TI-BASIC has only globals, so they are split by layer)
 
@@ -97,8 +98,10 @@ exact integers. Values that should be 0 but carry rounding residue (|v| < 1e-9) 
 ## Solvers
 
 ### 1 F+G OR F/G (`HAOPS`)
-`WHAT DO THEY WANT?` 1:DOMAIN 2:VALUE AT A NUMBER 3:FORMULA
-* combination (one key): 1:F+G 2:F-G 3:F*G 4:F/G 5:G/F
+`WHAT DO THEY WANT?` 1:DOMAIN LIKE D(F/G) 2:A VALUE LIKE (FG)(-2) 3:FORMULA LIKE (F-G)(X)
+4:A VALUE OFF GRAPHS (asks only x, f(x) and g(x) read off the graphs; ENTER = no point there)
+* combination (one key): 1:F+G (OR G+F) 2:F-G 3:FG 4:F/G 5:G/F 6:G-F; quotient domains show both orders;
+  footer `4:SAME F,G` keeps f and g for the next part
 * f and g shapes (`HAFUNC`): 1:AX+B 2:AX²+BX+C 3:(AX+B)/(CX+D) 4:K√(AX+B)+C
   5:FRACTION WITH X² (general (AX²+BX+C)/(DX²+EX+F)) 6:GRAPH (corners) 7:WORDS
   (domain + zeros) 8:SAVED GRAPH
@@ -109,7 +112,8 @@ exact integers. Values that should be 0 but carry rounding residue (|v| < 1e-9) 
 * FORMULA: the combined function (polynomials combined; rationals as one fraction).
 
 ### 2 F(G(X)) (`HACOMP`)
-`WHAT DO THEY WANT?` 1:SIMPLIFY+DOMAIN 2:GRAPH VALUES 3:√(GRAPH) DOMAIN 4:GRAPH(√X) DOMAIN 5:ONE NUMBER
+`WHAT DO THEY WANT?` 1:SIMPLIFY + DOMAIN 2:F(G(5)) FROM GRAPHS 3:DOMAIN OF √(GRAPH)
+4:DOMAIN OF GRAPH(√(X)) 5:F(G(5)) FROM FORMULAS (exact radical values; footer `3:SAME F,G NEW NUMBER`)
 * 1: f shape, g shape, then 1:F(G(X)) 2:G(F(X)). Result simplified exactly as the class does
   (multiply top and bottom by the LCD), domain = x in Dg and g(x) in Df, found before
   simplifying. Footer `3:OTHER ORDER`.
@@ -120,7 +124,7 @@ exact integers. Values that should be 0 but carry rounding residue (|v| < 1e-9) 
 * 3: √(graph): where the graph is ≥ 0. 4: graph(K√(AX+B)+C) or graph(AX+B): x with g(x) in the graph's domain.
 
 ### 3 F⁻¹ (`HAINV`)
-`WHAT DO THEY WANT?` 1:FIND F⁻¹(X) 2:ARE THEY INVERSES 3:D,R OF F⁻¹ 4:HAS INVERSE? (HLT)
+`WHAT DO THEY WANT?` 1:FIND F⁻¹(X) 2:VERIFY TWO FUNCTIONS 3:DOMAIN/RANGE OF F⁻¹ 4:HAS INVERSE? (HLT)
 * shapes: 1:AX+B 2:(AX+B)/(CX+D) 3:A(BX+C)³+D 4:A³√(BX+C)+D 5:A√(BX+C)+D 6:A(BX+C)^(M/N)+D
 * output the inverse in the class's form, with restriction, domain and range for roots.
 * verify: compose both ways (exactly for rational shapes, at test points for the others).
@@ -142,7 +146,8 @@ exact integers. Values that should be 0 but carry rounding residue (|v| < 1e-9) 
 * every answer: `1:AGAIN 2:HOME 3:SAME EQ` (same equation: changes / points / D,R / WHY).
 
 ### 5 ABS BARS (`HAABS`)
-`WHAT DO THEY WANT?` 1:POINTS + D,R 2:DOMAIN ONLY 3:RANGE ONLY
+`WHAT DO THEY WANT?` 1:SKETCH/GRAPH: PTS, D, R 2:DOMAIN ONLY 3:RANGE ONLY 4:D AND R (NO GRAPH)
+5:ORDER OF THE STEPS (numbered (1), (2), … as the class writes them)
 * bar shapes: 1:A|F(BX+C)+D|+K 2:A·F(B|X|+C)+K 3:A·F(|BX+C|)+K
 * points: graph corners (saved or new); inside steps, then f, then outside steps; new
   x-intercepts are added before |y|; f(|x|) keeps x ≥ 0 (adds the point at x = 0) and mirrors.
@@ -151,7 +156,7 @@ exact integers. Values that should be 0 but carry rounding residue (|v| < 1e-9) 
   [2,7] → [-7,-2]U[2,7]).
 
 ### 6 KX^P / ROOTS (`HAPOWER`)
-`WHAT DO THEY WANT?` 1:FIND K AND P 2:EVEN/ODD+QUADS 3:ALL PROPERTIES 4:BUILD A FUNCTION
+`WHAT DO THEY WANT?` 1:FIND K,P (Y=KX^P FORM) 2:SYMMETRY/QUADS 3:ALL PROPERTIES 4:BUILD EQUATION
 * find k,p: what is on top (number, x power, root index, number and x power under the root),
   what is on the bottom (same) → k (roots of numbers taken exactly) and p reduced.
   Also: plain number → not a power function; x in the exponent → not a power function.
@@ -161,9 +166,11 @@ exact integers. Values that should be 0 but carry rounding residue (|v| < 1e-9) 
 * build: quadrants + near 0 (through origin / asymptotes) + shape → one valid k·x^(a/b).
 
 ### 7 DECOMPOSE (`HADECOMP`)
-shapes: 1:K(STUFF)^N+C 2:K√(STUFF)+C 3:K/(STUFF)^N+C 4:K/√(STUFF)+C 5:K|STUFF|+C
-6:A(STUFF)²+B(STUFF)+C 7:K/(M+𝑒^(STUFF)) 8:√(K/STUFF). The student types the inside
-STUFF as text; the answer gives g(x) and f(x), two or three ways when the class expects it.
+`WHAT DOES H(X) LOOK LIKE?` 1:K(STUFF)^N+C 2:K√(STUFF)+C 3:K/(STUFF)^N+C 4:K/√(STUFF)+C 5:K|STUFF|+C
+6:A(STUFF)²+B(STUFF)+C 7:K𝑒^(STUFF)+C 8:K/(M+𝑒^(STUFF)) 9:√(K/STUFF). The student types the inside
+STUFF as text (ENTER alone goes back) and the outside numbers; the answer gives G(X) and F(X), up to three
+ways (smallest chunk first, as the guide does), never G(X)=X or F(X)=X, with no trivial pieces such as
+1/(1/X) or (X-2)+2.
 
 ## Testing
 

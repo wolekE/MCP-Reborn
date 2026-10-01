@@ -22,13 +22,13 @@ If W<50
 Then
 X→Y
 0→θ
-If length(Str9)-X<26 and not(inString(Str9,"√(",X) or inString(Str9,"³√(",X) or inString(Str9,"𝑒^(",X))
+If length(Str9)-X<26 and not(inString(Str9,"√(",X) or inString(Str9,"³√(",X) or inString(Str9,"𝑒^(",X) or inString(Str9,"abs(",X))
 Then
 length(Str9)+1→Y
 Else
 Repeat Y>length(Str9) or θ>26
 sub(Str9,Y,1)→Str8
-θ+1+(Str8="√(")+2(Str8="³√(" or Str8="𝑒^(")→θ
+θ+1+(Str8="√(")+2(Str8="³√(" or Str8="𝑒^(")+3(Str8="abs(")→θ
 Y+1→Y
 End
 End

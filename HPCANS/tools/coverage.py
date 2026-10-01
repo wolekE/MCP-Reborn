@@ -20,8 +20,9 @@ from run_tests import load  # noqa: E402
 
 ROOT = HERE.parent
 OUT = ROOT / "COVERAGE.md"
-MENU = {"1": "F+G OR F/G", "2": "F(G(X))", "3": "F⁻¹", "4": "A*F(BX+C)+K", "5": "ABS BARS",
-        "6": "KX^P / ROOTS", "7": "DECOMPOSE"}
+MENU = {"1": "F+G  F-G  FG  F/G", "2": "F(G(X))  OR √(G(X))", "3": "F⁻¹(X)  INVERSE",
+        "4": "A*F(BX+C)+K SHIFT/FLIP", "5": "ABS BARS |F(X)| F(|X|)", "6": "KX^P  POWER/ROOTS",
+        "7": "DECOMPOSE H(X)"}
 
 
 def esc(s):
