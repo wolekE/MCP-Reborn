@@ -699,12 +699,13 @@ class RecMachine(Machine):
 
 
 PROGS = None
+SRC_DIR = [SRC]
 
 
 def run(actions):
     global PROGS
     if PROGS is None:
-        PROGS = load_programs(SRC)
+        PROGS = load_programs(SRC_DIR[0])
     m = RecMachine(PROGS)
     err = None
     try:
@@ -841,8 +842,11 @@ def main():
     ap.add_argument("-v", action="store_true")
     ap.add_argument("--numeric-only", action="store_true",
                     help="skip sympy simplify(f(g(x))-h) and use only the TI-mode sample-point check")
+    ap.add_argument("--src", default=None, help="program folder (default ../src)")
     args = ap.parse_args()
     SYMBOLIC[0] = not args.numeric_only
+    if args.src:
+        SRC_DIR[0] = Path(args.src)
     rng = random.Random(args.s)
     stats = {g: 0 for g in range(1, 10)}
     bad = 0

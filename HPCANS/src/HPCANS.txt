@@ -9,7 +9,7 @@ Disp ""
 Disp "NEGATIVE: USE THE (⁻) KEY"
 Disp "FRACTION: TYPE 2/3"
 Disp "CLEAR = BACK (MENUS)"
-Disp ""
+Disp "ERR SCREEN? PRESS 1:QUIT"
 Disp "PRESS ENTER"
 Pause
 Lbl M
