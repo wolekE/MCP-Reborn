@@ -386,17 +386,7 @@ class Machine:
         self.src = programs  # name -> list of source lines
         self.parsed = {}
         self.labels = {}
-        for name, lines in programs.items():
-            toks = []
-            for n, line in enumerate(lines, 1):
-                toks.append(tokenize(line))
-            self.parsed[name] = [None] * len(lines)
-            self._toks = getattr(self, "_toks", {})
-            self._toks[name] = toks
-            self.labels[name] = {}
-            for i, tk in enumerate(toks):
-                if tk and tk[0] == "Lbl ":
-                    self.labels[name]["".join(tk[1:])] = i
+        self._toks = {}
         self.reals, self.strs = {}, {}
         self.lists = {k: list(v) for k, v in (persistent_lists or {}).items()}
         self.screen = [[" "] * COLS for _ in range(ROWS)]
@@ -702,6 +692,14 @@ class Machine:
         return D(0)
 
     # -- running ------------------------------------------------------------------
+    def load(self, name):
+        if name in self._toks:
+            return
+        toks = [tokenize(line) for line in self.src[name]]
+        self._toks[name] = toks
+        self.parsed[name] = [None] * len(toks)
+        self.labels[name] = {"".join(tk[1:]): i for i, tk in enumerate(toks) if tk and tk[0] == "Lbl "}
+
     def stmt(self, name, i):
         st = self.parsed[name][i]
         if st is None:
@@ -737,6 +735,7 @@ class Machine:
                 if steps > self.max_steps:
                     raise Halt(("step_limit", None))
                 f = self.frames[-1]
+                self.load(f.name)
                 lines = self.src[f.name]
                 if f.pc >= len(lines):
                     if f.blocks:

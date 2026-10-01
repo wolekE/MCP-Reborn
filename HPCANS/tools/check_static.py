@@ -147,6 +147,10 @@ def main():
         for name in progs:
             if name not in seen:
                 probs.append(f"{name}: not reachable from HPCANS")
+    only = [a for a in sys.argv[1:] if not a.startswith("-")]
+    if only:
+        probs = [p for p in probs if any(p.startswith(o + ":") or p.startswith(o + " ") for o in only)
+                 and "not reachable" not in p]
     for p in probs:
         print("  -", p)
     print(f"{len(progs)} programs, {sum(len(l) for l in progs.values())} lines: "
