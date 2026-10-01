@@ -6,11 +6,14 @@ https://github.com/TI-Toolkit/tivars_lib_py, `pip install tivars`).
 The source file has one TI-BASIC statement per line, written with the token
 names the calculator / TI Connect CE display (Disp, ClrHome, →, ►Frac, ≠ ...).
 
-Code (outside quotes) is tokenized by tivars.  Text inside quotes is tokenized
-here one character at a time from a whitelist of characters a student can type
-on the keypad, so tivars' ASCII shortcuts ("->", ">=", "L1", "[A]" ...) can
-never turn display text into a different token.  Every line is then decoded
-again and must read back exactly as written, or the build fails.
+Both code and quoted text are tokenized here from explicit whitelists
+(longest match first), so every byte in the program comes from a table that
+is listed below and cross-checked against the TI-Toolkit token sheet that
+ships with tivars.  Nothing is left to a general-purpose tokenizer: tivars'
+ASCII shortcuts ("->", ">=", "L1", "[A]" ...) can never turn display text into
+a different token, and a command can never be silently spelled out as letters
+(e.g. "Pause" as P,a,u,s,e, which displays the same but is ERR:SYNTAX).
+Every line is then decoded by tivars and must read back exactly as written.
 
 Usage:  python build_8xp.py [source.txt] [output.8xp]
 """
@@ -68,19 +71,63 @@ def tokenize_string_body(body: str, where: str) -> bytes:
     return out
 
 
+# Every token allowed outside quotes, with its byte value.
+CODE_TOKENS = {
+    # commands
+    "Disp ": b"\xDE", "Input ": b"\xDC", "Output(": b"\xE0", "ClrHome": b"\xE1",
+    "Pause": b"\xD8", "Lbl ": b"\xD6", "Goto ": b"\xD7", "Menu(": b"\xE6",
+    "If ": b"\xCE", "Then": b"\xCF", "Else": b"\xD0", "End": b"\xD4", "Stop": b"\xD9",
+    "Float": b"\x69", "Normal": b"\x66",
+    # functions
+    "abs(": b"\xB2", "fPart(": b"\xBA", "gcd(": b"\xBB\x09", "min(": b"\x1A",
+    "max(": b"\x19", "not(": b"\xB8",
+    # operators and punctuation
+    " and ": b"\x40", " or ": b"\x3C", " xor ": b"\x3D", "►Frac": b"\x03", "→": b"\x04",
+    "⁻": b"\xB0", "+": b"\x70", "-": b"\x71", "*": b"\x82", "/": b"\x83",
+    "=": b"\x6A", "<": b"\x6B", ">": b"\x6C", "≤": b"\x6D", "≥": b"\x6E", "≠": b"\x6F",
+    "(": b"\x10", ")": b"\x11", ",": b"\x2B", ".": b"\x3A", "ᴇ": b"\x3B",
+}
+for _ch in "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ":
+    CODE_TOKENS[_ch] = bytes([ord(_ch)])
+# tivars shows the Pause token as "Pause " (trailing space); lines never end in a space.
+DISPLAY_ALIAS = {"Pause ": "Pause"}
+
+
+def _check_tables():
+    """Every table entry must decode, per the TI-Toolkit token sheet, to its own name."""
+    for table in (CODE_TOKENS, STRING_MULTI, STRING_SINGLE):
+        for name, tok in table.items():
+            toks = decode(tok)[0]
+            shown = "".join(t.langs["en"].display for t in toks)
+            if len(toks) != 1 or DISPLAY_ALIAS.get(shown, shown) != name:
+                raise AssertionError(f"token table entry {name!r} -> {tok.hex()} decodes as {shown!r}")
+
+
+def tokenize_code(code: str, where: str) -> bytes:
+    out = b""
+    i = 0
+    names = sorted(CODE_TOKENS, key=len, reverse=True)
+    while i < len(code):
+        for name in names:
+            if code.startswith(name, i):
+                out += CODE_TOKENS[name]
+                i += len(name)
+                break
+        else:
+            raise ValueError(f"{where}: cannot tokenize {code[i:]!r} (not in the allowed token list)")
+    return out
+
+
 def tokenize_line(line: str, where: str) -> bytes:
-    """Tokenize one statement: code via tivars, quoted text via the whitelist."""
+    """Tokenize one statement: code and quoted text each from their whitelist."""
     out = b""
     rest = line
     while rest:
         q = rest.find('"')
         if q < 0:
-            code, rest = rest, ""
-            out += encode(code, mode="smart")[0] if code else b""
+            out += tokenize_code(rest, where)
             break
-        code = rest[:q]
-        if code:
-            out += encode(code, mode="smart")[0]
+        out += tokenize_code(rest[:q], where)
         rest = rest[q + 1:]
         end = rest.find('"')
         if end < 0:
@@ -91,10 +138,12 @@ def tokenize_line(line: str, where: str) -> bytes:
 
 
 def display(data: bytes) -> str:
-    return "".join(tok.langs["en"].display for tok in decode(data)[0])
+    shown = "".join(tok.langs["en"].display for tok in decode(data)[0])
+    return DISPLAY_ALIAS.get(shown, shown)
 
 
 def build(src: Path, out: Path) -> bytes:
+    _check_tables()
     lines = src.read_text(encoding="utf-8").split("\n")
     if lines and lines[-1] == "":
         lines.pop()

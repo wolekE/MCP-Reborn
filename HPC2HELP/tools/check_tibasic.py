@@ -40,8 +40,8 @@ from fractions import Fraction
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
-SRC = HERE.parent / "HPC2HELP.txt"
-SCREENS = HERE.parent / "SCREENS.txt"
+SRC = Path(sys.argv[1]) if len(sys.argv) > 1 else HERE.parent / "HPC2HELP.txt"
+SCREENS = HERE.parent / "SCREENS.txt" if len(sys.argv) <= 1 else SRC.with_suffix(".screens.txt")
 ROWS, COLS = 8, 16  # TI-84 Plus home screen; the CE (10 x 26) is roomier
 
 FAILURES = []
@@ -831,52 +831,96 @@ def main():
         return run
 
     # ---- exhaustive menu walk: every option of every menu ------------------
-    start = absorb(Run(prog, labels, match, input_defaults=DEFAULTS, stop_at_menu=True).go(0), "start")
-    if not (isinstance(start.end, str) and start.end.startswith("('menu'")):
-        pass
-    first_menu = start.menus_seen[0][0] if start.menus_seen else None
-    if first_menu is None:
-        fail("program never reaches a menu")
-        report(lines)
-        return
-    states = {first_menu: start.env}
-    edges = {}
-    queue = deque([first_menu])
-    while queue:
-        m = queue.popleft()
-        title, items = prog[m][1], prog[m][2]
-        for k in range(1, len(items) + 1):
-            r = Run(prog, labels, match, env=states[m], menu_choices=[k], input_defaults=DEFAULTS)
-            r.go(m)
-            absorb(r, f"menu '{title}' option {k} '{items[k - 1][0]}'")
-            nxt = r.end[1] if isinstance(r.end, tuple) else r.end
-            edges[(m, k)] = nxt
-            if isinstance(r.end, tuple) and r.end[1] not in states:
-                states[r.end[1]] = r.env
-                queue.append(r.end[1])
-            if r.end not in ("stop",) and not isinstance(r.end, tuple):
-                fail(f"menu '{title}' option {k}: run ended with {r.end!r}")
+    # The walk is repeated with several input profiles so the tools' error
+    # menus are walked too.  Every option's destination is checked:
+    #   main-menu items open the submenu with the same name; MAIN MENU,
+    #   TRANSFORM MENU and POWER MENU go where they say; tools and their
+    #   repeat options end at that tool's own menu; RE-ENTER on an error menu
+    #   comes back to the same tool; every reference topic returns to the
+    #   menu it was chosen from.
+    profiles = {
+        "valid": dict(DEFAULTS),
+        "tool B=0": dict(DEFAULTS, **{"B=": "0"}),
+        "tool A=0": dict(DEFAULTS, **{"A=": "0"}),
+        "power K=0": dict(DEFAULTS, **{"K=": "0"}),
+        "power B=0": dict(DEFAULTS, **{"BOTTOM B=": "0"}),
+        "power A=0": dict(DEFAULTS, **{"TOP A=": "0"}),
+        "power A=1/2": dict(DEFAULTS, **{"TOP A=": "1/2"}),
+        "power A=1000": dict(DEFAULTS, **{"TOP A=": "1000"}),
+    }
+    TOOLS = {"POINT TOOL", "D/R TOOL", "CLASSIFIER"}
+    REPEAT = {"NEXT POINT", "NEW A,B,H,K", "NEW VALUES", "NEW FUNCTION", "RE-ENTER"}
+    GOES = {"TRANSFORM MENU": "TRANSFORM", "POWER MENU": "POWER FUNCS"}
+    all_states = {}
+    main_menu = None
+    for pname, prof in profiles.items():
+        start = absorb(Run(prog, labels, match, input_defaults=prof, stop_at_menu=True).go(0), f"start [{pname}]")
+        if not start.menus_seen:
+            fail("program never reaches a menu")
+            report(lines)
+            return
+        first = start.menus_seen[0][0]
+        main_menu = first if main_menu is None else main_menu
+        main_title = prog[main_menu][1]
+        states = {first: start.env}
+        edges = {}
+        queue = deque([first])
+        while queue:
+            m = queue.popleft()
+            title, items = prog[m][1], prog[m][2]
+            for k in range(1, len(items) + 1):
+                text = items[k - 1][0]
+                r = Run(prog, labels, match, env=states[m], menu_choices=[k], input_defaults=prof)
+                r.go(m)
+                what = f"[{pname}] menu '{title}' option {k} '{text}'"
+                absorb(r, what)
+                if r.end != "stop" and not isinstance(r.end, tuple):
+                    fail(f"{what}: run ended with {r.end!r}")
+                    continue
+                dest = "stop" if r.end == "stop" else prog[r.end[1]][1]
+                edges[(m, k)] = r.end if r.end == "stop" else r.end[1]
+                if isinstance(r.end, tuple) and r.end[1] not in states:
+                    states[r.end[1]] = r.env
+                    queue.append(r.end[1])
+                # expected destination
+                took_input = any(prog[i][0] == "input" for i in r.executed)
+                if m == main_menu:
+                    want = "stop" if text == "EXIT" else text
+                elif text == "MAIN MENU":
+                    want = main_title
+                elif text in GOES:
+                    want = GOES[text]
+                elif "CANNOT" in title and text == "RE-ENTER":
+                    want = title if pname.startswith("tool") else None
+                    if dest != title:
+                        fail(f"{what}: RE-ENTER with the same bad input should come back to '{title}', got '{dest}'")
+                    if edges[(m, k)] != m:
+                        fail(f"{what}: RE-ENTER went to a different tool's error menu (line {edges[(m, k)] + 1})")
+                    continue
+                elif text in TOOLS or text in REPEAT:
+                    tool = text if text in TOOLS else title
+                    if pname == "valid":
+                        want = tool
+                    else:
+                        continue  # error outcomes are checked by the scripted error tests
+                else:
+                    want = title
+                    if took_input:
+                        fail(f"{what}: a reference topic asked for input")
+                if want is not None and dest != want:
+                    fail(f"{what}: goes to '{dest}', expected '{want}'")
+        for m, env in states.items():
+            all_states.setdefault(m, env)
 
-    main_menu = first_menu
-    # every menu must offer a way back to MAIN (directly or via its parent)
-    for m in states:
-        reach, todo = {m}, [m]
-        while todo:
-            u = todo.pop()
-            for k in range(1, len(prog[u][2]) + 1):
-                v = edges.get((u, k))
-                if isinstance(v, int) and v not in reach:
-                    reach.add(v)
-                    todo.append(v)
-        if main_menu not in reach:
-            fail(f"menu '{prog[m][1]}' (line {m + 1}) cannot get back to the main menu")
-        if m != main_menu:
-            direct = [t for t, lab in prog[m][2] if labels[lab] in (labels.get("M0"),)]
-            if not direct:
-                fail(f"menu '{prog[m][1]}' has no MAIN MENU option")
-    exit_ok = any(edges.get((main_menu, k)) == "stop" for k in range(1, len(prog[main_menu][2]) + 1))
-    if not exit_ok:
-        fail("main menu has no EXIT option that stops the program")
+    # every menu must offer MAIN MENU and EXIT must stop the program
+    for m in all_states:
+        if m != main_menu and not any(lab == "M0" for _, lab in prog[m][2]):
+            fail(f"menu '{prog[m][1]}' (line {m + 1}) has no MAIN MENU option")
+    if not any(t == "EXIT" for t, _ in prog[main_menu][2]):
+        fail("main menu has no EXIT option")
+    for m in (i for i, st in enumerate(prog) if st[0] == "menu"):
+        if m not in all_states:
+            fail(f"menu at line {m + 1} was never reached by the walk")
 
     def menu_index(title, text):
         m = find_menu_line(prog, title)
@@ -978,6 +1022,33 @@ def main():
     nums = [m.group(1) for p in r.pages for l in p[2] for m in [re.match(r"(\d+)\) ", l)] if m]
     if nums != [str(n) for n in range(1, 13)]:
         fail(f"READ ALL 12 numbering is {nums}")
+
+    # READ ALL, then each group: each group must show only its own pages
+    # (the W flag must be reset) and return to TOP MISTAKES.
+    seq = path((MAIN, "TOP MISTAKES"), ("TOP MISTAKES", "READ ALL 12"), ("TOP MISTAKES", "1-5 TRANSFORMS"),
+               ("TOP MISTAKES", "6-9 DOMAIN/INV"), ("TOP MISTAKES", "10-12 POWER"), ("TOP MISTAKES", "READ ALL 12"))
+    r = Run(prog, labels, match, menu_choices=seq + [menu_index("TOP MISTAKES", "MAIN MENU"), menu_index(MAIN, "EXIT")])
+    r.go(0)
+    absorb(r, "mistakes sequence")
+    heads = [p[2][0].strip() for p in r.pages]
+    want = [f"TOP MISTAKES {n}" for n in list(range(1, 8)) + [1, 2, 3] + [4, 5] + [6, 7] + list(range(1, 8))]
+    if heads != want:
+        fail(f"TOP MISTAKES sequence showed pages {heads}, expected {want}")
+    tm = find_menu_line(prog, "TOP MISTAKES")[0]
+    if [m for m, _, _ in r.menus_seen].count(tm) != 6 or r.end != "stop":
+        fail("TOP MISTAKES groups do not all return to the TOP MISTAKES menu")
+
+    # RE-ENTER after a tool error, then valid values: back in the same tool
+    for tool, bad, title in [("POINT TOOL", ["2", "0", "3", "⁻3"], "B CANNOT BE 0"),
+                             ("POINT TOOL", ["0", "1", "3", "⁻3"], "A CANNOT BE 0"),
+                             ("D/R TOOL", ["2", "0", "3", "⁻3"], "B CANNOT BE 0"),
+                             ("D/R TOOL", ["0", "1", "3", "⁻3"], "A CANNOT BE 0")]:
+        r = Run(prog, labels, match, menu_choices=path((MAIN, "TRANSFORM"), ("TRANSFORM", tool), (title, "RE-ENTER")),
+                inputs=bad, input_defaults=DEFAULTS)
+        r.go(0)
+        absorb(r, f"{tool} {title} then RE-ENTER")
+        if not (isinstance(r.end, tuple) and prog[r.end[1]][1] == tool):
+            fail(f"{tool}: after '{title}' and RE-ENTER with valid values, ended at {r.end} instead of the {tool} menu")
 
     # ---- exhaustive classifier vs an independent numeric oracle -------------
     cls_env = None
