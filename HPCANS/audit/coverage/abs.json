@@ -249,7 +249,7 @@
   "what_question_gives": "|f(x)| or f(|x|): method",
   "solver_path": "5 → 5:ORDER OF THE STEPS → shape 1 or 2 (and 1:SKETCH/GRAPH does it on the points)",
   "student_enters": "all ENTER",
-  "calculator_shows": "|f(x)|: '|Y|: FLIP NEGATIVES UP'; f(|x|): 'KEEP X≥0, MIRROR TO LEFT'",
+  "calculator_shows": "|f(x)|: '(1) |Y|: FLIP NEGATIVES UP'; f(|x|): '(1) KEEP X≥0, MIRROR LEFT'",
   "expected_answer": "|f(x)|: flip the negatives up; f(|x|): mirror the right side",
   "test_ids": [
    "CRAM-8i-a",
@@ -263,7 +263,7 @@
   "what_question_gives": "Order of steps: f(|x|-3), f(|x-3|), 2|f(x+1)|-1, |f(x)-1|+2",
   "solver_path": "5 → 5:ORDER OF THE STEPS → shape 2 / 3 / 1 / 1",
   "student_enters": "f(|x|-3): C=-3; f(|x-3|): C=-3; 2|f(x+1)|-1: A=2 C=1 K=-1; |f(x)-1|+2: D=-1 K=2 (rest ENTER)",
-  "calculator_shows": "RIGHT 3 / KEEP X≥0, MIRROR TO LEFT; KEEP X≥0, MIRROR TO LEFT / RIGHT 3; LEFT 1 / |Y|: FLIP NEGATIVES UP / VERT STRETCH 2 / DOWN 1; DOWN 1 / |Y|: FLIP NEGATIVES UP / UP 2",
+  "calculator_shows": "RIGHT 3 / KEEP X≥0, MIRROR LEFT; KEEP X≥0, MIRROR LEFT / RIGHT 3; LEFT 1 / |Y|: FLIP NEGATIVES UP / VERT STRETCH 2 / DOWN 1; DOWN 1 / |Y|: FLIP NEGATIVES UP / UP 2",
   "expected_answer": "right 3 then mirror; mirror then right 3; left 1, |y|, ×2, down 1; down 1, |y|, up 2",
   "test_ids": [
    "CRAM-6.3a",
@@ -399,7 +399,7 @@
  {
   "item_id": "MIST-6-4",
   "what_question_gives": "Taking |y| before a shift inside the bars",
-  "solver_path": "D (inside the bars) is applied before |y|, K after; separate prompts 'D (AFTER F( ))=' and 'K (END NUMBER)='",
+  "solver_path": "D (inside the bars) is applied before |y|, K after; separate prompts 'D (AFTER F IN BARS)=' and 'K (END NUMBER)='",
   "student_enters": "|f(x)-3|: D=-3; |f(x)|-3: K=-3",
   "calculator_shows": "R=[0,5] vs R=[-3,1]",
   "expected_answer": "handled",
@@ -422,7 +422,7 @@
  {
   "item_id": "CRAM-MIST-4",
   "what_question_gives": "Mixing up |x| (left/right) and |y| (up/down)",
-  "solver_path": "Shape menu by where the bars are; ORDER lists 'KEEP X≥0, MIRROR TO LEFT' vs '|Y|: FLIP NEGATIVES UP'",
+  "solver_path": "Shape menu by where the bars are; ORDER lists 'KEEP X≥0, MIRROR LEFT' vs '|Y|: FLIP NEGATIVES UP'",
   "student_enters": "—",
   "calculator_shows": "see CRAM-8i",
   "expected_answer": "handled",

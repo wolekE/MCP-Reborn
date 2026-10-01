@@ -69,7 +69,8 @@ and result. Only HAANS/HAPAGE/HAOUT touch W (the answer-screen row).
     `(-INF,-1)U(-1,5]`, `[-3,3]`, `NO REAL NUMBERS`.
 * **HAIVL** — asks the student for an interval. Str9 = heading (e.g.
   `"ORIGINAL DOMAIN OF F:"`) → S, T (ends; ±1ᴇ99 for infinity), U, V (closed 1/0).
-  Clears the screen itself. CLEAR at the bracket question is ignored (it asks again).
+  Clears the screen itself. CLEAR at the bracket question is ignored (it asks again). An I typed
+  at LEFT END means -INF (a beginner types I for the -∞ end too); ends typed in the wrong order are swapped.
 
 ## High
 

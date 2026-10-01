@@ -356,12 +356,12 @@ def find_oracle(p):
     q, r, n = kform(kk, f)
     chk = sp.Rational(q.numerator, q.denominator) * sp.Integer(r) ** sp.Rational(1, n)
     assert abs(sp.N(chk - kk, 50)) < 1e-40, (p, kk, chk)
-    return "ok", kk, Fr(int(pp.p), int(pp.q)), (q, r, n)
+    return "ok", kk, Fr(int(pp.p), int(pp.q)), (q, r, n), p
 
 
 def find_expect(o):
     """the answer lines for an 'ok' FIND oracle result and the K text"""
-    _, kk, pp, (q, r, n) = o
+    _, kk, pp, (q, r, n), _ = o
     if r == 1:
         ktxt = ft(q)
         ycoef = coef_text(q)
@@ -371,13 +371,26 @@ def find_expect(o):
     return ["Y=" + ycoef + "X" + pexp_text(pp), "K=" + ktxt, "P=" + ft(pp), "YES, A POWER FUNCTION"], ktxt
 
 
+def fallback_ok(o):
+    p = o[4]
+    v = p["vals"]
+    if "F" not in v:
+        return False
+    f = int(v["F"])
+    u, w = abs(v["D"]).numerator, abs(v["D"]).denominator
+    g = w * u ** (f - 1) if p["shape"] in (4, 6) else u * w ** (f - 1)
+    return g >= 10 ** 11 or g ** (1 / f) > 900
+
+
 def check_find(o, body):
     want, ktxt = find_expect(o)
     if body == want:
         return []
-    _, kk, pp, (q, r, n) = o
-    # the documented decimal fallback for an enormous radicand
-    if r >= 10 ** 6 and len(body) == 4 and body[1].startswith("K="):
+    _, kk, pp, (q, r, n), _ = o
+    # the documented decimal fallback when the radicand work would be too big for the TI
+    # (14 digits) or too slow: the radicand before taking out n-th powers is u*v^(F-1) for
+    # sqrt[F](u/v) on top, v*u^(F-1) for it in the bottom
+    if fallback_ok(o) and len(body) == 4 and body[1].startswith("K="):
         try:
             got = float(body[1][2:])
             if abs(got - float(kk)) < 1e-5 * max(1, abs(float(kk))) and body[2:] == want[2:]:
@@ -819,7 +832,7 @@ def make_session(rng, kinds):
             elif nxt < 0.7:
                 # 3:ALL PROPS on the k, p found
                 acts.append("k3")
-                _, kk, pp, _ = o
+                _, kk, pp, _, _ = o
                 _, ktxt = find_expect(o)
                 a, b = pp.numerator, pp.denominator
                 screens.append(("find-props", desc, FOOT_3,
@@ -923,6 +936,10 @@ def make_session(rng, kinds):
                 acts.append(rng.choice(["k2", "CLEAR"]))
                 where = "MAIN"
             continue
+    if where == "KP":
+        # 1:AGAIN left the student at the K= prompt (CLEAR cannot leave an Input): press 2:HOME instead
+        assert acts[-1] == "k1"
+        acts[-1] = "k2"
     return acts, screens
 
 

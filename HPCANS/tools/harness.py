@@ -36,11 +36,11 @@ def programs():
 
 
 def answer_pages(events):
-    """Each answer = the screens from the first one whose top line is ANSWER:
+    """Each answer = the screens from the first one whose top line is ANSWER: (or WHY:)
     through any ENTER=MORE pages, up to the footer key press."""
     answers, cur = [], None
     for kind, detail, lines in events:
-        if cur is None and lines and lines[0].startswith("ANSWER:"):
+        if cur is None and lines and (lines[0].startswith("ANSWER:") or lines[0].startswith("WHY:")):
             cur = []
         if cur is not None:
             if not cur or cur[-1] != lines:
