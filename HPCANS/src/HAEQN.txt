@@ -1,10 +1,14 @@
-"Y="→Str5
-If N=⁻1
-"Y=-"→Str5
-If N≠1 and N≠⁻1
-Then
+If abs(P)<ᴇ⁻9
+0→P
+If abs(Q)<ᴇ⁻9
+0→Q
 N→θ
 prgmHAFRAC
+"Y="→Str5
+If Str9="-1"
+"Y=-"→Str5
+If Str9≠"1" and Str9≠"-1"
+Then
 If Y>1
 "("+Str9+")"→Str9
 "Y="+Str9→Str5
@@ -14,19 +18,17 @@ Str5+"F("→Str5
 prgmHAPOLY
 Str5+Str7+")"→Str4
 "X"→Str7
-If P>0
+If P≠0
 Then
-P→θ
-prgmHAFRAC
-"X-"+Str9→Str7
-End
-If P<0
-Then
-⁻P→θ
+abs(P)→θ
 prgmHAFRAC
 "X+"+Str9→Str7
+If P>0
+"X-"+Str9→Str7
 End
-If O=⁻1
+O→θ
+prgmHAFRAC
+If Str9="-1"
 Then
 If P=0
 Then
@@ -35,10 +37,8 @@ Else
 "-("+Str7+")"→Str7
 End
 End
-If O≠1 and O≠⁻1
+If Str9≠"1" and Str9≠"-1"
 Then
-O→θ
-prgmHAFRAC
 If Y>1
 "("+Str9+")"→Str9
 If P=0
@@ -60,3 +60,15 @@ If Q<0
 Str5+Str9→Str5
 Str4+Str9→Str4
 End
+N→θ
+prgmHAFRAC
+"A="+Str9+"  B="→Str7
+O→θ
+prgmHAFRAC
+Str7+Str9+"  H="→Str7
+P→θ
+prgmHAFRAC
+Str7+Str9+"  K="→Str7
+Q→θ
+prgmHAFRAC
+Str7+Str9→Str9

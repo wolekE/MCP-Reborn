@@ -72,6 +72,8 @@ H→K
 prgmHAINV4
 If not(L)
 2→F
+If L and abs(K)>ᴇ15
+0→L
 If L
 Then
 E+1→E
@@ -82,8 +84,12 @@ If not(L)
 If L and abs(K-H)>ᴇ⁻8*max(1,abs(H))
 Then
 K→B
+0→Z
+If abs(K)<ᴇ10
+Then
 K→θ
 prgmHAFRAC
+End
 If Z and Y≤999
 1→F
 If not(F) and not(D)
@@ -125,12 +131,14 @@ Str9→Str3
 Str2+Str3+"))"→Str2
 If F=2
 Str2+" UNDEFINED"→Str2
-If F=1
+If F=1 and abs(B)<ᴇ10
 Then
 B→θ
 prgmHAFRAC
 Str2+"="+Str9+"≠"+Str3→Str2
 End
+If F=1 and abs(B)≥ᴇ10
+Str2+"≠"+Str3→Str2
 End
 End
 If J=1

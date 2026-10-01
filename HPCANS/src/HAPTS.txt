@@ -1,9 +1,9 @@
+0→N
+Repeat N≥1 and N≤50 and not(fPart(N))
 ClrHome
 Disp Str9
 Disp "TYPE EACH CORNER AND END"
 Disp "POINT, LEFT TO RIGHT."
-0→N
-Repeat N≥1 and N≤50 and not(fPart(N))
 Input "HOW MANY POINTS=",Str8
 prgmHANUM
 θ→N
@@ -32,6 +32,9 @@ Disp "1:BOTH SOLID (FILLED)"
 Disp "2:LEFT OPEN (HOLLOW)"
 Disp "3:RIGHT OPEN (HOLLOW)"
 Disp "4:BOTH OPEN (HOLLOW)"
+0→θ
+Repeat θ
 4→θ
 prgmHAKEY
+End
 {(θ≠2 and θ≠4),(θ≠3 and θ≠4)}→ʟHC

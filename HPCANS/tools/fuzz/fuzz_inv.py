@@ -321,11 +321,6 @@ def punctured(p):
     return [(None, p, False, False), (p, None, False, False)]
 
 
-def lt(a, b):
-    """a < b with None = -inf as a left end... used only on finite numbers"""
-    return a < b
-
-
 def in_set(x, ivs):
     for lo, hi, lc, rc in ivs:
         okl = lo is None or (mpv(x) > mpv(lo) if not (isinstance(x, Fr) and isinstance(lo, Fr)) else x > lo) \
@@ -949,11 +944,6 @@ def true_inverse(f):
 
 
 # ============================================================================ checks
-def lines_of(m):
-    """answer pages (list of lines, without the ANSWER:/PAGE head)"""
-    return m.out
-
-
 def width(text):
     """columns on the TI screen (⁻¹ is one character there)"""
     return len(text.replace("⁻¹", "~"))
@@ -1114,6 +1104,9 @@ def check_find(case, page, rng, probs, mode="find"):
         return
     text = lines[i[0]][len("F⁻¹(X)="):]
     case["inv_text"] = text
+    extra = [l for l in lines if not re.match(r"F⁻¹\(X\)=|FOR X|D=|R=", l)]
+    if extra:
+        probs.append(f"unexpected lines on a FIND answer: {extra}")
     check_inverse_formula(f, text, rng, probs)
     want = None if isinstance(f, Rat) else restriction_text(f.range())
     fl = find_line(lines, "FOR X")
@@ -1263,6 +1256,20 @@ def check_comp_line(line, name_o, name_i, outer, inner, rng, probs, case):
             if ok:
                 probs.append(f"{line!r} but the composite is x on R_{name_o}")
         return False
+    mm = re.fullmatch(r"([^)]+)\)\)≠([^=]+)", rest)
+    if mm:      # a value too big to show: only the failure
+        a, _ = ti_num(mm.group(1))
+        if not same(a, ti_num(mm.group(2))[0]):
+            probs.append(f"{line!r}: the two x numbers differ")
+        try:
+            real = outer(inner(a))
+            if abs(mpv(real)) < 1e10:
+                probs.append(f"{line!r}: value {mp.nstr(mpv(real), 12)} is small enough to show")
+            if same(real, a, mp.mpf("1e-12")):
+                probs.append(f"{line!r}: but that equals x")
+        except Undef:
+            probs.append(f"{line!r}: really undefined")
+        return False
     mm = re.fullmatch(r"([^)]+)\)\)=(.+)≠(.+)", rest)
     if mm:
         a, ea = ti_num(mm.group(1))
@@ -1274,7 +1281,9 @@ def check_comp_line(line, name_o, name_i, outer, inner, rng, probs, case):
             real = outer(inner(a))
             if not same(real, v, mp.mpf("1e-6")):
                 probs.append(f"{line!r}: really {name_o}({name_i}({a}))={mp.nstr(mpv(real), 12)}")
-            elif ev_ and not same(real, v, mp.mpf("1e-25")):
+            elif ev_ and not same(real, v, mp.mpf("1e-25")) and not (v.denominator <= 99 and same(real, v, mp.mpf("1e-11"))):
+                # HAFRAC shows a value within 1E-11 of a small fraction as that fraction (its documented
+                # tolerance, e.g. -8.000000000002 as -8); a big-denominator "fraction" that is not exact is a bug
                 case["fake_exact"] = case.get("fake_exact", 0) + 1
                 probs.append(f"{line!r}: {mp.nstr(mpv(real), 20)} is not a fraction (HAFRAC shows it as one)")
             if same(real, a, mp.mpf("1e-12")):
@@ -1310,6 +1319,9 @@ def check_comp_line(line, name_o, name_i, outer, inner, rng, probs, case):
 def check_verify(case, page, rng, probs):
     f, g = case["f"], case["g"]
     lines = page[1:]
+    extra = [l for l in lines if not re.match(r"YES, INVERSES$|NO, NOT INVERSES$|F\(G\(|G\(F\(|\((F|G) NEEDS ", l)]
+    if extra:
+        probs.append(f"unexpected lines on a VERIFY answer: {extra}")
     if isinstance(f, Rat) and isinstance(g, Rat) and (f.constant() or g.constant()):
         truth = False
     else:
@@ -1584,6 +1596,19 @@ def build(rng, only=None):
         if name == "hlt":
             k = k[1:]       # the k4 is in `sub`
         c["why"] = rng.random() < 0.2
+        if rng.random() < 0.1 and k and k[0] in ("k1", "k2", "k3", "k4", "k5", "k6", "k7", "k9"):
+            # CLEAR at the first menu of the problem goes back one level; the student picks again
+            if name == "find":
+                k = ["CLEAR", "k1"] + k
+            elif name == "verify":
+                k = ["CLEAR", "k2"] + k
+            elif name == "dr_formula":
+                k = [k[0], "CLEAR"] + k       # CLEAR at the shape menu: back to WHAT DOES THE PAPER GIVE?
+            elif name == "dr_given":
+                k = ["CLEAR", "k3"] + k       # CLEAR at WHAT DOES THE PAPER GIVE?: back to the submenu
+            elif name == "hlt":
+                k = ["CLEAR", "k4"] + k if k[0] != "k9" else ["k9", "CLEAR"] + k
+            c["desc"] += " (with a CLEAR detour)"
         keys += k
         keys += ["k3", "k1" if j < n - 1 else "k2"] if c["why"] else ["k1" if j < n - 1 else "k2"]
         probs.append(c)

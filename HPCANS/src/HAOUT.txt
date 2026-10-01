@@ -1,13 +1,21 @@
+If W>50
+Return
 1→X
 While X≤length(Str9)
 If W≥8
 Then
-Output(10,1,"ENTER=MORE")
-Repeat getKey=105
+Output(10,1,"ENTER=MORE  CLEAR=SKIP")
+0→θ
+Repeat θ=105 or θ=45
+getKey→θ
 End
 ClrHome
 0→W
+If θ=45
+99→W
 End
+If W<50
+Then
 X→Y
 0→θ
 Repeat Y>length(Str9) or θ>26
@@ -16,8 +24,31 @@ sub(Str9,Y,1)→Str8
 Y+1→Y
 End
 If θ>26
+Then
 Y-1→Y
+Y→θ
+While θ>X+7 and sub(Str9,θ,1)≠" " and not(sub(Str9,θ-1,1)="U" and inString(")]",sub(Str9,θ-2,1)))
+θ-1→θ
+End
+If θ≤X+7
+Then
+Y→θ
+While θ>X+7 and sub(Str9,θ-1,1)≠","
+θ-1→θ
+End
+End
+If θ>X+7
+θ→Y
+End
 W+1→W
 Output(W,1,sub(Str9,X,Y-X))
 Y→X
+If X≤length(Str9)
+Then
+If sub(Str9,X,1)=" "
+X+1→X
+End
+Else
+length(Str9)+1→X
+End
 End

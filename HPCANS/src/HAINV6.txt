@@ -1,12 +1,18 @@
-1/L₁(2)→E
-⁻L₁(5)/L₁(2)→F
+L₁(2)→A
+L₁(3)→B
+L₁(4)→C
+If fPart(L₁(7)/2)≠0 and A<0 and B<0
+Then
+⁻A→A
+⁻B→B
+⁻C→C
+End
+1/A→E
+⁻L₁(5)/A→F
 0→G
 1→H
 prgmHAINV5
 Str2→Str1
-L₁(2)→A
-L₁(3)→B
-L₁(4)→C
 L₁(5)→D
 L₁(6)→E
 L₁(7)→F

@@ -1,7 +1,12 @@
 If H>0
 Goto S
 ClrHome
-Disp Str0+"(X) LOOKS LIKE:"
+Str0+"(X) LOOKS LIKE:"→Str9
+If I=2 and Str0="F"
+"F(X) (1ST ONE) LOOKS LIKE:"→Str9
+If I=2 and Str0="G"
+"G(X) (2ND ONE) LOOKS LIKE:"→Str9
+Disp Str9
 Disp "1:AX+B  (A LINE)"
 Disp "2:(AX+B)/(CX+D)  FRACTION"
 Disp "3:A/(BX+C)+D  FRACTION"

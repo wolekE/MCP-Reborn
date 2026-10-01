@@ -508,16 +508,17 @@ HCASES = [
 # runner
 # ---------------------------------------------------------------------------
 def candidates(lines):
-    """Every screen line, plus 2- and 3-row joins of a line HAOUT wrapped (a row 24+ wide)."""
-    rows = [l.strip() for l in lines if l.strip() and l.strip() != "ENTER=MORE"]
+    """Every screen line, plus 2- and 3-row joins of a line HAOUT wrapped (HAOUT breaks at a
+    space, which it drops, after a union U or a comma, or at column 26)."""
+    rows = [l.strip() for l in lines if l.strip() and not l.strip().startswith("ENTER=MORE")]
     out = set(rows)
     for i in range(len(rows)):
-        joined = rows[i]
+        joins = {rows[i]}
         for k in (1, 2):
-            if i + k >= len(rows) or len(rows[i + k - 1]) < 24:  # one screen cell per character
+            if i + k >= len(rows):
                 break
-            joined += rows[i + k]
-            out.add(joined)
+            joins = {j + sep + rows[i + k] for j in joins for sep in ("", " ")}
+            out |= joins
     return out
 
 

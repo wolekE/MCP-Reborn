@@ -1,28 +1,55 @@
+Str9→Str4
+0→R
+Lbl 1
 ClrHome
-Disp Str9
-Disp "TYPE THE NUMBERS YOU SEE"
+Disp Str4
 Disp "EX: -2F(3X-6)+1 GIVES"
 Disp "  A=-2 B=3 C=-6 K=1"
-Disp "NO NUMBER? PRESS ENTER"
-0→N
-While N=0
+Disp "NO NUMBER: PRESS ENTER"
+Disp "JUST A MINUS? TYPE (⁻)"
+If R
+Disp "A AND B CAN NOT BE 0"
 Input "A (FRONT)=",Str8
 prgmHANUM
 θ→N
 If Z
 1→N
-End
-0→O
-While O=0
+1→R
+If N=0
+Goto 1
 Input "B (X COEF)=",Str8
+If length(Str8)>0
+Then
+inString(Str8,"X")→θ
+While θ
+"(1)"→Str5
+If θ>1
+sub(Str8,1,θ-1)+Str5→Str5
+If θ<length(Str8)
+Str5+sub(Str8,θ+1,length(Str8)-θ)→Str5
+Str5→Str8
+inString(Str8,"X")→θ
+End
+End
 prgmHANUM
 θ→O
 If Z
 1→O
-End
+If O=0
+Goto 1
 Input "C (INSIDE NUMBER)=",Str8
+If length(Str8)>1
+Then
+If sub(Str8,1,1)="+"
+sub(Str8,2,length(Str8)-1)→Str8
+End
 prgmHANUM
 θ→P
 Input "K (END NUMBER)=",Str8
+If length(Str8)>1
+Then
+If sub(Str8,1,1)="+"
+sub(Str8,2,length(Str8)-1)→Str8
+End
 prgmHANUM
 θ→Q

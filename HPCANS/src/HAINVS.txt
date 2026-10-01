@@ -3,11 +3,13 @@
 For(L,1,4)
 L₅(L)→θ
 prgmHAFRAC
-If Z
+If Z and K<ᴇ6
 lcm(K,Y)→K
-If not(Z)
+If not(Z) or K≥ᴇ6
 0→M
 End
+If M and K*max(abs(L₅))≥ᴇ10
+0→M
 If M
 Then
 For(L,1,4)

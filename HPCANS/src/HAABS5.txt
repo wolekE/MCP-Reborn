@@ -1,12 +1,15 @@
+0→F
+If J=3
+Goto Y
 If I=3
 Then
-"KEEP X≥0, MIRROR TO LEFT"→Str9
-prgmHAOUT
+"KEEP X≥0, MIRROR LEFT"→Str9
+prgmHAABS7
 End
 If B<0
 Then
 "REFLECT Y-AXIS"→Str9
-prgmHAOUT
+prgmHAABS7
 End
 If abs(B)≠1
 Then
@@ -18,7 +21,7 @@ Then
 Else
 "HORIZ STRETCH "+Str9→Str9
 End
-prgmHAOUT
+prgmHAABS7
 End
 ⁻C/B→E
 If abs(E)<ᴇ⁻9
@@ -33,13 +36,16 @@ Then
 Else
 "LEFT "+Str9→Str9
 End
-prgmHAOUT
+prgmHAABS7
 End
 If I=2
 Then
-"KEEP X≥0, MIRROR TO LEFT"→Str9
-prgmHAOUT
+"KEEP X≥0, MIRROR LEFT"→Str9
+prgmHAABS7
 End
+Lbl Y
+If J=2
+Goto N
 If I=1 and D≠0
 Then
 abs(D)→θ
@@ -50,17 +56,17 @@ Then
 Else
 "DOWN "+Str9→Str9
 End
-prgmHAOUT
+prgmHAABS7
 End
 If I=1
 Then
 "|Y|: FLIP NEGATIVES UP"→Str9
-prgmHAOUT
+prgmHAABS7
 End
 If A<0
 Then
 "REFLECT X-AXIS"→Str9
-prgmHAOUT
+prgmHAABS7
 End
 If abs(A)≠1
 Then
@@ -72,7 +78,7 @@ Then
 Else
 "VERT COMPRESS "+Str9→Str9
 End
-prgmHAOUT
+prgmHAABS7
 End
 If K≠0
 Then
@@ -84,5 +90,11 @@ Then
 Else
 "DOWN "+Str9→Str9
 End
+prgmHAABS7
+End
+Lbl N
+If F=0
+Then
+"NO CHANGE"→Str9
 prgmHAOUT
 End

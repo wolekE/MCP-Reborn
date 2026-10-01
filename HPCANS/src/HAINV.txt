@@ -135,7 +135,7 @@ L₁(2)→A
 L₁(3)→B
 L₁(4)→C
 L₁(5)→D
-If abs(AD-BC)<ᴇ⁻10
+If abs(AD-BC)≤ᴇ⁻10*max(abs(AD),abs(BC))
 Goto N
 If I=3
 Goto Q
@@ -259,10 +259,10 @@ If J=0
 Goto M
 If J=2
 Goto 5
-"DOMAIN OF F:"→Str9
+"DOMAIN OF F: -INF IS -I"→Str9
 prgmHAIVL
 {S,T,U,V}→L₄
-"RANGE OF F:"→Str9
+"RANGE OF F: -INF IS -I"→Str9
 prgmHAIVL
 {S,T,U,V}→L₅
 5→K

@@ -492,6 +492,12 @@ class Machine:
         return v
 
     def binop(self, k, a, b):
+        r = self._binop(k, a, b)
+        if isinstance(r, D) and k in ("+", "-", "*", "/", "^") and abs(r) >= D("1E100"):
+            raise TIError(f"{self.where()}: ERR:OVERFLOW {a} {k} {b}")
+        return r
+
+    def _binop(self, k, a, b):
         if k == "+":
             return CTX.add(a, b)
         if k == "-":
@@ -566,7 +572,10 @@ class Machine:
             return D(int(self.real(v[0]) == 0))
         if f == "round(":
             places = int(self.real(v[1])) if len(v) > 1 else 9
-            return CTX.plus(self.real(v[0]).quantize(D(1).scaleb(-places), rounding=decimal.ROUND_HALF_UP))
+            x = self.real(v[0])
+            if x == 0 or x.adjusted() + places + 1 > 28:  # finer than any stored digit: unchanged
+                return CTX.plus(x)
+            return CTX.plus(x.quantize(D(1).scaleb(-places), rounding=decimal.ROUND_HALF_UP))
         if f == "√(":
             x = self.real(v[0])
             if x < 0:

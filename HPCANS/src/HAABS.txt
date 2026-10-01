@@ -27,6 +27,8 @@ prgmHAKEY
 θ→I
 If I=0
 Goto M
+0→E
+Lbl A
 ClrHome
 If I=1
 Disp "Y=A|F(BX+C)+D|+K","EX: -2|F(X+1)-3|+4 HAS","  A=-2 C=1 D=-3 K=4"
@@ -35,6 +37,9 @@ Disp "Y=A*F(B|X|+C)+K","EX: 3F(|X|-1)+2 HAS","  A=3 C=-1 K=2"
 If I=3
 Disp "Y=A*F(|BX+C|)+K","EX: 3F(|X-1|)+2 HAS","  A=3 C=-1 K=2"
 Disp "NO NUMBER? PRESS ENTER"
+If E
+Disp "A AND B CAN NOT BE 0"
+1→E
 1→A
 1→B
 0→C
@@ -42,44 +47,47 @@ Disp "NO NUMBER? PRESS ENTER"
 0→K
 If J=2
 Goto B
-0→A
-While A=0
 Input "A (FRONT)=",Str8
-prgmHANUM
+prgmHAABS6
 θ→A
 If Z
 1→A
-End
+If A=0
+Goto A
 Lbl B
 If J=3 and I=1
 Goto D
-0→B
-While B=0
 If I=2
 Then
 Input "B (|X| COEF)=",Str8
 Else
 Input "B (X COEF)=",Str8
 End
-prgmHANUM
+prgmHAABS6
 θ→B
 If Z
 1→B
-End
+If B=0
+Goto A
 Input "C (INSIDE NUMBER)=",Str8
-prgmHANUM
+prgmHAABS6
 θ→C
+If I=3 and B<0
+Then
+⁻B→B
+⁻C→C
+End
 Lbl D
 If J=2
 Goto Q
 If I=1
 Then
-Input "D (AFTER F( ))=",Str8
-prgmHANUM
+Input "D (AFTER F IN BARS)=",Str8
+prgmHAABS6
 θ→D
 End
 Input "K (END NUMBER)=",Str8
-prgmHANUM
+prgmHAABS6
 θ→K
 If J=1
 Goto P
@@ -117,7 +125,7 @@ Goto T
 inString(Str9,"U")→L
 If length(Str9)>26 and L>0
 Then
-sub(Str9,L+1,length(Str9)-L)→Str3
+"  "+sub(Str9,L+1,length(Str9)-L)→Str3
 sub(Str9,1,L)→Str9
 prgmHAOUT
 Str3→Str9
@@ -167,10 +175,38 @@ Goto F
 Lbl P
 If dim(ʟBX)=0
 Goto N
+If dim(ʟBY)≠dim(ʟBX) or dim(ʟBC)≠2
+Goto N
 ClrHome
 Disp "GRAPH CORNERS OF F:"
 Disp "1:USE THE SAVED GRAPH"
 Disp "2:TYPE A NEW GRAPH"
+Disp "SAVED GRAPH:"
+""→Str0
+0→M
+For(L,1,dim(ʟBX))
+If M<5
+Then
+ʟBX(L)→N
+ʟBY(L)→O
+prgmHAPTXT
+If length(Str5)>26
+"(...)"→Str5
+If length(Str0)+length(Str5)>24
+Then
+Disp Str0
+M+1→M
+""→Str0
+End
+If length(Str0)
+Str0+"  "→Str0
+Str0+Str5→Str0
+End
+End
+If M<5
+Disp Str0
+If M≥5
+Disp "..."
 2→θ
 prgmHAKEY
 If θ=0
@@ -211,7 +247,7 @@ prgmHAOUT
 inString(Str9,"U")→L
 If length(Str9)>26 and L>0
 Then
-sub(Str9,L+1,length(Str9)-L)→Str3
+"  "+sub(Str9,L+1,length(Str9)-L)→Str3
 sub(Str9,1,L)→Str9
 prgmHAOUT
 Str3→Str9

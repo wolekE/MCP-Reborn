@@ -3,7 +3,7 @@ ClrHome
 Disp "Y=A*F(BX+C)+K"
 Disp "WHAT DO THEY WANT?"
 Disp "1:LIST THE CHANGES"
-Disp "2:NEW POINT(S)"
+Disp "2:NEW POINTS (TABLE)"
 Disp "3:NEW DOMAIN AND RANGE"
 Disp "4:WRITE THE EQUATION"
 4→θ
@@ -27,48 +27,58 @@ N→A
 O→B
 P→C
 Q→K
+Lbl 11
 ⁻C/B→H
 If abs(H)<ᴇ⁻9
 0→H
+A→N
+B→O
+H→P
+K→Q
+prgmHAEQN
+Str9→Str2
+Str5→Str3
 prgmHAANS
+Str3→Str9
+prgmHAOUT
 0→I
 If A<0
 Then
-"REFLECT X-AXIS"→Str9
+"REFLECT OVER X-AXIS"→Str9
 prgmHAOUT
-I+1→I
+1→I
 End
-If abs(A)≠1
+If abs(abs(A)-1)>ᴇ⁻9
 Then
 abs(A)→θ
 prgmHAFRAC
 If abs(A)>1
 Then
-"VERT STRETCH "+Str9→Str9
+"VERT STRETCH BY "+Str9→Str9
 Else
-"VERT COMPRESS "+Str9→Str9
+"VERT COMPRESS BY "+Str9→Str9
 End
 prgmHAOUT
-I+1→I
+1→I
 End
 If B<0
 Then
-"REFLECT Y-AXIS"→Str9
+"REFLECT OVER Y-AXIS"→Str9
 prgmHAOUT
-I+1→I
+1→I
 End
-If abs(B)≠1
+If abs(abs(B)-1)>ᴇ⁻9
 Then
 1/abs(B)→θ
 prgmHAFRAC
 If abs(B)>1
 Then
-"HORIZ COMPRESS "+Str9→Str9
+"HORIZ COMPRESS BY "+Str9→Str9
 Else
-"HORIZ STRETCH "+Str9→Str9
+"HORIZ STRETCH BY "+Str9→Str9
 End
 prgmHAOUT
-I+1→I
+1→I
 End
 If H≠0
 Then
@@ -81,9 +91,9 @@ Else
 "LEFT "+Str9→Str9
 End
 prgmHAOUT
-I+1→I
+1→I
 End
-If K≠0
+If abs(K)≥ᴇ⁻9
 Then
 abs(K)→θ
 prgmHAFRAC
@@ -94,23 +104,35 @@ Else
 "DOWN "+Str9→Str9
 End
 prgmHAOUT
-I+1→I
+1→I
 End
-If I=0
+If not(I)
 Then
 "NO CHANGE"→Str9
 prgmHAOUT
 End
-"1:AGAIN  2:HOME  3:WHY"→Str9
+If length(Str2)>26
+Then
+inString(Str2,"  H=")→I
+sub(Str2,1,I-1)→Str9
+prgmHAOUT
+sub(Str2,I+2,length(Str2)-I-1)→Str2
+End
+Str2→Str9
+prgmHAOUT
+"1:AGAIN  2:HOME  3:SAME EQ"→Str9
 3→θ
 prgmHAEND
 θ→J
+If J=3
+Goto 6
 If J=1
 Goto 1
-If J=3
-Goto 5
 Return
 Lbl 5
+⁻C/B→H
+If abs(H)<ᴇ⁻9
+0→H
 A→N
 B→O
 H→P
@@ -132,10 +154,13 @@ prgmHAFRAC
 prgmHAOUT
 "ORDER: A, THEN B, H, K"→Str9
 prgmHAOUT
-"1:AGAIN  2:HOME"→Str9
-2→θ
+"1:AGAIN  2:HOME  3:SAME EQ"→Str9
+3→θ
 prgmHAEND
-If θ=1
+θ→J
+If J=3
+Goto 6
+If J=1
 Goto 1
 Return
 Lbl 2
@@ -145,10 +170,12 @@ N→A
 O→B
 P→C
 Q→K
+Lbl 21
 ClrHome
 Disp "WHICH POINTS?"
-Disp "1:TYPE ONE POINT"
+Disp "1:ONE POINT AT A TIME"
 Disp "2:ALL CORNERS OF A GRAPH"
+Disp "  OR A TABLE OF POINTS"
 2→θ
 prgmHAKEY
 If θ=0
@@ -175,20 +202,36 @@ E→O
 prgmHAPTXT
 "FROM "+Str5→Str9
 prgmHAOUT
-"1:NEXT PT 2:HOME 3:NEW EQ"→Str9
+"1:NEXT PT 2:HOME 3:SAME EQ"→Str9
 3→θ
 prgmHAEND
 θ→J
 If J=1
 Goto 23
 If J=3
-Goto 2
+Goto 6
 Return
 Lbl 22
 If dim(ʟBX)=0
 Goto 24
+If dim(ʟBY)≠dim(ʟBX) or dim(ʟBC)≠2
+Goto 24
+ʟBX(1)→N
+ʟBY(1)→O
+prgmHAPTXT
+Str5→Str2
+dim(ʟBX)→I
+ʟBX(I)→N
+ʟBY(I)→O
+prgmHAPTXT
+"SAVED: "+Str2+"..."+Str5→Str2
+I→θ
+prgmHAFRAC
+If length(Str2)>26
+"SAVED: "+Str9+" POINTS"→Str2
 ClrHome
 Disp "GRAPH CORNERS:"
+Disp Str2
 Disp "1:USE THE SAVED GRAPH"
 Disp "2:TYPE A NEW GRAPH"
 2→θ
@@ -206,13 +249,22 @@ prgmHAPTS
 Lbl 25
 (ʟBX-C)/B→L₁
 A*ʟBY+K→L₂
-SortA(L₁,L₂)
 prgmHAANS
 For(I,1,dim(L₁))
+ʟBX(I)→N
+ʟBY(I)→O
+prgmHAPTXT
+Str5→Str2
 L₁(I)→N
 L₂(I)→O
 prgmHAPTXT
-Str5→Str9
+Str2+" TO "+Str5→Str9
+If length(Str9)>26
+Then
+Str2+" TO"→Str9
+prgmHAOUT
+"   "+Str5→Str9
+End
 prgmHAOUT
 End
 min(L₁)→S
@@ -228,10 +280,17 @@ min(ʟBY)→D
 max(ʟBY)→E
 0→F
 0→G
-For(I,1,dim(ʟBY))
-If ʟBY(I)=D and not((I=1 and not(ʟBC(1))) or (I=dim(ʟBY) and not(ʟBC(2))))
+dim(ʟBY)→M
+For(I,1,M)
+not((I=1 and not(ʟBC(1))) or (I=M and not(ʟBC(2))))→L
+If I<M
+Then
+If ʟBY(I)=ʟBY(I+1)
+1→L
+End
+If ʟBY(I)=D and L
 1→F
-If ʟBY(I)=E and not((I=1 and not(ʟBC(1))) or (I=dim(ʟBY) and not(ʟBC(2))))
+If ʟBY(I)=E and L
 1→G
 End
 A*D+K→S
@@ -249,14 +308,38 @@ End
 prgmHADOM
 9→θ
 prgmHADOM
+"R="+Str6→Str0
+If length(Str1)+length(Str0)≤24
+Then
+Str1+"  "+Str0→Str9
+prgmHAOUT
+Else
 Str1→Str9
 prgmHAOUT
-"R="+Str6→Str9
+Str0→Str9
 prgmHAOUT
-"1:AGAIN  2:HOME"→Str9
-2→θ
+End
+{1/B,⁻C/B}→ʟPLY
+prgmHAPOLY
+"NEW X="+Str7→Str9
+prgmHAOUT
+{A,K}→ʟPLY
+prgmHAPOLY
+inString(Str7,"X")→I
+"Y"→Str9
+If I>1
+sub(Str7,1,I-1)+Str9→Str9
+If I<length(Str7)
+Str9+sub(Str7,I+1,length(Str7)-I)→Str9
+"NEW Y="+Str9→Str9
+prgmHAOUT
+"1:AGAIN  2:HOME  3:SAME EQ"→Str9
+3→θ
 prgmHAEND
-If θ=1
+θ→J
+If J=3
+Goto 6
+If J=1
 Goto 2
 Return
 Lbl 3
@@ -266,6 +349,7 @@ N→A
 O→B
 P→C
 Q→K
+Lbl 31
 ClrHome
 Disp "WHAT ARE YOU GIVEN?"
 Disp "1:DOMAIN AND RANGE"
@@ -347,10 +431,13 @@ prgmHADOM
 "R="+Str6→Str9
 prgmHAOUT
 End
-"1:AGAIN  2:HOME"→Str9
-2→θ
+"1:AGAIN  2:HOME  3:SAME EQ"→Str9
+3→θ
 prgmHAEND
-If θ=1
+θ→J
+If J=3
+Goto 6
+If J=1
 Goto 3
 Return
 Lbl 4
@@ -358,8 +445,8 @@ Lbl 4
 1→B
 0→C
 0→K
-4→J
-Repeat J=7 or J=0
+0→J
+Repeat J=9 or J=0
 ⁻C/B→H
 If abs(H)<ᴇ⁻9
 0→H
@@ -369,17 +456,19 @@ H→P
 K→Q
 prgmHAEQN
 ClrHome
-Disp "SO FAR:"
-Disp Str5
-Disp "ADD THE STEPS IN THE ORDER"
-Disp "THE QUESTION SAYS THEM:"
+If length(Str5)≤26
+Disp "SO FAR:",Str5
+If length(Str5)>26
+Disp sub(Str5,1,26),sub(Str5,27,min(26,length(Str5)-26))
+Disp "PICK EACH STEP IN ORDER:"
 Disp "1:REFLECT OVER X-AXIS"
 Disp "2:REFLECT OVER Y-AXIS"
 Disp "3:VERT STRETCH/COMPRESS"
 Disp "4:HORIZ STRETCH/COMPRESS"
-Disp "5:LEFT/RIGHT  6:UP/DOWN"
-Disp "7:DONE"
-7→θ
+Disp "5:LEFT      6:RIGHT"
+Disp "7:UP        8:DOWN"
+Disp "9:DONE"
+9→θ
 prgmHAKEY
 θ→J
 If J=1
@@ -389,48 +478,51 @@ Then
 End
 If J=2
 ⁻B→B
-If J=3
+If J=3 or J=4
 Then
 ClrHome
+If J=3
+Then
 Disp "VERT STRETCH BY 5: TYPE 5"
 Disp "VERT COMPRESS BY 1/2:"
+Else
+Disp "HORIZ STRETCH BY 3: TYPE 3"
+Disp "HORIZ COMPRESS BY 1/2:"
+End
 Disp "  TYPE 1/2"
 Input "FACTOR=",Str8
 prgmHANUM
-If θ≠0
+abs(θ)→θ
+If θ≠0 and J=3
 Then
 θ*A→A
 θ*K→K
 End
-End
-If J=4
-Then
-ClrHome
-Disp "HORIZ STRETCH BY 3: TYPE 3"
-Disp "HORIZ COMPRESS BY 1/2:"
-Disp "  TYPE 1/2"
-Input "FACTOR=",Str8
-prgmHANUM
-If θ≠0
+If θ≠0 and J=4
 B/θ→B
 End
+If J≥5 and J≤8
+Then
+ClrHome
+Disp "TYPE THE NUMBER YOU SEE"
 If J=5
-Then
-ClrHome
-Disp "RIGHT 3: TYPE 3"
-Disp "LEFT 3: TYPE -3"
-Input "AMOUNT=",Str8
-prgmHANUM
-C-B*θ→C
-End
+Input "SHIFT LEFT BY=",Str8
 If J=6
-Then
-ClrHome
-Disp "UP 4: TYPE 4"
-Disp "DOWN 4: TYPE -4"
-Input "AMOUNT=",Str8
+Input "SHIFT RIGHT BY=",Str8
+If J=7
+Input "SHIFT UP BY=",Str8
+If J=8
+Input "SHIFT DOWN BY=",Str8
 prgmHANUM
+abs(θ)→θ
+If J=5
+C+B*θ→C
+If J=6
+C-B*θ→C
+If J=7
 K+θ→K
+If J=8
+K-θ→K
 End
 End
 If J=0
@@ -443,27 +535,60 @@ B→O
 H→P
 K→Q
 prgmHAEQN
+Str9→Str2
 prgmHAANS
 Str5→Str9
 prgmHAOUT
+If Str4≠Str5
+Then
 "="+sub(Str4,3,length(Str4)-2)→Str9
 prgmHAOUT
-A→θ
-prgmHAFRAC
-"A="+Str9→Str2
-B→θ
-prgmHAFRAC
-Str2+"  B="+Str9→Str2
-H→θ
-prgmHAFRAC
-Str2+"  H="+Str9→Str2
-K→θ
-prgmHAFRAC
-Str2+"  K="+Str9→Str9
+End
+If length(Str2)>26
+Then
+inString(Str2,"  H=")→I
+sub(Str2,1,I-1)→Str9
 prgmHAOUT
-"1:AGAIN  2:HOME"→Str9
-2→θ
+sub(Str2,I+2,length(Str2)-I-1)→Str2
+End
+Str2→Str9
+prgmHAOUT
+"1:AGAIN  2:HOME  3:SAME EQ"→Str9
+3→θ
 prgmHAEND
-If θ=1
+θ→J
+If J=3
+Goto 6
+If J=1
 Goto 4
 Return
+Lbl 6
+⁻C/B→H
+If abs(H)<ᴇ⁻9
+0→H
+A→N
+B→O
+H→P
+K→Q
+prgmHAEQN
+ClrHome
+Disp "SAME EQUATION:"
+If length(Str5)≤26
+Disp Str5
+Disp "WHAT ELSE DO THEY WANT?"
+Disp "1:LIST THE CHANGES"
+Disp "2:NEW POINTS (TABLE)"
+Disp "3:NEW DOMAIN AND RANGE"
+Disp "4:WHY (HOW H WAS FOUND)"
+4→θ
+prgmHAKEY
+θ→J
+If J=0
+Goto M
+If J=1
+Goto 11
+If J=2
+Goto 21
+If J=3
+Goto 31
+Goto 5

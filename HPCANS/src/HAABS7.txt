@@ -1,0 +1,3 @@
+F+1→F
+"("+sub("123456789",F,1)+") "+Str9→Str9
+prgmHAOUT

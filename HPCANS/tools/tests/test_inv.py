@@ -222,4 +222,74 @@ CASES = [
          ["F⁻¹(X)=", "(((5-X)/2)^(5/3)-1)/3"], "f^-1(x) = (((5 - x)/2)^(5/3) - 1)/3"),
     hlt("EXTRA-inv-23", "Has an inverse function? y=-3x+9 (a slanted line)", "line", [],
         ["YES, HAS INVERSE", "(PASSES THE HLT)", "(A FLAT LINE Y=5 IS NO)"], "YES"),
+    # ---- adversarial review (fuzz/fuzz_inv.py): one case per bug fixed ----
+    verify("REV-inv-1", "Restricted pair with a negative power: f=x^(-2), g=x^(-1/2) (f must keep x>0, not x>=0)",
+           ("pow", "-2", "", "", ""), ("pow", "-1/2", "", "", ""),
+           ["YES, INVERSES", "F(G(X))=X", "G(F(X))=X", "(F NEEDS X>0)"],
+           "inverses when f is restricted to x > 0 (the range of g); was (F NEEDS X≥0)"),
+    verify("REV-inv-2", "g undefined on the range of f: f=5√(3x+5)-1, g=-3√(-3x+2)-3",
+           ("sqrt", "5", "3X+5", "-1"), ("sqrt", "-3", "-3X+2", "-3"),
+           ["NO, NOT INVERSES", "F(G(1)) UNDEFINED", "G(F(-3)) UNDEFINED"],
+           "not inverses: 1 is in R_f but g(1) is undefined; was the false claim G(F(X)) UNDEFINED"),
+    verify("REV-inv-3", "Composite with a zero bottom: f=1/x, g=0", ("frac", "1", "X"), ("line", "0"),
+           ["NO, NOT INVERSES", "F(G(X)) UNDEFINED", "G(F(X))=0≠X"],
+           "f(g(x)) = 1/0 is undefined for every x; was F(G(X))=1/0≠X"),
+    verify("REV-inv-4", "Constant composite: f=g=-5x/(2x)", ("frac", "-5X", "2X"), ("frac", "-5X", "2X"),
+           ["NO, NOT INVERSES", "F(G(X))=-5/2≠X", "G(F(X))=-5/2≠X"],
+           "f(g(x)) = -5/2 for every allowed x; was -5X/(2X)≠X"),
+    hlt("REV-inv-5", "A flat line typed at PARABOLA: y=5", "parab", ["5"],
+        ["NO, NOT ONE-TO-ONE", "F(-1)=5", "F(1)=5", "Y=5 HITS TWICE"], "y = 5 fails the HLT; was YES, HAS INVERSE"),
+    hlt("REV-inv-6", "Graph (-2,4),(0,0),(3,6): fails the HLT but is NOT even", "graph", [],
+        ["NO, NOT ONE-TO-ONE", "F(-2)=4", "F(2)=4", "Y=4 HITS TWICE"],
+        "f(-2) = f(2) = 4; (F IS EVEN) must not be printed (was printed)",
+        extra=["k3"] + corners([(-2, 4), (0, 0), (3, 6)])),
+    find("REV-inv-7", "Long inverse breaks at a + or - sign: f(x)=-4(-(2/3)x-9)^(-3/4)+7/2", "pow",
+         ["-3/4", "-4", "-9-2X/3", "7/2"],
+         ["F⁻¹(X)=", "(-3/2)((7-2X)/8)^(-4/3)", "-27/2", "FOR X<7/2", "D=(-INF,7/2)", "R=(-INF,-27/2)"],
+         "f^-1(x) = (-3/2)((7-2x)/8)^(-4/3) - 27/2, x < 7/2; was one 29-column line cut inside -27/2"),
+    verify("REV-inv-8", "Long composition line breaks after =: f=(5x+2)/(3x+7), g=(4x-9)/(6x+5)",
+           ("frac", "5X+2", "3X+7"), ("frac", "4X-9", "6X+5"),
+           ["NO, NOT INVERSES", "F(G(X))=(32X-35)/(54X+8)≠X", "G(F(X))=", "(-7X-55)/(45X+47)≠X"],
+           "g(f(x)) = (-7x-55)/(45x+47); was cut by the screen edge"),
+    find("REV-inv-9", "Fraction in front: f(x)=(2/3)(x-1)³+1", "cube", ["2/3", "X-1", "1"],
+         ["F⁻¹(X)=³√((3X-3)/2)+1"], "f^-1(x) = cbrt((3x-3)/2) + 1; was cbrt((3/2)X-3/2)+1"),
+    find("REV-inv-10", "Two minus signs cancel: f(x)=-³√(-3x)-8", "cbrt", ["-", "-3X", "-8"],
+         ["F⁻¹(X)=(X+8)³/3"], "f^-1(x) = (x+8)^3/3; was -(-X-8)³/3"),
+    find("REV-inv-11", "Two minus signs cancel: f(x)=-6(2-5x)³-1", "cube", ["-6", "2-5X", "-1"],
+         ["F⁻¹(X)=(³√((X+1)/6)+2)/5"], "f^-1(x) = (cbrt((x+1)/6)+2)/5; was (2-³√((-X-1)/6))/5"),
+    find("REV-inv-12", "Tiny coefficients are not a constant: f(x)=(x/9973+1/9967)/(x/9949+1/9941)", "frac",
+         ["X/9973+1/9967", "X/9949+1/9941"], ["F⁻¹(X)=", "(1/9967-(1/9941)X)/", "((1/9949)X-1/9973)"],
+         "f^-1(x) = (dx-b)/(a-cx); was NO INVERSE FUNCTION (an absolute 1E-10 test on ad-bc)"),
+    verify("REV-inv-13", "Values too big to show: f=g=100(100x)^5", ("pow", "5", "100", "100X", ""),
+           ("pow", "5", "100", "100X", ""), ["NO, NOT INVERSES", "F(G(1))≠1", "G(F(1))≠1"],
+           "f(g(1)) is about 1E72 (shown without the number; it overflowed the screen and the real TI's range)"),
+    verify("REV-inv-14", "g undefined on the range of f (rational and root): f=(-5x-1)/(-(7/5)x+2), g=5√(-5x)-7",
+           ("frac", "-5X-1", "(-7/5)X+2"), ("sqrt", "5", "-5X", "-7"),
+           ["NO, NOT INVERSES", "F(G(1)) UNDEFINED", "G(F(2)) UNDEFINED"],
+           "not inverses: 1 is in R_f but g(1) is undefined (a point where g is undefined used to be skipped)"),
 ]
+
+# lines that must NOT be on the answer screen (run_tests.py checks only lines that must be there;
+# run this file directly to check these too)
+ABSENT = {"REV-inv-6": ["(F IS EVEN)"]}
+
+
+def main():
+    import sys
+    from pathlib import Path
+    sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+    from harness import describe_failure, run_case
+    bad = 0
+    for c in CASES:
+        r = run_case(c)
+        got = [l.strip() for a in r["answers"] for l in a]
+        extra = [l for l in ABSENT.get(c["id"], []) if l in got]
+        if not r["ok"] or extra:
+            bad += 1
+            print(describe_failure(r) + (f"\n   lines that must not be there: {extra}" if extra else ""))
+    print(f"{len(CASES)} cases, {len(CASES) - bad} passed, {bad} failed")
+    return 1 if bad else 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
