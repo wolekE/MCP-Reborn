@@ -1,26 +1,15 @@
+1/L₁(2)→E
+⁻L₁(5)/L₁(2)→F
+0→G
+1→H
+prgmHAINV5
+Str2→Str1
 L₁(2)→A
 L₁(3)→B
 L₁(4)→C
 L₁(5)→D
 L₁(6)→E
 L₁(7)→F
-1/A→K
-⁻D/A→L
-If abs(A)≠1 and fPart(A)=0
-Then
-(A>0)-(A<0)→K
-⁻KD→L
-End
-prgmHAINVL
-Str3→Str1
-If abs(A)≠1 and fPart(A)=0
-Then
-If D≠0
-"("+Str1+")"→Str1
-abs(A)→θ
-prgmHAFRAC
-Str1+"/"+Str9→Str1
-End
 Str1="X"→G
 If E=3 and F=1
 Then

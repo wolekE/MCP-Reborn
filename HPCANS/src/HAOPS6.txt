@@ -24,18 +24,23 @@ L*E+ʟOPW(M+5)→L
 End
 ʟOPW(13)→ʟOPV(3I-2)
 ʟOPW(12)→ʟOPV(3I-1)
-max(0,B/L)→ʟOPV(3I)
+B/L→B
+If abs(B)<ᴇ⁻9
+0→B
+max(0,B)→ʟOPV(3I)
 End
 End
 1→C
 If A=2 or D=2
 2→C
-If K=3 and ((A=1 and F=0) or (D=1 and G=0))
-1→C
 If (K=4 and D=1 and abs(G)<ᴇ⁻9) or (K=5 and A=1 and abs(F)<ᴇ⁻9)
 3→C
 If A=0 or D=0
 0→C
+If C=0 or C=3
+Return
+If (K=3 and ((A=1 and abs(F)<ᴇ⁻9) or (D=1 and abs(G)<ᴇ⁻9))) or (K=4 and A=1 and abs(F)<ᴇ⁻9) or (K=5 and D=1 and abs(G)<ᴇ⁻9)
+Goto Z
 If C≠1
 Return
 For(I,1,2)
@@ -50,6 +55,18 @@ Then
 End
 End
 End
+If ʟOPV(2)=0 and ʟOPV(5)=0
+Goto Q
+If ʟOPV(2)≠0 and ʟOPV(5)≠0
+Then
+√(ʟOPV(6)/ʟOPV(3))→θ
+prgmHAFRAC
+If Z
+Then
+ʟOPV(5)*√(ʟOPV(6)/ʟOPV(3))→ʟOPV(5)
+ʟOPV(3)→ʟOPV(6)
+End
+End
 ʟOPV(3)→L
 If ʟOPV(2)=0
 ʟOPV(6)→L
@@ -59,6 +76,8 @@ If K=1
 {ʟOPV(1)+ʟOPV(4),ʟOPV(2)+ʟOPV(5),L}→ʟOPR
 If K=2
 {ʟOPV(1)-ʟOPV(4),ʟOPV(2)-ʟOPV(5),L}→ʟOPR
+If K=6
+{ʟOPV(4)-ʟOPV(1),ʟOPV(5)-ʟOPV(2),L}→ʟOPR
 If K=3
 {ʟOPV(1)*ʟOPV(4)+ʟOPV(2)*ʟOPV(5)*L,ʟOPV(1)*ʟOPV(5)+ʟOPV(2)*ʟOPV(4),L}→ʟOPR
 If K=4
@@ -73,8 +92,51 @@ Then
 End
 prgmHAOPS5
 Return
+Lbl Q
+ʟOPV(1)→θ
+prgmHAFRAC
+If not(Z)
+Goto E
+X→B
+Y→L
+ʟOPV(4)→θ
+prgmHAFRAC
+If not(Z)
+Goto E
+If K=1
+{B*Y+X*L,L*Y}→ʟOPN
+If K=2
+{B*Y-X*L,L*Y}→ʟOPN
+If K=3
+{B*X,L*Y}→ʟOPN
+If K=4
+{B*Y,L*X}→ʟOPN
+If K=5
+{X*L,Y*B}→ʟOPN
+If K=6
+{X*L-B*Y,L*Y}→ʟOPN
+If ʟOPN(2)<0
+⁻ʟOPN→ʟOPN
+If max(abs(ʟOPN))≥ᴇ12
+Goto E
+gcd(abs(ʟOPN(1)),ʟOPN(2))→B
+ʟOPN/B→ʟOPN
+abs(ʟOPN(1))→Y
+prgmHADIG
+Str8→Str1
+If ʟOPN(2)>1
+Then
+ʟOPN(2)→Y
+prgmHADIG
+Str1+"/"+Str8→Str1
+End
+If ʟOPN(1)<0
+"-"+Str1→Str1
+Return
 Lbl D
-If ʟOPV(1)≠0 or ʟOPV(4)≠0 or K≤2
+If K≤2 or K=6
+Goto S
+If ʟOPV(1)≠0 or ʟOPV(4)≠0
 Goto E
 If K=3
 {0,ʟOPV(2)*ʟOPV(5),ʟOPV(3)*ʟOPV(6)}→ʟOPR
@@ -83,6 +145,19 @@ If K=4
 If K=5
 {0,ʟOPV(5)/ʟOPV(2),ʟOPV(6)/ʟOPV(3)}→ʟOPR
 prgmHAOPS5
+Return
+Lbl S
+1-2*(K=6)→B
+1-2*(K=2)→L
+{B*ʟOPV(1)+L*ʟOPV(4),B*ʟOPV(2),ʟOPV(3)}→ʟOPR
+prgmHAOPS5
+Str1→Str2
+{0,(1-2*(K=2))*ʟOPV(5),ʟOPV(6)}→ʟOPR
+prgmHAOPS5
+If sub(Str1,1,1)≠"-"
+"+"+Str1→Str1
+Str2+Str1→Str1
+If not(inString(Str1,"A"))
 Return
 Lbl E
 F+G→B
@@ -94,8 +169,12 @@ If K=4
 F/G→B
 If K=5
 G/F→B
+If K=6
+G-F→B
 B→θ
-prgmHAFRAC
+prgmHAOPS9
 Str9→Str1
-If not(Z)
-"ABOUT "+Str1→Str1
+Return
+Lbl Z
+"0"→Str1
+1→C

@@ -1,0 +1,94 @@
+{θ,0,0,0,0,1,0,0,0,0}→ʟCMR
+If abs(θ)≥ᴇ98
+Goto D
+For(L,1,dim(ʟCMQ)/3)
+ʟCMQ(3L-2)→Y
+If Y≠0 and not(ʟCMR(2))
+Then
+If abs((Y*θ+ʟCMQ(3L-1))*θ+ʟCMQ(3L))≤ᴇ⁻9*(abs(Y)θ²+abs(ʟCMQ(3L-1)*θ)+abs(ʟCMQ(3L)))
+L→ʟCMR(2)
+End
+End
+If not(ʟCMR(2))
+Goto D
+3ʟCMR(2)-2→L
+{ʟCMQ(L),ʟCMQ(L+1),ʟCMQ(L+2)}→ʟCMU
+1→ʟCMR(3)
+For(L,1,3)
+ʟCMU(L)→θ
+prgmHAFRAC
+If not(Z) or ʟCMR(6)>ᴇ6
+0→ʟCMR(3)
+If ʟCMR(3)
+lcm(ʟCMR(6),Y)→ʟCMR(6)
+End
+If not(ʟCMR(3)) or ʟCMR(6)>ᴇ6
+Goto D
+{round(ʟCMR(6)ʟCMU(1),0),round(ʟCMR(6)ʟCMU(2),0),round(ʟCMR(6)ʟCMU(3),0)}→ʟCMU
+gcd(gcd(abs(ʟCMU(1)),abs(ʟCMU(2))),abs(ʟCMU(3)))→L
+ʟCMU/L→ʟCMU
+ʟCMU(2)²-4ʟCMU(1)ʟCMU(3)→ʟCMR(7)
+If ʟCMR(7)≤0 or ʟCMR(7)≥ᴇ12
+Goto D
+1→ʟCMR(8)
+2→L
+While L²≤ʟCMR(7) and L<300
+If fPart(ʟCMR(7)/L²)=0
+Then
+ʟCMR(7)/L²→ʟCMR(7)
+L*ʟCMR(8)→ʟCMR(8)
+Else
+L+1→L
+End
+End
+If ʟCMR(7)=1
+Goto D
+⁻ʟCMU(2)→ʟCMR(9)
+2ʟCMU(1)→ʟCMR(10)
+(ʟCMR(9)+ʟCMR(8)√(ʟCMR(7)))/ʟCMR(10)→θ
+(ʟCMR(9)-ʟCMR(8)√(ʟCMR(7)))/ʟCMR(10)→Y
+1-2(abs(ʟCMR(1)-θ)>abs(ʟCMR(1)-Y))→L
+If ʟCMR(10)<0
+Then
+⁻ʟCMR(9)→ʟCMR(9)
+⁻ʟCMR(10)→ʟCMR(10)
+⁻L→L
+End
+gcd(gcd(abs(ʟCMR(9)),ʟCMR(8)),ʟCMR(10))→Y
+ʟCMR(9)/Y→ʟCMR(9)
+ʟCMR(8)/Y→ʟCMR(8)
+ʟCMR(10)/Y→ʟCMR(10)
+ʟCMR(7)→Y
+prgmHADIG
+"√("+Str8+")"→Str9
+If ʟCMR(8)>1
+Then
+ʟCMR(8)→Y
+prgmHADIG
+Str8+Str9→Str9
+End
+If L>0 and ʟCMR(9)≠0
+"+"+Str9→Str9
+If L<0
+"-"+Str9→Str9
+If ʟCMR(9)≠0
+Then
+abs(ʟCMR(9))→Y
+prgmHADIG
+Str8+Str9→Str9
+If ʟCMR(9)<0
+"-"+Str9→Str9
+If ʟCMR(10)>1
+"("+Str9+")"→Str9
+End
+If ʟCMR(10)>1
+Then
+ʟCMR(10)→Y
+prgmHADIG
+Str9+"/"+Str8→Str9
+End
+1→Z
+Return
+Lbl D
+ʟCMR(1)→θ
+prgmHAFRAC

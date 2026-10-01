@@ -2,6 +2,10 @@
 ""→Str3
 If K≠0
 Then
+K→θ
+prgmHAFRAC
+If Z
+X/Y→K
 augment(augment({2},ʟCMN),{0,0,0,0,1,K,0})→ʟF3
 3→N
 prgmHAFSTR

@@ -16,8 +16,7 @@ Then
 prgmHAFZERO
 C and θ→C
 End
-9→θ
-prgmHADOM
+prgmHAOPS7
 Str6→Str1
 If not(C)
 "CAN NOT DO THIS ONE"→Str1

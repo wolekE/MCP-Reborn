@@ -1,0 +1,18 @@
+round(abs(θ),6)→X
+iPart(X)→Y
+prgmHADIG
+Str8→Str9
+round(ᴇ6*fPart(X),0)→Y
+If Y>0
+Then
+Y+ᴇ6→Y
+prgmHADIG
+sub(Str8,2,6)→Str8
+While sub(Str8,length(Str8),1)="0"
+sub(Str8,1,length(Str8)-1)→Str8
+End
+Str9+"."+Str8→Str9
+End
+If θ<0 and X>0
+"-"+Str9→Str9
+"ABOUT "+Str9→Str9

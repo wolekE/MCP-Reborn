@@ -65,8 +65,8 @@ A→P
 prgmHAFDOM
 θ→C
 prgmHACOMP6
-9→θ
-prgmHADOM
+prgmHACOMPA
+prgmHACOMPB
 "D="+Str6→Str2
 If C=0
 "D=? (NOT SUPPORTED)"→Str2
@@ -81,7 +81,8 @@ Then
 Str0+"="→Str9
 prgmHAOUT
 Str1→Str9
-prgmHAOUT
+1→θ
+prgmHACOMPW
 End
 If I>0 and I≤18
 Then
@@ -89,7 +90,8 @@ Str0+"="+Str1→Str9
 prgmHAOUT
 End
 Str2→Str9
-prgmHAOUT
+0→θ
+prgmHACOMPW
 If J≤2
 Then
 Output(9,1,"1:AGAIN  2:HOME")
@@ -118,8 +120,7 @@ B→N
 0→O
 prgmHAFDOM
 θ→C
-9→θ
-prgmHADOM
+prgmHACOMPB
 Str6→Str2
 If C=0
 "?"→Str2
@@ -129,8 +130,7 @@ A→N
 0→O
 prgmHAFDOM
 θ→C
-9→θ
-prgmHADOM
+prgmHACOMPB
 Str6→Str3
 If C=0
 "?"→Str3
@@ -140,20 +140,25 @@ If length(Str1)>0
 Then
 "PUT "+sub("FG",B,1)+"(X) IN FOR EVERY X"→Str9
 prgmHAOUT
-End
-If length(Str1)>0 and L₂(1)=1 and (L₂(7)≠0 or L₂(8)≠0 or L₂(9)≠0 or L₂(10)≠0)
+If L₂(1)=1
+Then
+If L₂(7)≠0 or L₂(8)≠0 or L₂(9)≠0 or L₂(10)≠0
 Then
 "THEN TOP,BOTTOM TIMES LCD"→Str9
 prgmHAOUT
 End
+End
+End
 "X MUST BE IN D OF "+sub("FG",B,1)+":"→Str9
 prgmHAOUT
 Str2→Str9
-prgmHAOUT
+0→θ
+prgmHACOMPW
 sub("FG",B,1)+"(X) MUST BE IN D OF "+sub("FG",A,1)+":"→Str9
 prgmHAOUT
 Str3→Str9
-prgmHAOUT
+0→θ
+prgmHACOMPW
 "(FOUND BEFORE SIMPLIFYING)"→Str9
 prgmHAOUT
 "1:AGAIN  2:HOME"→Str9
@@ -163,6 +168,11 @@ If θ=1
 Goto 1
 Return
 Lbl 2
+0→C
+0→D
+Lbl 2N
+{0}→L₃
+{0}→L₄
 ClrHome
 Disp "WHICH ONE IS ASKED?"
 Disp "1:F(G(NUMBER))"
@@ -198,12 +208,14 @@ If K=0
 Goto M
 If K=3
 Goto 2R
+If K=2
+Goto 2T
 9→L
-If K=2 or not(I)
+If not(I)
 7→L
 Lbl 2F
 1→θ
-If J≠4
+If J≠4 and not(C)
 Then
 1→N
 L→O
@@ -212,7 +224,9 @@ prgmHAFUNC
 End
 If θ=0
 Goto M
-If J≠3
+If J≠4
+1→C
+If J≠3 and not(D)
 Then
 2→N
 L→O
@@ -221,6 +235,9 @@ prgmHAFUNC
 End
 If θ=0
 Goto M
+If J≠3
+1→D
+Lbl 2V
 B→N
 H→O
 prgmHAFEVAL
@@ -236,7 +253,29 @@ prgmHAFEVAL
 P→G
 Q→I
 End
+If M=5 and F=1
+prgmHACOMP9
 Goto 2A
+Lbl 2T
+If J≠4
+Then
+"GRAPH OF F:"→Str9
+prgmHAPTS
+ʟHX→ʟGFX
+ʟHY→ʟGFY
+ʟHC→ʟGFC
+augment(augment({3,dim(ʟHX),ʟHC(1),ʟHC(2)},ʟHX),ʟHY)→ʟF1
+End
+If J≠3
+Then
+"GRAPH OF G:"→Str9
+prgmHAPTS
+ʟHX→ʟGGX
+ʟHY→ʟGGY
+ʟHC→ʟGGC
+augment(augment({3,dim(ʟHX),ʟHC(1),ʟHC(2)},ʟHX),ʟHY)→ʟF2
+End
+Goto 2V
 Lbl 2R
 H→θ
 prgmHAFRAC
@@ -265,13 +304,18 @@ prgmHANUM
 θ→G
 1-Z→I
 Lbl 2A
+L₃→L₅
+E→θ
+prgmHACOMP8
+Str9→Str3
+L₄→L₅
+G→θ
+prgmHACOMP8
+Str9→Str2
 H→θ
 prgmHAFRAC
 sub("FG",B,1)+"("+Str9+")"→Str0
 sub("FG",A,1)+"("+Str0+")="→Str1
-G→θ
-prgmHAFRAC
-Str9→Str2
 If I=0
 "UNDEFINED"→Str2
 If I=2 or F=2
@@ -280,37 +324,41 @@ If F=0
 "UNDEFINED"→Str2
 prgmHAANS
 Str1+Str2→Str9
-prgmHAOUT
+1→θ
+prgmHACOMPW
 If F=0
 Str0+" DOES NOT EXIST"→Str9
 If F=2
 Str0+" IS NOT GIVEN"→Str9
 If F=1
-Then
-E→θ
-prgmHAFRAC
-Str0+"="+Str9→Str9
-End
-prgmHAOUT
+Str0+"="+Str3→Str9
+1→θ
+prgmHACOMPW
 If F=1
 Then
-E→θ
-prgmHAFRAC
-sub("FG",A,1)+"("+Str9+")"→Str3
-G→θ
-prgmHAFRAC
-Str3+"="+Str9→Str9
+sub("FG",A,1)+"("+Str3+")"→Str3
+Str3+"="+Str2→Str9
 If I=0
 Str3+" DOES NOT EXIST"→Str9
 If I=2
 Str3+" IS NOT GIVEN"→Str9
-prgmHAOUT
+1→θ
+prgmHACOMPW
 End
+If M=5
+Then
+Output(9,1,"1:AGAIN  2:HOME")
+"3:SAME F,G  NEW NUMBER"→Str9
+3→θ
+Else
 "1:AGAIN  2:HOME"→Str9
 2→θ
+End
 prgmHAEND
 If θ=1
 Goto 2
+If θ=3
+Goto 2N
 Return
 Lbl 3
 ClrHome
@@ -346,7 +394,8 @@ If C=0
 "D=? (NOT SUPPORTED)"→Str2
 prgmHAANS
 Str2→Str9
-prgmHAOUT
+0→θ
+prgmHACOMPW
 "1:AGAIN  2:HOME"→Str9
 2→θ
 prgmHAEND
@@ -397,14 +446,16 @@ A→P
 prgmHAFDOM
 θ→C
 prgmHACOMP6
-9→θ
-prgmHADOM
+3→B
+prgmHACOMPA
+prgmHACOMPB
 "D="+Str6→Str2
 If C=0
 "D=? (NOT SUPPORTED)"→Str2
 prgmHAANS
 Str2→Str9
-prgmHAOUT
+0→θ
+prgmHACOMPW
 "1:AGAIN  2:HOME"→Str9
 2→θ
 prgmHAEND

@@ -1,0 +1,51 @@
+Str9→Str7
+While length(Str7)>0
+0→T
+For(S,1,length(Str7))
+sub(Str7,S,1)→Str6
+T+1+(Str6="√(")+2(Str6="³√(")→T
+End
+length(Str7)→V
+If T>26
+Then
+0→T
+0→U
+0→X
+0→Y
+0→Z
+0→S
+While T≤26
+S+1→S
+sub(Str7,S,1)→Str6
+T+1+(Str6="√(")+2(Str6="³√(")→T
+If T≤26
+Then
+U+(Str6="(" or Str6="√(" or Str6="³√(")-(Str6=")")→U
+If U=0 and Str6="=" and not(X)
+S→X
+If U=0 and Str6="/"
+S→Z
+If U=0 and S>1 and (Str6="+" or Str6="-" or Str6="≠")
+Then
+If inString("0123456789X)²³",sub(Str7,S-1,1))
+S-1→Y
+End
+End
+End
+S-1→V
+If Z
+Z→V
+If Y
+Y→V
+If X
+X→V
+End
+sub(Str7,1,V)→Str9
+If V<length(Str7)
+Then
+sub(Str7,V+1,length(Str7)-V)→Str7
+Else
+""→Str7
+End
+prgmHAOUT
+End

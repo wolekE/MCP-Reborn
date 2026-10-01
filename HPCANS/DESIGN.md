@@ -67,12 +67,13 @@ Arguments/results: θ (number), Str9 (text), and the lists named in each API.
 
 ## Exact numbers
 
-The TI-84 computes with 14 significant digits. Every displayed number goes through
-`HAFRAC`, which finds the exact fraction n/d (d ≤ 9999) that matches the value to 1e-9
-(so `-17/4` is shown, never `-4.25`). If no such fraction exists the value is not a
-fraction (e.g. √2) and is shown as a 6-digit decimal with a `~` mark. Integer work
-(gcd, parity, reduction) uses `gcd(` on exact integers. Values that should be 0 but
-carry rounding residue (|v| < 1e-9) are snapped to 0.
+The TI-84 computes with 14 significant digits. Every displayed number goes through `HAFRAC`, which finds the exact fraction n/d that matches
+the value to 1e-11·max(1,|x|), with d ≤ 9999 and d²·max(1,|x|) ≤ 1e8 (so `-17/4` is shown, never
+`-4.25`, and an irrational number cannot match a big-denominator fraction by accident). If no
+such fraction exists the value is shown as a 6-place decimal. The operations and composition
+solvers print quadratic irrationals exactly (`X≠-√(2),√(2)`, `(29±4√(6))/5`) by testing each end
+against the quadratics it can come from. Integer work (gcd, parity, reduction) uses `gcd(` on
+exact integers. Values that should be 0 but carry rounding residue (|v| < 1e-9) are snapped to 0.
 
 ## Data formats
 

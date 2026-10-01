@@ -1,6 +1,7 @@
 "DOMAIN OF "+Str4+":"→Str9
 prgmHAIVL
 {4,S,T,U,V,0}→ʟFNC
+Lbl A
 ClrHome
 Disp "WHERE IS "+Str4+"(X)=0?"
 Disp "AT SINGLE X VALUES:"
@@ -8,6 +9,8 @@ Disp "(ENTER = NONE)"
 Input "HOW MANY X VALUES=",Str8
 prgmHANUM
 iPart(θ)→N
+If N<0 or N>9
+Goto A
 4→O
 For(P,1,N)
 If O≥10
@@ -21,6 +24,7 @@ augment(ʟFNC,{θ,θ})→ʟFNC
 ʟFNC(6)+1→ʟFNC(6)
 O+1→O
 End
+Lbl B
 ClrHome
 Disp "IS "+Str4+"(X)=0 FOR EVERY X"
 Disp "IN AN INTERVAL LIKE [2,3]?"
@@ -28,6 +32,8 @@ Disp "(ENTER = NO)"
 Input "HOW MANY INTERVALS=",Str8
 prgmHANUM
 iPart(θ)→N
+If N<0 or N>9
+Goto B
 4→O
 For(P,1,N)
 If O≥9

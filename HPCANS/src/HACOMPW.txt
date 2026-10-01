@@ -1,0 +1,66 @@
+θ→V
+Str9→Str7
+While length(Str7)>0
+length(Str7)→T
+If T>13 and T≤26
+Then
+0→T
+For(S,1,length(Str7))
+T+1+(sub(Str7,S,1)="√(")→T
+End
+End
+If T≤26
+Then
+Str7→Str9
+""→Str7
+Else
+0→S
+0→T
+0→U
+{0,0,0,0}→ʟCMW
+While S<length(Str7) and T≤26
+S+1→S
+sub(Str7,S,1)→Str6
+T+1+(Str6="√(")→T
+If T≤26
+Then
+S→ʟCMW(2)
+ʟCMW(1)+(Str6="(" or Str6="[" or Str6="√(")-(Str6=")" or Str6="]")→ʟCMW(1)
+If ʟCMW(1)≤1 and (Str6="," or Str6="U" or (V and Str6="="))
+S→ʟCMW(4)
+If V and ʟCMW(1)≤1 and Str6="/" and S<length(Str7)
+Then
+If inString("(X√(",sub(Str7,S+1,1))
+S→ʟCMW(4)
+End
+If V and S>1 and ʟCMW(1)≤1 and (Str6="+" or Str6="-")
+Then
+If inString("0123456789)X²³",sub(Str7,S-1,1))
+S-1→ʟCMW(4)
+End
+If ʟCMW(4)
+Then
+If ʟCMW(1)≤0
+ʟCMW(4)→U
+If ʟCMW(1)=1
+ʟCMW(4)→ʟCMW(3)
+0→ʟCMW(4)
+End
+End
+End
+If U=0
+ʟCMW(3)→U
+If U=0
+ʟCMW(2)→U
+sub(Str7,1,U)→Str9
+If U<length(Str7)
+Then
+sub(Str7,U+1,length(Str7)-U)→Str7
+If sub(Str7,1,1)=" " and length(Str7)>1
+sub(Str7,2,length(Str7)-1)→Str7
+Else
+""→Str7
+End
+End
+prgmHAOUT
+End

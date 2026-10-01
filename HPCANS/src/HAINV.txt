@@ -192,6 +192,8 @@ Lbl P
 (1-L₁(4))/L₁(3)→B
 L₁(2)+L₁(5)→C
 Lbl W
+1→G
+Lbl V
 3→K
 If A>B
 Then
@@ -224,7 +226,7 @@ prgmHAOUT
 "Y="+Str2+" HITS TWICE"→Str9
 prgmHAOUT
 "(F IS EVEN)"→Str9
-If abs(A+B)<ᴇ⁻9
+If G and abs(A+B)<ᴇ⁻9
 prgmHAOUT
 Goto E
 Lbl 2
@@ -350,13 +352,19 @@ expr(Str3)→A
 ⁻1→X
 expr(Str3)→B
 (A+B)/2-C→D
-If abs(D)<ᴇ⁻9
+If abs(D)<ᴇ⁻9 and abs(A-B)≥ᴇ⁻9
 Goto H
+If abs(D)<ᴇ⁻9
+Goto K
 ⁻(A-B)/(4D)→H
 H-1→A
 H+1→B
 B→X
 expr(Str3)→C
+Goto W
+Lbl K
+⁻1→A
+1→B
 Goto W
 Lbl 7
 "F"→Str0
@@ -411,7 +419,8 @@ prgmHAPTS
 prgmHAINV8
 If not(J)
 Goto H
-Goto W
+0→G
+Goto V
 Lbl E
 "1:AGAIN  2:HOME  3:WHY"→Str9
 3→θ
@@ -516,7 +525,7 @@ Lbl Y4
 prgmHAOUT
 "F(G(X))=X AND G(F(X))=X."→Str9
 prgmHAOUT
-"ONE FAILS: NOT INVERSES."→Str9
+"IF ONE FAILS: NOT INVERSES"→Str9
 prgmHAOUT
 Goto Z
 Lbl Y5

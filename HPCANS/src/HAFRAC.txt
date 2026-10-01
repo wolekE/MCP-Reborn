@@ -18,7 +18,7 @@ Y*ʟFR(3)+ʟFR(4)→ʟFR(7)
 ʟFR(6)→ʟFR(1)
 ʟFR(3)→ʟFR(4)
 ʟFR(7)→ʟFR(3)
-If ʟFR(3)≤9999 and abs(X-ʟFR(1)/ʟFR(3))≤ᴇ⁻11*max(1,X)
+If ʟFR(3)≤9999 and ʟFR(3)²*max(1,X)≤ᴇ8 and abs(X-ʟFR(1)/ʟFR(3))≤ᴇ⁻11*max(1,X)
 1→Z
 ʟFR(5)-Y→Y
 If Y>0

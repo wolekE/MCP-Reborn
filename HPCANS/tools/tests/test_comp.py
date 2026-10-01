@@ -92,11 +92,11 @@ CASES = [
     saved_value("EX-2.2a", "f(g(5)) from the graphs of Example 1.3", 1, "5",
                 ["F(G(5))=2", "G(5)=0", "F(0)=2"], "2"),
     dict(id="EX-2.2b", source="g(f(-6)) from the graphs of Example 1.3 (both graphs typed as corner points)",
-         actions=["k2", "k2", "k2", "t:-6", "k2"] + typed(F_PTS) + ["k1"] + typed(G_PTS) + ["k2"],
+         actions=["k2", "k2", "k2", "t:-6", "k2"] + typed(F_PTS) + typed(G_PTS) + ["k2"],
          expect=["G(F(-6))=1", "F(-6)=2", "G(2)=1"], official="1",
          graph="corners of f and g typed from the figure",
          path="2:F(G(X)) → 2:F(G(5)) FROM GRAPHS → 2:G(F(NUMBER)); NUMBER=-6; 2:TYPE THE CORNER POINTS; "
-              "F: 5 points (-6,2) (-3,-1) (1,3) (4,0) (7,3), 1:BOTH SOLID; G: 1:TYPE, 5 points (-5,3) (-2,0) "
+              "F: 5 points (-6,2) (-3,-1) (1,3) (4,0) (7,3), 1:BOTH SOLID; G: 5 points (-5,3) (-2,0) "
               "(1,0) (3,2) (6,-1), 1:BOTH SOLID"),
     dict(id="EX-2.2c", source="g(g(-5)) from the graph of g in Example 1.3 (student reads the two values)",
          actions=["k2", "k2", "k4", "t:-5", "k3", "t:3", "t:2", "k2"],
@@ -314,3 +314,111 @@ CASES = [
          "EX-2.3a inputs; 4:WHY; 1:AGAIN; 1:F(G(X)); PR-2.2 inputs",
          after=["k4", "k1", "k1"] + recip("", "", "-3") + recip("2", "", "") + ["k2"]),
 ]
+
+# --------------------------------------------------------------------- adversarial review (bugs fixed)
+CASES += [
+    simp("REV-comp-1", "4:WHY when the inside function is a graph with only 2 corners (crashed with "
+         "ERR:INVALID DIM: TI-BASIC 'and' does not short-circuit, L₂(9) was read)", 2,
+         ["k7", "t:2", "t:1", "t:3", "t:2", "t:2", "k3"], recip("-1/4", "2", "1"),
+         ["D=[1,2)"], "(review) g(f(x)) with f = graph (1,3)-(2,2), right end open; g=-(1/4)/(2x+1): [1,2)",
+         "F: 7:A GRAPH 2 points (1,3) (2,2), 3:RIGHT OPEN; G: 4 K=-1/4 A=2 B=1; then 4:WHY",
+         after=["k4", "ENTER", "k2"]),
+    simp("REV-comp-2", "a repeated common factor cancels fully: f=(x²-2x+1)/(x²-2x+1), g=x+1 "
+         "(was F(G(X))=X/X)", 1,
+         frac2("", "-2", "1", "", "-2", "1"), lin("", "1"),
+         ["F(G(X))=1", "D=ALL REALS, X≠0"], "(review) x²/x² = 1, x ≠ 0",
+         "F: 6 A=ENTER B=-2 C=1 D=ENTER E=-2 F=1; G: 1 A=ENTER B=1"),
+    simp("REV-comp-3", "an input not in lowest terms gives a degree-4 result: f=1/(x²+1), g=(x-1)/(x²-1) "
+         "(was (X^4-2X²+1)/(X^4-X²-2X+2), not simplified)", 1,
+         frac2("0", "0", "1", "", "0", "1"), frac2("0", "", "-1", "", "0", "-1"),
+         ["F(G(X))=", "(X²+2X+1)/(X²+2X+2)", "D=ALL REALS, X≠-1,1"],
+         "(review) g = 1/(x+1) with a hole at 1: (x+1)²/((x+1)²+1); x ≠ -1, 1",
+         "F: 6 A=0 B=0 C=1 D=ENTER E=0 F=1; G: 6 A=0 B=ENTER C=-1 D=ENTER E=0 F=-1"),
+    simp("REV-comp-4", "a √ coefficient computed as (-1/3)·3 = -0.99999999999999 prints as -√, not -1√: "
+         "f=3√(-x/3)-5, f(f(x))", 3,
+         root("3", "-1/3", "", "-5"), [],
+         ["F(F(X))=", "3√(-√(-(1/3)X)+5/3)-5", "D=[-25/3,0]"],
+         "(review) 3√(5/3-√(-x/3))-5; x ≤ 0 and √(-x/3) ≤ 5/3: [-25/3,0]",
+         "F: 5 K=3 A=-1/3 B=ENTER C=-5"),
+    dict(id="REV-comp-5", source="2:TYPE THE CORNER POINTS goes straight to typing even when other graphs are "
+         "saved (it showed a second GRAPH OF F: 1:TYPE menu for each graph)", lists=EX13,
+         actions=["k2", "k2", "k1", "t:1", "k2"] + typed([(0, 0), (2, 4)]) + typed([(-1, 2), (1, 0)]) + ["k2"],
+         expect=["F(G(1))=0", "G(1)=0", "F(0)=0"], official="(review) g(1)=0, f(0)=0",
+         graph="new corners typed over the saved EX-1.3 graphs",
+         path="2 → 2:F(G(5)) FROM GRAPHS → 1:F(G(NUMBER)); NUMBER=1; 2:TYPE THE CORNER POINTS; "
+              "F: 2 points (0,0) (2,4); G: 2 points (-1,2) (1,0)"),
+    dict(id="REV-comp-6", source="5:F(G(5)) FROM FORMULAS, footer 3:SAME F,G: EX-2.1 f=x²-1, g=3x+2, "
+         "then g(f(1)) and f(f(0)) without typing f and g again",
+         actions=["k2", "k5", "k1", "t:1"] + quad("", "0", "-1") + lin("3", "2")
+         + ["k3", "k2", "t:1", "k3", "k3", "t:0", "k2"],
+         expect=["F(G(1))=24", "G(F(1))=2", "F(1)=0", "G(0)=2", "F(F(0))=0", "F(0)=-1", "F(-1)=0"],
+         official="(f o g)(1) = 24; (review) g(f(1)) = g(0) = 2; f(f(0)) = f(-1) = 0",
+         path="2 → 5 → 1; NUMBER=1; F: 2 A=ENTER B=0 C=-1; G: 1 A=3 B=2; 3:SAME F,G → 2; NUMBER=1; "
+              "3:SAME F,G → 3; NUMBER=0"),
+    dict(id="REV-comp-7", source="3:SAME F,G after F(F(2)) asks only for g, which was never typed",
+         actions=["k2", "k5", "k3", "t:2"] + lin("2", "-1") + ["k3", "k1", "t:2"] + recip("", "", "-1") + ["k2"],
+         expect=["F(F(2))=5", "F(G(2))=1", "G(2)=1", "F(1)=1"],
+         official="(review) f=2x-1: f(f(2)) = f(3) = 5; g=1/(x-1): f(g(2)) = f(1) = 1",
+         path="2 → 5 → 3:F(F(NUMBER)); NUMBER=2; F: 1 A=2 B=-1; 3:SAME F,G → 1; NUMBER=2; "
+              "G: 4 K=ENTER A=ENTER B=-1"),
+    dict(id="REV-comp-8", source="5:F(G(5)) FROM FORMULAS with a square root: f=√(x+3), g=x², f(g(2)) "
+         "(was the decimal 2.645751)",
+         actions=["k2", "k5", "k1", "t:2"] + root("", "", "3", "") + quad("", "0", "") + ["k2"],
+         expect=["F(G(2))=√(7)", "G(2)=4", "F(4)=√(7)"], official="(review) g(2)=4, f(4)=√7",
+         path="2 → 5 → 1:F(G(NUMBER)); NUMBER=2; F: 5 K=ENTER A=ENTER B=3 C=ENTER; G: 2 A=ENTER B=0 C=ENTER"),
+    dict(id="REV-comp-9", source="a fraction of a square root, rationalized: f=√(x+1), g=1/(x-1), g(f(2)) "
+         "(was the decimal 1.366025)",
+         actions=["k2", "k5", "k2", "t:2"] + root("", "", "1", "") + recip("", "", "-1") + ["k2"],
+         expect=["G(F(2))=(1/2)√(3)+1/2", "F(2)=√(3)", "G(√(3))=(1/2)√(3)+1/2"],
+         official="(review) f(2)=√3, g(√3) = 1/(√3-1) = (√3+1)/2",
+         path="2 → 5 → 2:G(F(NUMBER)); NUMBER=2; F: 5 K=ENTER A=ENTER B=1 C=ENTER; G: 4 K=ENTER A=ENTER B=-1"),
+    simp("REV-comp-10", "irrational domain ends are exact: f=√x, g=5-x² (was D=[-2.236068,2.236068])", 1,
+         SQRTX, quad("-1", "0", "5"),
+         ["F(G(X))=√(-X²+5)", "D=[-√(5),√(5)]"], "(review) 5-x² ≥ 0: [-√5, √5]",
+         "F: 5 ENTER×4; G: 2 A=-1 B=0 C=5"),
+    simp("REV-comp-11", "excluded irrational x's are exact and the long line breaks at a comma: f=1/x, "
+         "g=3x²-3x-1", 1,
+         recip("", "", ""), quad("3", "-3", "-1"),
+         ["F(G(X))=1/(3X²-3X-1)", "D=ALL REALS,", "X≠(3-√(21))/6,(3+√(21))/6"],
+         "(review) 3x²-3x-1 ≠ 0: ℝ, x ≠ (3±√21)/6", "F: 4 ENTER×3; G: 2 A=3 B=-3 C=-1"),
+    simp("REV-comp-12", "g(x)=c with an irrational c (a root of the outside bottom): f=-x-5, g=2x²/(4-2x²)", 2,
+         lin("-1", "-5"), frac2("2", "0", "0", "-2", "0", "4"),
+         ["G(F(X))=", "(X²+10X+25)/(-X²-10X-23)", "D=ALL REALS, X≠-5-√(2),", "-5+√(2)"],
+         "(review) f(x)² ≠ 2 ⇔ x ≠ -5±√2", "F: 1 A=-1 B=-5; G: 6 A=2 B=0 C=0 D=-2 E=0 F=4"),
+    simp("REV-comp-13", "an inside function that is 0 over a bottom with no real zeros: f=0/(-(2/3)x²-3x-5), "
+         "g=(-3x-3)/(2x+1) (was (6X²+27X+45)/(-2X²-9X-15), not simplified)", 2,
+         frac2("0", "0", "0", "-2/3", "-3", "-5"), ratlin("-3", "-3", "2", "1"),
+         ["G(F(X))=-3", "D=ALL REALS"], "(review) g(0) = -3; f's bottom is never 0, f(x) = 0 ≠ -1/2",
+         "F: 6 A=0 B=0 C=0 D=-2/3 E=-3 F=-5; G: 3 A=-3 B=-3 C=2 D=1"),
+    simp("REV-comp-14", "a formula longer than a screen row breaks between terms, not inside a number: "
+         "f=(1/2)x²-2x-6, g=(-x²+3x-5)/(5x²-3)", 1,
+         quad("1/2", "-2", "-6"), frac2("-1", "3", "-5", "5", "0", "-3"),
+         ["F(G(X))=", "(-279X^4-66X³+467X²+6X", "-143)/(50X^4-60X²+18)", "D=ALL REALS, X≠-√(15)/5,", "√(15)/5"],
+         "(review) (-279x⁴-66x³+467x²+6x-143)/(50x⁴-60x²+18); x ≠ ±√15/5",
+         "F: 2 A=1/2 B=-2 C=-6; G: 6 A=-1 B=3 C=-5 D=5 E=0 F=-3"),
+    simp("REV-comp-15", "the reduced inside function gives the exact ends: f=1/(x²-2), g=(x²+x)/x "
+         "(was X≠-2.414214,0,0.414214)", 1,
+         frac2("0", "0", "1", "", "0", "-2"), frac2("", "", "0", "0", "", "0"),
+         ["F(G(X))=1/(X²+2X-1)", "D=ALL REALS, X≠-1-√(2),0,", "-1+√(2)"],
+         "(review) g = x+1 with a hole at 0; (x+1)² ≠ 2: ℝ, x ≠ -1±√2, 0",
+         "F: 6 A=0 B=0 C=1 D=ENTER E=0 F=-2; G: 6 A=ENTER B=ENTER C=0 D=0 E=ENTER F=0"),
+    simp("REV-comp-16", "√ inside, outside bottom with irrational zeros: f=1/(x²-x-1), g=√x "
+         "(was [0,2.618034)U(2.618034,INF))", 1,
+         frac2("0", "0", "1", "", "-1", "-1"), SQRTX,
+         ["F(G(X))=1/(X-1-√(X))", "D=[0,(3+√(5))/2)U", "((3+√(5))/2,INF)"],
+         "(review) √x ≠ (1+√5)/2 ⇔ x ≠ (3+√5)/2; x ≥ 0",
+         "F: 6 A=0 B=0 C=1 D=ENTER E=-1 F=-1; G: 5 ENTER×4"),
+    simp("REV-comp-17", "graph inside, outside bottom with irrational zeros: g(f(x)) with f = the EX-1.3 graph "
+         "and g=1/(x²-2) (ends were 6-digit decimals)", 2,
+         ["k7", "k2"], frac2("0", "0", "1", "", "0", "-2"),
+         ["D=[-6,-4-√(2))U", "(-4-√(2),-2+√(2))U", "(-2+√(2),4-√(2))U", "(4-√(2),4+√(2))U(4+√(2),7]"],
+         "(review) x in [-6,7] and f(x) ≠ ±√2 on each straight piece",
+         "F: 7:A GRAPH → 2:USE SAVED GRAPH OF F; G: 6 A=0 B=0 C=1 D=ENTER E=0 F=-2", lists=EX13),
+    dict(id="REV-comp-18", source="a √ of an irrational input (a nested root) is never shown as a made-up exact "
+         "radical: g=-4√(-3x-4)-3, g(g(-6)) (once printed (-6/2245)√(111776305)-3)",
+         actions=["k2", "k5", "k4", "t:-6"] + root("-4", "-3", "-4", "-3") + ["k2"],
+         expect=["G(G(-6))=-31.255941", "G(-6)=-4√(14)-3"],
+         official="(review) g(-6) = -4√14-3; g(g(-6)) = -4√(5+12√14)-3 ≈ -31.255941 (nested root: decimal)",
+         path="2 → 5 → 4:G(G(NUMBER)); NUMBER=-6; G: 5 K=-4 A=-3 B=-4 C=-3"),
+]
+

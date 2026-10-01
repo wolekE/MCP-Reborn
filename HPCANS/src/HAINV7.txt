@@ -70,6 +70,8 @@ If J=2
 L₁→L₄
 H→K
 prgmHAINV4
+If not(L)
+2→F
 If L
 Then
 E+1→E
@@ -82,9 +84,9 @@ Then
 K→B
 K→θ
 prgmHAFRAC
-If Z
+If Z and Y≤999
 1→F
-If not(Z) and not(D)
+If not(F) and not(D)
 Then
 {H,K}→ʟINVP
 1→D
@@ -113,7 +115,7 @@ End
 Else
 If not(F) and E>0
 Str2+"X))=X"→Str2
-If not(E)
+If not(E) and not(F)
 Str2+"X)) UNDEFINED"→Str2
 If F
 Then
@@ -155,7 +157,7 @@ L₄(1)→E
 L₄(2)→F
 L₄(3)→G
 L₄(4)→H
-"F(G(X))="→Str0
+"F(G(X))"→Str0
 Else
 L₄(1)→A
 L₄(2)→B
@@ -165,24 +167,34 @@ L₃(1)→E
 L₃(2)→F
 L₃(3)→G
 L₃(4)→H
-"G(F(X))="→Str1
+"G(F(X))"→Str1
 End
 {AE+BG,AF+BH,CE+DG,CF+DH}→L₅
+abs(L₅(1)L₅(4)-L₅(2)L₅(3))<ᴇ⁻9*max(1,abs(L₅(1)L₅(4)))→K
 If L₅(2)=0 and L₅(3)=0 and L₅(1)=L₅(4) and L₅(1)≠0
 Then
-"X"→Str2
+"=X"→Str2
 L₅(1)→θ
 prgmHAFRAC
 If L₅(1)≠1
-Str9+"X/"+Str9+"=X"→Str2
+"="+Str9+"X/"+Str9+"=X"→Str2
 Else
 L₅(1)→E
 L₅(2)→F
 L₅(3)→G
 L₅(4)→H
+If K and G≠0
+Then
+E/G→θ
+prgmHAFRAC
+Str9→Str2
+Else
 prgmHAINV5
-Str2+"≠X"→Str2
 End
+"="+Str2+"≠X"→Str2
+End
+If L₅(3)=0 and L₅(4)=0
+" UNDEFINED"→Str2
 If J=1
 Str0+Str2→Str0
 If J=2
@@ -196,9 +208,9 @@ If D
 "YES, INVERSES"→Str9
 prgmHAOUT
 Str0→Str9
-prgmHAOUT
+prgmHAINVW
 Str1→Str9
-prgmHAOUT
+prgmHAINVW
 If not(D)
 Return
 For(J,1,2)
@@ -219,6 +231,10 @@ prgmHAFRAC
 "≥"→Str3
 If L₄(2)<0
 "≤"→Str3
+If L₄(6)<0 and L₄(2)>0
+">"→Str3
+If L₄(6)<0 and L₄(2)<0
+"<"→Str3
 Str2+Str3+Str9+")"→Str9
 prgmHAOUT
 End

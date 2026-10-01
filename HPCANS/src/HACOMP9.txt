@@ -1,0 +1,50 @@
+If B=1
+ʟF1→L₁
+If B=2
+ʟF2→L₁
+If A=1
+ʟF1→L₂
+If A=2
+ʟF2→L₂
+If L₁(1)=2
+Then
+If L₁(12)≠0
+Then
+augment({1},seq(L₁(K),K,2,13))→ʟF3
+3→N
+H→O
+prgmHAFEVAL
+{L₁(13),L₁(12),P}→L₃
+End
+End
+If L₂(1)=2
+Then
+1→L
+If dim(L₃)=3 and (L₂(4)≠0 or L₂(5)≠0)
+Then
+L₃(3)→θ
+prgmHAFRAC
+abs(X)Y→θ
+If not(Z) or fPart(√(θ))≠0
+0→L
+End
+If L₂(12)≠0 and L
+Then
+augment({1},seq(L₂(K),K,2,13))→ʟF3
+3→N
+E→O
+prgmHAFEVAL
+{L₂(13),L₂(12),P}→L₄
+End
+End
+If L₂(1)=1 and dim(L₃)=3 and I=1
+Then
+If L₃(3)>0
+Then
+A→N
+L₃(1)-L₃(2)√(L₃(3))→O
+prgmHAFEVAL
+If Q=1
+{(G+P)/2,(G-P)/(2√(L₃(3))),L₃(3)}→L₄
+End
+End

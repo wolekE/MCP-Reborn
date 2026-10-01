@@ -1,0 +1,40 @@
+If L₃(1)≠1
+Return
+If L₃(7)≠0 or L₃(8)≠0
+Return
+If L₃(9)=0 and L₃(10)=0
+Return
+seq(L₃(K),K,2,6)→ʟCMT
+seq(L₃(K),K,7,11)→ʟCMB
+{L₃(9),L₃(10),L₃(11)}→ʟQC
+prgmHAROOT
+0→G
+For(I,1,θ)
+ʟRT(I)→E
+0→F
+For(K,2,6)
+F*E+L₃(K)→F
+End
+If abs(F)<ᴇ⁻9*max(1,max(abs(ʟCMT)))
+1→G
+End
+sum(ʟCMT*ʟCMB)/sum(ʟCMB²)→E
+If max(abs(ʟCMT-E*ʟCMB))<ᴇ⁻9*max(1,max(abs(ʟCMT)))
+1→G
+If not(G)
+Return
+prgmHACOMP4
+{0,0,0,0,0}→L₄
+For(K,1,dim(ʟCMT))
+ʟCMT(K)→L₄(5-dim(ʟCMT)+K)
+End
+For(K,1,5)
+L₄(K)→L₃(K+1)
+End
+{0,0,0,0,0}→L₄
+For(K,1,dim(ʟCMB))
+ʟCMB(K)→L₄(5-dim(ʟCMB)+K)
+End
+For(K,1,5)
+L₄(K)→L₃(K+6)
+End

@@ -16,12 +16,13 @@ Return
 Lbl C
 ClrHome
 Disp "WHICH ONE IS IT?"
-Disp "1:F+G"
+Disp "1:F+G  (OR G+F)"
 Disp "2:F-G"
 Disp "3:FG   (F TIMES G)"
 Disp "4:F/G"
 Disp "5:G/F"
-5→θ
+Disp "6:G-F"
+6→θ
 prgmHAKEY
 θ→K
 If K=0
@@ -35,6 +36,8 @@ If K=4
 "F/G"→Str0
 If K=5
 "G/F"→Str0
+If K=6
+"G-F"→Str0
 If H
 Goto V
 1→N
@@ -57,13 +60,13 @@ If J=3
 Goto 3
 prgmHAANS
 K→B
-If K<4
+If K<4 or K=6
 1→B
 prgmHAOPS4
 "D("+Str0+")="→Str2
 Str1→Str3
 prgmHAOPS3
-If K≥4
+If K=4 or K=5
 Then
 9-K→B
 prgmHAOPS4
@@ -112,7 +115,7 @@ prgmHAOUT
 prgmHAOUT
 Lbl 5
 K→B
-If K<4
+If K<4 or K=6
 1→B
 prgmHAOPS4
 "D("+Str0+")="→Str2
@@ -160,7 +163,7 @@ prgmHAOPS3
 End
 "D: X MUST WORK IN F AND G"→Str9
 prgmHAOUT
-If K≥4
+If K=4 or K=5
 Then
 "AND BOTTOM CAN NOT BE 0"→Str9
 prgmHAOUT
@@ -175,15 +178,14 @@ prgmHADOM
 I→N
 0→O
 prgmHAFDOM
-9→θ
-prgmHADOM
+prgmHAOPS7
 "D("+sub("FG",I,1)+")="→Str2
 Str6→Str3
 prgmHAOPS3
 End
 "KEEP X IN BOTH D(F), D(G)"→Str9
 prgmHAOUT
-If K<4
+If K<4 or K=6
 Goto WE
 For(I,1,2)
 I→N
@@ -194,12 +196,12 @@ R→D
 "NONE"→Str3
 For(L,1,D)
 ʟFZL(L)→θ
-prgmHAFRAC
+prgmHAOPS8
 Str9→Str1
 If ʟFZR(L)>ʟFZL(L)
 Then
 ʟFZR(L)→θ
-prgmHAFRAC
+prgmHAOPS8
 "["+Str1+","+Str9+"]"→Str1
 End
 If L=1
@@ -242,11 +244,11 @@ Then
 prgmHAOUT
 End
 Lbl WE
-"1:AGAIN 2:HOME 3:SAME F,G"→Str9
-3→θ
+"1:AGAIN 2:HOME 4:SAME F,G"→Str9
+4→θ
 prgmHAEND
 If θ=1
 Goto A
-If θ=3
+If θ≥3
 Goto M
 Return

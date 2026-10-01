@@ -1,25 +1,36 @@
 ʟF1→ʟOPA
 ʟF2→ʟOPB
-If K=5
+If K=5 or K=6
 Then
 ʟF2→ʟOPA
 ʟF1→ʟOPB
 End
-If K=2 and ʟOPB(1)=1
+If (K=2 or K=6) and ʟOPB(1)=1
 Then
 For(I,2,6)
 ⁻ʟOPB(I)→ʟOPB(I)
 End
 End
-If K=2 and ʟOPB(1)=2
+If (K=2 or K=6) and ʟOPB(1)=2
 Then
 ⁻ʟOPB(12)→ʟOPB(12)
 ⁻ʟOPB(13)→ʟOPB(13)
 End
-If K≤2 and ʟOPA(1)=1 and ʟOPB(1)=1
+If (K≤2 or K=6) and ʟOPA(1)=1 and ʟOPB(1)=1
 Goto S
-If K≤2
+If K≤2 or K=6
 Goto T
+If ʟOPA(1)=2 and ʟOPB(1)=2 and ʟOPA(13)=0 and ʟOPB(13)=0 and (K=3 or ʟOPB(12)≠0)
+Then
+If max(abs(seq(ʟOPA(I)-ʟOPB(I),I,2,11)))=0
+Then
+If K=3
+augment({1},augment(ʟOPA(12)*ʟOPB(12)*seq(ʟOPA(I),I,2,6),augment(seq(ʟOPA(I),I,7,11),{1,0})))→ʟOPA
+If K≠3
+{1,0,0,0,0,ʟOPA(12)/ʟOPB(12),0,0,0,0,1,1,0}→ʟOPA
+{1,0,0,0,0,1,0,0,0,0,1,1,0}→ʟOPB
+End
+End
 ""→Str2
 ""→Str3
 For(I,1,2)
@@ -116,6 +127,11 @@ If ʟOPA(1)=2 and ʟOPB(1)=2
 Then
 ʟOPA(13)+ʟOPB(13)→ʟOPA(13)
 0→ʟOPB(13)
+If max(abs(seq(ʟOPA(I)-ʟOPB(I),I,2,11)))=0
+Then
+ʟOPA(12)+ʟOPB(12)→ʟOPA(12)
+{1,0,0,0,0,0,0,0,0,0,1,1,0}→ʟOPB
+End
 End
 If ʟOPA(1)=2 and ʟOPB(1)=1 and max(abs(seq(ʟOPB(I),I,7,10)))=0
 Then

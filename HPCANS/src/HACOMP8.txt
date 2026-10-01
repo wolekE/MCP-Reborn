@@ -1,0 +1,50 @@
+θ→K
+If dim(L₅)<3
+Goto D
+If L₅(3)≤0
+Goto D
+L₅(3)→θ
+prgmHAFRAC
+If not(Z) or X=0
+Goto D
+{L₅(1),L₅(2),abs(X)Y,Y,1,2}→L₅
+If L₅(3)>ᴇ9
+Goto D
+While L₅(6)²≤L₅(3) and L₅(6)≤100
+If fPart(L₅(3)/L₅(6)²)=0
+Then
+L₅(3)/L₅(6)²→L₅(3)
+L₅(5)L₅(6)→L₅(5)
+Else
+L₅(6)+1→L₅(6)
+End
+End
+If L₅(3)=1
+Goto D
+L₅(2)L₅(5)/L₅(4)→θ
+prgmHAFRAC
+If not(Z) or X=0
+Goto D
+Str9→Str1
+If Str9="1"
+""→Str1
+If Str9="-1"
+"-"→Str1
+If Y>1
+"("+Str9+")"→Str1
+L₅(3)→θ
+prgmHAFRAC
+Str1+"√("+Str9+")"→Str1
+L₅(1)→θ
+prgmHAFRAC
+If not(Z)
+Goto D
+If X>0
+Str1+"+"+Str9→Str1
+If X<0
+Str1+Str9→Str1
+Str1→Str9
+Return
+Lbl D
+K→θ
+prgmHAFRAC

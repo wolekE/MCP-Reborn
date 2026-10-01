@@ -1,9 +1,2 @@
 "F⁻¹(X)="+Str2→Str9
-If length(Str2)+2(inString(Str2,"³√(")>0)+(inString(Str2,"√(")>0)>20
-"F⁻¹(X)="→Str9
-prgmHAOUT
-If length(Str2)+2(inString(Str2,"³√(")>0)+(inString(Str2,"√(")>0)>20
-Then
-Str2→Str9
-prgmHAOUT
-End
+prgmHAINVW

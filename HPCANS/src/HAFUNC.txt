@@ -42,6 +42,7 @@ ClrHome
 Disp Str4+"(X)=AX+B"
 Disp "EX: 3-X GIVES A=-1 B=3"
 Disp "NO NUMBER IN FRONT? ENTER"
+Disp "JUST A NUMBER LIKE 5? A=0"
 Input "A (X COEF)=",Str8
 prgmHANUM
 θ+Z→ʟFNC(5)
@@ -72,6 +73,7 @@ Disp Str4+"(X)=(AX+B)/(CX+D)"
 Disp "EX: (X+2)/(4-X) GIVES"
 Disp "  A=1 B=2 C=-1 D=4"
 Disp "NO NUMBER IN FRONT? ENTER"
+Disp "NO X ON THE BOTTOM? C=0"
 Input "A (TOP X COEF)=",Str8
 prgmHANUM
 θ+Z→ʟFNC(5)

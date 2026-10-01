@@ -1,0 +1,126 @@
+{θ,0,0,0,0,1,0,0,0,0}→ʟOPS
+prgmHAFRAC
+If Z or abs(ʟOPS(1))≥ᴇ98
+Return
+For(X,1,dim(ʟOPU)/3)
+ʟOPS(1)→θ
+ʟOPU(3X-2)→Y
+If (Y≠0 or ʟOPU(3X-1)≠0) and not(ʟOPS(2))
+Then
+If abs((Y*θ+ʟOPU(3X-1))*θ+ʟOPU(3X))≤ᴇ⁻9*(abs(Y)*θ²+abs(ʟOPU(3X-1)*θ)+abs(ʟOPU(3X)))
+X→ʟOPS(2)
+End
+End
+If not(ʟOPS(2))
+Goto D
+3*ʟOPS(2)-2→X
+{ʟOPU(X),ʟOPU(X+1),ʟOPU(X+2)}→ʟOPT
+ʟOPT(1)→θ
+prgmHAFRAC
+If not(Z)
+Goto D
+Y→ʟOPS(6)
+ʟOPT(2)→θ
+prgmHAFRAC
+If not(Z)
+Goto D
+lcm(ʟOPS(6),Y)→ʟOPS(6)
+ʟOPT(3)→θ
+prgmHAFRAC
+If not(Z)
+Goto D
+lcm(ʟOPS(6),Y)→ʟOPS(6)
+{round(ʟOPS(6)*ʟOPT(1),0),round(ʟOPS(6)*ʟOPT(2),0),round(ʟOPS(6)*ʟOPT(3),0)}→ʟOPT
+gcd(gcd(abs(ʟOPT(1)),abs(ʟOPT(2))),abs(ʟOPT(3)))→X
+ʟOPT/X→ʟOPT
+If ʟOPT(1)=0
+Goto L
+ʟOPT(2)²-4*ʟOPT(1)*ʟOPT(3)→ʟOPS(7)
+If ʟOPS(7)≤0 or ʟOPS(7)≥ᴇ12
+Goto D
+1→ʟOPS(8)
+2→X
+While X²≤ʟOPS(7) and X<300
+If fPart(ʟOPS(7)/X²)=0
+Then
+ʟOPS(7)/X²→ʟOPS(7)
+X*ʟOPS(8)→ʟOPS(8)
+Else
+X+1→X
+End
+End
+⁻ʟOPT(2)→ʟOPS(9)
+2*ʟOPT(1)→ʟOPS(10)
+(ʟOPS(9)+ʟOPS(8)*√(ʟOPS(7)))/ʟOPS(10)→θ
+(ʟOPS(9)-ʟOPS(8)*√(ʟOPS(7)))/ʟOPS(10)→Y
+1-2*(abs(ʟOPS(1)-θ)>abs(ʟOPS(1)-Y))→X
+If ʟOPS(10)<0
+Then
+⁻ʟOPS(9)→ʟOPS(9)
+⁻ʟOPS(10)→ʟOPS(10)
+⁻X→X
+End
+X→ʟOPS(2)
+If ʟOPS(7)=1
+Then
+ʟOPS(9)+X*ʟOPS(8)→ʟOPS(9)
+0→ʟOPS(8)
+End
+Lbl G
+gcd(gcd(abs(ʟOPS(9)),ʟOPS(8)),ʟOPS(10))→X
+ʟOPS(9)/X→ʟOPS(9)
+ʟOPS(8)/X→ʟOPS(8)
+ʟOPS(10)/X→ʟOPS(10)
+If ʟOPS(8)=0
+Then
+abs(ʟOPS(9))→Y
+prgmHADIG
+Str8→Str9
+If ʟOPS(9)<0
+"-"+Str9→Str9
+Else
+ʟOPS(7)→Y
+prgmHADIG
+"√("+Str8+")"→Str9
+If ʟOPS(8)>1
+Then
+ʟOPS(8)→Y
+prgmHADIG
+Str8+Str9→Str9
+End
+If ʟOPS(2)>0 and ʟOPS(9)≠0
+"+"+Str9→Str9
+If ʟOPS(2)<0
+"-"+Str9→Str9
+If ʟOPS(9)≠0
+Then
+abs(ʟOPS(9))→Y
+prgmHADIG
+Str8+Str9→Str9
+If ʟOPS(9)<0
+"-"+Str9→Str9
+If ʟOPS(10)>1
+"("+Str9+")"→Str9
+End
+End
+If ʟOPS(10)>1
+Then
+ʟOPS(10)→Y
+prgmHADIG
+Str9+"/"+Str8→Str9
+End
+1→Z
+Return
+Lbl L
+⁻ʟOPT(3)→ʟOPS(9)
+ʟOPT(2)→ʟOPS(10)
+0→ʟOPS(8)
+If ʟOPS(10)<0
+Then
+⁻ʟOPS(9)→ʟOPS(9)
+⁻ʟOPS(10)→ʟOPS(10)
+End
+Goto G
+Lbl D
+ʟOPS(1)→θ
+prgmHAFRAC

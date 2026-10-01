@@ -13,6 +13,12 @@ If B=3
 ""→Str1
 If L₁(1)>2 or L₂(1)>2
 Return
+L₁→L₃
+prgmHACOMP7
+L₃→L₁
+L₂→L₃
+prgmHACOMP7
+L₃→L₂
 If L₂(1)=2
 Goto R
 seq(L₂(I),I,2,6)→ʟCMN

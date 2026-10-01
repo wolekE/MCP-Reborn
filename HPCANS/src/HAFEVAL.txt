@@ -22,7 +22,7 @@ Goto U
 R/P→R
 If ʟFNC(1)=1
 Goto 1
-If R<0 and R>⁻ᴇ⁻9
+If abs(R)<ᴇ⁻9
 0→R
 If R<0
 Goto U

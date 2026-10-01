@@ -17,8 +17,9 @@ and result. Only HAANS/HAPAGE/HAOUT touch W (the answer-screen row).
 ## Low
 
 * **HAFRAC** — θ (number) → Str9 exact text: `-17/4`, `6`, `0`, `INF`, `-INF`
-  (|θ| ≥ 1ᴇ98), or a decimal like `1.414214` when no fraction with denominator ≤ 9999
-  matches to 1e-11 (relative). Also X = signed numerator, Y = denominator,
+  (|θ| ≥ 1ᴇ98), or a decimal like `1.414214` when no fraction n/d matches to 1e-11·max(1,|θ|)
+  with d ≤ 9999 and d²·max(1,|θ|) ≤ 1ᴇ8 (the second limit keeps irrational numbers such as
+  −24−4√17 from matching a large-denominator fraction by accident). Also X = signed numerator, Y = denominator,
   Z = 1 exact / 0 decimal. |θ| < 1ᴇ-9 counts as 0. Uses ʟFR, Str8.
 * **HADIG** — Y (integer ≥ 0) → Str8 digits. (Used by HAFRAC.)
 * **HANUM** — Str8 (text the student typed with `Input "…",Str8`) → θ.
@@ -130,12 +131,15 @@ returns θ = 0 ("not supported") and leaves D unchanged. Evaluating and text wor
   Graph: a submenu offers `2:USE SAVED GRAPH OF F` / `3:…OF G` when saved; a typed graph (via HAPTS)
   is saved to ʟGGX ʟGGY ʟGGC when the name is `"G"`, else to ʟGFX ʟGFY ʟGFC (HPCANS must have run
   its `SetUpEditor`, so these lists exist). Words: HAIVL for the domain, then how many single x with
-  f = 0, then how many intervals `FROM X=`/`TO X=` with f = 0.
+  f = 0, then how many intervals `FROM X=`/`TO X=` with f = 0 (each count 0–9; anything else is asked
+  again, so a typo cannot start 22 prompts).
 * **HAFSTR** (text) — N = slot → **Str5** = the function in X: `-X+3`, `2X²-1`, `(X+1)/(X-2)`, `2/X`,
   `(X-3)/X²`, `√(-X+5)`, `7√(X)+4`, `(1/2)√(X-1)`; `""` for graph and words.
 * **HAFEVAL** (value) — N = slot, O = x → **P** = f(x), **Q** = 1 defined, 0 undefined (outside the
   domain, bottom 0, negative under √, x off the graph or at a hollow end), 2 = words record, x in the
-  domain but the value was not given (P = 0). Graphs: straight-line interpolation between corners.
+  domain but the value was not given (P = 0; the value is known to be nonzero, since the words list
+  every zero). Graphs: straight-line interpolation between corners. A value under √ within 1ᴇ-9 of 0
+  counts as 0 (3(-4/3)+4 leaves a 1ᴇ-13 residue), so √ at a domain end point is exactly 0.
 * **HAFDOM** (sets) — always **intersects into the current HADOM set D** (start with `1→θ:prgmHADOM`):
   * O = 0: D = D ∩ domain(f). Rational: all reals minus the bottom's zeros. Root: sign chart of the
     inside. Graph: [x1, xn] with the end dots. Words: the interval.

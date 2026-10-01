@@ -7,7 +7,7 @@ Goto R
 ʟOPR(3)→θ
 prgmHAFRAC
 If not(Z)
-Goto R
+Goto I
 X*Y→L
 ʟOPR(2)/Y→ʟOPR(2)
 2→S
@@ -29,7 +29,7 @@ prgmHAFRAC
 abs(ʟOPR(2))→θ
 prgmHAFRAC
 If not(Z)
-Goto R
+Goto I
 If Str9≠"1"
 Then
 If Y>1
@@ -43,7 +43,7 @@ Return
 ʟOPR(1)→θ
 prgmHAFRAC
 If not(Z)
-Goto R
+Goto I
 If ʟOPR(2)>0 and ʟOPR(1)<0
 Goto N
 If ʟOPR(2)>0
@@ -59,3 +59,8 @@ prgmHAFRAC
 Str9→Str1
 If not(Z)
 "ABOUT "+Str1→Str1
+Return
+Lbl I
+ʟOPR(1)+ʟOPR(2)*√(ʟOPR(3))→θ
+prgmHAOPS9
+Str9→Str1

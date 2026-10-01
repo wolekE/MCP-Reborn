@@ -16,6 +16,15 @@ If dim(ʟCMB)=6
 Return
 If ʟCMT(1)=0
 {1}→ʟCMB
+If dim(ʟCMT)=dim(ʟCMB)
+Then
+ʟCMT(1)/ʟCMB(1)→E
+If max(abs(ʟCMT-E*ʟCMB))<ᴇ⁻9*max(1,max(abs(ʟCMT)))
+Then
+{E}→ʟCMT
+{1}→ʟCMB
+End
+End
 If dim(ʟCMB)=2 or dim(ʟCMB)=3
 Then
 ʟCMB→ʟQC
@@ -26,11 +35,17 @@ prgmHAROOT
 ʟRT→L₅
 For(I,1,D)
 L₅(I)→E
+Repeat not(G)
 0→F
 For(K,1,dim(ʟCMT))
 F*E+ʟCMT(K)→F
 End
-If dim(ʟCMT)>1 and abs(F)<ᴇ⁻9*max(1,max(abs(ʟCMT)))
+0→G
+For(K,1,dim(ʟCMB))
+G*E+ʟCMB(K)→G
+End
+dim(ʟCMT)>1 and dim(ʟCMB)>1 and abs(F)<ᴇ⁻9*max(1,max(abs(ʟCMT))) and abs(G)<ᴇ⁻9*max(1,max(abs(ʟCMB)))→G
+If G
 Then
 For(K,2,dim(ʟCMT))
 ʟCMT(K)+E*ʟCMT(K-1)→ʟCMT(K)
@@ -40,6 +55,7 @@ For(K,2,dim(ʟCMB))
 ʟCMB(K)+E*ʟCMB(K-1)→ʟCMB(K)
 End
 dim(ʟCMB)-1→dim(ʟCMB)
+End
 End
 End
 End

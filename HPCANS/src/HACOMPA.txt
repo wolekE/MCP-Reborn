@@ -1,0 +1,22 @@
+{0,0,0}→ʟCMQ
+If A=1
+ʟF1→L₃
+If A=2
+ʟF2→L₃
+If A=3
+ʟF3→L₃
+If B=1
+ʟF1→L₄
+If B=2
+ʟF2→L₄
+If B=3
+ʟF3→L₄
+prgmHACOMPD
+L₄→ʟCMI
+prgmHACOMP7
+L₃→ʟCMJ
+ʟCMI→L₃
+prgmHACOMP7
+L₃→L₄
+ʟCMJ→L₃
+prgmHACOMPD

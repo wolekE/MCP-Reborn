@@ -1,0 +1,86 @@
+{0,0,0}→ʟOPU
+For(T,1,2)
+If T=1
+ʟF1→ʟOPW
+If T=2
+ʟF2→ʟOPW
+If ʟOPW(1)≤2
+Then
+If ʟOPW(2)=0 and ʟOPW(3)=0
+augment(ʟOPU,{ʟOPW(4),ʟOPW(5),ʟOPW(6)})→ʟOPU
+If ʟOPW(7)=0 and ʟOPW(8)=0
+augment(ʟOPU,{ʟOPW(9),ʟOPW(10),ʟOPW(11)})→ʟOPU
+If ʟOPW(1)=2 and ʟOPW(2)=0 and ʟOPW(3)=0 and ʟOPW(7)=0 and ʟOPW(8)=0
+augment(ʟOPU,ʟOPW(12)²*{ʟOPW(4),ʟOPW(5),ʟOPW(6)}-ʟOPW(13)²*{ʟOPW(9),ʟOPW(10),ʟOPW(11)})→ʟOPU
+End
+End
+0→S
+For(T,1,dim(ʟDL))
+If ʟDL(T)≤ʟDR(T)
+S+1→S
+End
+"NO REAL NUMBERS"→Str6
+If S=0
+Return
+1→U
+1→X
+0→Y
+0→V
+For(T,1,dim(ʟDL))
+If ʟDL(T)≤ʟDR(T)
+Then
+If X and ʟDL(T)>⁻ᴇ98
+0→U
+If not(X) and (ʟDL(T)≠V or ʟDA(T) or Y)
+0→U
+ʟDR(T)→V
+ʟDB(T)→Y
+0→X
+End
+End
+If V<ᴇ98
+0→U
+If U
+Goto A
+0→S
+For(T,1,dim(ʟDL))
+If ʟDL(T)≤ʟDR(T)
+Then
+"("→Str7
+If ʟDA(T)
+"["→Str7
+ʟDL(T)→θ
+prgmHAOPS8
+Str7+Str9+","→Str7
+ʟDR(T)→θ
+prgmHAOPS8
+Str7+Str9→Str7
+If ʟDB(T)
+Then
+Str7+"]"→Str7
+Else
+Str7+")"→Str7
+End
+If S=0
+Then
+Str7→Str6
+Else
+Str6+"U"+Str7→Str6
+End
+S+1→S
+End
+End
+Return
+Lbl A
+"ALL REALS"→Str6
+If S>1
+Then
+"ALL REALS, X≠"→Str6
+For(T,1,dim(ʟDL)-1)
+ʟDR(T)→θ
+prgmHAOPS8
+If T>1
+Str6+","→Str6
+Str6+Str9→Str6
+End
+End

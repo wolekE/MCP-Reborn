@@ -1,0 +1,70 @@
+0→G
+For(H,1,dim(ʟDL))
+If ʟDL(H)≤ʟDR(H)
+G+1→G
+End
+"NO REAL NUMBERS"→Str6
+If G=0
+Return
+1→E
+1→F
+0→D
+0→K
+For(H,1,dim(ʟDL))
+If ʟDL(H)≤ʟDR(H)
+Then
+If F and ʟDL(H)>⁻ᴇ98
+0→E
+If not(F) and (ʟDL(H)≠K or ʟDA(H) or D)
+0→E
+ʟDR(H)→K
+ʟDB(H)→D
+0→F
+End
+End
+If K<ᴇ98
+0→E
+If E
+Goto A
+0→G
+For(H,1,dim(ʟDL))
+If ʟDL(H)≤ʟDR(H)
+Then
+"("→Str7
+If ʟDA(H)
+"["→Str7
+ʟDL(H)→θ
+prgmHACOMPC
+Str7+Str9+","→Str7
+ʟDR(H)→θ
+prgmHACOMPC
+Str7+Str9→Str7
+If ʟDB(H)
+Then
+Str7+"]"→Str7
+Else
+Str7+")"→Str7
+End
+If G=0
+Then
+Str7→Str6
+Else
+Str6+"U"+Str7→Str6
+End
+G+1→G
+End
+End
+Return
+Lbl A
+"ALL REALS"→Str6
+If G>1
+Then
+"ALL REALS, X≠"→Str6
+For(H,1,dim(ʟDL)-1)
+ʟDR(H)→θ
+prgmHACOMPC
+If H>1
+Str6+","→Str6
+Str6+Str9→Str6
+End
+End

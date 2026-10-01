@@ -493,6 +493,14 @@ HCASES = [
          actions=["k7"] + typed_graph([(0, 0), (2, 0), (4, 2)], "k2"),
          driver=enter(2, "G") + ANS + zeros_of(2) + quotient_domain(2, 2, "D(1/G)"),
          expect=["ZEROS=[0,2]", "D(1/G)=(2,4]"], official="(extra) zero stretch is reported closed; D(1/g)=(2,4]"),
+    # ------------------------------------------------------------------ adversarial review (ops)
+    dict(id="REV-ops-H1", source="HAFEVAL: √(3x+4) at x=-4/3 is exactly 0 (3(-4/3)+4 leaves a 1E-13 residue; "
+         "√ of it was 3E-7, so f(-4/3) was not 0 and g/f there was not undefined)",
+         actions=["k5", "t:", "t:3", "t:4", "t:"],
+         driver=enter(1, "F") + ANS + val(1, "⁻4/3") + ["Q→B", "If P=0", '"F(-4/3) IS EXACTLY 0"→Str9',
+                                                        "If P≠0", '"F(-4/3) IS NOT 0"→Str9', "prgmHAOUT",
+                                                        "B→θ", "prgmHAFRAC", '"Q="+Str9→Str9', "prgmHAOUT"],
+         expect=["F(-4/3) IS EXACTLY 0", "Q=1"], official="√0 = 0, defined"),
 ]
 
 

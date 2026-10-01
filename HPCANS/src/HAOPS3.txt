@@ -19,6 +19,7 @@ X→Z
 0→U
 0→V
 0→Y
+0→θ
 While S≤length(Str3) and T≤26
 sub(Str3,S,1)→Str9
 T+1+(Str9="√(")→T
@@ -26,12 +27,14 @@ If T≤26
 Then
 S→V
 Z+(Str9="(" or Str9="[" or Str9="√(")-(Str9=")" or Str9="]")→Z
-If Z=0 and (Str9="," or Str9="/" or Str9="U" or Str9="=")
+If Z=0 and (Str9="," or Str9="U" or Str9="=")
 S→U
+If Z=0 and Str9="/"
+S→θ
 If Z=0 and Str9=")" and S<length(Str3)
 Then
 If sub(Str3,S+1,1)="("
-S→U
+S→θ
 End
 If S>1 and (Str9="+" or Str9="-")
 Then
@@ -39,13 +42,15 @@ sub(Str3,S-1,1)→Str8
 If inString("0123456789)X²³",Str8)
 Then
 If Z=0
-S-1→U
+S-1→θ
 S-1→Y
 End
 End
 End
 S+1→S
 End
+If U=0
+θ→U
 If U=0
 Y→U
 If T≤26 or U=0
@@ -62,6 +67,11 @@ Then
 sub(Str3,U+1,length(Str3)-U)→Str3
 Else
 ""→Str3
+End
+If length(Str3)>1
+Then
+If sub(Str3,1,1)=" "
+sub(Str3,2,length(Str3)-1)→Str3
 End
 prgmHAOUT
 End

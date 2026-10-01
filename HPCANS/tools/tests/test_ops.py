@@ -2,17 +2,18 @@
 Study guide Section 1 (Examples 1.1-1.3, Practice 1.1-1.4), cram sheet 1, cram 8a, Section 8 correction 6.
 
 Submenu:  WHAT DO THEY WANT?  1:DOMAIN  2:A VALUE  3:FORMULA
-Then:     WHICH ONE IS IT?    1:F+G  2:F-G  3:FG  4:F/G  5:G/F
+Then:     WHICH ONE IS IT?    1:F+G  2:F-G  3:FG  4:F/G  5:G/F  6:G-F
 Then f and g from the shape menu of HAFUNC ("F(X) LOOKS LIKE?"):
   1:AX+B  2:AX²+BX+C  3:(AX+B)/(CX+D)  4:K/(AX+B)  5:K√(AX+B)+C  6:FRACTION WITH X²  7:A GRAPH  8:WORDS
 VALUE then asks X=.  DOMAIN of F/G (or G/F) also shows the other order.  FORMULA also shows the domain.
 Footer: 1:AGAIN 2:HOME 3:WHY, and row 9 "4:SAME F,G  NEW QUESTION" (keeps f and g, back to WHAT DO THEY WANT?).
+The WHY page footer is 1:AGAIN 2:HOME 4:SAME F,G (the same 4 as on the answer screen).
 """
 
 ASK = {"domain": "k1", "value": "k2", "formula": "k3"}
 ASK_WORDS = {"domain": "1:DOMAIN", "value": "2:A VALUE", "formula": "3:FORMULA"}
-COMBO = {"F+G": "k1", "F-G": "k2", "FG": "k3", "F/G": "k4", "G/F": "k5"}
-COMBO_NUM = {"F+G": "1", "F-G": "2", "FG": "3", "F/G": "4", "G/F": "5"}
+COMBO = {"F+G": "k1", "F-G": "k2", "FG": "k3", "F/G": "k4", "G/F": "k5", "G-F": "k6"}
+COMBO_NUM = {"F+G": "1", "F-G": "2", "FG": "3", "F/G": "4", "G/F": "5", "G-F": "6"}
 
 SHAPES = {"line": ("k1", "1:AX+B", ["A=", "B="]),
           "quad": ("k2", "2:AX²+BX+C", ["A=", "B=", "C="]),
@@ -257,4 +258,74 @@ CASES = [
     case("EXTRA-ops-25", "FORMULA with a graph: no formula, but the domain is still given (EX-1.3 graphs, f+g)",
          "formula", "F+G", SAVED_F, SAVED_G, ["NO FORMULA: F OR G IS", "A GRAPH OR WORDS", "D(F+G)=[-5,6]"],
          "a graph has no formula; D_f+g = [-5, 6]", lists=EX13, graph_note="saved graphs of f and g (Example 1.3)"),
+    # ---------------------------------------------------------------- adversarial review (REV-ops-n)
+    case("REV-ops-1", "root value at its end point: f=4√(3x+4), g=5x+1: (g/f)(-4/3) (f=0 there; 3(-4/3)+4 left a "
+         "1E-13 residue under the root, so f looked nonzero and the answer was -14166666666666√(0))", "value", "G/F",
+         fn("root", "4", "3", "4", ""), fn("line", "5", "1"), ["(G/F)(-4/3)=UNDEFINED"], "f(-4/3)=0, so g/f is undefined",
+         x="-4/3"),
+    case("REV-ops-2", "the same residue made two radicals look different: f=-4√(-3x-5), g=5√(-4x+6)-19/5: (f-g)(-5/3)",
+         "value", "F-G", fn("root", "-4", "-3", "-5", ""), fn("root", "5", "-4", "6", "-19/5"),
+         ["(F-G)(-5/3)=", "19/5-(5/3)√(114)"], "0-(5√(38/3)-19/5) = 19/5-(5/3)√114 (was ABOUT -13.995132)", x="-5/3"),
+    case("REV-ops-3", "words: f/g where f=0 and g is not 0 (only its listed zeros are 0) is 0, not 'CAN NOT TELL'; "
+         "PR-1.4 f, g: (f/g)(-1), (g/f)(2), (f+g)(-1)", "value", "F/G", PR14_F, PR14_G,
+         ["(F/G)(-1)=0", "(G/F)(2)=0", "CAN NOT TELL FROM WORDS"], "0/g(-1)=0; 0/f(2)=0; f(-1)+g(-1) unknown",
+         x="-1", extra=["k4", "k2", "k5", "t:2", "k4", "k2", "k1", "t:-1"],
+         then="4:SAME F,G → 2 → 5:G/F X=2; 4:SAME F,G → 2 → 1:F+G X=-1"),
+    case("REV-ops-4", "exact value with a denominator over 9999: f=-x/(4x²+4x-1), g=(-5x-1)/(-5x+2): (f+g)(8)",
+         "value", "F+G", fn("frac2", "0", "-1", "0", "4", "4", "-1"), fn("frac", "-5", "-1", "-5", "2"),
+         ["(F+G)(8)=11463/10906"], "-8/287+41/38 = 11463/10906 (was ABOUT 1.051073)", x="8"),
+    case("REV-ops-5", "irrational zeros of a quadratic bottom are shown exactly: f=1, g=3x²-3x-1: domain of f/g",
+         "domain", "F/G", fn("line", "0", "1"), fn("quad", "3", "-3", "-1"),
+         ["D(F/G)=ALL REALS,", "X≠(3-√(21))/6,(3+√(21))/6", "D(G/F)=ALL REALS"],
+         "3x²-3x-1=0 at (3±√21)/6 (was X≠-0.263763,1.263763)"),
+    case("REV-ops-6", "irrational interval ends: f=√x, g=x²-2: domain of f/g", "domain", "F/G", SQRTX,
+         fn("quad", "", "0", "-2"), ["D(F/G)=[0,√(2))U(√(2),INF)", "D(G/F)=(0,INF)"], "[0,√2)∪(√2,∞); (0,∞)"),
+    case("REV-ops-7", "a long excluded list wraps at a comma, never inside -√(3)/2: f=4x²-3, g=x: domain of g/f",
+         "domain", "G/F", fn("quad", "4", "0", "-3"), fn("line", "", ""),
+         ["D(G/F)=ALL REALS,", "X≠-√(3)/2,√(3)/2", "D(F/G)=ALL REALS, X≠0"], "ℝ, x≠±√3/2; ℝ, x≠0"),
+    case("REV-ops-8", "(g-f)(x) has its own entry 6:G-F (2:F-G would give the opposite sign): PR-1.1 f, g",
+         "formula", "G-F", PR11_F, PR11_G, ["(G-F)(X)=-2X²-X+4", "D(G-F)=ALL REALS", "(G-F)(-2)=-2"],
+         "(3-x)-(2x²-1) = -2x²-x+4; g(-2)-f(-2) = 5-7 = -2", extra=["k4", "k2", "k6", "t:-2"],
+         then="4:SAME F,G → 2:A VALUE → 6:G-F; X=-2"),
+    case("REV-ops-9", "two different radicals are added exactly: f=√x, g=√(x+1): (f+g)(2), (f-g)(2)", "value", "F+G",
+         SQRTX, fn("root", "", "", "1", ""), ["(F+G)(2)=√(2)+√(3)", "(F-G)(2)=√(2)-√(3)"],
+         "√2+√3; √2-√3 (was ABOUT 3.146264)", x="2", extra=["k4", "k2", "k2", "t:2"],
+         then="4:SAME F,G → 2:A VALUE → 2:F-G; X=2"),
+    case("REV-ops-10", "radicals that simplify to the same √: f=√(4x), g=√x: (f+g)(2)=2√2+√2", "value", "F+G",
+         fn("root", "", "4", "", ""), SQRTX, ["(F+G)(2)=3√(2)", "(F/G)(2)=2"], "√8+√2 = 3√2; √8/√2 = 2",
+         x="2", extra=["k4", "k2", "k4", "t:2"], then="4:SAME F,G → 2:A VALUE → 4:F/G; X=2"),
+    case("REV-ops-11", "the WHY page footer uses the same 4:SAME F,G as the answer screen: EX-1.1 domain, WHY, 4",
+         "domain", "F/G", EX11_F, EX11_G, ["D(F/G)=[-3,1)U(1,INF)", "D(F+G)=[-3,INF)"], "[-3,1)∪(1,∞); [-3,∞)",
+         extra=["k3", "k4", "k1", "k1"], then="3:WHY → 4:SAME F,G → 1:DOMAIN → 1:F+G"),
+    case("REV-ops-12", "a typo in HOW MANY X VALUES (22) is asked again instead of 22 X= prompts: PR-1.4 f/g",
+         "domain", "F/G", (["k8", "t:-4", "t:9", "k1", "t:22", "t:2", "t:-1", "t:6", "t:"], "8:WORDS with a typo"),
+         PR14_G, ["D(F/G)=[-4,2)U(3,5]", "D(G/F)=[-4,-1)U(-1,5]"], "f/g: [−4, 2) ∪ (3, 5]; g/f: [−4, −1) ∪ (−1, 5]"),
+    case("REV-ops-13", "a wrapped list of fractions never splits -2/3 into '-2/' and '3': f=1/(x+1), "
+         "g=(8x²-30x+13)/(3x+2): domain of f/g", "domain", "F/G", fn("recip", "", "", "1"),
+         fn("frac2", "8", "-30", "13", "0", "3", "2"),
+         ["D(F/G)=ALL REALS, X≠-1,", "-2/3,1/2,13/4", "ALL REALS, X≠-1,-2/3"],
+         "f: x≠-1; g: x≠-2/3, zeros 1/2, 13/4"),
+    case("REV-ops-14", "an irrational value is never shown as a look-alike fraction: f=(-6x²+3)/(-3x²-6), g=5√6 "
+         "(A=0, B=6): (f/g)(-29/4) = 833√6/13095 was shown as 1496/9601", "value", "F/G",
+         fn("frac2", "-6", "0", "3", "-3", "0", "-6"), fn("root", "5", "0", "6", ""),
+         ["(F/G)(-29/4)=", "ABOUT 0.155817"], "833√6/13095 ≈ 0.155817", x="-29/4"),
+    case("REV-ops-15", "an approximate answer is a decimal, never 'ABOUT 33227/5000': f=-2√(2x-3), g=-6√(6x-6)-3: "
+         "(g/f)(10/3) = (6√14+3)/(2√(11/3))", "value", "G/F", fn("root", "-2", "2", "-3", ""),
+         fn("root", "-6", "6", "-6", "-3"), ["(G/F)(10/3)=ABOUT 6.6454"], "≈ 6.6454 (two different radicals)",
+         x="10/3"),
+    case("REV-ops-16", "a zero of K√(AX+B)+C with a big denominator is exact: f=(17/3)√(-6x-2/5)-13/4, g=x: "
+         "domain of g/f", "domain", "G/F", fn("root", "17/3", "-6", "-2/5", "-13/4"), fn("line", "", ""),
+         ["D(G/F)=", "(-INF,-16853/138720)U", "(-16853/138720,-1/15]"],
+         "f=0 at -6x-2/5=(39/68)², x=-16853/138720; D_f=(-∞,-1/15] (was -0.121489)"),
+    case("REV-ops-17", "equal radicals combine: f=√x, g=√x: (fg)(x)=x, (f/g)(x)=1; f=√(x+3), g=√(x+3): "
+         "(f+g)(x)=2√(x+3) (was √(X)√(X), √(X)/√(X), √(X+3)+√(X+3))", "formula", "FG", SQRTX, SQRTX,
+         ["(FG)(X)=X", "D(FG)=[0,INF)", "(F/G)(X)=1", "D(F/G)=(0,INF)", "(F+G)(X)=2√(X+3)", "D(F+G)=[-3,INF)"],
+         "x on [0,∞); 1 on (0,∞); 2√(x+3) on [-3,∞)",
+         extra=["k4", "k3", "k4", "k1", "k1"] + EX11_F[0] + EX11_F[0],
+         then="4:SAME F,G → 3 → 4:F/G; 1:AGAIN → 1:F+G with f=g=√(x+3)"),
+    case("REV-ops-18", "equal radicals with a zero front number on the bottom: f=-√(3x+5), g=0√(3x+5) (K=0): "
+         "(f/g)(x) is undefined everywhere (crashed with ERR:DIVIDE BY 0)", "formula", "F/G",
+         fn("root", "-", "3", "5", ""), fn("root", "0", "3", "5", ""),
+         ["(F/G)(X)=UNDEFINED", "D(F/G)=NO REAL NUMBERS", "(G/F)(X)=0", "D(G/F)=(-5/3,INF)"],
+         "g=0 for every x; g/f=0 on (-5/3,∞)", extra=["k4", "k3", "k5"], then="4:SAME F,G → 3 → 5:G/F"),
 ]
