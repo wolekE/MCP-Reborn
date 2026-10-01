@@ -2,20 +2,10 @@
 
 ## 1. Put it on the calculator
 
-**Easiest: 2 files.** In the folder **`TRANSFER`** are `HPCANS1.8xg` and `HPCANS2.8xg`. Each is a
-*group* that holds about half the programs.
-
-1. Install **TI Connect CE** on the computer, plug in the calculator, open **Calculator Explorer**,
-   and drag **both** `.8xg` files onto the calculator.
-2. On the calculator, unpack each group:
-   1. Press `2nd` `+` (MEM), choose **8:Group…**, press `▶` to go to **UNGROUP**, pick **HPCANS1**,
-      and press `ENTER`.
-   2. If it asks about a duplicate name, choose **Overwrite All**.
-   3. Do the same for **HPCANS2**.
-3. Afterwards you may delete the two groups to save Archive space: `2nd` `+`, 2:Mem Mgmt/Del…, then Group.
-
-The programs land in RAM, ready to run. (The same programs are also in the folder one by one, as `.8xp`
-files, if you prefer sending those.)
+1. Install **TI Connect CE** on the computer, plug in the calculator, and open **Calculator Explorer**.
+2. Open the folder **`TRANSFER`** (unzip it first if it came as a .zip). Click one `.8xp` file, press
+   **Ctrl+A** (Mac: **Cmd+A**) to select all of them, and drag them all at once into the TI Connect CE window.
+3. Click **Send**, and send them to **RAM**, not Archive.
 
 HPCANS needs about **85 KB** of free RAM (the programs are about 76 KB; the rest is working space). If the calculator says ERR:MEMORY, delete or archive other
 programs first. Keep the `TRANSFER` folder: a RAM reset erases the programs.
