@@ -48,7 +48,7 @@ Disp "A AND B CAN NOT BE 0"
 If J=2
 Goto B
 Input "A (FRONT)=",Str8
-prgmHAABS6
+prgmHANUM
 θ→A
 If Z
 1→A
@@ -63,14 +63,14 @@ Input "B (|X| COEF)=",Str8
 Else
 Input "B (X COEF)=",Str8
 End
-prgmHAABS6
+prgmHANUM
 θ→B
 If Z
 1→B
 If B=0
 Goto A
 Input "C (INSIDE NUMBER)=",Str8
-prgmHAABS6
+prgmHANUM
 θ→C
 If I=3 and B<0
 Then
@@ -83,11 +83,11 @@ Goto Q
 If I=1
 Then
 Input "D (AFTER F IN BARS)=",Str8
-prgmHAABS6
+prgmHANUM
 θ→D
 End
 Input "K (END NUMBER)=",Str8
-prgmHAABS6
+prgmHANUM
 θ→K
 If J=1
 Goto P

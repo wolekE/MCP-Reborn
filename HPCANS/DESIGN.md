@@ -20,23 +20,28 @@ problem in Sections 1–7 has a solver path (see COVERAGE.md) and a test (see TE
 | Program | Role |
 |---|---|
 | `HPCANS` | The only one the student runs. Splash + main menu, calls solvers. |
-| `HAOPS` | 1 F+G OR F/G: domain, value, formula |
-| `HACOMP` | 2 F(G(X)): formula + domain, graph values, numbers |
-| `HAINV` | 3 F⁻¹: find inverse, verify, D/R, HLT |
-| `HATRANS` | 4 A*F(BX+C)+K: list changes, new points, D/R, write equation |
-| `HAABS` | 5 ABS BARS: points + D/R, domain only, range only |
-| `HAPOWER` | 6 KX^P / ROOTS: find k,p, symmetry/quadrants, all properties, build function |
-| `HADECOMP` | 7 DECOMPOSE |
-| `HAFUNC` | (helper) choose a function shape and enter its numbers; render it; evaluate it |
-| `HAGRAPH` | (helper) enter/save a graph as corner points; evaluate; domain; zeros; f ≥ 0 |
-| `HADOM` | (helper) sets of reals as unions of intervals: ∩, remove point/segment, sign chart, render |
-| `HAPOLY` | (helper) polynomial → text, polynomial multiply |
-| `HAIVL` | (helper) ask for an interval (ends, brackets, ∞) |
-| `HAROOT` | (helper) real roots of ax²+bx+c |
-| `HAFRAC` | (helper) number → exact text (`-17/4`, `6`, `INF`) |
-| `HANUM` | (helper) typed text → number (fixes a leading minus-key, `I` = ∞) |
-| `HAKEY` | (helper) wait for a number key 1..N or CLEAR |
-| `HAANS`,`HAOUT`,`HAEND` | (helper) answer screen: start, print a line (wraps, pages), footer + choice |
+| `HAOPS` (+ `HAOPS2`–`HAOPS9`) | 1 F+G OR F/G: domain, value, formula. 2 formula builder, 3 line printer, 4 domain of a combination, 5/9 exact or decimal values, 6 values, 7/8 exact domain text with roots |
+| `HACOMP` (+ `HACOMP2`–`HACOMP9`, `HACOMPA`–`HACOMPD`, `HACOMPW`) | 2 F(G(X)): formula + domain, graph values, formula values. 2–5, 7 composite formula and simplifying, 6 domain clean-up, 8/9 exact values, A–D exact domain ends, W line breaker |
+| `HAINV` (+ `HAINV2`–`HAINV9`, `HAINVL`, `HAINVS`, `HAINVW`) | 3 F⁻¹: find inverse, verify, D/R, HLT. 2 shape entry, 3 typed line, 4 evaluate, 5 rational text, 6 power inverse, 7 verify engine, 8 HLT from a graph, 9/W printing, L line text, S integer scaling |
+| `HATRANS` | 4 A*F(BX+C)+K: list changes, new points, D/R, write equation (uses `HAABCK`, `HAEQN`, `HAPTXT`) |
+| `HAABS` (+ `HAABS2`–`HAABS5`, `HAABS7`) | 5 ABS BARS: graph points + D/R, domain only, range only, D and R, order of steps |
+| `HAPOWER` (+ `HAPOWR2`–`HAPOWR4`) | 6 KX^P / ROOTS: find k,p, symmetry/quadrants, all properties, build function |
+| `HADECOMP` (+ `HADECMP2`) | 7 DECOMPOSE |
+| `HAFUNC` `HAGRAPH` `HAFSTR` `HAFEVAL` `HAFDOM` `HAFZERO` `HAWORDS` | (high helpers) function records: shape entry, graphs, words, text, values, domains, zeros |
+| `HAABCK` `HAEQN` `HAPTXT` `HAPTS` | (high helpers) ask A,B,C,K; equation text; point text; ask graph corners |
+| `HADOM` | (mid helper) sets of reals as unions of intervals: ∩, remove point/segment, sign chart, render |
+| `HAPOLY` `HAPMUL` | (mid helpers) polynomial → text, polynomial multiply |
+| `HAIVL` | (mid helper) ask for an interval (ends, brackets, ∞) |
+| `HAROOT` | (low helper) real roots of ax²+bx+c (stable formula) |
+| `HAFRAC` `HADIG` | (low helpers) number → exact text (`-17/4`, `6`, `INF`); digits |
+| `HANUM` | (low helper) typed text → number (minus key, `+`, `X`, `I` = ∞) |
+| `HAKEY` | (low helper) wait for a number key 1..N or CLEAR |
+| `HAANS` `HAPAGE` `HAOUT` `HAEND` | (low helpers) answer screen: start, page title, print a line (word-safe wrap, ENTER=MORE / CLEAR=SKIP), footer + choice |
+
+Programs with a number or letter after the solver name are that solver's own sub-programs (solver
+layer, sharing A–M with it). `HAOPS7`–`HAOPS9` and `HACOMPA`–`HACOMPD` also use S–Z, θ and Str6–Str9
+as scratch and keep θ / Str9 across `HADIG` / `HAFRAC` calls, which works because those helpers do not
+write them (checked by `tools/poison.py`); keep it that way if HAFRAC or HADIG changes.
 
 A solver returns to `HPCANS` with `Return`; nothing ever calls `HPCANS` again, so the call
 stack stays shallow. Only `HPCANS` uses `Stop` (when the student presses CLEAR on the main menu).
@@ -122,16 +127,19 @@ exact integers. Values that should be 0 but carry rounding residue (|v| < 1e-9) 
 * D,R: swap, brackets kept. HLT: shape → YES / NO with two points that share a y.
 
 ### 4 A*F(BX+C)+K (`HATRANS`)
-`WHAT DO THEY WANT?` 1:LIST CHANGES 2:NEW POINT(S) 3:DOMAIN/RANGE 4:WRITE EQUATION
-* inputs exactly as printed: `A (FRONT)=`, `B (X COEF)=`, `C (INSIDE #)=`, `K (END #)=`;
-  ENTER on A or B = 1, on C or K = 0. h = −C/B internally; the student never factors.
-* changes in class order: A (reflect x-axis, vert stretch/compress |A|), B (reflect y-axis,
-  horiz compress/stretch 1/|B|), h (right/left), k (up/down); skipped when they do nothing.
-  WHY: factored form `Y=AF(B(X-H))+K` and rules `X→X/B+H`, `Y→AY+K`.
-* new point: (x−C)/B, A·y+K, one point at a time or all saved graph points (+ D, R).
+`WHAT DO THEY WANT?` 1:LIST THE CHANGES 2:NEW POINTS (TABLE) 3:NEW DOMAIN AND RANGE 4:WRITE THE EQUATION
+* inputs exactly as printed: `A (FRONT)=`, `B (X COEF)=`, `C (INSIDE NUMBER)=`, `K (END NUMBER)=`;
+  ENTER on A or B = 1, on C or K = 0; a lone (-) = -1; a copied `+` and an `X` (3X → 3) are accepted.
+  h = −C/B internally; the student never factors.
+* changes: the factored `Y=AF(B(X-H))+K` first, then the changes in class order
+  (`REFLECT OVER X-AXIS`, `VERT STRETCH BY 3`, `REFLECT OVER Y-AXIS`, `HORIZ COMPRESS BY 1/3`,
+  `RIGHT 2`, `UP 1`), then `A= B= H= K=`.
+* new points: one point at a time, or every corner / table point as `(x,y) TO (x',y')` in table
+  order, then `D=..  R=..` (flat pieces and hollow ends handled).
 * D/R: ends through the rules, reordered, brackets follow their numbers, ∞ allowed.
-* write equation: the steps in the order the question says (handles "THEN"):
-  reflect x / reflect y / vert factor / horiz factor / left-right / up-down → `Y=…` in both forms.
+* write: 1:REFLECT X 2:REFLECT Y 3:VERT 4:HORIZ 5:LEFT 6:RIGHT 7:UP 8:DOWN 9:DONE, in the order
+  the words say (handles THEN); sizes typed as seen → `Y=…` in both forms.
+* every answer: `1:AGAIN 2:HOME 3:SAME EQ` (same equation: changes / points / D,R / WHY).
 
 ### 5 ABS BARS (`HAABS`)
 `WHAT DO THEY WANT?` 1:POINTS + D,R 2:DOMAIN ONLY 3:RANGE ONLY
@@ -159,8 +167,19 @@ STUFF as text; the answer gives g(x) and f(x), two or three ways when the class 
 
 ## Testing
 
-`tools/simulate.py` runs the TI-BASIC source on a model of the TI-84 Plus CE home screen
+`tools/tibasic.py` runs the TI-BASIC source on a model of the TI-84 Plus CE home screen
 (26 × 10, 14-digit arithmetic, strings, lists, loops, program calls). `tools/tests/*.py`
 script every practice problem and worked example (inputs → expected answer from the study
 guide); `tools/run_tests.py` runs them all and writes TESTS.md. Static checks: every
 label/jump, no jumps out of blocks, every token on the allowed list.
+
+Also:
+* `tools/fuzz/fuzz_<group>.py` drive each solver from the main menu with thousands of random
+  problems (negatives, fractions, zeros, ENTER defaults, infinite ends, CLEAR detours) and compare
+  the ANSWER lines with an independent exact oracle (sympy / fractions).
+* `tools/poison.py` reruns the tests or a fuzzer with every variable a helper really writes (except
+  its outputs) set to junk after each helper call, so a solver that keeps a value across a call fails.
+* `tools/check_static.py` (layers, blocks, labels, widths, tokens), `tools/build.py` (one `.8xp` per
+  program, every token cross-checked with the TI-Toolkit token sheet) and `tools/verify.py`
+  (byte-level check of each file: header, checksum, RAM flag, tokens decode back to the source).
+* `tools/coverage.py` writes COVERAGE.md from the inventory, the coverage maps and the test runs.

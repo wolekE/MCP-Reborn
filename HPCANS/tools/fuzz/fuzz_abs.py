@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Randomized differential testing of the absolute-value solver (main menu 5: HAABS, HAABS2..HAABS7).
+Randomized differential testing of the absolute-value solver (main menu 5: HAABS, HAABS2..HAABS5, HAABS7).
 
 Every case is a session typed from the main menu exactly as a student would press keys:
   * shapes 1:A|F(BX+C)+D|+K  2:A*F(B|X|+C)+K  3:A*F(|BX+C|)+K with negative / fractional / zero
