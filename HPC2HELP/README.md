@@ -56,7 +56,7 @@ calculator-to-computer cable. TI Connect CE works with both the TI-84 Plus and t
    list (or use the *Actions* menu → add/send files from the computer and pick `HPC2HELP.8xp`;
    menu wording varies a little between versions). In the *Send to Calculators* window choose
    **RAM** as the location if it asks, then click **Send**.
-4. **Check memory if the transfer fails.** The program is about **14 KB**. A TI-84 Plus has about
+4. **Check memory if the transfer fails.** The program is about **15 KB**. A TI-84 Plus has about
    24 KB of user RAM, so if it says there isn't enough memory, archive (don't delete) other
    programs: `2nd` `MEM` → `2:Mem Mgmt/Del` shows free RAM. A TI-84 Plus CE has plenty of room.
 5. **Run it.** On the calculator press `PRGM`, stay on the **EXEC** tab, choose **HPC2HELP**
@@ -68,8 +68,8 @@ If the PRGM list shows a `*` next to HPC2HELP, it went to Archive. Move it to RA
 
 ## If you have to type it in by hand
 
-The `.8xp` file is the easy way. Typing the source in by hand works, but it is about 1,080 lines
-(613 of them `Disp` lines), so expect several hours.
+The `.8xp` file is the easy way. Typing the source in by hand works, but it is about 1,130 lines
+(about 650 of them `Disp` lines), so expect several hours.
 
 1. `PRGM` → **NEW** → `1:Create New`, type the name `HPC2HELP` (alpha-lock is already on), `ENTER`.
 2. Type each line of `HPC2HELP.txt` and press `ENTER` at the end of each line; the calculator adds the `:`.
@@ -101,6 +101,7 @@ The `.8xp` file is the easy way. Typing the source in by hand works, but it is a
 | `√(` | `2nd` `x²` |
 | `³` `³√(` | `MATH` → MATH → `3` / `4` |
 | `[` `]` | `2nd` `×` / `2nd` `−` |
+| `U` (union, inside quotes) | the letter U |
 
 If you would rather type on a computer, a text-to-.8xp converter such as Cemetech's SourceCoder can
 also turn `HPC2HELP.txt` into a `.8xp`. You don't need one, though; `HPC2HELP.8xp` is already built.
