@@ -1,0 +1,31 @@
+ClrHome
+Disp Str9
+Disp "(TYPE I FOR INFINITY)"
+Input "LEFT END=",Str8
+prgmHANUM
+θ→S
+Input "RIGHT END=",Str8
+prgmHANUM
+θ→T
+If S>T
+Then
+S→U
+T→S
+U→T
+End
+1→U
+1→V
+If abs(S)<ᴇ98 or abs(T)<ᴇ98
+Then
+Disp "BRACKETS?"
+Disp "1:[ ]   2:[ )"
+Disp "3:( ]   4:( )"
+4→θ
+prgmHAKEY
+(θ≤2)→U
+(θ=0 or θ=1 or θ=3)→V
+End
+If abs(S)≥ᴇ98
+0→U
+If abs(T)≥ᴇ98
+0→V

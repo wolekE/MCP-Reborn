@@ -1,0 +1,23 @@
+1→X
+While X≤length(Str9)
+If W≥8
+Then
+Output(10,1,"ENTER=MORE")
+Repeat getKey=105
+End
+ClrHome
+0→W
+End
+X→Y
+0→θ
+Repeat Y>length(Str9) or θ>26
+sub(Str9,Y,1)→Str8
+θ+1+(Str8="√(")+2(Str8="³√(" or Str8="𝑒^(")→θ
+Y+1→Y
+End
+If θ>26
+Y-1→Y
+W+1→W
+Output(W,1,sub(Str9,X,Y-X))
+Y→X
+End

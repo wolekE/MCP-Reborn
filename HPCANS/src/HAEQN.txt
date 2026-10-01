@@ -1,0 +1,62 @@
+"Y="→Str5
+If N=⁻1
+"Y=-"→Str5
+If N≠1 and N≠⁻1
+Then
+N→θ
+prgmHAFRAC
+If Y>1
+"("+Str9+")"→Str9
+"Y="+Str9→Str5
+End
+Str5+"F("→Str5
+{O,⁻O*P}→ʟPLY
+prgmHAPOLY
+Str5+Str7+")"→Str4
+"X"→Str7
+If P>0
+Then
+P→θ
+prgmHAFRAC
+"X-"+Str9→Str7
+End
+If P<0
+Then
+⁻P→θ
+prgmHAFRAC
+"X+"+Str9→Str7
+End
+If O=⁻1
+Then
+If P=0
+Then
+"-X"→Str7
+Else
+"-("+Str7+")"→Str7
+End
+End
+If O≠1 and O≠⁻1
+Then
+O→θ
+prgmHAFRAC
+If Y>1
+"("+Str9+")"→Str9
+If P=0
+Then
+Str9+"X"→Str7
+Else
+Str9+"("+Str7+")"→Str7
+End
+End
+Str5+Str7+")"→Str5
+If Q≠0
+Then
+abs(Q)→θ
+prgmHAFRAC
+If Q>0
+"+"+Str9→Str9
+If Q<0
+"-"+Str9→Str9
+Str5+Str9→Str5
+Str4+Str9→Str4
+End

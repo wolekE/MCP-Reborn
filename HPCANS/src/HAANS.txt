@@ -1,0 +1,3 @@
+ClrHome
+Output(1,1,"ANSWER:")
+1→W

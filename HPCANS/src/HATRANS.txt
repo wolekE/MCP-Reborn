@@ -1,0 +1,469 @@
+Lbl M
+ClrHome
+Disp "Y=A*F(BX+C)+K"
+Disp "WHAT DO THEY WANT?"
+Disp "1:LIST THE CHANGES"
+Disp "2:NEW POINT(S)"
+Disp "3:NEW DOMAIN AND RANGE"
+Disp "4:WRITE THE EQUATION"
+4→θ
+prgmHAKEY
+θ→J
+If J=0
+Return
+If J=1
+Goto 1
+If J=2
+Goto 2
+If J=3
+Goto 3
+If J=4
+Goto 4
+Goto M
+Lbl 1
+"Y=A*F(BX+C)+K"→Str9
+prgmHAABCK
+N→A
+O→B
+P→C
+Q→K
+⁻C/B→H
+If abs(H)<ᴇ⁻9
+0→H
+prgmHAANS
+0→I
+If A<0
+Then
+"REFLECT X-AXIS"→Str9
+prgmHAOUT
+I+1→I
+End
+If abs(A)≠1
+Then
+abs(A)→θ
+prgmHAFRAC
+If abs(A)>1
+Then
+"VERT STRETCH "+Str9→Str9
+Else
+"VERT COMPRESS "+Str9→Str9
+End
+prgmHAOUT
+I+1→I
+End
+If B<0
+Then
+"REFLECT Y-AXIS"→Str9
+prgmHAOUT
+I+1→I
+End
+If abs(B)≠1
+Then
+1/abs(B)→θ
+prgmHAFRAC
+If abs(B)>1
+Then
+"HORIZ COMPRESS "+Str9→Str9
+Else
+"HORIZ STRETCH "+Str9→Str9
+End
+prgmHAOUT
+I+1→I
+End
+If H≠0
+Then
+abs(H)→θ
+prgmHAFRAC
+If H>0
+Then
+"RIGHT "+Str9→Str9
+Else
+"LEFT "+Str9→Str9
+End
+prgmHAOUT
+I+1→I
+End
+If K≠0
+Then
+abs(K)→θ
+prgmHAFRAC
+If K>0
+Then
+"UP "+Str9→Str9
+Else
+"DOWN "+Str9→Str9
+End
+prgmHAOUT
+I+1→I
+End
+If I=0
+Then
+"NO CHANGE"→Str9
+prgmHAOUT
+End
+"1:AGAIN  2:HOME  3:WHY"→Str9
+3→θ
+prgmHAEND
+θ→J
+If J=1
+Goto 1
+If J=3
+Goto 5
+Return
+Lbl 5
+A→N
+B→O
+H→P
+K→Q
+prgmHAEQN
+"WHY:"→Str9
+prgmHAPAGE
+"AS TYPED:"→Str9
+prgmHAOUT
+Str4→Str9
+prgmHAOUT
+"FACTOR OUT B:"→Str9
+prgmHAOUT
+Str5→Str9
+prgmHAOUT
+H→θ
+prgmHAFRAC
+"SO H=-C/B="+Str9→Str9
+prgmHAOUT
+"ORDER: A, THEN B, H, K"→Str9
+prgmHAOUT
+"1:AGAIN  2:HOME"→Str9
+2→θ
+prgmHAEND
+If θ=1
+Goto 1
+Return
+Lbl 2
+"Y=A*F(BX+C)+K"→Str9
+prgmHAABCK
+N→A
+O→B
+P→C
+Q→K
+ClrHome
+Disp "WHICH POINTS?"
+Disp "1:TYPE ONE POINT"
+Disp "2:ALL CORNERS OF A GRAPH"
+2→θ
+prgmHAKEY
+If θ=0
+Goto M
+If θ=2
+Goto 22
+Lbl 23
+ClrHome
+Disp "OLD POINT (X,Y)"
+Input "OLD X=",Str8
+prgmHANUM
+θ→D
+Input "OLD Y=",Str8
+prgmHANUM
+θ→E
+(D-C)/B→N
+A*E+K→O
+prgmHAPTXT
+prgmHAANS
+Str5→Str9
+prgmHAOUT
+D→N
+E→O
+prgmHAPTXT
+"FROM "+Str5→Str9
+prgmHAOUT
+"1:NEXT PT 2:HOME 3:NEW EQ"→Str9
+3→θ
+prgmHAEND
+θ→J
+If J=1
+Goto 23
+If J=3
+Goto 2
+Return
+Lbl 22
+If dim(ʟBX)=0
+Goto 24
+ClrHome
+Disp "GRAPH CORNERS:"
+Disp "1:USE THE SAVED GRAPH"
+Disp "2:TYPE A NEW GRAPH"
+2→θ
+prgmHAKEY
+If θ=0
+Goto M
+If θ=1
+Goto 25
+Lbl 24
+"BASE GRAPH OF F"→Str9
+prgmHAPTS
+ʟHX→ʟBX
+ʟHY→ʟBY
+ʟHC→ʟBC
+Lbl 25
+(ʟBX-C)/B→L₁
+A*ʟBY+K→L₂
+SortA(L₁,L₂)
+prgmHAANS
+For(I,1,dim(L₁))
+L₁(I)→N
+L₂(I)→O
+prgmHAPTXT
+Str5→Str9
+prgmHAOUT
+End
+min(L₁)→S
+max(L₁)→T
+(B>0)ʟBC(1)+(B<0)ʟBC(2)→U
+(B>0)ʟBC(2)+(B<0)ʟBC(1)→V
+2→θ
+prgmHADOM
+9→θ
+prgmHADOM
+"D="+Str6→Str1
+min(ʟBY)→D
+max(ʟBY)→E
+0→F
+0→G
+For(I,1,dim(ʟBY))
+If ʟBY(I)=D and not((I=1 and not(ʟBC(1))) or (I=dim(ʟBY) and not(ʟBC(2))))
+1→F
+If ʟBY(I)=E and not((I=1 and not(ʟBC(1))) or (I=dim(ʟBY) and not(ʟBC(2))))
+1→G
+End
+A*D+K→S
+A*E+K→T
+F→U
+G→V
+If A<0
+Then
+A*E+K→S
+A*D+K→T
+G→U
+F→V
+End
+2→θ
+prgmHADOM
+9→θ
+prgmHADOM
+Str1→Str9
+prgmHAOUT
+"R="+Str6→Str9
+prgmHAOUT
+"1:AGAIN  2:HOME"→Str9
+2→θ
+prgmHAEND
+If θ=1
+Goto 2
+Return
+Lbl 3
+"Y=A*F(BX+C)+K"→Str9
+prgmHAABCK
+N→A
+O→B
+P→C
+Q→K
+ClrHome
+Disp "WHAT ARE YOU GIVEN?"
+Disp "1:DOMAIN AND RANGE"
+Disp "2:ONLY THE DOMAIN"
+Disp "3:ONLY THE RANGE"
+3→θ
+prgmHAKEY
+θ→J
+If J=0
+Goto M
+If J≠3
+Then
+"ORIGINAL DOMAIN OF F:"→Str9
+prgmHAIVL
+{S,T,U,V}→L₁
+End
+If J≠2
+Then
+"ORIGINAL RANGE OF F:"→Str9
+prgmHAIVL
+{S,T,U,V}→L₂
+End
+prgmHAANS
+If J≠3
+Then
+L₁(1)→S
+L₁(2)→T
+If abs(S)<ᴇ98
+(S-C)/B→S
+If abs(S)≥ᴇ98 and B<0
+⁻S→S
+If abs(T)<ᴇ98
+(T-C)/B→T
+If abs(T)≥ᴇ98 and B<0
+⁻T→T
+L₁(3)→U
+L₁(4)→V
+If B<0
+Then
+S→D
+T→S
+D→T
+L₁(4)→U
+L₁(3)→V
+End
+2→θ
+prgmHADOM
+9→θ
+prgmHADOM
+"D="+Str6→Str9
+prgmHAOUT
+End
+If J≠2
+Then
+L₂(1)→S
+L₂(2)→T
+If abs(S)<ᴇ98
+A*S+K→S
+If abs(S)≥ᴇ98 and A<0
+⁻S→S
+If abs(T)<ᴇ98
+A*T+K→T
+If abs(T)≥ᴇ98 and A<0
+⁻T→T
+L₂(3)→U
+L₂(4)→V
+If A<0
+Then
+S→D
+T→S
+D→T
+L₂(4)→U
+L₂(3)→V
+End
+2→θ
+prgmHADOM
+9→θ
+prgmHADOM
+"R="+Str6→Str9
+prgmHAOUT
+End
+"1:AGAIN  2:HOME"→Str9
+2→θ
+prgmHAEND
+If θ=1
+Goto 3
+Return
+Lbl 4
+1→A
+1→B
+0→C
+0→K
+4→J
+Repeat J=7 or J=0
+⁻C/B→H
+If abs(H)<ᴇ⁻9
+0→H
+A→N
+B→O
+H→P
+K→Q
+prgmHAEQN
+ClrHome
+Disp "SO FAR:"
+Disp Str5
+Disp "ADD THE STEPS IN THE ORDER"
+Disp "THE QUESTION SAYS THEM:"
+Disp "1:REFLECT OVER X-AXIS"
+Disp "2:REFLECT OVER Y-AXIS"
+Disp "3:VERT STRETCH/COMPRESS"
+Disp "4:HORIZ STRETCH/COMPRESS"
+Disp "5:LEFT/RIGHT  6:UP/DOWN"
+Disp "7:DONE"
+7→θ
+prgmHAKEY
+θ→J
+If J=1
+Then
+⁻A→A
+⁻K→K
+End
+If J=2
+⁻B→B
+If J=3
+Then
+ClrHome
+Disp "VERT STRETCH BY 5: TYPE 5"
+Disp "VERT COMPRESS BY 1/2:"
+Disp "  TYPE 1/2"
+Input "FACTOR=",Str8
+prgmHANUM
+If θ≠0
+Then
+θ*A→A
+θ*K→K
+End
+End
+If J=4
+Then
+ClrHome
+Disp "HORIZ STRETCH BY 3: TYPE 3"
+Disp "HORIZ COMPRESS BY 1/2:"
+Disp "  TYPE 1/2"
+Input "FACTOR=",Str8
+prgmHANUM
+If θ≠0
+B/θ→B
+End
+If J=5
+Then
+ClrHome
+Disp "RIGHT 3: TYPE 3"
+Disp "LEFT 3: TYPE -3"
+Input "AMOUNT=",Str8
+prgmHANUM
+C-B*θ→C
+End
+If J=6
+Then
+ClrHome
+Disp "UP 4: TYPE 4"
+Disp "DOWN 4: TYPE -4"
+Input "AMOUNT=",Str8
+prgmHANUM
+K+θ→K
+End
+End
+If J=0
+Goto M
+⁻C/B→H
+If abs(H)<ᴇ⁻9
+0→H
+A→N
+B→O
+H→P
+K→Q
+prgmHAEQN
+prgmHAANS
+Str5→Str9
+prgmHAOUT
+"="+sub(Str4,3,length(Str4)-2)→Str9
+prgmHAOUT
+A→θ
+prgmHAFRAC
+"A="+Str9→Str2
+B→θ
+prgmHAFRAC
+Str2+"  B="+Str9→Str2
+H→θ
+prgmHAFRAC
+Str2+"  H="+Str9→Str2
+K→θ
+prgmHAFRAC
+Str2+"  K="+Str9→Str9
+prgmHAOUT
+"1:AGAIN  2:HOME"→Str9
+2→θ
+prgmHAEND
+If θ=1
+Goto 4
+Return

@@ -1,0 +1,311 @@
+If θ=1
+Goto 1
+If θ=2
+Goto 2
+If θ=3
+Goto 3
+If θ=4
+Goto 4
+If θ=5
+Goto 5
+If θ=6
+Goto 6
+If θ=7
+Goto 7
+If θ=8
+Goto 8
+If θ=9
+Goto 9
+If θ=10
+Goto 10
+Return
+Lbl 1
+{⁻ᴇ99}→ʟDL
+{ᴇ99}→ʟDR
+{0}→ʟDA
+{0}→ʟDB
+Return
+Lbl 2
+{S}→ʟDL
+{T}→ʟDR
+{U}→ʟDA
+{V}→ʟDB
+Return
+Lbl 3
+{⁻ᴇ99}→ʟEL
+{ᴇ99}→ʟER
+{0}→ʟEA
+{0}→ʟEB
+Return
+Lbl 4
+{S}→ʟEL
+{T}→ʟER
+{U}→ʟEA
+{V}→ʟEB
+Return
+Lbl 10
+ʟDL→ʟEL
+ʟDR→ʟER
+ʟDA→ʟEA
+ʟDB→ʟEB
+Return
+Lbl 5
+{1}→ʟTL
+{0}→ʟTR
+{0}→ʟTA
+{0}→ʟTB
+For(S,1,dim(ʟDL))
+For(T,1,dim(ʟEL))
+max(ʟDL(S),ʟEL(T))→U
+min(ʟDR(S),ʟER(T))→V
+(ʟDL(S)>ʟEL(T))ʟDA(S)+(ʟDL(S)<ʟEL(T))ʟEA(T)+(ʟDL(S)=ʟEL(T))ʟDA(S)ʟEA(T)→X
+(ʟDR(S)<ʟER(T))ʟDB(S)+(ʟDR(S)>ʟER(T))ʟEB(T)+(ʟDR(S)=ʟER(T))ʟDB(S)ʟEB(T)→Y
+If U<V or (U=V and X and Y)
+Then
+U→ʟTL(dim(ʟTL)+1)
+V→ʟTR(dim(ʟTR)+1)
+X→ʟTA(dim(ʟTA)+1)
+Y→ʟTB(dim(ʟTB)+1)
+End
+End
+End
+Goto 99
+Lbl 6
+{1}→ʟTL
+{0}→ʟTR
+{0}→ʟTA
+{0}→ʟTB
+For(T,1,dim(ʟDL))
+ʟDL(T)→U
+ʟDR(T)→V
+ʟDA(T)→X
+ʟDB(T)→Y
+If U≤V
+Then
+If S<U or S>V
+Then
+U→ʟTL(dim(ʟTL)+1)
+V→ʟTR(dim(ʟTR)+1)
+X→ʟTA(dim(ʟTA)+1)
+Y→ʟTB(dim(ʟTB)+1)
+Else
+If U<S
+Then
+U→ʟTL(dim(ʟTL)+1)
+S→ʟTR(dim(ʟTR)+1)
+X→ʟTA(dim(ʟTA)+1)
+0→ʟTB(dim(ʟTB)+1)
+End
+If S<V
+Then
+S→ʟTL(dim(ʟTL)+1)
+V→ʟTR(dim(ʟTR)+1)
+0→ʟTA(dim(ʟTA)+1)
+Y→ʟTB(dim(ʟTB)+1)
+End
+End
+End
+End
+Goto 99
+Lbl 7
+{1}→ʟTL
+{0}→ʟTR
+{0}→ʟTA
+{0}→ʟTB
+For(θ,1,dim(ʟDL))
+ʟDL(θ)→U
+ʟDR(θ)→V
+ʟDA(θ)→X
+ʟDB(θ)→Y
+If U≤V and U<S
+Then
+U→ʟTL(dim(ʟTL)+1)
+min(V,S)→ʟTR(dim(ʟTR)+1)
+X→ʟTA(dim(ʟTA)+1)
+(V<S)Y→ʟTB(dim(ʟTB)+1)
+End
+If U≤V and V>T
+Then
+max(U,T)→ʟTL(dim(ʟTL)+1)
+V→ʟTR(dim(ʟTR)+1)
+(U>T)X→ʟTA(dim(ʟTA)+1)
+Y→ʟTB(dim(ʟTB)+1)
+End
+End
+Goto 99
+Lbl 99
+If dim(ʟTL)>1
+Then
+seq(ʟTL(U),U,2,dim(ʟTL))→ʟDL
+seq(ʟTR(U),U,2,dim(ʟTR))→ʟDR
+seq(ʟTA(U),U,2,dim(ʟTA))→ʟDA
+seq(ʟTB(U),U,2,dim(ʟTB))→ʟDB
+Else
+ʟTL→ʟDL
+ʟTR→ʟDR
+ʟTA→ʟDA
+ʟTB→ʟDB
+End
+Return
+Lbl 8
+{0}→ʟCP
+ʟSN→ʟQC
+prgmHAROOT
+θ→V
+If θ>0
+augment(ʟCP,ʟRT)→ʟCP
+ʟSD→ʟQC
+prgmHAROOT
+If θ>0
+augment(ʟCP,ʟRT)→ʟCP
+{1}→ʟEL
+{0}→ʟER
+{0}→ʟEA
+{0}→ʟEB
+dim(ʟCP)-1→S
+If S>0
+Then
+seq(ʟCP(T),T,2,dim(ʟCP))→ʟCP
+SortA(ʟCP)
+{ʟCP(1)}→ʟTL
+For(T,2,dim(ʟCP))
+If ʟCP(T)-ʟTL(dim(ʟTL))>ᴇ⁻9
+ʟCP(T)→ʟTL(dim(ʟTL)+1)
+End
+ʟTL→ʟCP
+dim(ʟCP)→S
+End
+0→Z
+0→Y
+For(T,0,S)
+0→X
+If S>0 and T=0
+ʟCP(1)-1→X
+If S>0 and T=S
+ʟCP(S)+1→X
+If T>0 and T<S
+(ʟCP(T)+ʟCP(T+1))/2→X
+(ʟSN(1)X²+ʟSN(2)X+ʟSN(3))(ʟSD(1)X²+ʟSD(2)X+ʟSD(3))→θ
+If θ>0 or (V=⁻1 and U)
+Then
+If not(Z)
+Then
+⁻ᴇ99→X
+If T>0
+ʟCP(T)→X
+X→ʟEL(dim(ʟEL)+1)
+0→ʟEA(dim(ʟEA)+1)
+1→Z
+End
+0→Y
+Else
+If Z
+Then
+ʟCP(T)→ʟER(dim(ʟER)+1)
+Y→ʟEB(dim(ʟEB)+1)
+0→Z
+End
+End
+If T<S
+Then
+ʟCP(T+1)→X
+not(abs(ʟSD(1)X²+ʟSD(2)X+ʟSD(3))<ᴇ⁻9) and U→θ
+If θ and not(Z)
+Then
+X→ʟEL(dim(ʟEL)+1)
+1→ʟEA(dim(ʟEA)+1)
+1→Z
+End
+If not(θ) and Z
+Then
+X→ʟER(dim(ʟER)+1)
+0→ʟEB(dim(ʟEB)+1)
+0→Z
+End
+θ→Y
+End
+End
+If Z
+Then
+ᴇ99→ʟER(dim(ʟER)+1)
+0→ʟEB(dim(ʟEB)+1)
+End
+If dim(ʟEL)>1
+Then
+seq(ʟEL(T),T,2,dim(ʟEL))→ʟEL
+seq(ʟER(T),T,2,dim(ʟER))→ʟER
+seq(ʟEA(T),T,2,dim(ʟEA))→ʟEA
+seq(ʟEB(T),T,2,dim(ʟEB))→ʟEB
+End
+Return
+Lbl 9
+0→S
+For(T,1,dim(ʟDL))
+If ʟDL(T)≤ʟDR(T)
+S+1→S
+End
+"NO REAL NUMBERS"→Str6
+If S=0
+Return
+1→U
+1→X
+0→Y
+For(T,1,dim(ʟDL))
+If ʟDL(T)≤ʟDR(T)
+Then
+If X and ʟDL(T)>⁻ᴇ98
+0→U
+If not(X) and (ʟDL(T)≠V or ʟDA(T) or Y)
+0→U
+ʟDR(T)→V
+ʟDB(T)→Y
+0→X
+End
+End
+If V<ᴇ98
+0→U
+If U
+Goto 91
+0→S
+For(T,1,dim(ʟDL))
+If ʟDL(T)≤ʟDR(T)
+Then
+"("→Str7
+If ʟDA(T)
+"["→Str7
+ʟDL(T)→θ
+prgmHAFRAC
+Str7+Str9+","→Str7
+ʟDR(T)→θ
+prgmHAFRAC
+Str7+Str9→Str7
+If ʟDB(T)
+Then
+Str7+"]"→Str7
+Else
+Str7+")"→Str7
+End
+If S=0
+Then
+Str7→Str6
+Else
+Str6+"U"+Str7→Str6
+End
+S+1→S
+End
+End
+Return
+Lbl 91
+"ALL REALS"→Str6
+If S>1
+Then
+"ALL REALS, X≠"→Str6
+For(T,1,dim(ʟDL)-1)
+ʟDR(T)→θ
+prgmHAFRAC
+If T>1
+Str6+","→Str6
+Str6+Str9→Str6
+End
+End
+Return

@@ -1,0 +1,43 @@
+0→S
+For(T,1,dim(ʟPLY))
+If abs(ʟPLY(T))≥ᴇ⁻9
+Then
+abs(ʟPLY(T))→θ
+prgmHAFRAC
+dim(ʟPLY)-T→U
+If U=0
+Then
+Str9→Str6
+Else
+"X"→Str6
+If U=2
+"X²"→Str6
+If U=3
+"X³"→Str6
+If U=4
+"X^4"→Str6
+If Str9≠"1"
+Then
+If Y>1
+"("+Str9+")"→Str9
+Str9+Str6→Str6
+End
+End
+If S=0
+Then
+Str6→Str7
+If ʟPLY(T)<0
+"-"+Str7→Str7
+Else
+If ʟPLY(T)<0
+Then
+Str7+"-"+Str6→Str7
+Else
+Str7+"+"+Str6→Str7
+End
+End
+S+1→S
+End
+End
+If S=0
+"0"→Str7

@@ -1,0 +1,28 @@
+ClrHome
+Disp Str9
+Disp "TYPE THE NUMBERS YOU SEE"
+Disp "EX: -2F(3X-6)+1 GIVES"
+Disp "  A=-2 B=3 C=-6 K=1"
+Disp "NO NUMBER? PRESS ENTER"
+0→N
+While N=0
+Input "A (FRONT)=",Str8
+prgmHANUM
+θ→N
+If Z
+1→N
+End
+0→O
+While O=0
+Input "B (X COEF)=",Str8
+prgmHANUM
+θ→O
+If Z
+1→O
+End
+Input "C (INSIDE NUMBER)=",Str8
+prgmHANUM
+θ→P
+Input "K (END NUMBER)=",Str8
+prgmHANUM
+θ→Q

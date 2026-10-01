@@ -1,0 +1,6 @@
+N→θ
+prgmHAFRAC
+"("+Str9+","→Str5
+O→θ
+prgmHAFRAC
+Str5+Str9+")"→Str5

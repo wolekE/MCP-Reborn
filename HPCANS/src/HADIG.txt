@@ -1,0 +1,6 @@
+sub("0123456789",Y-10int(Y/10)+1,1)→Str8
+int(Y/10)→Y
+While Y>0
+sub("0123456789",Y-10int(Y/10)+1,1)+Str8→Str8
+int(Y/10)→Y
+End

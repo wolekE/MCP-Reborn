@@ -1,0 +1,12 @@
+θ→X
+0→θ
+Repeat θ
+getKey→Z
+If Z=45
+⁻1→θ
+3*(9-int(Z/10))+Z-10int(Z/10)-1→Y
+If Z≥72 and Z≤94 and Z-10int(Z/10)≥2 and Z-10int(Z/10)≤4 and Y≤X
+Y→θ
+End
+If θ<0
+0→θ

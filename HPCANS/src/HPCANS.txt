@@ -1,0 +1,69 @@
+Float
+Normal
+SetUpEditor ʟGFX,ʟGFY,ʟGFC,ʟGGX,ʟGGY,ʟGGC,ʟBX,ʟBY,ʟBC
+SetUpEditor
+ClrHome
+Disp "HPC ANSWER HELPER"
+Disp ""
+Disp "NEGATIVE: USE THE (⁻) KEY"
+Disp "FRACTION: TYPE 2/3"
+Disp "CLEAR = GO BACK"
+Disp ""
+Disp "PRESS ENTER"
+Pause
+Lbl M
+ClrHome
+Disp "WHAT DOES IT LOOK LIKE?"
+Disp "1:F+G  OR  F/G"
+Disp "2:F(G(X))"
+Disp "3:F⁻¹(X)  INVERSE"
+Disp "4:A*F(BX+C)+K"
+Disp "5:ABS BARS |F(X)| F(|X|)"
+Disp "6:KX^P  OR  ROOTS"
+Disp "7:DECOMPOSE H(X)"
+Disp ""
+Disp "CLEAR=QUIT"
+7→θ
+prgmHAKEY
+θ→A
+If A=0
+Goto Q
+If A=1
+Goto 1
+If A=2
+Goto 2
+If A=3
+Goto 3
+If A=4
+Goto 4
+If A=5
+Goto 5
+If A=6
+Goto 6
+If A=7
+Goto 7
+Goto M
+Lbl 1
+prgmHAOPS
+Goto M
+Lbl 2
+prgmHACOMP
+Goto M
+Lbl 3
+prgmHAINV
+Goto M
+Lbl 4
+prgmHATRANS
+Goto M
+Lbl 5
+prgmHAABS
+Goto M
+Lbl 6
+prgmHAPOWER
+Goto M
+Lbl 7
+prgmHADECOMP
+Goto M
+Lbl Q
+ClrHome
+Stop

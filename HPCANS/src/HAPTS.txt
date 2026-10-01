@@ -1,0 +1,34 @@
+ClrHome
+Disp Str9
+Disp "TYPE EACH CORNER AND END"
+Disp "POINT, LEFT TO RIGHT."
+Input "HOW MANY POINTS=",Str8
+prgmHANUM
+θ→N
+{0}→ʟHX
+{0}→ʟHY
+N→dim(ʟHX)
+N→dim(ʟHY)
+For(O,1,N)
+ClrHome
+O→θ
+prgmHAFRAC
+"POINT "+Str9→Str9
+Disp Str9
+Input "X=",Str8
+prgmHANUM
+θ→ʟHX(O)
+Input "Y=",Str8
+prgmHANUM
+θ→ʟHY(O)
+End
+SortA(ʟHX,ʟHY)
+ClrHome
+Disp "THE END DOTS ARE"
+Disp "1:BOTH SOLID (FILLED)"
+Disp "2:LEFT OPEN (HOLLOW)"
+Disp "3:RIGHT OPEN (HOLLOW)"
+Disp "4:BOTH OPEN (HOLLOW)"
+4→θ
+prgmHAKEY
+{(θ≠2 and θ≠4),(θ≠3 and θ≠4)}→ʟHC

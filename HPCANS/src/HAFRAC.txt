@@ -1,0 +1,67 @@
+abs(θ)→X
+If X<ᴇ⁻9
+0→X
+{1,0,0,1,X,0,0}→ʟFR
+If X≥ᴇ98
+Then
+"INF"→Str9
+ᴇ99→ʟFR(1)
+1→ʟFR(3)
+1→Z
+Else
+0→Z
+Repeat Z or ʟFR(3)>9999
+int(ʟFR(5))→Y
+Y*ʟFR(1)+ʟFR(2)→ʟFR(6)
+Y*ʟFR(3)+ʟFR(4)→ʟFR(7)
+ʟFR(1)→ʟFR(2)
+ʟFR(6)→ʟFR(1)
+ʟFR(3)→ʟFR(4)
+ʟFR(7)→ʟFR(3)
+If ʟFR(3)≤9999 and abs(X-ʟFR(1)/ʟFR(3))≤ᴇ⁻11*max(1,X)
+1→Z
+ʟFR(5)-Y→Y
+If Y>0
+1/Y→ʟFR(5)
+End
+If Z
+Then
+ʟFR(1)→Y
+prgmHADIG
+Str8→Str9
+If ʟFR(3)>1
+Then
+ʟFR(3)→Y
+prgmHADIG
+Str9+"/"+Str8→Str9
+End
+Else
+round(X,6)→X
+iPart(X)→Y
+prgmHADIG
+Str8→Str9
+round(ᴇ6*fPart(X),0)→Y
+If Y>0
+Then
+Y+ᴇ6→Y
+prgmHADIG
+sub(Str8,2,6)→Str8
+While sub(Str8,length(Str8),1)="0"
+sub(Str8,1,length(Str8)-1)→Str8
+End
+Str9+"."+Str8→Str9
+End
+End
+End
+If θ<0 and abs(θ)≥ᴇ⁻9
+"-"+Str9→Str9
+If Z
+Then
+ʟFR(1)→X
+ʟFR(3)→Y
+Else
+abs(θ)→X
+1→Y
+End
+If θ<0
+⁻X→X

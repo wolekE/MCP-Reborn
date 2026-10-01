@@ -1,0 +1,6 @@
+seq(0,U,1,dim(ʟPA)+dim(ʟPB)-1)→ʟPC
+For(S,1,dim(ʟPA))
+For(T,1,dim(ʟPB))
+ʟPC(S+T-1)+ʟPA(S)*ʟPB(T)→ʟPC(S+T-1)
+End
+End

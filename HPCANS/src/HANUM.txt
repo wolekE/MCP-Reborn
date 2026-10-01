@@ -1,0 +1,19 @@
+0→Z
+0→θ
+If length(Str8)=0
+Then
+1→Z
+Else
+If Str8="⁻" or Str8="-"
+"⁻1"→Str8
+If sub(Str8,1,1)="-" and length(Str8)>1
+"⁻"+sub(Str8,2,length(Str8)-1)→Str8
+If inString(Str8,"I")
+Then
+ᴇ99→θ
+If sub(Str8,1,1)="⁻"
+⁻ᴇ99→θ
+Else
+expr(Str8)→θ
+End
+End

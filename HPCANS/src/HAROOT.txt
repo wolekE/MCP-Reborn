@@ -1,0 +1,31 @@
+ʟQC(1)→X
+ʟQC(2)→Y
+ʟQC(3)→Z
+{0}→ʟRT
+0→θ
+If X=0
+Then
+If Y≠0
+Then
+⁻Z/Y→ʟRT(1)
+1→θ
+Else
+If Z=0
+⁻1→θ
+End
+Else
+Y²-4X*Z→Z
+If abs(Z)<ᴇ⁻12*max(1,Y²)
+0→Z
+If Z>0
+Then
+{(⁻Y-√(Z))/(2X),(⁻Y+√(Z))/(2X)}→ʟRT
+SortA(ʟRT)
+2→θ
+End
+If Z=0
+Then
+{⁻Y/(2X)}→ʟRT
+1→θ
+End
+End
