@@ -1,0 +1,111 @@
+L₁(2)→A
+L₁(3)→B
+L₁(4)→C
+L₁(5)→D
+L₁(6)→E
+L₁(7)→F
+1/A→K
+⁻D/A→L
+If abs(A)≠1 and fPart(A)=0
+Then
+(A>0)-(A<0)→K
+⁻KD→L
+End
+prgmHAINVL
+Str3→Str1
+If abs(A)≠1 and fPart(A)=0
+Then
+If D≠0
+"("+Str1+")"→Str1
+abs(A)→θ
+prgmHAFRAC
+Str1+"/"+Str9→Str1
+End
+Str1="X"→G
+If E=3 and F=1
+Then
+"³√("+Str1+")"→Str2
+Else
+If not(G)
+"("+Str1+")"→Str1
+Str1→Str2
+F/E→H
+If H=2
+Str2+"²"→Str2
+If H=3
+Str2+"³"→Str2
+If H≠1 and H≠2 and H≠3
+Then
+H→θ
+prgmHAFRAC
+If H>0 and fPart(H)=0
+Then
+Str2+"^"+Str9→Str2
+Else
+Str2+"^("+Str9+")"→Str2
+End
+End
+End
+If B=1
+Then
+Str2→Str1
+If C≠0
+Then
+⁻C→θ
+prgmHAFRAC
+If C<0
+"+"+Str9→Str9
+Str1+Str9→Str1
+End
+End
+If B=⁻1
+Then
+"-"+Str2→Str1
+If C≠0
+Then
+C→θ
+prgmHAFRAC
+Str9+"-"+Str2→Str1
+End
+End
+If abs(B)≠1 and fPart(B)=0
+Then
+abs(B)→θ
+prgmHAFRAC
+Str9→Str3
+If C=0
+Then
+Str2+"/"+Str3→Str1
+If B<0
+"-"+Str1→Str1
+Else
+If B>0
+Then
+⁻C→θ
+prgmHAFRAC
+If C<0
+"+"+Str9→Str9
+"("+Str2+Str9+")/"+Str3→Str1
+Else
+C→θ
+prgmHAFRAC
+"("+Str9+"-"+Str2+")/"+Str3→Str1
+End
+End
+End
+If fPart(B)≠0
+Then
+1/B→θ
+prgmHAFRAC
+If Y>1
+"("+Str9+")"→Str9
+Str9+Str2→Str1
+If C≠0
+Then
+⁻C/B→θ
+prgmHAFRAC
+If ⁻C/B>0
+"+"+Str9→Str9
+Str1+Str9→Str1
+End
+End

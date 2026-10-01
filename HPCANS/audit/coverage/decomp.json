@@ -1,0 +1,393 @@
+[
+ {
+  "item_id": "EX-3.1",
+  "what_question_gives": "h(x)=(5x-1)^4",
+  "expected_answer": "g(x)=5x-1, f(x)=x^4",
+  "solver_path": "7:DECOMPOSE H(X) → 1:K(STUFF)^N+C",
+  "student_enters": "STUFF=5X-1, K=ENTER, N=4, C=ENTER",
+  "calculator_shows": "ANSWER: G(X)=5X-1 / F(X)=X^4 / OR G(X)=5X / F(X)=(X-1)^4",
+  "test_ids": [
+   "EX-3.1",
+   "MIST-3-1",
+   "EXTRA-decomp-6"
+  ]
+ },
+ {
+  "item_id": "EX-3.2",
+  "what_question_gives": "h(x)=3/sqrt(x^2+4), two ways",
+  "expected_answer": "g=x^2+4, f=3/sqrt(x); g=sqrt(x^2+4), f=3/x; third split g=x^2, f=3/sqrt(x+4)",
+  "solver_path": "7 → 4:K/√(STUFF)+C",
+  "student_enters": "STUFF=X²+4, K=3, ROOT INDEX=ENTER, C=ENTER",
+  "calculator_shows": "ANSWER: G(X)=X²+4 / F(X)=3/√(X) / OR G(X)=√(X²+4) / F(X)=3/X / OR G(X)=X² / F(X)=3/√(X+4) (all three of the guide's splits)",
+  "test_ids": [
+   "EX-3.2",
+   "MIST-3-2",
+   "RULE-3-CHECK",
+   "EXTRA-decomp-14"
+  ]
+ },
+ {
+  "item_id": "EX-3.3",
+  "what_question_gives": "h(x)=2/(1+e^(3x)); teacher's 1/(1+e^(-x))",
+  "expected_answer": "g=e^(3x), f=2/(1+x); g=1+e^(3x), f=2/x; g=3x, f=2/(1+e^x). Teacher: g=e^(-x), f=1/(1+x) or g=1+e^(-x), f=1/x",
+  "solver_path": "7 → 8:K/(M+𝑒^(STUFF))",
+  "student_enters": "(a) STUFF=3X, K=2, M=1; (b) STUFF=(-)X, K=ENTER, M=1",
+  "calculator_shows": "(a) G(X)=𝑒^(3X) / F(X)=2/(1+X) / OR G(X)=1+𝑒^(3X) / F(X)=2/X / OR G(X)=3X / F(X)=2/(1+𝑒^(X)); (b) G(X)=𝑒^(-X) / F(X)=1/(1+X) / OR G(X)=1+𝑒^(-X) / F(X)=1/X / OR G(X)=-X / F(X)=1/(1+𝑒^(X))",
+  "test_ids": [
+   "EX-3.3a",
+   "EX-3.3b"
+  ]
+ },
+ {
+  "item_id": "PR-3.1",
+  "what_question_gives": "h(x)=sqrt(7-2x)",
+  "expected_answer": "g(x)=7-2x, f(x)=sqrt(x)",
+  "solver_path": "7 → 2:K√(STUFF)+C",
+  "student_enters": "STUFF=7-2X, K=ENTER, ROOT INDEX=ENTER, C=ENTER",
+  "calculator_shows": "ANSWER: G(X)=7-2X / F(X)=√(X) / OR G(X)=-2X / F(X)=√(7+X)",
+  "test_ids": [
+   "PR-3.1",
+   "SOL-3.1"
+  ]
+ },
+ {
+  "item_id": "PR-3.2",
+  "what_question_gives": "h(x)=|x^2-9|+4, two decompositions",
+  "expected_answer": "g=x^2-9, f=|x|+4; or g=|x^2-9|, f=x+4",
+  "solver_path": "7 → 5:K|STUFF|+C",
+  "student_enters": "STUFF=X²-9, K=ENTER, C=4",
+  "calculator_shows": "ANSWER: G(X)=X²-9 / F(X)=|X|+4 / OR G(X)=|X²-9| / F(X)=X+4 / OR G(X)=X² / F(X)=|X-9|+4",
+  "test_ids": [
+   "PR-3.2",
+   "SOL-3.2"
+  ]
+ },
+ {
+  "item_id": "PR-3.3",
+  "what_question_gives": "h(x)=1/(x^3+2)^2, two decompositions",
+  "expected_answer": "g=x^3+2, f=1/x^2; or g=(x^3+2)^2, f=1/x; or g=1/(x^3+2), f=x^2",
+  "solver_path": "7 → 3:K/(STUFF)^N+C",
+  "student_enters": "STUFF=X³+2, K=ENTER, N=2, C=ENTER",
+  "calculator_shows": "ANSWER: G(X)=X³+2 / F(X)=1/X² / OR G(X)=(X³+2)² / F(X)=1/X / OR G(X)=1/(X³+2) / F(X)=X²",
+  "test_ids": [
+   "PR-3.3",
+   "SOL-3.3"
+  ]
+ },
+ {
+  "item_id": "PR-3.4",
+  "what_question_gives": "h(x)=4(2x+3)^2-3(2x+3)",
+  "expected_answer": "g(x)=2x+3, f(x)=4x^2-3x",
+  "solver_path": "7 → 6:A(STUFF)²+B(STUFF)+C",
+  "student_enters": "STUFF=2X+3, A=4, B=-3, C=ENTER",
+  "calculator_shows": "ANSWER: G(X)=2X+3 / F(X)=4X²-3X",
+  "test_ids": [
+   "PR-3.4",
+   "SOL-3.4"
+  ]
+ },
+ {
+  "item_id": "SOL-3.1",
+  "what_question_gives": "official answer for 3.1",
+  "expected_answer": "g(x)=7-2x, f(x)=sqrt(x)",
+  "solver_path": "as PR-3.1",
+  "student_enters": "STUFF=7-2X, ENTER x3",
+  "calculator_shows": "G(X)=7-2X / F(X)=√(X) (first way matches the guide)",
+  "test_ids": [
+   "SOL-3.1",
+   "PR-3.1"
+  ]
+ },
+ {
+  "item_id": "SOL-3.2",
+  "what_question_gives": "official answer for 3.2",
+  "expected_answer": "g=x^2-9, f=|x|+4; or g=|x^2-9|, f=x+4",
+  "solver_path": "as PR-3.2",
+  "student_enters": "STUFF=X²-9, K=ENTER, C=4",
+  "calculator_shows": "both official ways, in the guide's order, plus G(X)=X², F(X)=|X-9|+4",
+  "test_ids": [
+   "SOL-3.2",
+   "PR-3.2"
+  ]
+ },
+ {
+  "item_id": "SOL-3.3",
+  "what_question_gives": "official answer for 3.3 (three splits)",
+  "expected_answer": "g=x^3+2, f=1/x^2; g=(x^3+2)^2, f=1/x; g=1/(x^3+2), f=x^2",
+  "solver_path": "as PR-3.3",
+  "student_enters": "STUFF=X³+2, K=ENTER, N=2, C=ENTER",
+  "calculator_shows": "all three official splits, in the guide's order",
+  "test_ids": [
+   "SOL-3.3",
+   "PR-3.3"
+  ]
+ },
+ {
+  "item_id": "SOL-3.4",
+  "what_question_gives": "official answer for 3.4",
+  "expected_answer": "g(x)=2x+3, f(x)=4x^2-3x",
+  "solver_path": "as PR-3.4",
+  "student_enters": "STUFF=2X+3, A=4, B=-3, C=ENTER",
+  "calculator_shows": "G(X)=2X+3 / F(X)=4X²-3X",
+  "test_ids": [
+   "SOL-3.4",
+   "PR-3.4"
+  ]
+ },
+ {
+  "item_id": "CRAM-EX-3a",
+  "what_question_gives": "h(x)=sqrt(1/x^2)",
+  "expected_answer": "g=x^2, f=sqrt(1/x) or g=1/x^2, f=sqrt(x)",
+  "solver_path": "7 → 9:√(K/STUFF)",
+  "student_enters": "STUFF=X², K=ENTER",
+  "calculator_shows": "ANSWER: G(X)=X² / F(X)=√(1/X) / OR G(X)=1/X² / F(X)=√(X)",
+  "test_ids": [
+   "CRAM-EX-3a"
+  ]
+ },
+ {
+  "item_id": "CRAM-EX-3b",
+  "what_question_gives": "h(x)=1/(1+e^(-x))",
+  "expected_answer": "g=e^(-x), f=1/(1+x) or g=1+e^(-x), f=1/x",
+  "solver_path": "7 → 8:K/(M+𝑒^(STUFF))",
+  "student_enters": "STUFF=-X (either minus key), K=ENTER, M=1",
+  "calculator_shows": "ANSWER: G(X)=𝑒^(-X) / F(X)=1/(1+X) / OR G(X)=1+𝑒^(-X) / F(X)=1/X / OR G(X)=-X / F(X)=1/(1+𝑒^(X))",
+  "test_ids": [
+   "CRAM-EX-3b"
+  ]
+ },
+ {
+  "item_id": "CRAM-3-EX",
+  "what_question_gives": "study-guide copy of the two cram examples",
+  "expected_answer": "as CRAM-EX-3a and CRAM-EX-3b",
+  "solver_path": "7 → 9 (sqrt(1/x^2)); 7 → 8 (1/(1+e^(-x)))",
+  "student_enters": "STUFF=X², K=ENTER; STUFF=(-)X, K=ENTER, M=1",
+  "calculator_shows": "same screens as CRAM-EX-3a / CRAM-EX-3b",
+  "test_ids": [
+   "CRAM-3-EXa",
+   "CRAM-3-EXb"
+  ]
+ },
+ {
+  "item_id": "CRAM-3",
+  "what_question_gives": "problem type: g = inside chunk; f = what is done to it; neither is just x",
+  "expected_answer": "rule",
+  "solver_path": "7 → shape menu; the program picks the chunk",
+  "student_enters": "e.g. h=sqrt(x)+3: 2:K√(STUFF)+C, STUFF=X, K=ENTER, ROOT=ENTER, C=3",
+  "calculator_shows": "G(X)=√(X) / F(X)=X+3 (the way with G(X)=X is dropped automatically)",
+  "test_ids": [
+   "CRAM-3",
+   "EXTRA-decomp-12"
+  ]
+ },
+ {
+  "item_id": "CRAM-3.1",
+  "what_question_gives": "cram rule: g = inside chunk (in parentheses, under a radical, in a denominator or exponent)",
+  "expected_answer": "rule",
+  "solver_path": "menu templates: (STUFF) 1,6; √(STUFF) 2,4; denominator 3,4,8,9; exponent 7,8; |STUFF| 5",
+  "student_enters": "the inside text as STUFF",
+  "calculator_shows": "G(X)= the typed chunk on the first line of every answer",
+  "test_ids": [
+   "EX-3.1",
+   "PR-3.1",
+   "PR-3.3",
+   "EX-3.3a",
+   "PR-3.2"
+  ]
+ },
+ {
+  "item_id": "CRAM-3.2",
+  "what_question_gives": "cram rule: neither f nor g can be x; several answers can be right; check by composing back",
+  "expected_answer": "rule",
+  "solver_path": "every shape; footer 3:WHY",
+  "student_enters": "any",
+  "calculator_shows": "never G(X)=X or F(X)=X; 2-3 ways on OR lines; WHY page: CHECK: F(G(X)) GIVES H(X)=<h rebuilt>",
+  "test_ids": [
+   "CRAM-8k",
+   "MIST-3-3",
+   "RULE-3-CHECK",
+   "EXTRA-decomp-21"
+  ]
+ },
+ {
+  "item_id": "CRAM-8k",
+  "what_question_gives": "Write h=f(g(x)) → g = inside chunk; neither piece is just x",
+  "expected_answer": "g = inside chunk; neither piece is just x",
+  "solver_path": "7 → 3:K/(STUFF)^N+C (example h=1/x^2)",
+  "student_enters": "STUFF=X, K=ENTER, N=2, C=ENTER",
+  "calculator_shows": "G(X)=X² / F(X)=1/X / OR G(X)=1/X / F(X)=X²",
+  "test_ids": [
+   "CRAM-8k"
+  ]
+ },
+ {
+  "item_id": "CRAM-8-COMP",
+  "what_question_gives": "cram 8 row: write h=f(g(x)) (decomposition part of this item)",
+  "expected_answer": "g = inside chunk; neither piece is just x",
+  "solver_path": "7:DECOMPOSE H(X)",
+  "student_enters": "as CRAM-8k",
+  "calculator_shows": "as CRAM-8k (the composition rows belong to HACOMP)",
+  "test_ids": [
+   "CRAM-8k"
+  ]
+ },
+ {
+  "item_id": "MIST-3-1",
+  "what_question_gives": "mistake: swapping roles (f=5x-1, g=x^4)",
+  "expected_answer": "g is inside: g=5x-1, f=x^4",
+  "solver_path": "7 → 1",
+  "student_enters": "STUFF=5X-1, K=ENTER, N=4, C=ENTER",
+  "calculator_shows": "G(X)=5X-1 / F(X)=X^4. Handled: the typed STUFF is always printed as G (the inside), and f is always the outside with X.",
+  "test_ids": [
+   "MIST-3-1",
+   "EX-3.1"
+  ]
+ },
+ {
+  "item_id": "MIST-3-2",
+  "what_question_gives": "mistake: leaving the chunk in f",
+  "expected_answer": "f=3/sqrt(x), not 3/sqrt(x^2+4)",
+  "solver_path": "7 → 4",
+  "student_enters": "STUFF=X²+4, K=3, ENTER, ENTER",
+  "calculator_shows": "F(X)=3/√(X). Handled: f is built only from the template with X, so the chunk never appears in f.",
+  "test_ids": [
+   "MIST-3-2",
+   "EX-3.2"
+  ]
+ },
+ {
+  "item_id": "MIST-3-3",
+  "what_question_gives": "mistake: using f(x)=x or g(x)=x",
+  "expected_answer": "never f=x or g=x",
+  "solver_path": "any shape with STUFF=X",
+  "student_enters": "e.g. 2:K√(STUFF)+C, STUFF=X, ENTER x3 (h=sqrt(x))",
+  "calculator_shows": "G(X)=X+1 / F(X)=√(X-1) / G(X)=X IS NOT ALLOWED, SO / THIS ONE SHIFTS X BY 1. Handled: ways with g=X or f=X are never printed; with STUFF=X the bigger chunk is used (h=√x+3 → G=√(X), F=X+3; h=1/x² → G=X², F=1/X); a plain line prints NONE: H(X) HAS NO CHUNK.",
+  "test_ids": [
+   "MIST-3-3",
+   "CRAM-3",
+   "CRAM-8k",
+   "EXTRA-decomp-7",
+   "EXTRA-decomp-12"
+  ]
+ },
+ {
+  "item_id": "ICAN-07",
+  "what_question_gives": "I Can: decompose a function into two composed functions (page-3 list and cram copy)",
+  "expected_answer": "Section 3",
+  "solver_path": "7:DECOMPOSE H(X) → 9 shape templates",
+  "student_enters": "STUFF + outside numbers",
+  "calculator_shows": "G(X)=… / F(X)=… (+ OR ways)",
+  "test_ids": [
+   "EX-3.1",
+   "EX-3.2",
+   "EX-3.3a",
+   "PR-3.1",
+   "PR-3.2",
+   "PR-3.3",
+   "PR-3.4",
+   "CRAM-EX-3a",
+   "CRAM-EX-3b"
+  ]
+ },
+ {
+  "item_id": "ICAN-03",
+  "what_question_gives": "Section-3 I Can sentence (p8-12 id; the critic renamed it S3-ICAN): decompose (no graphing)",
+  "expected_answer": "",
+  "solver_path": "7:DECOMPOSE H(X)",
+  "student_enters": "STUFF + outside numbers (no graph needed)",
+  "calculator_shows": "G(X)/F(X) answers",
+  "test_ids": [
+   "EX-3.1",
+   "EX-3.2",
+   "EX-3.3a",
+   "PR-3.1",
+   "PR-3.2",
+   "PR-3.3",
+   "PR-3.4"
+  ]
+ },
+ {
+  "item_id": "S3-ICAN",
+  "what_question_gives": "same sentence as ICAN-03 (critic id)",
+  "expected_answer": "",
+  "solver_path": "7:DECOMPOSE H(X)",
+  "student_enters": "STUFF + outside numbers",
+  "calculator_shows": "G(X)/F(X) answers",
+  "test_ids": [
+   "PR-3.1",
+   "PR-3.2",
+   "PR-3.3",
+   "PR-3.4"
+  ]
+ },
+ {
+  "item_id": "RULE-3-KEY",
+  "what_question_gives": "key idea: g = inside chunk, f = what is done, neither is x, more than one way",
+  "expected_answer": "rule",
+  "solver_path": "7 → shapes",
+  "student_enters": "any",
+  "calculator_shows": "up to 3 ways on OR lines; never G(X)=X or F(X)=X",
+  "test_ids": [
+   "EX-3.2",
+   "PR-3.3",
+   "EX-3.3a"
+  ]
+ },
+ {
+  "item_id": "RULE-3-WHY",
+  "what_question_gives": "decomposition is composition run backward",
+  "expected_answer": "rule",
+  "solver_path": "footer 3:WHY",
+  "student_enters": "3 after an answer",
+  "calculator_shows": "WHY: G(X)=THE INSIDE CHUNK, THE PART DONE FIRST. F(X)=WHAT IS DONE TO IT, WITH X WHERE G WAS.",
+  "test_ids": [
+   "RULE-3-CHECK",
+   "EXTRA-decomp-21"
+  ]
+ },
+ {
+  "item_id": "RULE-3-RECOGNIZE",
+  "what_question_gives": "'find f and g so that h=f(g(x))' / 'decompose'",
+  "expected_answer": "rule",
+  "solver_path": "main menu 7:DECOMPOSE H(X), then the shape that looks like h",
+  "student_enters": "shape key",
+  "calculator_shows": "shape menu WHAT DOES H(X) LOOK LIKE?",
+  "test_ids": [
+   "EX-3.1",
+   "PR-3.1"
+  ]
+ },
+ {
+  "item_id": "RULE-3-CHECK",
+  "what_question_gives": "check by composing back",
+  "expected_answer": "f(g(x)) must give exactly h(x)",
+  "solver_path": "any answer → 3:WHY",
+  "student_enters": "3",
+  "calculator_shows": "CHECK: F(G(X)) GIVES / H(X)=3/√(X²+4) (h rebuilt from what was typed; checked by hand for all 9 shapes because the harness only captures ANSWER pages)",
+  "test_ids": [
+   "RULE-3-CHECK",
+   "EXTRA-decomp-21"
+  ]
+ },
+ {
+  "item_id": "TEST-6",
+  "what_question_gives": "test list: decompose functions (no graphing)",
+  "expected_answer": "",
+  "solver_path": "7:DECOMPOSE H(X)",
+  "student_enters": "STUFF + numbers",
+  "calculator_shows": "G(X)/F(X) answers",
+  "test_ids": [
+   "EX-3.1",
+   "PR-3.4"
+  ]
+ },
+ {
+  "item_id": "SECTION-8 corrections",
+  "what_question_gives": "Section 8 has no correction for decomposition (CORR-1..7 are other sections)",
+  "expected_answer": "",
+  "solver_path": "n/a",
+  "student_enters": "n/a",
+  "calculator_shows": "n/a",
+  "test_ids": []
+ }
+]

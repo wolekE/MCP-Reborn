@@ -1,0 +1,644 @@
+[
+ {
+  "item_id": "EX-2.1",
+  "what_question_gives": "f(x)=x²-1, g(x)=3x+2; asks f(g(x)), g(f(x)) and the check (f∘g)(1)=24",
+  "solver_path": "2:F(G(X)) → 1:SIMPLIFY + DOMAIN → 1:F(G(X)) (or 2:G(F(X)), or footer 3:OTHER ORDER); check: 2:F(G(X)) → 5:F(G(5)) FROM FORMULAS → 1:F(G(NUMBER))",
+  "student_enters": "F: 2:AX²+BX+C A=ENTER B=0 C=-1; G: 1:AX+B A=3 B=2 (check: NUMBER=1, then the same F and G)",
+  "calculator_shows": "ANSWER: F(G(X))=9X²+12X+3 / D=ALL REALS; ANSWER: G(F(X))=3X²-1 / D=ALL REALS; ANSWER: F(G(1))=24 / G(1)=5 / F(5)=24",
+  "expected_answer": "f(g(x)) = 9x^2 + 12x + 3; g(f(x)) = 3x^2 - 1; both domains R; check (f o g)(1) = 24",
+  "test_ids": [
+   "EX-2.1a",
+   "EX-2.1b",
+   "EX-2.1c"
+  ]
+ },
+ {
+  "item_id": "EX-2.2a",
+  "what_question_gives": "graphs of f and g (Example 1.3); asks f(g(5))",
+  "solver_path": "2:F(G(X)) → 2:F(G(5)) FROM GRAPHS → 1:F(G(NUMBER)) → 1:THE SAVED GRAPH(S)",
+  "student_enters": "NUMBER=5 (graphs saved once as corner points; or 2:TYPE THE CORNER POINTS; or 3:READ THEM OFF THE GRAPH: G(5)=0, F(0)=2)",
+  "calculator_shows": "ANSWER: F(G(5))=2 / G(5)=0 / F(0)=2",
+  "expected_answer": "2",
+  "test_ids": [
+   "EX-2.2a"
+  ]
+ },
+ {
+  "item_id": "EX-2.2b",
+  "what_question_gives": "graphs of Example 1.3; asks g(f(-6))",
+  "solver_path": "2:F(G(X)) → 2:F(G(5)) FROM GRAPHS → 2:G(F(NUMBER)) → 2:TYPE THE CORNER POINTS",
+  "student_enters": "NUMBER=-6; F: 5 points (-6,2) (-3,-1) (1,3) (4,0) (7,3), 1:BOTH SOLID; G: 1:TYPE, 5 points (-5,3) (-2,0) (1,0) (3,2) (6,-1), 1:BOTH SOLID",
+  "calculator_shows": "ANSWER: G(F(-6))=1 / F(-6)=2 / G(2)=1",
+  "expected_answer": "1",
+  "test_ids": [
+   "EX-2.2b"
+  ]
+ },
+ {
+  "item_id": "EX-2.2c",
+  "what_question_gives": "graph of g (Example 1.3); asks g(g(-5))",
+  "solver_path": "2:F(G(X)) → 2:F(G(5)) FROM GRAPHS → 4:G(G(NUMBER)) → 3:READ THEM OFF THE GRAPH (or 1:SAVED)",
+  "student_enters": "NUMBER=-5; G(-5)=? Y=3; G(3)=? Y=2",
+  "calculator_shows": "ANSWER: G(G(-5))=2 / G(-5)=3 / G(3)=2",
+  "expected_answer": "2",
+  "test_ids": [
+   "EX-2.2c"
+  ]
+ },
+ {
+  "item_id": "EX-2.2d",
+  "what_question_gives": "graphs of Example 1.3; asks f(g(-6)) where -6 is not in D_g=[-5,6]",
+  "solver_path": "2:F(G(X)) → 2:F(G(5)) FROM GRAPHS → 1:F(G(NUMBER)) → 1:THE SAVED GRAPH(S) (or 3:READ, ENTER = no point there)",
+  "student_enters": "NUMBER=-6",
+  "calculator_shows": "ANSWER: F(G(-6))=UNDEFINED / G(-6) DOES NOT EXIST",
+  "expected_answer": "undefined",
+  "test_ids": [
+   "EX-2.2d",
+   "EXTRA-comp-13"
+  ]
+ },
+ {
+  "item_id": "EX-2.3",
+  "what_question_gives": "A(x)=(x+3)/(x-2), B(x)=4/(x+1); asks simplified A(B(x)) and B(A(x)) with domains",
+  "solver_path": "2:F(G(X)) → 1:SIMPLIFY + DOMAIN → 1:F(G(X)) OR A(B(X)); footer 3:OTHER ORDER for B(A(X)); 4:WHY shows D of each piece",
+  "student_enters": "A as F: 3:(AX+B)/(CX+D) A=ENTER B=3 C=ENTER D=-2; B as G: 4:K/(AX+B) K=4 A=ENTER B=1",
+  "calculator_shows": "ANSWER: F(G(X))=(3X+7)/(-2X+2) / D=ALL REALS, X≠-1,1; then ANSWER: G(F(X))=(4X-8)/(2X+1) / D=ALL REALS, X≠-1/2,2",
+  "expected_answer": "A(B(x)) = (3x+7)/(2-2x), D: R, x != -1, 1; B(A(x)) = (4x-8)/(2x+1), D: R, x != 2, -1/2",
+  "test_ids": [
+   "EX-2.3a",
+   "EX-2.3b",
+   "EXTRA-comp-17"
+  ]
+ },
+ {
+  "item_id": "EX-2.4",
+  "what_question_gives": "f(x)=√x, g(x)=9-x²; asks f(g(x)), g(f(x)) and domains",
+  "solver_path": "2:F(G(X)) → 1:SIMPLIFY + DOMAIN → 1:F(G(X)), then 3:OTHER ORDER (or 2:G(F(X)))",
+  "student_enters": "F: 5:K√(AX+B)+C ENTER×4; G: 2:AX²+BX+C A=-1 B=0 C=9",
+  "calculator_shows": "ANSWER: F(G(X))=√(-X²+9) / D=[-3,3]; ANSWER: G(F(X))=-X+9 / D=[0,INF)",
+  "expected_answer": "f(g(x)) = sqrt(9 - x^2), D: [-3,3]; g(f(x)) = 9 - x, D: [0,inf)",
+  "test_ids": [
+   "EX-2.4a",
+   "EX-2.4b"
+  ]
+ },
+ {
+  "item_id": "EX-2.5a",
+  "what_question_gives": "g(x)=√x and the graph of f (Example 1.3); asks the domain of g(f(x))=√(f(x))",
+  "solver_path": "2:F(G(X)) → 3:DOMAIN OF √(GRAPH) → 1:THE GRAPH OF F → 2:USE SAVED GRAPH OF F (or type corners). Also menu 1 with F = 7:A GRAPH, G = √X, order 2:G(F(X))",
+  "student_enters": "no numbers if the graph is saved; else 5 corner points and the end dots",
+  "calculator_shows": "ANSWER: D=[-6,-4]U[-2,7]",
+  "expected_answer": "D = [-6,-4] U [-2,7]",
+  "test_ids": [
+   "EX-2.5a",
+   "EXTRA-comp-12"
+  ]
+ },
+ {
+  "item_id": "EX-2.5b",
+  "what_question_gives": "g(x)=√x and the graph of f; asks the domain of (g/f)(x)=√x/f(x) (an operations question)",
+  "solver_path": "main menu 1:F+G OR F/G (HAOPS) → 1:DOMAIN → 5:G/F; F: 7:A GRAPH → 2:USE SAVED GRAPH OF F; G: 5:K√(AX+B)+C ENTER×4",
+  "student_enters": "no numbers if f's graph is saved; G = ENTER×4",
+  "calculator_shows": "ANSWER: D(G/F)=[0,4)U(4,7] (HAOPS also shows D(F/G)=(0,7])",
+  "expected_answer": "D = [0,4) U (4,7]",
+  "test_ids": [
+   "EX-2.5b"
+  ]
+ },
+ {
+  "item_id": "EX-2.5c",
+  "what_question_gives": "g(x)=√x and the graph of f; asks the domain of f(g(x))=f(√x)",
+  "solver_path": "2:F(G(X)) → 4:DOMAIN OF GRAPH(√(X)) → 1:THE GRAPH OF F → 2:USE SAVED GRAPH OF F → 1:√(X) (2:SOMETHING ELSE allows any inside shape, e.g. 2X+1). Also menu 1 with F = graph, G = √X, order 1",
+  "student_enters": "keys only when f's graph is saved",
+  "calculator_shows": "ANSWER: D=[0,49]",
+  "expected_answer": "D = [0,49]",
+  "test_ids": [
+   "EX-2.5c",
+   "EXTRA-comp-11",
+   "EXTRA-comp-15"
+  ]
+ },
+ {
+  "item_id": "PR-2.1",
+  "what_question_gives": "f(x)=2x-5, g(x)=x²+x; asks f(g(x)) and g(f(x))",
+  "solver_path": "2:F(G(X)) → 1:SIMPLIFY + DOMAIN → 1:F(G(X)), footer 3:OTHER ORDER (or 2:G(F(X)))",
+  "student_enters": "F: 1:AX+B A=2 B=-5; G: 2:AX²+BX+C ENTER×3",
+  "calculator_shows": "ANSWER: F(G(X))=2X²+2X-5 / D=ALL REALS; ANSWER: G(F(X))=4X²-18X+20 / D=ALL REALS",
+  "expected_answer": "f(g(x)) = 2x^2 + 2x - 5; g(f(x)) = 4x^2 - 18x + 20",
+  "test_ids": [
+   "PR-2.1a",
+   "PR-2.1b"
+  ]
+ },
+ {
+  "item_id": "PR-2.2",
+  "what_question_gives": "f(x)=1/(x-3), g(x)=2/x; asks f(g(x)) simplified and its domain",
+  "solver_path": "2:F(G(X)) → 1:SIMPLIFY + DOMAIN → 1:F(G(X))",
+  "student_enters": "F: 4:K/(AX+B) K=ENTER A=ENTER B=-3; G: 4:K/(AX+B) K=2 A=ENTER B=ENTER",
+  "calculator_shows": "ANSWER: F(G(X))=X/(-3X+2) / D=ALL REALS, X≠0,2/3",
+  "expected_answer": "f(g(x)) = x/(2 - 3x); domain R, x != 0, 2/3",
+  "test_ids": [
+   "PR-2.2",
+   "EXTRA-comp-17"
+  ]
+ },
+ {
+  "item_id": "PR-2.3",
+  "what_question_gives": "A(x)=(x-1)/(x+4), B(x)=5/(x-2); asks A(B(x)) simplified and its domain",
+  "solver_path": "2:F(G(X)) → 1:SIMPLIFY + DOMAIN → 1:F(G(X)) OR A(B(X))",
+  "student_enters": "A as F: 3:(AX+B)/(CX+D) A=ENTER B=-1 C=ENTER D=4; B as G: 4:K/(AX+B) K=5 A=ENTER B=-2",
+  "calculator_shows": "ANSWER: F(G(X))=(-X+7)/(4X-3) / D=ALL REALS, X≠3/4,2",
+  "expected_answer": "A(B(x)) = (7 - x)/(4x - 3); domain R, x != 2, 3/4",
+  "test_ids": [
+   "PR-2.3"
+  ]
+ },
+ {
+  "item_id": "PR-2.4",
+  "what_question_gives": "f(x)=√(x-1), g(x)=x²-3x+1; asks f(g(x)), g(f(x)) and domains",
+  "solver_path": "2:F(G(X)) → 1:SIMPLIFY + DOMAIN → 1:F(G(X)), footer 3:OTHER ORDER",
+  "student_enters": "F: 5:K√(AX+B)+C K=ENTER A=ENTER B=-1 C=ENTER; G: 2:AX²+BX+C A=ENTER B=-3 C=1",
+  "calculator_shows": "ANSWER: F(G(X))=√(X²-3X) / D=(-INF,0]U[3,INF); ANSWER: G(F(X))=X-3√(X-1) / D=[1,INF)",
+  "expected_answer": "f(g(x)) = sqrt(x^2 - 3x), domain (-inf,0] U [3,inf); g(f(x)) = x - 3sqrt(x - 1), domain [1,inf)",
+  "test_ids": [
+   "PR-2.4a",
+   "PR-2.4b"
+  ]
+ },
+ {
+  "item_id": "PR-2.5a",
+  "what_question_gives": "graphs of Example 1.3; asks f(g(1))",
+  "solver_path": "2:F(G(X)) → 2:F(G(5)) FROM GRAPHS → 1:F(G(NUMBER)) → 1:THE SAVED GRAPH(S)",
+  "student_enters": "NUMBER=1",
+  "calculator_shows": "ANSWER: F(G(1))=2 / G(1)=0 / F(0)=2",
+  "expected_answer": "2",
+  "test_ids": [
+   "PR-2.5a"
+  ]
+ },
+ {
+  "item_id": "PR-2.5b",
+  "what_question_gives": "graphs of Example 1.3; asks g(f(4))",
+  "solver_path": "2:F(G(X)) → 2:F(G(5)) FROM GRAPHS → 2:G(F(NUMBER)) → 1:THE SAVED GRAPH(S)",
+  "student_enters": "NUMBER=4",
+  "calculator_shows": "ANSWER: G(F(4))=0 / F(4)=0 / G(0)=0",
+  "expected_answer": "0",
+  "test_ids": [
+   "PR-2.5b"
+  ]
+ },
+ {
+  "item_id": "PR-2.5c",
+  "what_question_gives": "graph of g (Example 1.3); asks the domain of y=√(g(x))",
+  "solver_path": "2:F(G(X)) → 3:DOMAIN OF √(GRAPH) → 2:THE GRAPH OF G → 3:USE SAVED GRAPH OF G (or type the corners)",
+  "student_enters": "keys only when g's graph is saved",
+  "calculator_shows": "ANSWER: D=[-5,5]",
+  "expected_answer": "[-5,5]",
+  "test_ids": [
+   "PR-2.5c"
+  ]
+ },
+ {
+  "item_id": "SOL-2.1",
+  "what_question_gives": "Section 9 answer to PR-2.1",
+  "solver_path": "same as PR-2.1",
+  "student_enters": "same as PR-2.1",
+  "calculator_shows": "F(G(X))=2X²+2X-5; G(F(X))=4X²-18X+20",
+  "expected_answer": "2x^2 + 2x - 5; 4x^2 - 18x + 20",
+  "test_ids": [
+   "PR-2.1a",
+   "PR-2.1b"
+  ]
+ },
+ {
+  "item_id": "SOL-2.2",
+  "what_question_gives": "Section 9 answer to PR-2.2",
+  "solver_path": "same as PR-2.2",
+  "student_enters": "same as PR-2.2",
+  "calculator_shows": "F(G(X))=X/(-3X+2) / D=ALL REALS, X≠0,2/3",
+  "expected_answer": "x/(2 - 3x); R, x != 0, 2/3",
+  "test_ids": [
+   "PR-2.2"
+  ]
+ },
+ {
+  "item_id": "SOL-2.3",
+  "what_question_gives": "Section 9 answer to PR-2.3",
+  "solver_path": "same as PR-2.3",
+  "student_enters": "same as PR-2.3",
+  "calculator_shows": "F(G(X))=(-X+7)/(4X-3) / D=ALL REALS, X≠3/4,2",
+  "expected_answer": "(7 - x)/(4x - 3); R, x != 2, 3/4",
+  "test_ids": [
+   "PR-2.3"
+  ]
+ },
+ {
+  "item_id": "SOL-2.4",
+  "what_question_gives": "Section 9 answer to PR-2.4",
+  "solver_path": "same as PR-2.4",
+  "student_enters": "same as PR-2.4",
+  "calculator_shows": "F(G(X))=√(X²-3X) / D=(-INF,0]U[3,INF); G(F(X))=X-3√(X-1) / D=[1,INF)",
+  "expected_answer": "sqrt(x^2 - 3x), (-inf,0] U [3,inf); x - 3sqrt(x - 1), [1,inf)",
+  "test_ids": [
+   "PR-2.4a",
+   "PR-2.4b"
+  ]
+ },
+ {
+  "item_id": "SOL-2.5",
+  "what_question_gives": "Section 9 answer to PR-2.5",
+  "solver_path": "same as PR-2.5a/b/c",
+  "student_enters": "same as PR-2.5a/b/c",
+  "calculator_shows": "F(G(1))=2; G(F(4))=0; D=[-5,5]",
+  "expected_answer": "(a) 2 (b) 0 (c) [-5,5]",
+  "test_ids": [
+   "PR-2.5a",
+   "PR-2.5b",
+   "PR-2.5c"
+  ]
+ },
+ {
+  "item_id": "CRAM-EX-2",
+  "what_question_gives": "A=(x+2)/(x-4), B=3/(x+5); asks A(B(x)) simplified and its domain",
+  "solver_path": "2:F(G(X)) → 1:SIMPLIFY + DOMAIN → 1:F(G(X)) OR A(B(X))",
+  "student_enters": "A as F: 3 A=ENTER B=2 C=ENTER D=-4; B as G: 4:K/(AX+B) K=3 A=ENTER B=5",
+  "calculator_shows": "ANSWER: F(G(X))=(2X+13)/(-4X-17) / D=ALL REALS, X≠-5,-17/4",
+  "expected_answer": "A(B(x)) = (2x+13)/(-4x-17); Domain: R, x != -5, -17/4",
+  "test_ids": [
+   "CRAM-EX-2"
+  ]
+ },
+ {
+  "item_id": "CRAM-2-EX",
+  "what_question_gives": "same cram example (duplicate id from the other reader)",
+  "solver_path": "2:F(G(X)) → 1:SIMPLIFY + DOMAIN → 1:F(G(X)); B may also be typed as 3:(AX+B)/(CX+D) with A=0",
+  "student_enters": "A as F: 3 A=ENTER B=2 C=ENTER D=-4; B as G: 3 A=0 B=3 C=ENTER D=5",
+  "calculator_shows": "ANSWER: F(G(X))=(2X+13)/(-4X-17) / D=ALL REALS, X≠-5,-17/4",
+  "expected_answer": "A(B(x)) = (2x + 13)/(-4x - 17); domain R, x != -5, -17/4",
+  "test_ids": [
+   "CRAM-2-EX",
+   "CRAM-EX-2"
+  ]
+ },
+ {
+  "item_id": "CRAM-2",
+  "what_question_gives": "cram rules: inside-out, replace every x, LCD, domain before simplifying, √ of a graph",
+  "solver_path": "2:F(G(X)) menus 1-5 (the calculator applies every rule itself)",
+  "student_enters": "the functions as printed",
+  "calculator_shows": "the simplified composite and its domain; √(graph) domains",
+  "expected_answer": "(rules)",
+  "test_ids": [
+   "EX-2.1a",
+   "EX-2.1b",
+   "CRAM-EX-2",
+   "EX-2.3a",
+   "EX-2.5a",
+   "PR-2.5c"
+  ]
+ },
+ {
+  "item_id": "CRAM-2.1",
+  "what_question_gives": "rule: work inside-out; f(g(x)) ≠ g(f(x))",
+  "solver_path": "WHICH ONE IS ASKED? menu names the order (1:F(G(X)) OR A(B(X)) / 2:G(F(X)) OR B(A(X))); values menu evaluates the inside first and prints it",
+  "student_enters": "the order key",
+  "calculator_shows": "F(G(X))=9X²+12X+3 vs G(F(X))=3X²-1; F(G(5))=2 / G(5)=0 / F(0)=2",
+  "expected_answer": "g first, then f",
+  "test_ids": [
+   "EX-2.1a",
+   "EX-2.1b",
+   "EX-2.2a"
+  ]
+ },
+ {
+  "item_id": "CRAM-2.2",
+  "what_question_gives": "rule: replace every x; complex fraction × LCD",
+  "solver_path": "2:F(G(X)) → 1:SIMPLIFY + DOMAIN (HACOMP2 multiplies top and bottom by the inside's bottom to the outside's degree, i.e. the LCD; WHY page says so)",
+  "student_enters": "the two functions",
+  "calculator_shows": "F(G(X))=(3X+7)/(-2X+2); F(G(X))=(2X+13)/(-4X-17)",
+  "expected_answer": "substitute, × LCD",
+  "test_ids": [
+   "EX-2.3a",
+   "CRAM-EX-2",
+   "CRAM-8b"
+  ]
+ },
+ {
+  "item_id": "CRAM-2.3",
+  "what_question_gives": "rule: domain x ∈ D_g and g(x) ∈ D_f, decided before simplifying",
+  "solver_path": "2:F(G(X)) → 1:SIMPLIFY + DOMAIN (domain from the original f and g via HAFDOM mode 2, never from the simplified formula); WHY page lists D of the inside and D of the outside",
+  "student_enters": "the two functions",
+  "calculator_shows": "D=ALL REALS, X≠-1,1 (x≠-1 kept although 2-2x shows only x≠1); D=[0,INF) for 9-X",
+  "expected_answer": "x ∈ D_g and g(x) ∈ D_f",
+  "test_ids": [
+   "EX-2.3a",
+   "EX-2.4b",
+   "EXTRA-comp-3",
+   "EXTRA-comp-8"
+  ]
+ },
+ {
+  "item_id": "CRAM-2.4",
+  "what_question_gives": "rule: √(f(x)) from a graph keeps the x's where the graph is on or above the x-axis",
+  "solver_path": "2:F(G(X)) → 3:DOMAIN OF √(GRAPH)",
+  "student_enters": "which graph (F or G), saved or typed corners",
+  "calculator_shows": "D=[-6,-4]U[-2,7]; D=[-5,5]",
+  "expected_answer": "x where f(x) ≥ 0",
+  "test_ids": [
+   "EX-2.5a",
+   "PR-2.5c",
+   "CRAM-8c",
+   "EXTRA-comp-16"
+  ]
+ },
+ {
+  "item_id": "CRAM-8-COMP",
+  "what_question_gives": "cram 8 composition rows: fractions → substitute × LCD with the domain rule; √ of a graph; exact answers; check with a number",
+  "solver_path": "2:F(G(X)) → 1 (fractions), 3 (√ of a graph), 5 (push a number through for the check); decomposition row belongs to main menu 7",
+  "student_enters": "functions / graph / a number",
+  "calculator_shows": "exact fractions such as X≠-5,-17/4; F(G(1))=24 / G(1)=5 / F(5)=24",
+  "expected_answer": "(rules)",
+  "test_ids": [
+   "CRAM-8b",
+   "CRAM-8c",
+   "CRAM-EX-2",
+   "EX-2.1c"
+  ]
+ },
+ {
+  "item_id": "CRAM-8b",
+  "what_question_gives": "f(g(x)) with fractions → substitute, × LCD; domain: x ∈ D_g and g(x) ∈ D_f",
+  "solver_path": "2:F(G(X)) → 1:SIMPLIFY + DOMAIN → 1:F(G(X))",
+  "student_enters": "example f=(x+1)/(x-1): 3 A=ENTER B=1 C=ENTER D=-1; g=1/x: 4 ENTER×3",
+  "calculator_shows": "ANSWER: F(G(X))=(X+1)/(-X+1) / D=ALL REALS, X≠0,1",
+  "expected_answer": "substitute, × LCD; domain: x ∈ D_g and g(x) ∈ D_f",
+  "test_ids": [
+   "CRAM-8b"
+  ]
+ },
+ {
+  "item_id": "CRAM-8c",
+  "what_question_gives": "√ of a graphed f → keep the x's where f ≥ 0",
+  "solver_path": "2:F(G(X)) → 3:DOMAIN OF √(GRAPH)",
+  "student_enters": "example graph (0,-2),(2,2),(4,-2), solid ends",
+  "calculator_shows": "ANSWER: D=[1,3]",
+  "expected_answer": "keep the x's where f ≥ 0",
+  "test_ids": [
+   "CRAM-8c",
+   "EX-2.5a"
+  ]
+ },
+ {
+  "item_id": "CRAM-8-EXACT",
+  "what_question_gives": "exact answers: x ≠ -17/4, not -4.25",
+  "solver_path": "every number goes through HAFRAC (domains, coefficients, values)",
+  "student_enters": "fractions typed as 2/3",
+  "calculator_shows": "D=ALL REALS, X≠-5,-17/4; -X²+(1/6)X-3; D=[-7/2,3]",
+  "expected_answer": "keep exact fractions",
+  "test_ids": [
+   "CRAM-EX-2",
+   "EXTRA-comp-1",
+   "EXTRA-comp-15"
+  ]
+ },
+ {
+  "item_id": "CRAM-8-CHECK",
+  "what_question_gives": "check: push one key point through your final rule",
+  "solver_path": "2:F(G(X)) → 5:F(G(5)) FROM FORMULAS evaluates f(g(number)) step by step",
+  "student_enters": "the number and the two functions",
+  "calculator_shows": "F(G(1))=24 / G(1)=5 / F(5)=24 (compare with 9+12+3)",
+  "expected_answer": "(check method)",
+  "test_ids": [
+   "EX-2.1c",
+   "EXTRA-comp-14"
+  ]
+ },
+ {
+  "item_id": "CRAM-9-COMP",
+  "what_question_gives": "mistakes: simplifying before finding restrictions; forgetting the outer restriction",
+  "solver_path": "handled inside menu 2 → 1: the domain is computed from the original f and g (x in D_g, g(x) in D_f) before and independently of the simplified formula",
+  "student_enters": "nothing extra",
+  "calculator_shows": "D=ALL REALS, X≠-1,1 (inner -1 and outer 1 both kept)",
+  "expected_answer": "keep both restrictions",
+  "test_ids": [
+   "EX-2.3a",
+   "PR-2.2",
+   "PR-2.3",
+   "CRAM-EX-2",
+   "EXTRA-comp-3"
+  ]
+ },
+ {
+  "item_id": "CRAM-MIST-6",
+  "what_question_gives": "mistake: simplifying before finding domain restrictions",
+  "solver_path": "handled inside menu 2 → 1 (domain from the original pieces; a factor canceled in the formula keeps its restriction)",
+  "student_enters": "nothing extra",
+  "calculator_shows": "F(G(X))=1/(X+3) / D=ALL REALS, X≠-3,-1",
+  "expected_answer": "find restrictions first",
+  "test_ids": [
+   "EXTRA-comp-3",
+   "EX-2.3a",
+   "EX-2.4b"
+  ]
+ },
+ {
+  "item_id": "CRAM-MIST-7",
+  "what_question_gives": "mistake: forgetting the outer function's restriction in f(g(x))",
+  "solver_path": "handled inside menu 2 → 1 (HAFDOM removes every x where g(x) hits a zero of f's bottom, or leaves f's √ domain)",
+  "student_enters": "nothing extra",
+  "calculator_shows": "D=ALL REALS, X≠0,2/3 (2/3 from g(x)≠3)",
+  "expected_answer": "include g(x) ∈ D_f",
+  "test_ids": [
+   "PR-2.2",
+   "PR-2.3",
+   "CRAM-EX-2",
+   "EX-2.4a"
+  ]
+ },
+ {
+  "item_id": "CORR-5",
+  "what_question_gives": "Review key #6a corrected: g(f(x)) = (x²+x+2)/(x²-x-2), domain ℝ, x ≠ -1, 0, 2 (f=(x+2)/x², g=(x+1)/(1-x), the cram-1 pair)",
+  "solver_path": "2:F(G(X)) → 1:SIMPLIFY + DOMAIN → 2:G(F(X))",
+  "student_enters": "F: 6:FRACTION WITH X² A=0 B=ENTER C=2 D=ENTER E=0 F=ENTER; G: 3:(AX+B)/(CX+D) A=ENTER B=1 C=-1 D=1",
+  "calculator_shows": "ANSWER: G(F(X))=(X²+X+2)/(X²-X-2) / D=ALL REALS, X≠-1,0,2",
+  "expected_answer": "g(f(x)) = (x^2 + x + 2)/(x^2 - x - 2); domain ℝ, x ≠ -1, 0, 2",
+  "test_ids": [
+   "CORR-5"
+  ]
+ },
+ {
+  "item_id": "S2-ICAN",
+  "what_question_gives": "I Can (Day 2): compose two functions and simplify; domain of a composition from an equation or a graph",
+  "solver_path": "2:F(G(X)) → 1 (formulas), 2/5 (numbers), 3/4 (graph domains)",
+  "student_enters": "functions as printed / graph corners or saved graphs",
+  "calculator_shows": "simplified composite + D=...; F(G(5))=...; D=[...]",
+  "expected_answer": "(skill)",
+  "test_ids": [
+   "EX-2.3a",
+   "PR-2.4a",
+   "EX-2.5a",
+   "EX-2.5c",
+   "EX-2.2a"
+  ]
+ },
+ {
+  "item_id": "ICAN-05",
+  "what_question_gives": "I Can: compose two functions and simplify",
+  "solver_path": "2:F(G(X)) → 1:SIMPLIFY + DOMAIN",
+  "student_enters": "f and g by shape",
+  "calculator_shows": "F(G(X))=... and G(F(X))=... (3:OTHER ORDER)",
+  "expected_answer": "(skill)",
+  "test_ids": [
+   "EX-2.1a",
+   "EX-2.1b",
+   "PR-2.1a",
+   "PR-2.1b",
+   "EX-2.3a",
+   "EX-2.3b"
+  ]
+ },
+ {
+  "item_id": "ICAN-06",
+  "what_question_gives": "I Can: domain of a composition (equation or graph)",
+  "solver_path": "2:F(G(X)) → 1 (equations, also graph or words shapes), 3:DOMAIN OF √(GRAPH), 4:DOMAIN OF GRAPH(√(X))",
+  "student_enters": "functions / graphs",
+  "calculator_shows": "D=ALL REALS, X≠-5,-17/4; D=[-6,-4]U[-2,7]; D=[0,49]",
+  "expected_answer": "(skill)",
+  "test_ids": [
+   "CRAM-EX-2",
+   "PR-2.4a",
+   "EX-2.5a",
+   "EX-2.5c",
+   "PR-2.5c",
+   "EXTRA-comp-24"
+  ]
+ },
+ {
+  "item_id": "ICAN-01",
+  "what_question_gives": "I Can: evaluate a function given a graph (Sections 1.3 and 2.2; the 2.2 part is here)",
+  "solver_path": "2:F(G(X)) → 2:F(G(5)) FROM GRAPHS (saved graphs, typed corners, or values read off the paper); Section 1.3 part is main menu 1",
+  "student_enters": "the number; corners or the two read values",
+  "calculator_shows": "F(G(5))=2 / G(5)=0 / F(0)=2",
+  "expected_answer": "(skill)",
+  "test_ids": [
+   "EX-2.2a",
+   "EX-2.2b",
+   "EX-2.2c",
+   "PR-2.5a",
+   "PR-2.5b"
+  ]
+ },
+ {
+  "item_id": "RULE-2-KEY",
+  "what_question_gives": "key idea: closest function acts first; substitute the whole inner rule; LCD; domain x ∈ D_g and g(x) ∈ D_f decided first",
+  "solver_path": "2:F(G(X)) → 1:SIMPLIFY + DOMAIN; footer 4:WHY shows 'PUT G(X) IN FOR EVERY X / THEN TOP,BOTTOM TIMES LCD / X MUST BE IN D OF G / G(X) MUST BE IN D OF F'",
+  "student_enters": "f and g",
+  "calculator_shows": "composite + D=...",
+  "expected_answer": "(rule)",
+  "test_ids": [
+   "EX-2.3a",
+   "EXTRA-comp-17"
+  ]
+ },
+ {
+  "item_id": "RULE-2-WHY",
+  "what_question_gives": "why: 4 is a forbidden input of A, so x with B(x)=4 is thrown out",
+  "solver_path": "2:F(G(X)) → 1 → A(B(X)) (domain removes x with B(x)=4)",
+  "student_enters": "A=(x+2)/(x-4), B=3/(x+5)",
+  "calculator_shows": "D=ALL REALS, X≠-5,-17/4",
+  "expected_answer": "x ≠ -17/4 (B(x)=4)",
+  "test_ids": [
+   "CRAM-EX-2"
+  ]
+ },
+ {
+  "item_id": "RULE-2-RECOGNIZE",
+  "what_question_gives": "recognize: f(g(2)) from numbers/graphs; A(B(x)) with fractions; domain of f(g(x)); √ of a graph",
+  "solver_path": "menu 2 entries match each look: 2/5 for f(g(2)), 1 for A(B(x)) and domains, 3 for √(graph), 4 for graph(√x)",
+  "student_enters": "as printed",
+  "calculator_shows": "see the item rows",
+  "expected_answer": "(rule)",
+  "test_ids": [
+   "EX-2.2a",
+   "EX-2.1c",
+   "EX-2.3a",
+   "EX-2.5a",
+   "EX-2.5c"
+  ]
+ },
+ {
+  "item_id": "RULE-2-CHECK",
+  "what_question_gives": "check: compute with an easy x step by step and compare; test excluded values",
+  "solver_path": "2:F(G(X)) → 5:F(G(5)) FROM FORMULAS gives g(x), f(g(x)) step by step; an excluded x gives UNDEFINED with the failing step",
+  "student_enters": "the number and the functions",
+  "calculator_shows": "F(G(1))=24 / G(1)=5 / F(5)=24; F(G(2))=UNDEFINED / G(2)=3 / F(3) DOES NOT EXIST",
+  "expected_answer": "(check method)",
+  "test_ids": [
+   "EX-2.1c",
+   "EXTRA-comp-14"
+  ]
+ },
+ {
+  "item_id": "MIST-2-1",
+  "what_question_gives": "mistake: composing in the wrong order",
+  "solver_path": "handled in menu 2 → 1: the WHICH ONE IS ASKED? menu shows 1:F(G(X)) OR A(B(X)) / 2:G(F(X)) OR B(A(X)); the answer is labeled F(G(X))= or G(F(X))=; 3:OTHER ORDER gives the other one",
+  "student_enters": "the order key that looks like the question",
+  "calculator_shows": "F(G(X))=9X²+12X+3 vs G(F(X))=3X²-1",
+  "expected_answer": "g goes inside for f(g(x))",
+  "test_ids": [
+   "EX-2.1a",
+   "EX-2.1b",
+   "EX-2.3b"
+  ]
+ },
+ {
+  "item_id": "MIST-2-2",
+  "what_question_gives": "mistake: substituting for only some x's / dropping parentheses",
+  "solver_path": "handled in menu 2 → 1: the program substitutes the whole inner polynomial into every x (polynomial multiplication with HAPMUL)",
+  "student_enters": "nothing extra",
+  "calculator_shows": "G(F(X))=3X²-1 (not 3X²-1+2 errors); G(F(X))=4X²-18X+20",
+  "expected_answer": "3(x^2-1)+2 = 3x^2-1",
+  "test_ids": [
+   "EX-2.1b",
+   "PR-2.1b"
+  ]
+ },
+ {
+  "item_id": "MIST-2-3",
+  "what_question_gives": "mistake: multiplying only one term by the LCD",
+  "solver_path": "handled in menu 2 → 1: every term of the top and bottom is multiplied by the LCD (homogeneous substitution)",
+  "student_enters": "nothing extra",
+  "calculator_shows": "F(G(X))=(3X+7)/(-2X+2); F(G(X))=(2X+13)/(-4X-17)",
+  "expected_answer": "every term gets the LCD",
+  "test_ids": [
+   "EX-2.3a",
+   "CRAM-EX-2",
+   "PR-2.3"
+  ]
+ },
+ {
+  "item_id": "MIST-2-4",
+  "what_question_gives": "mistake: forgetting the outer (B(x)≠2) or inner (x≠-1) restriction after it cancels",
+  "solver_path": "handled in menu 2 → 1: domain from the original f and g before simplifying; common factors canceled in the formula keep their restriction",
+  "student_enters": "nothing extra",
+  "calculator_shows": "D=ALL REALS, X≠-1,1; F(G(X))=1/(X+3) / D=ALL REALS, X≠-3,-1; F(F(X))=X / D=ALL REALS, X≠0",
+  "expected_answer": "keep x ≠ -1 and x ≠ 1",
+  "test_ids": [
+   "EX-2.3a",
+   "EXTRA-comp-3",
+   "EXTRA-comp-8",
+   "EXTRA-comp-27"
+  ]
+ },
+ {
+  "item_id": "MIST-2-5",
+  "what_question_gives": "mistake: g(f(x)) = 9 - x with domain R (the √ inside still needs x ≥ 0)",
+  "solver_path": "handled in menu 2 → 1: D comes from √x first",
+  "student_enters": "F=√x (5, ENTER×4), G=9-x² (2: -1, 0, 9), order 2",
+  "calculator_shows": "G(F(X))=-X+9 / D=[0,INF)",
+  "expected_answer": "D = [0,inf)",
+  "test_ids": [
+   "EX-2.4b",
+   "EXTRA-comp-10"
+  ]
+ }
+]

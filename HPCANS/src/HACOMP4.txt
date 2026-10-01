@@ -1,0 +1,56 @@
+ʟCMT*(abs(ʟCMT)≥ᴇ⁻9)→ʟCMT
+ʟCMB*(abs(ʟCMB)≥ᴇ⁻9)→ʟCMB
+1→I
+While I<dim(ʟCMT) and ʟCMT(I)=0
+I+1→I
+End
+seq(ʟCMT(K),K,I,dim(ʟCMT))→ʟCMT
+1→I
+While I<dim(ʟCMB) and ʟCMB(I)=0
+I+1→I
+End
+seq(ʟCMB(K),K,I,dim(ʟCMB))→ʟCMB
+If ʟCMB(1)=0
+{0,0,0,0,0,0}→ʟCMB
+If dim(ʟCMB)=6
+Return
+If ʟCMT(1)=0
+{1}→ʟCMB
+If dim(ʟCMB)=2 or dim(ʟCMB)=3
+Then
+ʟCMB→ʟQC
+If dim(ʟCMB)=2
+augment({0},ʟCMB)→ʟQC
+prgmHAROOT
+θ→D
+ʟRT→L₅
+For(I,1,D)
+L₅(I)→E
+0→F
+For(K,1,dim(ʟCMT))
+F*E+ʟCMT(K)→F
+End
+If dim(ʟCMT)>1 and abs(F)<ᴇ⁻9*max(1,max(abs(ʟCMT)))
+Then
+For(K,2,dim(ʟCMT))
+ʟCMT(K)+E*ʟCMT(K-1)→ʟCMT(K)
+End
+dim(ʟCMT)-1→dim(ʟCMT)
+For(K,2,dim(ʟCMB))
+ʟCMB(K)+E*ʟCMB(K-1)→ʟCMB(K)
+End
+dim(ʟCMB)-1→dim(ʟCMB)
+End
+End
+End
+If dim(ʟCMB)=1
+Then
+ʟCMT/ʟCMB(1)→ʟCMT
+{1}→ʟCMB
+End
+If dim(ʟCMB)=1
+Return
+augment(ʟCMT,ʟCMB)→L₅
+prgmHACOMP5
+seq(L₅(K),K,1,dim(ʟCMT))→ʟCMT
+seq(L₅(K),K,dim(ʟCMT)+1,dim(L₅))→ʟCMB

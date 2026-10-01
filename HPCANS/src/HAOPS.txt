@@ -1,0 +1,252 @@
+0→H
+Lbl M
+ClrHome
+Disp "F+G  OR  F/G"
+Disp "WHAT DO THEY WANT?"
+Disp "1:DOMAIN   LIKE D(F/G)"
+Disp "2:A VALUE  LIKE (FG)(-2)"
+Disp "3:FORMULA  LIKE (F-G)(X)"
+If H
+Disp "(SAME F AND G AS BEFORE)"
+3→θ
+prgmHAKEY
+θ→J
+If J=0
+Return
+Lbl C
+ClrHome
+Disp "WHICH ONE IS IT?"
+Disp "1:F+G"
+Disp "2:F-G"
+Disp "3:FG   (F TIMES G)"
+Disp "4:F/G"
+Disp "5:G/F"
+5→θ
+prgmHAKEY
+θ→K
+If K=0
+Goto M
+"F+G"→Str0
+If K=2
+"F-G"→Str0
+If K=3
+"FG"→Str0
+If K=4
+"F/G"→Str0
+If K=5
+"G/F"→Str0
+If H
+Goto V
+1→N
+0→O
+"F"→Str9
+prgmHAFUNC
+If θ=0
+Goto C
+2→N
+0→O
+"G"→Str9
+prgmHAFUNC
+If θ=0
+Goto C
+1→H
+Lbl V
+If J=2
+Goto 2
+If J=3
+Goto 3
+prgmHAANS
+K→B
+If K<4
+1→B
+prgmHAOPS4
+"D("+Str0+")="→Str2
+Str1→Str3
+prgmHAOPS3
+If K≥4
+Then
+9-K→B
+prgmHAOPS4
+"D(G/F)="→Str2
+If K=5
+"D(F/G)="→Str2
+Str1→Str3
+prgmHAOPS3
+End
+Goto E
+Lbl 2
+ClrHome
+Disp "("+Str0+")(X)"
+Disp "WHAT NUMBER IS X?"
+Input "X=",Str8
+prgmHANUM
+θ→E
+If abs(E)≥ᴇ98
+Goto 2
+prgmHAOPS6
+prgmHAANS
+E→θ
+prgmHAFRAC
+"("+Str0+")("+Str9+")="→Str2
+"UNDEFINED"→Str3
+If C=1
+Str1→Str3
+If C=2
+"CAN NOT TELL FROM WORDS"→Str3
+prgmHAOPS3
+Goto E
+Lbl 3
+If ʟF1(1)>2 or ʟF2(1)>2
+Goto 4
+prgmHAOPS2
+prgmHAANS
+"("+Str0+")(X)="→Str2
+Str1→Str3
+prgmHAOPS3
+Goto 5
+Lbl 4
+prgmHAANS
+"NO FORMULA: F OR G IS"→Str9
+prgmHAOUT
+"A GRAPH OR WORDS"→Str9
+prgmHAOUT
+Lbl 5
+K→B
+If K<4
+1→B
+prgmHAOPS4
+"D("+Str0+")="→Str2
+Str1→Str3
+prgmHAOPS3
+Lbl E
+Output(9,1,"4:SAME F,G  NEW QUESTION")
+"1:AGAIN  2:HOME  3:WHY"→Str9
+4→θ
+prgmHAEND
+If θ=1
+Goto A
+If θ=4
+Goto M
+If θ=3
+Goto W
+Return
+Lbl A
+0→H
+Goto C
+Lbl W
+"WHY:"→Str9
+prgmHAPAGE
+If J=1
+Goto W1
+If J=2
+Goto W2
+For(I,1,2)
+I→N
+prgmHAFSTR
+sub("FG",I,1)→Str1
+Str1+"(X)="→Str2
+Str5→Str3
+If I=1
+ʟF1(1)→A
+If I=2
+ʟF2(1)→A
+If A≥3
+""→Str2
+If A=3
+Str1+" IS A GRAPH"→Str3
+If A=4
+Str1+" IS GIVEN IN WORDS"→Str3
+prgmHAOPS3
+End
+"D: X MUST WORK IN F AND G"→Str9
+prgmHAOUT
+If K≥4
+Then
+"AND BOTTOM CAN NOT BE 0"→Str9
+prgmHAOUT
+End
+"FIND D BEFORE SIMPLIFYING"→Str9
+prgmHAOUT
+Goto WE
+Lbl W1
+For(I,1,2)
+1→θ
+prgmHADOM
+I→N
+0→O
+prgmHAFDOM
+9→θ
+prgmHADOM
+"D("+sub("FG",I,1)+")="→Str2
+Str6→Str3
+prgmHAOPS3
+End
+"KEEP X IN BOTH D(F), D(G)"→Str9
+prgmHAOUT
+If K<4
+Goto WE
+For(I,1,2)
+I→N
+0→O
+0→P
+prgmHAFZERO
+R→D
+"NONE"→Str3
+For(L,1,D)
+ʟFZL(L)→θ
+prgmHAFRAC
+Str9→Str1
+If ʟFZR(L)>ʟFZL(L)
+Then
+ʟFZR(L)→θ
+prgmHAFRAC
+"["+Str1+","+Str9+"]"→Str1
+End
+If L=1
+Str1→Str3
+If L>1
+Str3+","+Str1→Str3
+End
+"ZEROS OF "+sub("FG",I,1)+": "→Str2
+prgmHAOPS3
+End
+"D(F/G): TAKE OUT G=0"→Str9
+prgmHAOUT
+"D(G/F): TAKE OUT F=0"→Str9
+prgmHAOUT
+Goto WE
+Lbl W2
+For(I,1,2)
+"UNDEFINED"→Str3
+If (I=1 and A=2) or (I=2 and D=2)
+"NOT GIVEN"→Str3
+If (I=1 and A=1) or (I=2 and D=1)
+Then
+{ʟOPV(3I-2),ʟOPV(3I-1),ʟOPV(3I)}→ʟOPR
+prgmHAOPS5
+Str1→Str3
+End
+E→θ
+prgmHAFRAC
+sub("FG",I,1)+"("+Str9+")="→Str2
+prgmHAOPS3
+End
+If C=3
+Then
+"CAN NOT DIVIDE BY 0"→Str9
+prgmHAOUT
+End
+If C=0
+Then
+"X MUST BE IN BOTH DOMAINS"→Str9
+prgmHAOUT
+End
+Lbl WE
+"1:AGAIN 2:HOME 3:SAME F,G"→Str9
+3→θ
+prgmHAEND
+If θ=1
+Goto A
+If θ=3
+Goto M
+Return

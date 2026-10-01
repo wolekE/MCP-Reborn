@@ -1,0 +1,173 @@
+"""Decomposition h(x) = f(g(x)) (main menu 7, program HADECOMP). Study guide Section 3, cram sheet 3, cram 8k.
+
+Shape menu "WHAT DOES H(X) LOOK LIKE?":
+  1:K(STUFF)^N+C  2:K√(STUFF)+C  3:K/(STUFF)^N+C  4:K/√(STUFF)+C  5:K|STUFF|+C
+  6:A(STUFF)²+B(STUFF)+C  7:K𝑒^(STUFF)+C  8:K/(M+𝑒^(STUFF))  9:√(K/STUFF)
+STUFF (the inside chunk) is typed as text with the X key; then the outside numbers in the order they are
+printed. ENTER gives K=1, N=1, ROOT INDEX=2, C=0, M=0 (shape 6: A=1, B=1, C=0).
+The answer lists g first (the inside chunk), then f; more ways follow on "OR" lines.
+Never G(X)=X or F(X)=X.
+"""
+
+SHAPES = {
+    1: ("1:K(STUFF)^N+C", ["K (FRONT)=", "N (POWER)=", "C (END NUMBER)="]),
+    2: ("2:K√(STUFF)+C", ["K (FRONT)=", "ROOT INDEX=", "C (END NUMBER)="]),
+    3: ("3:K/(STUFF)^N+C", ["K (TOP NUMBER)=", "N (POWER)=", "C (END NUMBER)="]),
+    4: ("4:K/√(STUFF)+C", ["K (TOP NUMBER)=", "ROOT INDEX=", "C (END NUMBER)="]),
+    5: ("5:K|STUFF|+C", ["K (FRONT)=", "C (END NUMBER)="]),
+    6: ("6:A(STUFF)²+B(STUFF)+C", ["A (FRONT)=", "B (MIDDLE)=", "C (END NUMBER)="]),
+    7: ("7:K𝑒^(STUFF)+C", ["K (FRONT)=", "C (END NUMBER)="]),
+    8: ("8:K/(M+𝑒^(STUFF))", ["K (TOP NUMBER)=", "M (BOTTOM NUMBER)="]),
+    9: ("9:√(K/STUFF)", ["K (TOP NUMBER)="]),
+}
+
+
+def dec(cid, src, shape, stuff, nums, expect, official, extra_keys=None):
+    """One decomposition: main menu 7, the shape key, STUFF, the outside numbers ("" = ENTER), then HOME."""
+    name, labels = SHAPES[shape]
+    acts = ["k7", f"k{shape}", f"t:{stuff}"] + [f"t:{v}" for v in nums] + (extra_keys or ["k2"])
+    words = " ".join(f"{lab}{v or 'ENTER'}" for lab, v in zip(labels, nums))
+    return dict(id=cid, source=src, actions=acts, expect=expect, official=official,
+                path=f"7 → {name}; STUFF={stuff} {words}")
+
+
+CASES = [
+    # ---- worked examples ---------------------------------------------------------------------------------
+    dec("EX-3.1", "h(x)=(5x-1)^4: decompose", 1, "5X-1", ["", "4", ""],
+        ["G(X)=5X-1", "F(X)=X^4"], "g(x) = 5x - 1, f(x) = x^4"),
+    dec("EX-3.2", "h(x)=3/sqrt(x^2+4): decompose two ways", 4, "X²+4", ["3", "", ""],
+        ["G(X)=X²+4", "F(X)=3/√(X)", "OR G(X)=√(X²+4)", "F(X)=3/X", "OR G(X)=X²", "F(X)=3/√(X+4)"],
+        "Way 1: g(x) = x^2 + 4, f(x) = 3/sqrt(x); Way 2: g(x) = sqrt(x^2 + 4), f(x) = 3/x; "
+        "Third split: g(x) = x^2, f(x) = 3/sqrt(x+4)"),
+    dec("EX-3.3a", "h(x)=2/(1+e^(3x)): decompose (three ways shown)", 8, "3X", ["2", "1"],
+        ["G(X)=𝑒^(3X)", "F(X)=2/(1+X)", "OR G(X)=1+𝑒^(3X)", "F(X)=2/X", "OR G(X)=3X", "F(X)=2/(1+𝑒^(X))"],
+        "Way 1: g(x) = e^(3x), f(x) = 2/(1+x); Way 2: g(x) = 1 + e^(3x), f(x) = 2/x; "
+        "Way 3: g(x) = 3x, f(x) = 2/(1+e^x)"),
+    dec("EX-3.3b", "Teacher's comparison h(x)=1/(1+e^(-x)) (STUFF typed with the (-) key)", 8, "⁻X", ["", "1"],
+        ["G(X)=𝑒^(-X)", "F(X)=1/(1+X)", "OR G(X)=1+𝑒^(-X)", "F(X)=1/X"],
+        "Teacher's 1/(1+e^(-x)): g = e^(-x), f = 1/(1+x), or g = 1 + e^(-x), f = 1/x"),
+    # ---- practice problems (Section 9 answers) -------------------------------------------------------------
+    dec("PR-3.1", "3.1 h(x)=sqrt(7-2x)", 2, "7-2X", ["", "", ""],
+        ["G(X)=7-2X", "F(X)=√(X)"], "g(x) = 7 - 2x, f(x) = sqrt(x)"),
+    dec("PR-3.2", "3.2 h(x)=|x^2-9|+4 (give two different decompositions)", 5, "X²-9", ["", "4"],
+        ["G(X)=X²-9", "F(X)=|X|+4", "OR G(X)=|X²-9|", "F(X)=X+4"],
+        "g(x) = x^2 - 9, f(x) = |x| + 4; or g(x) = |x^2 - 9|, f(x) = x + 4"),
+    dec("PR-3.3", "3.3 h(x)=1/(x^3+2)^2 (give two different decompositions)", 3, "X³+2", ["", "2", ""],
+        ["G(X)=X³+2", "F(X)=1/X²", "OR G(X)=(X³+2)²", "F(X)=1/X", "OR G(X)=1/(X³+2)", "F(X)=X²"],
+        "g(x) = x^3 + 2, f(x) = 1/x^2; or g(x) = (x^3 + 2)^2, f(x) = 1/x; or g(x) = 1/(x^3 + 2), f(x) = x^2"),
+    dec("PR-3.4", "3.4 h(x)=4(2x+3)^2-3(2x+3)", 6, "2X+3", ["4", "-3", ""],
+        ["G(X)=2X+3", "F(X)=4X²-3X"], "g(x) = 2x + 3, f(x) = 4x^2 - 3x"),
+    dec("SOL-3.1", "Solution 3.1 h(x)=sqrt(7-2x) (second way from splitting off the 7)",
+        2, "7-2X", ["", "", ""], ["G(X)=7-2X", "F(X)=√(X)", "OR G(X)=-2X", "F(X)=√(7+X)"],
+        "g(x) = 7 - 2x, f(x) = sqrt(x)"),
+    dec("SOL-3.2", "Solution 3.2 h(x)=|x^2-9|+4", 5, "X²-9", ["", "4"],
+        ["G(X)=X²-9", "F(X)=|X|+4", "OR G(X)=|X²-9|", "F(X)=X+4", "OR G(X)=X²", "F(X)=|X-9|+4"],
+        "g(x) = x^2 - 9, f(x) = |x| + 4; or g(x) = |x^2 - 9|, f(x) = x + 4"),
+    dec("SOL-3.3", "Solution 3.3 h(x)=1/(x^3+2)^2 (all three listed splits)", 3, "X³+2", ["", "2", ""],
+        ["G(X)=X³+2", "F(X)=1/X²", "OR G(X)=(X³+2)²", "F(X)=1/X", "OR G(X)=1/(X³+2)", "F(X)=X²"],
+        "g(x) = x^3 + 2, f(x) = 1/x^2; or g(x) = (x^3 + 2)^2, f(x) = 1/x; or g(x) = 1/(x^3 + 2), f(x) = x^2"),
+    dec("SOL-3.4", "Solution 3.4: the chunk 2x+3 appears twice", 6, "2X+3", ["4", "-3", ""],
+        ["G(X)=2X+3", "F(X)=4X²-3X"], "g(x) = 2x + 3, f(x) = 4x^2 - 3x"),
+    # ---- cram sheet --------------------------------------------------------------------------------------
+    dec("CRAM-EX-3a", "Cram Ex sqrt(1/x^2): two ways", 9, "X²", [""],
+        ["G(X)=X²", "F(X)=√(1/X)", "OR G(X)=1/X²", "F(X)=√(X)"],
+        "g = x^2, f = sqrt(1/x)  or  g = 1/x^2, f = sqrt(x)"),
+    dec("CRAM-EX-3b", "Cram Ex 1/(1+e^(-x)): two ways (STUFF typed with the subtraction key)", 8, "-X", ["", "1"],
+        ["G(X)=𝑒^(-X)", "F(X)=1/(1+X)", "OR G(X)=1+𝑒^(-X)", "F(X)=1/X"],
+        "g = e^(−x), f = 1/(1+x)  or  g = 1 + e^(−x), f = 1/x"),
+    dec("CRAM-3-EXa", "Cram 3 Ex (study-guide copy): sqrt(1/x^2)", 9, "X²", [""],
+        ["G(X)=X²", "F(X)=√(1/X)", "OR G(X)=1/X²", "F(X)=√(X)"],
+        "sqrt(1/x^2): g = x^2, f = sqrt(1/x) or g = 1/x^2, f = sqrt(x)"),
+    dec("CRAM-3-EXb", "Cram 3 Ex (study-guide copy): 1/(1+e^(-x))", 8, "⁻X", ["", "1"],
+        ["G(X)=𝑒^(-X)", "F(X)=1/(1+X)", "OR G(X)=1+𝑒^(-X)", "F(X)=1/X"],
+        "1/(1+e^(-x)): g = e^(-x), f = 1/(1+x) or g = 1 + e^(-x), f = 1/x"),
+    dec("CRAM-3", "g = the inside chunk (under a radical); neither f nor g is just x: h(x)=sqrt(x)+3", 2, "X",
+        ["", "", "3"], ["G(X)=√(X)", "F(X)=X+3"],
+        "(1) g = the inside chunk (in parentheses, under a radical, in a denominator or exponent); f = what is done to it. "
+        "(2) Neither f nor g can be just x. Several answers can be right: check by composing back."),
+    dec("CRAM-8k", "Write h=f(g(x)): g = inside chunk (in a denominator), never just x: h(x)=1/x^2", 3, "X",
+        ["", "2", ""], ["G(X)=X²", "F(X)=1/X", "OR G(X)=1/X", "F(X)=X²"],
+        "g = inside chunk; neither piece is just x"),
+    # ---- common mistakes -----------------------------------------------------------------------------------
+    dec("MIST-3-1", "Swapping roles: for (5x-1)^4 g is the INSIDE 5x-1 (not x^4)", 1, "5X-1", ["", "4", ""],
+        ["G(X)=5X-1", "F(X)=X^4", "OR G(X)=5X", "F(X)=(X-1)^4"],
+        "Swapping the roles: g is inside. For (5x - 1)^4, the pair f = 5x - 1, g = x^4 gives 5x^4 - 1. Wrong."),
+    dec("MIST-3-2", "Leaving the chunk in f: g = x^2+4 so f = 3/sqrt(x), not 3/sqrt(x^2+4)", 4, "X²+4",
+        ["3", "", ""], ["G(X)=X²+4", "F(X)=3/√(X)"], "Leaving the chunk in f: if g(x) = x^2 + 4, then f must not mention x^2 + 4. It's 3/sqrt(x), not 3/sqrt(x^2+4)."),
+    dec("MIST-3-3", "Using f(x)=x or g(x)=x: h(x)=sqrt(x) has no inside chunk", 2, "X", ["", "", ""],
+        ["G(X)=X+1", "F(X)=√(X-1)", "G(X)=X IS NOT ALLOWED, SO"], "Using f(x) = x or g(x) = x."),
+    # ---- extra checks: shapes, signs, fractions, defaults, odd input --------------------------------------
+    dec("EXTRA-decomp-1", "Negative and fraction outside numbers: h=-1/2(3x+1)^3+5/4", 1, "3X+1",
+        ["-1/2", "3", "5/4"],
+        ["G(X)=3X+1", "F(X)=-(1/2)X³+5/4", "OR G(X)=(3X+1)³", "F(X)=-(1/2)X+5/4", "OR G(X)=3X",
+         "F(X)=-(1/2)(X+1)³+5/4"],
+        "g = 3x+1, f = -(1/2)x^3 + 5/4 (or g = (3x+1)^3, f = -(1/2)x + 5/4)"),
+    dec("EXTRA-decomp-2", "Zero middle coefficient: h=2(x^2+1)^2-3", 6, "X²+1", ["2", "0", "-3"],
+        ["G(X)=X²+1", "F(X)=2X²-3"], "g = x^2+1, f = 2x^2 - 3"),
+    dec("EXTRA-decomp-3", "Cube root: h=cbrt(x^2-1)", 2, "X²-1", ["", "3", ""],
+        ["G(X)=X²-1", "F(X)=³√(X)", "OR G(X)=X²", "F(X)=³√(X-1)"], "g = x^2-1, f = cbrt(x)"),
+    dec("EXTRA-decomp-4", "Fourth root: h=4th root of (2x+1)", 2, "2X+1", ["", "4", ""],
+        ["G(X)=2X+1", "F(X)=X^(1/4)", "OR G(X)=2X", "F(X)=(X+1)^(1/4)"], "g = 2x+1, f = x^(1/4)"),
+    dec("EXTRA-decomp-5", "Exponential chunk: h=3e^(x^2)-1", 7, "X²", ["3", "-1"],
+        ["G(X)=X²", "F(X)=3𝑒^(X)-1", "OR G(X)=𝑒^(X²)", "F(X)=3X-1"], "g = x^2, f = 3e^x - 1"),
+    dec("EXTRA-decomp-6", "Student types the parentheses too: STUFF=(5X-1)", 1, "(5X-1)", ["", "4", ""],
+        ["G(X)=5X-1", "F(X)=X^4"], "g = 5x-1, f = x^4"),
+    dec("EXTRA-decomp-7", "STUFF just X, quadratic: h=x^2+6x+9 (complete the square)", 6, "X", ["", "6", "9"],
+        ["G(X)=X+3", "F(X)=X²"], "g = x+3, f = x^2"),
+    dec("EXTRA-decomp-8", "No 1 on the bottom: h=4/e^(2x)", 8, "2X", ["4", ""],
+        ["G(X)=𝑒^(2X)", "F(X)=4/X", "OR G(X)=2X", "F(X)=4/𝑒^(X)"], "g = e^(2x), f = 4/x"),
+    dec("EXTRA-decomp-9", "Power 1 on the bottom with an end number: h=5/(x^2+1)+2", 3, "X²+1", ["5", "", "2"],
+        ["G(X)=X²+1", "F(X)=5/X+2", "OR G(X)=1/(X²+1)", "F(X)=5X+2", "OR G(X)=X²", "F(X)=5/(X+1)+2"],
+        "g = x^2+1, f = 5/x + 2"),
+    dict(id="EXTRA-decomp-10", source="Bad inputs are asked again: STUFF without X, then K=0",
+         actions=["k7", "k1", "t:5", "t:5X-1", "t:0", "t:5X-1", "t:2", "t:3", "t:", "k2"],
+         expect=["G(X)=5X-1", "F(X)=2X³", "OR G(X)=(5X-1)³", "F(X)=2X"],
+         official="g = 5x-1, f = 2x^3", path="7 → 1; STUFF=5 (asked again) 5X-1, K=0 (asked again); 5X-1 K=2 N=3"),
+    dict(id="EXTRA-decomp-11", source="AGAIN goes back to the shape menu: (5x-1)^4 then sqrt(1/x^2)",
+         actions=["k7", "k1", "t:5X-1", "t:", "t:4", "t:", "k1", "k9", "t:X²", "t:", "k2"],
+         expect=["G(X)=5X-1", "F(X)=X^4", "G(X)=X²", "F(X)=√(1/X)"],
+         official="g = 5x-1, f = x^4; then g = x^2, f = sqrt(1/x)", path="7 → 1 ...; 1:AGAIN → 9 ..."),
+    dec("EXTRA-decomp-12", "Reciprocal square root with end number: h=-2/sqrt(x)+1 (STUFF just X)", 4, "X",
+        ["-2", "", "1"], ["G(X)=√(X)", "F(X)=-2/X+1"], "g = sqrt(x), f = -2/x + 1"),
+    dec("EXTRA-decomp-13", "Absolute value with negative front: h=-|2x-5|", 5, "2X-5", ["⁻", ""],
+        ["G(X)=2X-5", "F(X)=-|X|", "OR G(X)=|2X-5|", "F(X)=-X", "OR G(X)=2X", "F(X)=-|X-5|"],
+        "g = 2x-5, f = -|x|"),
+    dec("EXTRA-decomp-14", "Power typed with ^ instead of x²: h=3/sqrt(x^2+4) with STUFF=X^2+4", 4, "X^2+4",
+        ["3", "", ""], ["G(X)=X^2+4", "F(X)=3/√(X)", "OR G(X)=√(X^2+4)", "F(X)=3/X", "OR G(X)=X^2", "F(X)=3/√(X+4)"],
+        "g = x^2+4, f = 3/sqrt(x); or g = sqrt(x^2+4), f = 3/x"),
+    dec("EXTRA-decomp-15", "Decimals typed are shown exact: h=0.5(2x)^2+0.25", 1, "2X", ["0.5", "2", "0.25"],
+        ["G(X)=2X", "F(X)=(1/2)X²+1/4", "OR G(X)=(2X)²", "F(X)=(1/2)X+1/4"], "g = 2x, f = (1/2)x^2 + 1/4"),
+    dec("EXTRA-decomp-16", "STUFF just X, quadratic with fractions: h=2x^2+x-1", 6, "X", ["2", "", "-1"],
+        ["G(X)=X+1/4", "F(X)=2X²-9/8"], "g = x+1/4, f = 2x^2 - 9/8 (2(x+1/4)^2-9/8 = 2x^2+x-1)"),
+    dec("EXTRA-decomp-17", "Fourth root on the bottom: h=2/(4th root of (x+1))", 4, "X+1", ["2", "4", ""],
+        ["G(X)=X+1", "F(X)=2/X^(1/4)", "OR G(X)=(X+1)^(1/4)", "F(X)=2/X", "OR G(X)=1/(X+1)", "F(X)=2X^(1/4)"],
+        "g = x+1, f = 2/x^(1/4)"),
+    dec("EXTRA-decomp-18", "Fraction under a root with a chunk: h=sqrt(4/(x+1))", 9, "X+1", ["4"],
+        ["G(X)=X+1", "F(X)=√(4/X)", "OR G(X)=4/(X+1)", "F(X)=√(X)"], "g = x+1, f = sqrt(4/x)"),
+    dict(id="EXTRA-decomp-19", source="Bad power and bad root index are asked again",
+         actions=["k7", "k1", "t:X+2", "t:", "t:0", "t:X+2", "t:", "t:3", "t:",
+                  "k1", "k2", "t:X+2", "t:", "t:1", "t:X+2", "t:", "t:", "t:", "k2"],
+         expect=["G(X)=X+2", "F(X)=X³", "F(X)=√(X)"],
+         official="(x+2)^3: g = x+2, f = x^3; sqrt(x+2): g = x+2, f = sqrt(x)",
+         path="7 → 1; N=0 (asked again), N=3; AGAIN → 2; ROOT INDEX=1 (asked again), ENTER"),
+    dec("EXTRA-decomp-20", "Leading number split: h=sqrt(4-x^2)", 2, "4-X²", ["", "", ""],
+        ["G(X)=4-X²", "F(X)=√(X)", "OR G(X)=-X²", "F(X)=√(4+X)"], "g = 4-x^2, f = sqrt(x)"),
+    dec("RULE-3-CHECK", "Check by composing back: EX-3.2 answer, then 3:WHY shows CHECK: F(G(X)) GIVES H(X)=3/√(X²+4)",
+        4, "X²+4", ["3", "", ""], ["G(X)=X²+4", "F(X)=3/√(X)"],
+        "Compose your answer back: substitute g(x) into f. You must get exactly h(x).", extra_keys=["k3", "k2"]),
+    dict(id="EXTRA-decomp-21", source="Every shape, then 3:WHY (rebuilds h for the check) and 1:AGAIN from the WHY page",
+         actions=["k7",
+                  "k1", "t:5X-1", "t:", "t:4", "t:", "k3", "k1",
+                  "k2", "t:7-2X", "t:", "t:", "t:", "k3", "k1",
+                  "k3", "t:X³+2", "t:", "t:2", "t:", "k3", "k1",
+                  "k4", "t:X²+4", "t:3", "t:", "t:", "k3", "k1",
+                  "k5", "t:X²-9", "t:", "t:4", "k3", "k1",
+                  "k6", "t:2X+3", "t:4", "t:-3", "t:", "k3", "k1",
+                  "k7", "t:X²", "t:3", "t:-1", "k3", "k1",
+                  "k8", "t:3X", "t:2", "t:1", "k3", "k1",
+                  "k9", "t:X²", "t:", "k3", "k2"],
+         expect=["F(X)=X^4", "F(X)=√(X)", "F(X)=1/X²", "F(X)=3/√(X)", "F(X)=|X|+4", "F(X)=4X²-3X",
+                 "F(X)=3𝑒^(X)-1", "F(X)=2/(1+X)", "F(X)=√(1/X)"],
+         official="(one answer per shape; see the single-shape cases)",
+         path="7 → each shape 1..9 in turn → 3:WHY → 1:AGAIN; last WHY → 2:HOME"),
+]

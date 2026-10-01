@@ -1,0 +1,166 @@
+If θ=1
+Goto 1
+If θ=2
+Goto 2
+If θ=3
+Goto 3
+If θ=4
+Goto 4
+Return
+Lbl 1
+dim(ʟGFX)→P
+dim(ʟGGX)→Q
+If P=0 and Q=0
+Goto 5
+Lbl 6
+ClrHome
+Disp "GRAPH OF "+Str4+":"
+Disp "1:TYPE THE CORNER POINTS"
+If P
+Disp "2:USE SAVED GRAPH OF F"
+If Q
+Disp "3:USE SAVED GRAPH OF G"
+3→θ
+prgmHAKEY
+If θ=0
+Return
+If θ=2 and P
+Goto 7
+If θ=3 and Q
+Goto 8
+If θ≠1
+Goto 6
+Lbl 5
+"GRAPH OF "+Str4+":"→Str9
+prgmHAPTS
+If dim(ʟHX)=0
+Goto 5
+If Str4="G"
+Then
+ʟHX→ʟGGX
+ʟHY→ʟGGY
+ʟHC→ʟGGC
+Else
+ʟHX→ʟGFX
+ʟHY→ʟGFY
+ʟHC→ʟGFC
+End
+augment(augment({3,dim(ʟHX),ʟHC(1),ʟHC(2)},ʟHX),ʟHY)→ʟFNC
+1→θ
+Return
+Lbl 7
+augment(augment({3,dim(ʟGFX),ʟGFC(1),ʟGFC(2)},ʟGFX),ʟGFY)→ʟFNC
+1→θ
+Return
+Lbl 8
+augment(augment({3,dim(ʟGGX),ʟGGC(1),ʟGGC(2)},ʟGGX),ʟGGY)→ʟFNC
+1→θ
+Return
+Lbl 4
+0→θ
+If Str4="G" and dim(ʟGGX)>0
+Goto 8
+If Str4≠"G" and dim(ʟGFX)>0
+Goto 7
+Return
+Lbl 2
+ʟFNC(2)→R
+seq(ʟFNC(4+P),P,1,R)→ʟFNX
+seq(ʟFNC(4+R+P),P,1,R)→ʟFNY
+0→P
+0→Q
+If O<ʟFNX(1) or O>ʟFNX(R) or (O=ʟFNX(1) and not(ʟFNC(3))) or (O=ʟFNX(R) and not(ʟFNC(4)))
+Return
+ʟFNY(R)→P
+1→Q
+For(N,1,R-1)
+If Q=1 and O≥ʟFNX(N) and O<ʟFNX(N+1)
+Then
+ʟFNY(N)+(ʟFNY(N+1)-ʟFNY(N))(O-ʟFNX(N))/(ʟFNX(N+1)-ʟFNX(N))→P
+2→Q
+End
+End
+1→Q
+Return
+Lbl 3
+ʟFNC(2)→N
+seq(ʟFNC(4+S),S,1,N)→ʟFNX
+seq(ʟFNC(4+N+S),S,1,N)→ʟFNY
+R-2int(R/2)→U
+int(R/2)→V
+{ʟFNX(1)}→ʟFNB
+{ʟFNY(1)}→ʟFNW
+For(S,1,N-1)
+ʟFNY(S)→X
+ʟFNY(S+1)→Y
+If abs(P)<ᴇ98
+Then
+If (X-P)(Y-P)<0
+Then
+ʟFNX(S)+(P-X)(ʟFNX(S+1)-ʟFNX(S))/(Y-X)→ʟFNB(dim(ʟFNB)+1)
+P→ʟFNW(dim(ʟFNW)+1)
+End
+End
+If abs(Q)<ᴇ98 and Q≠P
+Then
+If (X-Q)(Y-Q)<0
+Then
+ʟFNX(S)+(Q-X)(ʟFNX(S+1)-ʟFNX(S))/(Y-X)→ʟFNB(dim(ʟFNB)+1)
+Q→ʟFNW(dim(ʟFNW)+1)
+End
+End
+ʟFNX(S+1)→ʟFNB(dim(ʟFNB)+1)
+Y→ʟFNW(dim(ʟFNW)+1)
+End
+SortA(ʟFNB,ʟFNW)
+dim(ʟFNB)→N
+{1}→ʟFGL
+{0}→ʟFGR
+{0}→ʟFGA
+{0}→ʟFGB
+0→Z
+For(S,1,N)
+ʟFNW(S)→Y
+(Y>P or (U and Y=P)) and (Y<Q or (V and Y=Q)) and (S>1 or ʟFNC(3)) and (S<N or ʟFNC(4))→T
+If T and not(Z)
+Then
+ʟFNB(S)→ʟFGL(dim(ʟFGL)+1)
+1→ʟFGA(dim(ʟFGA)+1)
+1→Z
+End
+If Z and not(T)
+Then
+ʟFNB(S)→ʟFGR(dim(ʟFGR)+1)
+0→ʟFGB(dim(ʟFGB)+1)
+0→Z
+End
+If S<N
+Then
+(Y+ʟFNW(S+1))/2→Y
+(Y>P or (U and Y=P)) and (Y<Q or (V and Y=Q))→X
+If X and not(Z)
+Then
+ʟFNB(S)→ʟFGL(dim(ʟFGL)+1)
+0→ʟFGA(dim(ʟFGA)+1)
+1→Z
+End
+If Z and not(X)
+Then
+ʟFNB(S)→ʟFGR(dim(ʟFGR)+1)
+1→ʟFGB(dim(ʟFGB)+1)
+0→Z
+End
+End
+End
+If Z
+Then
+ʟFNB(N)→ʟFGR(dim(ʟFGR)+1)
+1→ʟFGB(dim(ʟFGB)+1)
+End
+If dim(ʟFGL)>1
+Then
+seq(ʟFGL(S),S,2,dim(ʟFGL))→ʟFGL
+seq(ʟFGR(S),S,2,dim(ʟFGR))→ʟFGR
+seq(ʟFGA(S),S,2,dim(ʟFGA))→ʟFGA
+seq(ʟFGB(S),S,2,dim(ʟFGB))→ʟFGB
+End

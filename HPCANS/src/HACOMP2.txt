@@ -1,0 +1,139 @@
+If A=1
+ʟF1→L₁
+If A=2
+ʟF2→L₁
+If A=3
+ʟF3→L₁
+If B=1
+ʟF1→L₂
+If B=2
+ʟF2→L₂
+If B=3
+ʟF3→L₂
+""→Str1
+If L₁(1)>2 or L₂(1)>2
+Return
+If L₂(1)=2
+Goto R
+seq(L₂(I),I,2,6)→ʟCMN
+seq(L₂(I),I,7,11)→ʟCMD
+0→C
+For(I,1,5)
+If C=0 and (L₁(I+1)≠0 or L₁(I+6)≠0)
+6-I→C
+End
+C-1→C
+{L₁(6-C)}→ʟCMT
+{L₁(11-C)}→ʟCMB
+ʟCMD→ʟCME
+For(K,1,C)
+ʟCMT→ʟPA
+ʟCMN→ʟPB
+prgmHAPMUL
+ʟPC→ʟCMT
+ʟCMB→ʟPA
+prgmHAPMUL
+ʟPC→ʟCMB
+If K>1
+Then
+ʟCME→ʟPA
+ʟCMD→ʟPB
+prgmHAPMUL
+ʟPC→ʟCME
+End
+ʟCMT+L₁(6-C+K)*ʟCME→ʟCMT
+ʟCMB+L₁(11-C+K)*ʟCME→ʟCMB
+End
+prgmHACOMP4
+If dim(ʟCMT)>5 or dim(ʟCMB)>5
+Return
+{0,0,0,0,0}→L₃
+{0,0,0,0,0}→L₄
+For(K,1,dim(ʟCMT))
+ʟCMT(K)→L₃(5-dim(ʟCMT)+K)
+End
+For(K,1,dim(ʟCMB))
+ʟCMB(K)→L₄(5-dim(ʟCMB)+K)
+End
+augment(augment(augment({L₁(1)},L₃),L₄),{L₁(12),L₁(13)})→ʟF3
+3→N
+prgmHAFSTR
+Str5→Str1
+Return
+Lbl R
+If L₂(7)≠0 or L₂(8)≠0 or L₂(9)≠0 or L₂(10)≠0 or L₂(11)=0
+Return
+If L₁(2)≠0 or L₁(3)≠0 or L₁(7)≠0 or L₁(8)≠0
+Return
+seq(L₂(I),I,2,6)/L₂(11)→ʟCMN
+L₂(12)→E
+L₂(13)→F
+L₁(4)*E²*ʟCMN→ʟCMT
+L₁(4)*F²+L₁(5)*F+L₁(6)+ʟCMT(5)→ʟCMT(5)
+2*L₁(4)*E*F+L₁(5)*E→C
+L₁(9)*E²*ʟCMN→ʟCMB
+L₁(9)*F²+L₁(10)*F+L₁(11)+ʟCMB(5)→ʟCMB(5)
+2*L₁(9)*E*F+L₁(10)*E→D
+C*(abs(C)≥ᴇ⁻9)→C
+D*(abs(D)≥ᴇ⁻9)→D
+ʟCMB*(abs(ʟCMB)≥ᴇ⁻9)→ʟCMB
+If D=0 and sum(abs(ʟCMB))=0
+Return
+If D=0 and sum(abs(ʟCMB))=abs(ʟCMB(5))
+Then
+C/ʟCMB(5)→C
+ʟCMT/ʟCMB(5)→ʟCMT
+{0,0,0,0,1}→ʟCMB
+End
+If D≠0 or ʟCMB(5)≠1 or sum(abs(ʟCMB))≠1
+Then
+augment(augment(ʟCMT,{C}),augment(ʟCMB,{D}))→L₅
+prgmHACOMP5
+seq(L₅(K),K,1,5)→ʟCMT
+L₅(6)→C
+seq(L₅(K),K,7,11)→ʟCMB
+L₅(12)→D
+End
+ʟCMT→ʟCMP
+C→K
+prgmHACOMP3
+Str2→Str1
+I→G
+If D≠0 or ʟCMB(5)≠1 or sum(abs(ʟCMB))≠1
+Then
+ʟCMB→ʟCMP
+D→K
+prgmHACOMP3
+If G>1
+"("+Str1+")"→Str1
+If I>1 or L≠1
+"("+Str2+")"→Str2
+Str1+"/"+Str2→Str1
+End
+If L₁(1)=1
+Return
+L₁(12)→K
+L₁(13)→L
+"√("+Str1+")"→Str1
+If K=⁻1
+"-"+Str1→Str1
+If K=0
+""→Str1
+If K≠0 and abs(K)≠1
+Then
+K→θ
+prgmHAFRAC
+If Y>1
+"("+Str9+")"→Str9
+Str9+Str1→Str1
+End
+If L≠0 or K=0
+Then
+abs(L)→θ
+prgmHAFRAC
+If L<0
+"-"+Str9→Str9
+If L≥0 and K≠0
+"+"+Str9→Str9
+Str1+Str9→Str1
+End

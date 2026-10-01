@@ -1,0 +1,343 @@
+Lbl M
+ClrHome
+Disp "Y=KX^P  OR  ROOTS"
+Disp "WHAT DO THEY WANT?"
+Disp "1:FIND K,P (Y=KX^P FORM)"
+Disp "2:SYMMETRY/QUADS"
+Disp "  (EVEN/ODD, Q1/Q4 SHAPE)"
+Disp "3:ALL PROPERTIES"
+Disp "  (D,R,INC/DEC,LIMITS...)"
+Disp "4:BUILD EQUATION"
+Disp "  (FROM QUADS AND SHAPE)"
+4→θ
+prgmHAKEY
+θ→J
+If J=0
+Return
+If J=1
+Goto 1
+If J=4
+Goto 4
+Lbl 2
+ClrHome
+Disp "Y=K*X^P"
+Disp "P: TYPE 4/7 OR -2"
+Disp "NOT SHOWN: PRESS ENTER"
+Disp "-X^P: K IS (⁻) ALONE"
+Input "K=",Str8
+prgmHANUM
+θ→K
+If Z
+1→K
+Input "P=",Str8
+prgmHANUM
+θ→C
+If Z
+1→C
+If abs(K)≥ᴇ98 or abs(C)≥ᴇ98
+Goto 2
+C→θ
+prgmHAFRAC
+X→A
+Y→B
+0→M
+If not(Z)
+5→M
+If K=0
+1→M
+If A=0
+4→M
+If M
+Goto 9
+K→θ
+prgmHAFRAC
+Str9→Str1
+Lbl 3
+(J=2)→L
+prgmHAANS
+prgmHAPOWR3
+"1:AGAIN  2:HOME  3:WHY"→Str9
+3→θ
+prgmHAEND
+θ→I
+If I=1 and J=1
+Goto 1
+If I=1
+Goto 2
+If I≠3
+Return
+2→L
+prgmHAPOWR3
+"1:AGAIN  2:HOME"→Str9
+2→θ
+prgmHAEND
+If θ=1 and J=1
+Goto 1
+If θ=1
+Goto 2
+Return
+Lbl 1
+ClrHome
+Disp "WHAT DOES Y LOOK LIKE?"
+Disp "1:-3X^5"
+Disp "2:-7√(16X^3)   ANY ROOT"
+Disp "3:-1/(4X^6)"
+Disp "4:5/(2√(9X))   ANY ROOT"
+Disp "5:3X√(X)"
+Disp "6:2/(X√(X))"
+Disp "7:Y=7          NO X"
+Disp "8:Y=2^X        X IN POWER"
+8→θ
+prgmHAKEY
+θ→I
+If I=0
+Goto M
+If I≥7
+Goto 7
+1→C
+1→D
+0→E
+1→F
+0→G
+1→H
+ClrHome
+If I=1
+Disp "LIKE -3X^5  OR  X^(2/3)"
+If I=2
+Disp "LIKE -7√(16X^3)"
+If I=3
+Disp "LIKE -1/(4X^6)"
+If I=4
+Disp "LIKE 5/(2√(9X))"
+If I=5
+Disp "LIKE 3X√(X)"
+If I=6
+Disp "LIKE 2/(X√(X))"
+Disp "NOT SHOWN: PRESS ENTER"
+If I=2 or I≥4
+Disp "INDEX: √(X)=2, ³√(X)=3"
+If I=3 or I=4 or I=6
+Then
+Input "TOP NUMBER=",Str8
+prgmHANUM
+θ→H
+If Z
+1→H
+End
+If I=1 or I=2 or I=5
+Then
+Input "NUMBER IN FRONT=",Str8
+prgmHANUM
+θ→C
+If Z
+1→C
+End
+If I=3 or I=6
+Then
+Input "BOTTOM NUMBER=",Str8
+prgmHANUM
+θ→C
+If Z
+1→C
+End
+If I=4
+Then
+Input "NUMBER BEFORE ROOT=",Str8
+prgmHANUM
+θ→C
+If Z
+1→C
+End
+If I=1 or I=3
+Then
+Input "POWER ON X=",Str8
+prgmHANUM
+θ→E
+If Z
+1→E
+End
+If I≥5
+Then
+Input "X POWER OUTSIDE ROOT=",Str8
+prgmHANUM
+θ→E
+If Z
+1→E
+End
+If I=2 or I≥4
+Then
+0→F
+Repeat F≥1 and F≤99 and not(fPart(F))
+Input "ROOT INDEX=",Str8
+prgmHANUM
+θ→F
+If Z
+2→F
+End
+Input "NUMBER UNDER ROOT=",Str8
+prgmHANUM
+θ→D
+If Z
+1→D
+Input "X POWER UNDER ROOT=",Str8
+prgmHANUM
+θ→G
+If Z
+1→G
+End
+If abs(C)≥ᴇ98 or abs(D)≥ᴇ98 or abs(E)≥ᴇ98 or abs(G)≥ᴇ98 or abs(H)≥ᴇ98
+Goto 1
+prgmHAPOWR2
+If M
+Goto 9
+prgmHAANS
+Str0→Str9
+prgmHAOUT
+"K="+Str1→Str9
+prgmHAOUT
+"P="+Str2→Str9
+prgmHAOUT
+"YES, A POWER FUNCTION"→Str9
+prgmHAOUT
+"1:AGAIN 2:HOME 3:ALL PROPS"→Str9
+3→θ
+prgmHAEND
+θ→I
+If I=1
+Goto 1
+If I=3
+Goto 3
+Return
+Lbl 7
+prgmHAANS
+"NOT A POWER FUNCTION"→Str9
+prgmHAOUT
+"CONSTANT FUNCTION"→Str9
+If I=8
+"EXPONENTIAL FUNCTION"→Str9
+prgmHAOUT
+"(IT IS KX^0: POWER 0)"→Str9
+If I=8
+"(X IS IN THE EXPONENT)"→Str9
+prgmHAOUT
+Goto 6
+Lbl 9
+prgmHAANS
+"NOT A POWER FUNCTION"→Str9
+If M=2
+"UNDEFINED: BOTTOM IS 0"→Str9
+If M=5
+"TYPE POWERS AS FRACTIONS,"→Str9
+prgmHAOUT
+"(K=0, SO Y=0)"→Str9
+If M=3
+"(EVEN ROOT OF A NEGATIVE)"→Str9
+If M=4
+"(P=0, SO Y=K: CONSTANT)"→Str9
+If M=5
+"LIKE 2/3, NOT 0.667"→Str9
+If M≠2
+prgmHAOUT
+Lbl 6
+"1:AGAIN  2:HOME"→Str9
+2→θ
+prgmHAEND
+If θ=1 and J=1
+Goto 1
+If θ=1
+Goto 2
+Return
+Lbl 4
+ClrHome
+Disp "WHICH QUADRANTS IS IT IN?"
+Disp "1:I ONLY"
+Disp "2:IV ONLY"
+Disp "3:I AND II"
+Disp "4:III AND IV"
+Disp "5:I AND III"
+Disp "6:II AND IV"
+6→θ
+prgmHAKEY
+θ→I
+If I=0
+Goto M
+1-2not(fPart(I/2))→E
+ClrHome
+If E>0
+Then
+Disp "THE PART IN QUADRANT I:"
+Disp "1:INCREASING, CURVING DOWN"
+Disp "  (LEVELS OFF/SHARP POINT)"
+Disp "2:INCREASING, CURVING UP"
+Disp "  (GETS STEEPER)"
+Disp "3:DECREASING TOWARD X-AXIS"
+Disp "  (ASYMPTOTES X=0, Y=0)"
+Else
+Disp "THE PART IN QUADRANT IV:"
+Disp "1:DECREASING, CURVING UP"
+Disp "  (LEVELS OFF/SHARP POINT)"
+Disp "2:DECREASING, CURVING DOWN"
+Disp "  (GETS STEEPER)"
+Disp "3:INCREASING TOWARD X-AXIS"
+Disp "  (ASYMPTOTES X=0, Y=0)"
+End
+3→θ
+prgmHAKEY
+θ→G
+If G=0
+Goto 4
+1+(I≥3)+(I≥5)→C
+{1,3,⁻1,2,4,⁻2,3,5,⁻3}→L₁
+{2,2,2,3,3,3,5,3,5}→L₂
+L₁(3C-3+G)→A
+L₂(3C-3+G)→B
+E→K
+A/B→θ
+prgmHAFRAC
+Str9→Str2
+prgmHAANS
+"Y=X^("+Str2+")"→Str9
+If E<0
+"Y=-X^("+Str2+")"→Str9
+prgmHAOUT
+"K=1, P="+Str2→Str9
+If E<0
+"K=-1, P="+Str2→Str9
+prgmHAOUT
+"1:AGAIN  2:HOME  3:WHY"→Str9
+3→θ
+prgmHAEND
+If θ=1
+Goto 4
+If θ≠3
+Return
+"WHY:"→Str9
+prgmHAPAGE
+"I ONLY: B EVEN"→Str9
+If I=2
+"IV ONLY: B EVEN"→Str9
+If I=3
+"I AND II: A EVEN, B ODD"→Str9
+If I=4
+"III AND IV: A EVEN, B ODD"→Str9
+If I=5
+"I AND III: A, B BOTH ODD"→Str9
+If I=6
+"II AND IV: A, B BOTH ODD"→Str9
+prgmHAOUT
+"K>0: NOT FLIPPED"→Str9
+If E<0
+"K<0: FLIPPED OVER X-AXIS"→Str9
+prgmHAOUT
+"LEVELS OFF: 0<P<1"→Str9
+If G=2
+"GETS STEEPER: P>1"→Str9
+If G=3
+"ASYMPTOTES: P<0"→Str9
+prgmHAOUT
+"1:AGAIN  2:HOME"→Str9
+2→θ
+prgmHAEND
+If θ=1
+Goto 4
+Return

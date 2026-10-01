@@ -1,0 +1,13 @@
+If K<0 and L>0
+Then
+L→θ
+prgmHAFRAC
+Str9→Str3
+{K,0}→ʟPLY
+prgmHAPOLY
+Str3+Str7→Str3
+Else
+{K,L}→ʟPLY
+prgmHAPOLY
+Str7→Str3
+End

@@ -1,0 +1,227 @@
+0→V
+If O=2
+Goto M
+If N=1
+ʟF1→ʟFNC
+If N=2
+ʟF2→ʟFNC
+If N=3
+ʟF3→ʟFNC
+{0,0,0,O,1}→ʟFNV
+If O=1
+{P,Q,R,1,1}→ʟFNV
+If ʟFNC(1)=3
+Goto G
+If ʟFNC(1)=4
+Goto W
+If ʟFNC(7)≠0 or ʟFNC(8)≠0
+Goto X
+If ʟFNC(1)=2
+Goto 2
+{ʟFNC(9),ʟFNC(10),ʟFNC(11)}→ʟQC
+prgmHAROOT
+If θ=⁻1
+Goto E
+If θ=0
+Goto B
+ʟRT→ʟFNR
+For(O,1,dim(ʟFNR))
+ʟFNR(O)→S
+6→θ
+prgmHADOM
+End
+Goto B
+Lbl 2
+If ʟFNC(2)≠0 or ʟFNC(3)≠0
+Goto X
+{ʟFNC(4),ʟFNC(5),ʟFNC(6)}→ʟSN
+{ʟFNC(9),ʟFNC(10),ʟFNC(11)}→ʟSD
+1→U
+8→θ
+prgmHADOM
+5→θ
+prgmHADOM
+Lbl B
+If ʟFNV(4)=0
+Goto Z
+If ʟFNC(2)≠0 or ʟFNC(3)≠0
+Goto X
+1→O
+Lbl C
+ʟFNV(O)→P
+3-2O→Q
+ʟFNV(3)→R
+If O=1
+R-2int(R/2)→R
+If O=2
+int(R/2)→R
+If abs(P)≥ᴇ98
+Goto N
+If ʟFNC(1)=2
+Goto K
+Q(seq(ʟFNC(S),S,4,6)-P*seq(ʟFNC(S),S,9,11))→ʟSN
+Goto S
+Lbl K
+If ʟFNC(12)=0
+Goto Q
+(P-ʟFNC(13))/ʟFNC(12)→P
+If Q*ʟFNC(12)<0
+Goto L
+If P<0
+Goto N
+seq(ʟFNC(S),S,4,6)-P²seq(ʟFNC(S),S,9,11)→ʟSN
+Goto S
+Lbl L
+If P<0 or (P=0 and not(R))
+Goto E
+P²seq(ʟFNC(S),S,9,11)-seq(ʟFNC(S),S,4,6)→ʟSN
+Goto S
+Lbl Q
+If Q(ʟFNC(13)-P)>0 or (R and ʟFNC(13)=P)
+Goto N
+Goto E
+Lbl S
+{ʟFNC(9),ʟFNC(10),ʟFNC(11)}→ʟSD
+R→U
+8→θ
+prgmHADOM
+5→θ
+prgmHADOM
+Lbl N
+O+1→O
+If O≤2
+Goto C
+Goto Z
+Lbl G
+If ʟFNV(4)=1
+Goto H
+ʟFNC(2)→O
+ʟFNC(5)→S
+ʟFNC(4+O)→T
+ʟFNC(3)→U
+ʟFNC(4)→V
+4→θ
+prgmHADOM
+5→θ
+prgmHADOM
+Goto Z
+Lbl H
+ʟFNV(1)→P
+ʟFNV(2)→Q
+ʟFNV(3)→R
+3→θ
+prgmHAGRAPH
+ʟFGL→ʟEL
+ʟFGR→ʟER
+ʟFGA→ʟEA
+ʟFGB→ʟEB
+5→θ
+prgmHADOM
+Goto Z
+Lbl W
+ʟFNC(2)→S
+ʟFNC(3)→T
+ʟFNC(4)→U
+ʟFNC(5)→V
+4→θ
+prgmHADOM
+5→θ
+prgmHADOM
+If ʟFNV(4)=1
+0→ʟFNV(5)
+Goto Z
+Lbl X
+0→ʟFNV(5)
+Goto Z
+Lbl E
+1→S
+0→T
+0→U
+0→V
+2→θ
+prgmHADOM
+Lbl Z
+ʟFNV(5)→θ
+Return
+Lbl M
+{N,P,1,0,1}→ʟFNS
+If P=1
+ʟF1→ʟFNC
+If P=2
+ʟF2→ʟFNC
+If P=3
+ʟF3→ʟFNC
+If ʟFNC(1)=1
+Goto M1
+If ʟFNC(1)=2
+Goto M2
+If ʟFNC(1)=3
+Then
+{ʟFNC(5),ʟFNC(4+ʟFNC(2)),ʟFNC(3)+2ʟFNC(4)}→ʟFNT
+Else
+{ʟFNC(2),ʟFNC(3),ʟFNC(4)+2ʟFNC(5)}→ʟFNT
+End
+Goto M3
+Lbl M2
+If ʟFNC(2)≠0 or ʟFNC(3)≠0 or ʟFNC(7)≠0 or ʟFNC(8)≠0
+Goto MX
+{ʟFNC(4),ʟFNC(5),ʟFNC(6)}→ʟSN
+{ʟFNC(9),ʟFNC(10),ʟFNC(11)}→ʟSD
+1→U
+8→θ
+prgmHADOM
+If dim(ʟEL)>1
+Goto MX
+{ʟEL(1),ʟER(1),ʟEA(1)+2ʟEB(1)}→ʟFNT
+Lbl M3
+ʟFNS(1)→N
+0→O
+prgmHAFDOM
+If θ=0
+0→ʟFNS(3)
+ʟFNS(1)→N
+1→O
+ʟFNT(1)→P
+ʟFNT(2)→Q
+ʟFNT(3)→R
+prgmHAFDOM
+If θ=0
+0→ʟFNS(3)
+Goto MZ
+Lbl M1
+If ʟFNC(7)≠0 or ʟFNC(8)≠0
+Goto MX
+{ʟFNC(9),ʟFNC(10),ʟFNC(11)}→ʟQC
+prgmHAROOT
+If θ=⁻1
+Goto ME
+θ→ʟFNS(4)
+ʟRT→ʟFNT
+ʟFNS(1)→N
+0→O
+prgmHAFDOM
+If θ=0
+0→ʟFNS(3)
+Lbl M4
+If ʟFNS(5)>ʟFNS(4)
+Goto MZ
+ʟFNS(1)→N
+ʟFNT(ʟFNS(5))→O
+1→P
+prgmHAFZERO
+If θ=0
+0→ʟFNS(3)
+ʟFNS(5)+1→ʟFNS(5)
+Goto M4
+Lbl ME
+1→S
+0→T
+0→U
+0→V
+2→θ
+prgmHADOM
+Goto MZ
+Lbl MX
+0→ʟFNS(3)
+Lbl MZ
+ʟFNS(3)→θ

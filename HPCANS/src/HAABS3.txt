@@ -1,0 +1,50 @@
+If I≠1
+Goto 2
+If abs(E)<ᴇ98
+E+D→E
+If abs(F)<ᴇ98
+F+D→F
+If F≤0
+Then
+⁻F→L
+⁻E→F
+L→E
+G→L
+H→G
+L→H
+Else
+If E<0
+Then
+(⁻E>F and G) or (F>⁻E and H) or (F=⁻E and (G or H))→H
+max(⁻E,F)→F
+0→E
+1→G
+End
+End
+Lbl 2
+If abs(E)<ᴇ98
+A*E+K→E
+If abs(E)≥ᴇ98 and A<0
+⁻E→E
+If abs(F)<ᴇ98
+A*F+K→F
+If abs(F)≥ᴇ98 and A<0
+⁻F→F
+If A<0
+Then
+E→L
+F→E
+L→F
+G→L
+H→G
+L→H
+End
+E→S
+F→T
+G→U
+H→V
+2→θ
+prgmHADOM
+9→θ
+prgmHADOM
+Str6→Str2

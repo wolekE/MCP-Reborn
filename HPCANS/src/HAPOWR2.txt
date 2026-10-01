@@ -1,0 +1,121 @@
+0→M
+1→L
+If I=3 or I=4 or I=6
+⁻1→L
+L*(E+G/F)→θ
+prgmHAFRAC
+X→A
+Y→B
+If not(Z)
+5→M
+If C=0 or D=0 or H=0
+1→M
+If L<0 and (C=0 or D=0)
+2→M
+If D<0 and not(fPart(F/2))
+3→M
+If M=0 and A=0
+4→M
+If M
+Return
+abs(D)→θ
+If F=2
+√(θ)→θ
+If F=3
+³√(θ)→θ
+If F≥4
+θ^(F⁻¹)→θ
+θ→E
+If D<0
+⁻E→E
+C*E→K
+If L<0
+H/(C*E)→K
+E→θ
+prgmHAFRAC
+If not(Z)
+Goto R
+Lbl E
+K→I
+""→Str2
+0→E
+Goto C
+Lbl R
+abs(D)→θ
+prgmHAFRAC
+If not(Z)
+Goto E
+X→E
+Y→G
+If L>0
+Then
+C/G→I
+E*G^(F-1)→G
+Else
+H/(C*E)→I
+G*E^(F-1)→G
+End
+If G≥ᴇ9
+Goto E
+If D<0
+⁻I→I
+2→M
+While M^F≤G
+If not(fPart(G/M^F))
+Then
+G/M^F→G
+I*M→I
+Else
+M+1→M
+End
+End
+2→M
+While M≤F
+If not(fPart(F/M)) and abs(G^(M⁻¹)-round(G^(M⁻¹),0))<ᴇ⁻9
+Then
+round(G^(M⁻¹),0)→G
+F/M→F
+Else
+M+1→M
+End
+End
+0→M
+G→θ
+prgmHAFRAC
+If F=2
+"√("+Str9+")"→Str2
+If F=3
+"³√("+Str9+")"→Str2
+If F≥4
+Then
+"("+Str9+"^(1/"→Str2
+F→θ
+prgmHAFRAC
+Str2+Str9+"))"→Str2
+End
+1→E
+Lbl C
+abs(I)→θ
+prgmHAFRAC
+Str9→Str0
+If Y>1
+"("+Str9+")"→Str0
+If Z and X=1 and Y=1
+""→Str0
+If I<0
+"-"+Str0→Str0
+Str0+Str2→Str1
+If not(E)
+Then
+K→θ
+prgmHAFRAC
+Str9→Str1
+End
+"Y="+Str0+Str2+"X"→Str0
+A/B→θ
+prgmHAFRAC
+Str9→Str2
+If B=1 and A>1
+Str0+"^"+Str2→Str0
+If B>1 or A<0
+Str0+"^("+Str2+")"→Str0

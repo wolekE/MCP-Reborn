@@ -1,0 +1,413 @@
+Lbl M
+ClrHome
+Disp "F(G(X))  COMPOSITION"
+Disp "WHAT DO THEY WANT?"
+Disp "1:SIMPLIFY + DOMAIN"
+Disp "2:F(G(5)) FROM GRAPHS"
+Disp "3:DOMAIN OF √(GRAPH)"
+Disp "4:DOMAIN OF GRAPH(√(X))"
+Disp "5:F(G(5)) FROM FORMULAS"
+5→θ
+prgmHAKEY
+θ→M
+If M=0
+Return
+If M=1
+Goto 1
+If M=3
+Goto 3
+If M=4
+Goto 4
+Goto 2
+Lbl 1
+ClrHome
+Disp "WHICH ONE IS ASKED?"
+Disp "1:F(G(X))  OR A(B(X))"
+Disp "2:G(F(X))  OR B(A(X))"
+Disp "3:F(F(X))"
+Disp "4:G(G(X))"
+Disp ""
+Disp "(TYPE A AS F, B AS G)"
+4→θ
+prgmHAKEY
+θ→J
+If J=0
+Goto M
+1→θ
+If J≠4
+Then
+1→N
+0→O
+"F"→Str9
+prgmHAFUNC
+End
+If θ=0
+Goto M
+If J≠3
+Then
+2→N
+0→O
+"G"→Str9
+prgmHAFUNC
+End
+If θ=0
+Goto M
+Lbl 1C
+1+(J=2 or J=4)→A
+1+(J=1 or J=4)→B
+sub("FG",A,1)+"("+sub("FG",B,1)+"(X))"→Str0
+prgmHACOMP2
+1→θ
+prgmHADOM
+B→N
+2→O
+A→P
+prgmHAFDOM
+θ→C
+prgmHACOMP6
+9→θ
+prgmHADOM
+"D="+Str6→Str2
+If C=0
+"D=? (NOT SUPPORTED)"→Str2
+length(Str1)→I
+For(K,1,length(Str1))
+If sub(Str1,K,1)="√("
+I+1→I
+End
+prgmHAANS
+If I>18
+Then
+Str0+"="→Str9
+prgmHAOUT
+Str1→Str9
+prgmHAOUT
+End
+If I>0 and I≤18
+Then
+Str0+"="+Str1→Str9
+prgmHAOUT
+End
+Str2→Str9
+prgmHAOUT
+If J≤2
+Then
+Output(9,1,"1:AGAIN  2:HOME")
+"3:OTHER ORDER  4:WHY"→Str9
+4→θ
+Else
+"1:AGAIN  2:HOME  3:WHY"→Str9
+3→θ
+End
+prgmHAEND
+θ→I
+If I=1
+Goto 1
+If I=3 and J≤2
+Goto 1S
+If I=3 or I=4
+Goto 1Y
+Return
+Lbl 1S
+3-J→J
+Goto 1C
+Lbl 1Y
+1→θ
+prgmHADOM
+B→N
+0→O
+prgmHAFDOM
+θ→C
+9→θ
+prgmHADOM
+Str6→Str2
+If C=0
+"?"→Str2
+1→θ
+prgmHADOM
+A→N
+0→O
+prgmHAFDOM
+θ→C
+9→θ
+prgmHADOM
+Str6→Str3
+If C=0
+"?"→Str3
+"WHY:"→Str9
+prgmHAPAGE
+If length(Str1)>0
+Then
+"PUT "+sub("FG",B,1)+"(X) IN FOR EVERY X"→Str9
+prgmHAOUT
+End
+If length(Str1)>0 and L₂(1)=1 and (L₂(7)≠0 or L₂(8)≠0 or L₂(9)≠0 or L₂(10)≠0)
+Then
+"THEN TOP,BOTTOM TIMES LCD"→Str9
+prgmHAOUT
+End
+"X MUST BE IN D OF "+sub("FG",B,1)+":"→Str9
+prgmHAOUT
+Str2→Str9
+prgmHAOUT
+sub("FG",B,1)+"(X) MUST BE IN D OF "+sub("FG",A,1)+":"→Str9
+prgmHAOUT
+Str3→Str9
+prgmHAOUT
+"(FOUND BEFORE SIMPLIFYING)"→Str9
+prgmHAOUT
+"1:AGAIN  2:HOME"→Str9
+2→θ
+prgmHAEND
+If θ=1
+Goto 1
+Return
+Lbl 2
+ClrHome
+Disp "WHICH ONE IS ASKED?"
+Disp "1:F(G(NUMBER))"
+Disp "2:G(F(NUMBER))"
+Disp "3:F(F(NUMBER))"
+Disp "4:G(G(NUMBER))"
+4→θ
+prgmHAKEY
+θ→J
+If J=0
+Goto M
+Input "THE NUMBER=",Str8
+prgmHANUM
+θ→H
+1+(J=2 or J=4)→A
+1+(J=1 or J=4)→B
+0→L
+If M=5
+Goto 2F
+(J=4 or dim(ʟGFX)>0) and (J=3 or dim(ʟGGX)>0)→I
+ClrHome
+Disp "GET THE VALUES FROM:"
+If I
+Disp "1:THE SAVED GRAPH(S)"
+If not(I)
+Disp "1:(NO SAVED GRAPH YET)"
+Disp "2:TYPE THE CORNER POINTS"
+Disp "3:READ THEM OFF THE GRAPH"
+3→θ
+prgmHAKEY
+θ→K
+If K=0
+Goto M
+If K=3
+Goto 2R
+9→L
+If K=2 or not(I)
+7→L
+Lbl 2F
+1→θ
+If J≠4
+Then
+1→N
+L→O
+"F"→Str9
+prgmHAFUNC
+End
+If θ=0
+Goto M
+If J≠3
+Then
+2→N
+L→O
+"G"→Str9
+prgmHAFUNC
+End
+If θ=0
+Goto M
+B→N
+H→O
+prgmHAFEVAL
+P→E
+Q→F
+0→G
+0→I
+If F=1
+Then
+A→N
+E→O
+prgmHAFEVAL
+P→G
+Q→I
+End
+Goto 2A
+Lbl 2R
+H→θ
+prgmHAFRAC
+sub("FG",B,1)+"("+Str9+")=?"→Str3
+ClrHome
+Disp "READ IT OFF THE GRAPH:"
+Disp Str3
+Disp "(NOT ON THE GRAPH? ENTER)"
+Input "Y=",Str8
+prgmHANUM
+θ→E
+1-Z→F
+0→G
+0→I
+If F=0
+Goto 2A
+E→θ
+prgmHAFRAC
+sub("FG",A,1)+"("+Str9+")=?"→Str3
+ClrHome
+Disp "READ IT OFF THE GRAPH:"
+Disp Str3
+Disp "(NOT ON THE GRAPH? ENTER)"
+Input "Y=",Str8
+prgmHANUM
+θ→G
+1-Z→I
+Lbl 2A
+H→θ
+prgmHAFRAC
+sub("FG",B,1)+"("+Str9+")"→Str0
+sub("FG",A,1)+"("+Str0+")="→Str1
+G→θ
+prgmHAFRAC
+Str9→Str2
+If I=0
+"UNDEFINED"→Str2
+If I=2 or F=2
+"?"→Str2
+If F=0
+"UNDEFINED"→Str2
+prgmHAANS
+Str1+Str2→Str9
+prgmHAOUT
+If F=0
+Str0+" DOES NOT EXIST"→Str9
+If F=2
+Str0+" IS NOT GIVEN"→Str9
+If F=1
+Then
+E→θ
+prgmHAFRAC
+Str0+"="+Str9→Str9
+End
+prgmHAOUT
+If F=1
+Then
+E→θ
+prgmHAFRAC
+sub("FG",A,1)+"("+Str9+")"→Str3
+G→θ
+prgmHAFRAC
+Str3+"="+Str9→Str9
+If I=0
+Str3+" DOES NOT EXIST"→Str9
+If I=2
+Str3+" IS NOT GIVEN"→Str9
+prgmHAOUT
+End
+"1:AGAIN  2:HOME"→Str9
+2→θ
+prgmHAEND
+If θ=1
+Goto 2
+Return
+Lbl 3
+ClrHome
+Disp "DOMAIN OF Y=√(GRAPH)"
+Disp "UNDER THE √( IS:"
+Disp "1:THE GRAPH OF F"
+Disp "2:THE GRAPH OF G"
+2→θ
+prgmHAKEY
+θ→B
+If B=0
+Goto M
+B→N
+7→O
+sub("FG",B,1)→Str9
+prgmHAFUNC
+If θ=0
+Goto M
+1→θ
+prgmHADOM
+B→N
+1→O
+0→P
+ᴇ99→Q
+1→R
+prgmHAFDOM
+θ→C
+prgmHACOMP6
+9→θ
+prgmHADOM
+"D="+Str6→Str2
+If C=0
+"D=? (NOT SUPPORTED)"→Str2
+prgmHAANS
+Str2→Str9
+prgmHAOUT
+"1:AGAIN  2:HOME"→Str9
+2→θ
+prgmHAEND
+If θ=1
+Goto 3
+Return
+Lbl 4
+ClrHome
+Disp "DOMAIN OF GRAPH(√(X))"
+Disp "THE OUTSIDE GRAPH IS:"
+Disp "1:THE GRAPH OF F"
+Disp "2:THE GRAPH OF G"
+2→θ
+prgmHAKEY
+θ→A
+If A=0
+Goto M
+A→N
+7→O
+sub("FG",A,1)→Str9
+prgmHAFUNC
+If θ=0
+Goto M
+ClrHome
+Disp "INSIDE THE GRAPH IS:"
+Disp "1:√(X)"
+Disp "2:SOMETHING ELSE"
+2→θ
+prgmHAKEY
+θ→C
+If C=0
+Goto M
+{2,0,0,0,1,0,0,0,0,0,1,1,0}→ʟF3
+If C=2
+Then
+3→N
+0→O
+sub("GF",A,1)→Str9
+prgmHAFUNC
+End
+If θ=0
+Goto M
+1→θ
+prgmHADOM
+3→N
+2→O
+A→P
+prgmHAFDOM
+θ→C
+prgmHACOMP6
+9→θ
+prgmHADOM
+"D="+Str6→Str2
+If C=0
+"D=? (NOT SUPPORTED)"→Str2
+prgmHAANS
+Str2→Str9
+prgmHAOUT
+"1:AGAIN  2:HOME"→Str9
+2→θ
+prgmHAEND
+If θ=1
+Goto 4
+Return

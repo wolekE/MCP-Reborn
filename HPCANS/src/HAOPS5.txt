@@ -1,0 +1,61 @@
+If ʟOPR(2)=0 or ʟOPR(3)=0
+Goto R
+√(ʟOPR(3))→θ
+prgmHAFRAC
+If Z
+Goto R
+ʟOPR(3)→θ
+prgmHAFRAC
+If not(Z)
+Goto R
+X*Y→L
+ʟOPR(2)/Y→ʟOPR(2)
+2→S
+While S²≤L and S<100
+If fPart(L/S²)=0
+Then
+L/S²→L
+ʟOPR(2)*S→ʟOPR(2)
+Else
+S+1→S
+End
+End
+L→ʟOPR(3)
+If L=1
+Goto R
+L→θ
+prgmHAFRAC
+"√("+Str9+")"→Str1
+abs(ʟOPR(2))→θ
+prgmHAFRAC
+If not(Z)
+Goto R
+If Str9≠"1"
+Then
+If Y>1
+"("+Str9+")"→Str9
+Str9+Str1→Str1
+End
+If ʟOPR(2)<0
+"-"+Str1→Str1
+If abs(ʟOPR(1))<ᴇ⁻9
+Return
+ʟOPR(1)→θ
+prgmHAFRAC
+If not(Z)
+Goto R
+If ʟOPR(2)>0 and ʟOPR(1)<0
+Goto N
+If ʟOPR(2)>0
+"+"+Str1→Str1
+Str9+Str1→Str1
+Return
+Lbl N
+Str1+Str9→Str1
+Return
+Lbl R
+ʟOPR(1)+ʟOPR(2)*√(ʟOPR(3))→θ
+prgmHAFRAC
+Str9→Str1
+If not(Z)
+"ABOUT "+Str1→Str1

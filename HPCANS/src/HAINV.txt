@@ -1,0 +1,534 @@
+Lbl M
+ClrHome
+Disp "F⁻¹(X)  INVERSE"
+Disp "WHAT DO THEY WANT?"
+Disp "1:FIND F⁻¹(X)"
+Disp "2:VERIFY TWO FUNCTIONS"
+Disp "3:DOMAIN/RANGE OF F⁻¹"
+Disp "4:HAS INVERSE? (HLT)"
+4→θ
+prgmHAKEY
+θ→I
+If I=0
+Return
+If I=1
+Goto 1
+If I=2
+Goto 2
+If I=3
+Goto 3
+Goto 4
+Lbl 1
+1→I
+"F"→Str0
+0→H
+prgmHAINV2
+If H=0
+Goto M
+L₃→L₁
+Lbl F
+If L₁(1)=1
+Goto R
+If fPart(L₁(6)/2)=0
+Goto P
+prgmHAINV6
+prgmHAANS
+If I=3
+Then
+"FOR F⁻¹:"→Str9
+prgmHAOUT
+Else
+Str1→Str2
+prgmHAINV9
+End
+L₁(2)→A
+L₁(3)→B
+L₁(4)→C
+L₁(5)→D
+L₁(6)→E
+L₁(7)→F
+⁻C/B→H
+If abs(H)<ᴇ⁻9
+0→H
+fPart(F/2)=0→G
+2→K
+If I=3
+5→K
+If I=1 and not(G) and E>0
+Goto E
+If I=1
+Then
+D→θ
+prgmHAFRAC
+"≠"→Str3
+If G and A>0
+"≥"→Str3
+If G and A<0
+"≤"→Str3
+If G and E<0 and A>0
+">"→Str3
+If G and E<0 and A<0
+"<"→Str3
+"FOR X"+Str3+Str9→Str9
+prgmHAOUT
+End
+If G
+Then
+D→S
+ᴇ99→T
+E>0→U
+0→V
+If A<0
+Then
+⁻ᴇ99→S
+D→T
+0→U
+E>0→V
+End
+2→θ
+prgmHADOM
+Else
+1→θ
+prgmHADOM
+D→S
+6→θ
+If E<0
+prgmHADOM
+End
+9→θ
+prgmHADOM
+"D="+Str6→Str9
+prgmHAOUT
+If G
+Then
+H→S
+ᴇ99→T
+E>0→U
+0→V
+If B<0
+Then
+⁻ᴇ99→S
+H→T
+0→U
+E>0→V
+End
+2→θ
+prgmHADOM
+Else
+1→θ
+prgmHADOM
+H→S
+6→θ
+If E<0
+prgmHADOM
+End
+9→θ
+prgmHADOM
+inString(Str6,"X≠")→J
+If J
+sub(Str6,1,J-1)+"Y≠"+sub(Str6,J+2,length(Str6)-J-1)→Str6
+"R="+Str6→Str9
+prgmHAOUT
+Goto E
+Lbl R
+L₁(2)→A
+L₁(3)→B
+L₁(4)→C
+L₁(5)→D
+If abs(AD-BC)<ᴇ⁻10
+Goto N
+If I=3
+Goto Q
+D→E
+⁻B→F
+⁻C→G
+A→H
+prgmHAINV5
+prgmHAANS
+prgmHAINV9
+1→K
+Goto E
+Lbl Q
+5→K
+prgmHAANS
+"FOR F⁻¹:"→Str9
+prgmHAOUT
+1→θ
+prgmHADOM
+If C≠0
+A/C→S
+6→θ
+If C≠0
+prgmHADOM
+9→θ
+prgmHADOM
+"D="+Str6→Str9
+prgmHAOUT
+1→θ
+prgmHADOM
+If C≠0
+⁻D/C→S
+6→θ
+If C≠0
+prgmHADOM
+9→θ
+prgmHADOM
+inString(Str6,"X≠")→J
+If J
+sub(Str6,1,J-1)+"Y≠"+sub(Str6,J+2,length(Str6)-J-1)→Str6
+"R="+Str6→Str9
+prgmHAOUT
+Goto E
+Lbl N
+3→K
+prgmHAANS
+"NO INVERSE FUNCTION"→Str9
+prgmHAOUT
+"(F IS A CONSTANT)"→Str9
+prgmHAOUT
+Goto E
+Lbl P
+(⁻1-L₁(4))/L₁(3)→A
+(1-L₁(4))/L₁(3)→B
+L₁(2)+L₁(5)→C
+Lbl W
+3→K
+If A>B
+Then
+A→D
+B→A
+D→B
+End
+prgmHAANS
+If I=4
+Then
+"NO, NOT ONE-TO-ONE"→Str9
+prgmHAOUT
+Else
+"NO INVERSE FUNCTION"→Str9
+prgmHAOUT
+"(NOT ONE-TO-ONE)"→Str9
+prgmHAOUT
+End
+C→θ
+prgmHAFRAC
+Str9→Str2
+A→θ
+prgmHAFRAC
+"F("+Str9+")="+Str2→Str9
+prgmHAOUT
+B→θ
+prgmHAFRAC
+"F("+Str9+")="+Str2→Str9
+prgmHAOUT
+"Y="+Str2+" HITS TWICE"→Str9
+prgmHAOUT
+"(F IS EVEN)"→Str9
+If abs(A+B)<ᴇ⁻9
+prgmHAOUT
+Goto E
+Lbl 2
+2→I
+"F"→Str0
+0→H
+prgmHAINV2
+If H=0
+Goto M
+L₃→L₁
+"G"→Str0
+0→H
+prgmHAINV2
+If H=0
+Goto M
+L₃→L₂
+prgmHAINV7
+4→K
+Goto E
+Lbl 3
+3→I
+ClrHome
+Disp "WHAT DOES THE PAPER GIVE?"
+Disp "1:D AND R OF F (INTERVALS)"
+Disp "2:THE FORMULA FOR F"
+2→θ
+prgmHAKEY
+θ→J
+If J=0
+Goto M
+If J=2
+Goto 5
+"DOMAIN OF F:"→Str9
+prgmHAIVL
+{S,T,U,V}→L₄
+"RANGE OF F:"→Str9
+prgmHAIVL
+{S,T,U,V}→L₅
+5→K
+prgmHAANS
+"FOR F⁻¹:"→Str9
+prgmHAOUT
+L₅(1)→S
+L₅(2)→T
+L₅(3)→U
+L₅(4)→V
+2→θ
+prgmHADOM
+9→θ
+prgmHADOM
+"D="+Str6→Str9
+prgmHAOUT
+L₄(1)→S
+L₄(2)→T
+L₄(3)→U
+L₄(4)→V
+2→θ
+prgmHADOM
+9→θ
+prgmHADOM
+"R="+Str6→Str9
+prgmHAOUT
+Goto E
+Lbl 5
+"F"→Str0
+0→H
+prgmHAINV2
+If H=0
+Goto 3
+L₃→L₁
+Goto F
+Lbl 4
+4→I
+ClrHome
+Disp "WHAT DOES F LOOK LIKE?"
+Disp "1:LINE  AX+B"
+Disp "2:PARABOLA  X²"
+Disp "3:X³  ³√(X)  √(X)"
+Disp "4:ABS VALUE  |X|"
+Disp "5:POWER X^(M/N) OR X^4"
+Disp "6:FRACTION  1/X"
+Disp "7:𝑒^(X)  OR  LN X"
+Disp "8:[[X]] GREATEST INTEGER"
+Disp "9:A GRAPH"
+9→θ
+prgmHAKEY
+θ→J
+If J=0
+Goto M
+If J=2
+Goto 6
+If J=4
+Goto 7
+If J=5
+Goto 8
+If J=8
+Goto 9
+If J=9
+Goto 0
+Lbl H
+6→K
+prgmHAANS
+"YES, HAS INVERSE"→Str9
+prgmHAOUT
+"(PASSES THE HLT)"→Str9
+prgmHAOUT
+"(A FLAT LINE Y=5 IS NO)"→Str9
+If I=4 and J=1
+prgmHAOUT
+Goto E
+Lbl 6
+ClrHome
+Disp "TYPE F(X) WITH THE X KEY"
+Disp "EX: (X-1)²  OR  X²-2"
+Input "Y=",Str8
+If length(Str8)=0
+Goto 6
+prgmHAINV3
+0→X
+expr(Str3)→C
+1→X
+expr(Str3)→A
+⁻1→X
+expr(Str3)→B
+(A+B)/2-C→D
+If abs(D)<ᴇ⁻9
+Goto H
+⁻(A-B)/(4D)→H
+H-1→A
+H+1→B
+B→X
+expr(Str3)→C
+Goto W
+Lbl 7
+"F"→Str0
+8→H
+prgmHAINV2
+If H=0
+Goto 4
+L₃→L₁
+Goto P
+Lbl 8
+"F"→Str0
+7→H
+prgmHAINV2
+If H=0
+Goto 4
+L₃→L₁
+If fPart(L₁(6)/2)=0
+Goto P
+Goto H
+Lbl 9
+0→A
+1/2→B
+0→C
+Goto W
+Lbl 0
+ClrHome
+Disp "LOOK AT THE GRAPH. CAN A"
+Disp "FLAT (HORIZONTAL) LINE"
+Disp "HIT IT TWICE?"
+Disp "1:YES"
+Disp "2:NO"
+Disp "3:NOT SURE: TYPE CORNERS"
+3→θ
+prgmHAKEY
+θ→J
+If J=0
+Goto 4
+If J=2
+Goto H
+If J=3
+Goto C
+3→K
+prgmHAANS
+"NO, NOT ONE-TO-ONE"→Str9
+prgmHAOUT
+"(FAILS THE HLT)"→Str9
+prgmHAOUT
+Goto E
+Lbl C
+"GRAPH: CORNERS OF F"→Str9
+prgmHAPTS
+prgmHAINV8
+If not(J)
+Goto H
+Goto W
+Lbl E
+"1:AGAIN  2:HOME  3:WHY"→Str9
+3→θ
+prgmHAEND
+θ→J
+If J=3
+Goto Y
+Lbl G
+If J≠1
+Return
+If I=1
+Goto 1
+If I=2
+Goto 2
+If I=3
+Goto 3
+Goto 4
+Lbl Y
+"WHY:"→Str9
+prgmHAPAGE
+If K=1
+Goto Y1
+If K=2
+Goto Y2
+If K=3
+Goto Y3
+If K=4
+Goto Y4
+If K=5
+Goto Y5
+"EVERY FLAT LINE HITS IT"→Str9
+prgmHAOUT
+"AT MOST ONCE: ONE-TO-ONE."→Str9
+prgmHAOUT
+Goto Z
+Lbl Y1
+"SWAP X AND Y, SOLVE FOR Y."→Str9
+prgmHAOUT
+L₁(2)→A
+L₁(3)→B
+L₁(4)→C
+L₁(5)→D
+If C=0
+Goto Y7
+"Y TERMS TO ONE SIDE:"→Str9
+prgmHAOUT
+C→K
+⁻A→L
+prgmHAINVL
+"Y("+Str3+")="→Str2
+⁻D→K
+B→L
+prgmHAINVL
+Str2+Str3→Str9
+prgmHAOUT
+Lbl Y7
+2→E
+If CE+D=0
+1→E
+(AE+B)/(CE+D)→F
+Goto Y8
+Lbl Y2
+"SWAP X AND Y, ISOLATE THE"→Str9
+prgmHAOUT
+"POWER, UNDO IT WITH THE"→Str9
+prgmHAOUT
+"FLIPPED POWER."→Str9
+prgmHAOUT
+"RESTRICTION=RANGE OF F."→Str9
+If fPart(L₁(7)/2)=0
+prgmHAOUT
+(2^L₁(7)-L₁(4))/L₁(3)→E
+L₁(2)*2^L₁(6)+L₁(5)→F
+Lbl Y8
+E→θ
+prgmHAFRAC
+"CHECK: F("+Str9+")="→Str2
+F→θ
+prgmHAFRAC
+Str2+Str9→Str9
+prgmHAOUT
+F→θ
+prgmHAFRAC
+"AND F⁻¹("+Str9+")="→Str2
+E→θ
+prgmHAFRAC
+Str2+Str9→Str9
+prgmHAOUT
+"(F⁻¹ IS NOT 1/F.)"→Str9
+prgmHAOUT
+Goto Z
+Lbl Y3
+"TWO X VALUES GIVE THE"→Str9
+prgmHAOUT
+"SAME Y: A FLAT LINE HITS"→Str9
+prgmHAOUT
+"TWICE, SO IT FAILS THE HLT"→Str9
+prgmHAOUT
+Goto Z
+Lbl Y4
+"INVERSES ONLY IF BOTH"→Str9
+prgmHAOUT
+"F(G(X))=X AND G(F(X))=X."→Str9
+prgmHAOUT
+"ONE FAILS: NOT INVERSES."→Str9
+prgmHAOUT
+Goto Z
+Lbl Y5
+"SWAP: D OF F⁻¹=R OF F"→Str9
+prgmHAOUT
+"AND R OF F⁻¹=D OF F."→Str9
+prgmHAOUT
+"BRACKETS STAY THE SAME."→Str9
+prgmHAOUT
+Lbl Z
+"1:AGAIN  2:HOME"→Str9
+2→θ
+prgmHAEND
+θ→J
+Goto G

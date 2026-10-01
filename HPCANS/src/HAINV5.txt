@@ -1,0 +1,22 @@
+{E,F,G,H}→L₅
+prgmHAINVS
+If L₅(3)<0 or (L₅(3)=0 and L₅(4)<0)
+⁻L₅→L₅
+L₅(1)→E
+L₅(2)→F
+L₅(3)→G
+L₅(4)→H
+E→K
+F→L
+prgmHAINVL
+Str3→Str2
+If G=0 and H=1
+Return
+If E≠0 and F≠0
+"("+Str2+")"→Str2
+G→K
+H→L
+prgmHAINVL
+If G≠0 and (H≠0 or G≠1)
+"("+Str3+")"→Str3
+Str2+"/"+Str3→Str2

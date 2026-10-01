@@ -1,0 +1,70 @@
+{E}→ʟDL
+{F}→ʟDR
+{G}→ʟDA
+{H}→ʟDB
+If I=3
+Goto 2
+Lbl 1
+For(L,1,dim(ʟDL))
+ʟDL(L)→E
+ʟDR(L)→F
+If abs(E)<ᴇ98
+Then
+(E-C)/B→E
+Else
+If B<0
+⁻E→E
+End
+If abs(F)<ᴇ98
+Then
+(F-C)/B→F
+Else
+If B<0
+⁻F→F
+End
+If B<0
+Then
+ʟDA(L)→G
+ʟDB(L)→H
+F→ʟDL(L)
+E→ʟDR(L)
+H→ʟDA(L)
+G→ʟDB(L)
+Else
+E→ʟDL(L)
+F→ʟDR(L)
+End
+End
+SortA(ʟDL,ʟDR,ʟDA,ʟDB)
+If I≠2
+Goto 9
+Lbl 2
+ʟDL(1)→E
+ʟDR(1)→F
+ʟDA(1)→G
+ʟDB(1)→H
+{1}→ʟDL
+{0}→ʟDR
+{0}→ʟDA
+{0}→ʟDB
+If F>0 or (F=0 and H)
+Then
+{⁻F}→ʟDL
+{F}→ʟDR
+{H}→ʟDA
+{H}→ʟDB
+If E>0 or (E=0 and not(G))
+Then
+{⁻F,E}→ʟDL
+{⁻E,F}→ʟDR
+{H,G}→ʟDA
+{G,H}→ʟDB
+End
+End
+If I=3
+Goto 1
+Lbl 9
+0→V
+9→θ
+prgmHADOM
+Str6→Str1

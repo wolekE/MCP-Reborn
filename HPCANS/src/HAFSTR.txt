@@ -1,0 +1,59 @@
+If N=1
+ʟF1→ʟFNC
+If N=2
+ʟF2→ʟFNC
+If N=3
+ʟF3→ʟFNC
+""→Str5
+If ʟFNC(1)>2
+Return
+seq(ʟFNC(S),S,2,6)→ʟFNN
+seq(ʟFNC(S),S,7,11)→ʟFND
+sum(abs(ʟFND)≥ᴇ⁻9)→O
+If O=0
+Return
+If O=1 and abs(ʟFND(5))≥ᴇ⁻9
+Goto C
+ʟFNN→ʟPLY
+prgmHAPOLY
+Str7→Str5
+If sum(abs(ʟFNN)≥ᴇ⁻9)>1
+"("+Str5+")"→Str5
+ʟFND→ʟPLY
+prgmHAPOLY
+If O>1 or sum(ʟFND)≠1
+"("+Str7+")"→Str7
+Str5+"/"+Str7→Str5
+Goto K
+Lbl C
+ʟFNN/ʟFND(5)→ʟPLY
+prgmHAPOLY
+Str7→Str5
+Lbl K
+If ʟFNC(1)=1
+Return
+"√("+Str5+")"→Str5
+ʟFNC(12)→P
+ʟFNC(13)→Q
+If P=0
+""→Str5
+If P=⁻1
+"-"+Str5→Str5
+If P≠0 and abs(P)≠1
+Then
+P→θ
+prgmHAFRAC
+If Y>1
+"("+Str9+")"→Str9
+Str9+Str5→Str5
+End
+If Q≠0 or P=0
+Then
+abs(Q)→θ
+prgmHAFRAC
+If Q<0
+"-"+Str9→Str9
+If Q≥0 and P≠0
+"+"+Str9→Str9
+Str5+Str9→Str5
+End

@@ -1,0 +1,114 @@
+min(ʟBX)→E
+max(ʟBX)→F
+ʟBC(1)→G
+ʟBC(2)→H
+prgmHAABS2
+If Str1="NO REAL NUMBERS"
+Return
+ʟBX→L₁
+ʟBY→L₂
+dim(L₁)→M
+seq(1,L,1,M)→L₃
+ʟBC(1)→L₃(1)
+ʟBC(2)→L₃(M)
+If I≠1
+Goto 2
+L₂+D→L₂
+For(L,1,M-1)
+If L₂(L)*L₂(L+1)<0
+Then
+L₁(L)-L₂(L)*(L₁(L+1)-L₁(L))/(L₂(L+1)-L₂(L))→L₁(dim(L₁)+1)
+0→L₂(dim(L₂)+1)
+1→L₃(dim(L₃)+1)
+End
+End
+(L₁-C)/B→L₁
+A*abs(L₂)+K→L₂
+Goto 5
+Lbl 2
+If I=2
+(L₁-C)/B→L₁
+For(L,1,M-1)
+If L₁(L)*L₁(L+1)<0
+Then
+L₂(L)-L₁(L)*(L₂(L+1)-L₂(L))/(L₁(L+1)-L₁(L))→L₂(dim(L₂)+1)
+0→L₁(dim(L₁)+1)
+1→L₃(dim(L₃)+1)
+End
+End
+dim(L₁)→M
+For(L,1,M)
+If L₁(L)>0
+Then
+⁻L₁(L)→L₁(dim(L₁)+1)
+L₂(L)→L₂(dim(L₂)+1)
+L₃(L)→L₃(dim(L₃)+1)
+End
+End
+0→E
+For(L,1,dim(L₁))
+If L>M or L₁(L)≥0
+Then
+E+1→E
+L₁(L)→L₁(E)
+L₂(L)→L₂(E)
+L₃(L)→L₃(E)
+End
+End
+E→dim(L₁)
+E→dim(L₂)
+E→dim(L₃)
+min(abs(L₁))→E
+If E>0
+L₃+2(abs(L₁)=E)→L₃
+If I=3
+(L₁-C)/B→L₁
+A*L₂+K→L₂
+Lbl 5
+SortA(L₁,L₂,L₃)
+min(L₂)→E
+max(L₂)→F
+0→G
+0→H
+For(L,1,dim(L₂))
+If (L₃(L)=1 or L₃(L)=3) and abs(L₂(L)-E)<ᴇ⁻9
+1→G
+If (L₃(L)=1 or L₃(L)=3) and abs(L₂(L)-F)<ᴇ⁻9
+1→H
+End
+For(L,1,dim(L₂)-1)
+If (L₃(L)<2 or L₃(L+1)<2) and abs(L₂(L)-E)<ᴇ⁻9 and abs(L₂(L+1)-E)<ᴇ⁻9
+1→G
+If (L₃(L)<2 or L₃(L+1)<2) and abs(L₂(L)-F)<ᴇ⁻9 and abs(L₂(L+1)-F)<ᴇ⁻9
+1→H
+End
+E→S
+F→T
+G→U
+H→V
+2→θ
+prgmHADOM
+9→θ
+prgmHADOM
+Str6→Str2
+1→E
+dim(L₁)→M
+For(L,2,M-1)
+If L₃(L)≠1 or abs((L₂(L)-L₂(E))*(L₁(L+1)-L₁(E))-(L₂(L+1)-L₂(E))*(L₁(L)-L₁(E)))>ᴇ⁻9
+Then
+E+1→E
+L₁(L)→L₁(E)
+L₂(L)→L₂(E)
+L₃(L)→L₃(E)
+End
+End
+If M>1
+Then
+E+1→E
+L₁(M)→L₁(E)
+L₂(M)→L₂(E)
+L₃(M)→L₃(E)
+End
+E→dim(L₁)
+E→dim(L₂)
+E→dim(L₃)

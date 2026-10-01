@@ -1,0 +1,26 @@
+If length(Str8)=0
+"X"→Str8
+"("→Str3
+For(K,1,length(Str8))
+sub(Str8,K,1)→Str2
+If Str2="-" and inString("(+-*/^⁻√(³√(",sub(Str3,length(Str3),1))
+"⁻"→Str2
+Str3+Str2→Str3
+End
+sub(Str3,2,length(Str3)-1)→Str3
+If Str3="⁻"
+"⁻X"→Str3
+0→X
+expr(Str3)→L
+1→X
+expr(Str3)-L→K
+2→X
+abs(expr(Str3)-L-2K)≤ᴇ⁻9*max(1,abs(L)+abs(K))→M
+K→θ
+prgmHAFRAC
+If Z
+X/Y→K
+L→θ
+prgmHAFRAC
+If Z
+X/Y→L

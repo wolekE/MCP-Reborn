@@ -1,0 +1,34 @@
+ʟCMP*(abs(ʟCMP)≥ᴇ⁻9)→ʟCMP
+""→Str3
+If K≠0
+Then
+augment(augment({2},ʟCMN),{0,0,0,0,1,K,0})→ʟF3
+3→N
+prgmHAFSTR
+Str5→Str3
+End
+ʟCMP→ʟPLY
+prgmHAPOLY
+Str7→Str2
+sum(abs(ʟCMP)>0)→I
+sum(ʟCMP)→L
+If K≠0
+Then
+K→L
+If I=0
+Str3→Str2
+If I>0 and sum(abs(ʟCMP))=abs(ʟCMP(5))
+Then
+If ʟCMP(5)>0
+"+"+Str2→Str2
+Str3+Str2→Str2
+Else
+If I>0
+Then
+If sub(Str3,1,1)≠"-"
+"+"+Str3→Str3
+Str2+Str3→Str2
+End
+End
+End
+I+(K≠0)→I

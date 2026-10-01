@@ -1,0 +1,626 @@
+[
+ {
+  "item_id": "EX-4.1",
+  "what_question_gives": "11 functions: x³-2, (x-1)², |x|+3, 1/x, √x, e^x, ln x, ³√x, x², |x|, [[x]]; asks which have inverse functions",
+  "solver_path": "3 → 4:HAS INVERSE? (HLT) → family menu (1:LINE 2:PARABOLA 3:X³ ³√(X) √(X) 4:ABS VALUE 5:POWER 6:FRACTION 7:e^X/LN X 8:[[X]] 9:GRAPH)",
+  "student_enters": "x³-2, √x, ³√x: 3. 1/x: 6. e^x, ln x: 7. (x-1)²: 2 then Y=(X-1)². |x|+3: 4 then A=ENTER INSIDE=ENTER D=3. x²: 5 then POWER=2, then ENTER three times. |x|: 4 then ENTER three times. [[x]]: 8",
+  "calculator_shows": "YES, HAS INVERSE / (PASSES THE HLT) for the yes families. Otherwise NO, NOT ONE-TO-ONE with a witness: F(0)=1 F(2)=1 Y=1 HITS TWICE for (x-1)²; F(-1)=4 F(1)=4 (F IS EVEN) for |x|+3; F(-1)=1 F(1)=1 (F IS EVEN) for x² and |x|; F(0)=0 F(1/2)=0 for [[x]]",
+  "expected_answer": "YES: x³-2, 1/x, √x, e^x, ln x, ³√x. NO: (x-1)² (x=0 and x=2 both give 1), |x|+3 (even), x², |x|, [[x]]",
+  "test_ids": [
+   "EX-4.1a",
+   "EX-4.1b",
+   "EX-4.1c",
+   "EX-4.1d",
+   "EX-4.1e",
+   "EX-4.1f",
+   "EX-4.1g",
+   "EX-4.1h",
+   "EX-4.1i",
+   "EX-4.1j",
+   "EX-4.1k"
+  ]
+ },
+ {
+  "item_id": "EX-4.2",
+  "what_question_gives": "f(x)=4x-7",
+  "solver_path": "3 → 1:FIND F⁻¹(X) → 1:AX+B",
+  "student_enters": "Y=4X-7",
+  "calculator_shows": "F⁻¹(X)=(X+7)/4 (the WHY page shows CHECK: F(2)=1 AND F⁻¹(1)=2)",
+  "expected_answer": "f⁻¹(x)=(x+7)/4",
+  "test_ids": [
+   "EX-4.2"
+  ]
+ },
+ {
+  "item_id": "EX-4.3",
+  "what_question_gives": "f(x)=³√(2x+5)-1",
+  "solver_path": "3 → 1:FIND → 5:A³√(BX+C)+D",
+  "student_enters": "A=ENTER INSIDE=2X+5 D=-1",
+  "calculator_shows": "F⁻¹(X)=((X+1)³-5)/2",
+  "expected_answer": "((x+1)³-5)/2",
+  "test_ids": [
+   "EX-4.3"
+  ]
+ },
+ {
+  "item_id": "EX-4.4a",
+  "what_question_gives": "f(x)=(2x-5)/(3x+4)",
+  "solver_path": "3 → 1:FIND → 2:(AX+B)/(CX+D)",
+  "student_enters": "TOP=2X-5 BOTTOM=3X+4",
+  "calculator_shows": "F⁻¹(X)=(-4X-5)/(3X-2) (the WHY page shows Y(3X-2)=-4X-5)",
+  "expected_answer": "(-4x-5)/(3x-2)",
+  "test_ids": [
+   "EX-4.4a"
+  ]
+ },
+ {
+  "item_id": "EX-4.4b",
+  "what_question_gives": "Verify f(f⁻¹(x))=x for f and f⁻¹ above",
+  "solver_path": "3 → 2:VERIFY TWO FUNCTIONS; F and G each entered with 2:FRACTION",
+  "student_enters": "F: TOP=2X-5 BOTTOM=3X+4; G: TOP=-4X-5 BOTTOM=3X-2",
+  "calculator_shows": "YES, INVERSES / F(G(X))=-23X/-23=X / G(F(X))=-23X/-23=X",
+  "expected_answer": "-23x/-23 = x",
+  "test_ids": [
+   "EX-4.4b"
+  ]
+ },
+ {
+  "item_id": "EX-4.4c",
+  "what_question_gives": "Verify f⁻¹(f(x))=x",
+  "solver_path": "Same VERIFY run as EX-4.4b; G(F(X)) is f⁻¹(f(x))",
+  "student_enters": "same as EX-4.4b",
+  "calculator_shows": "G(F(X))=-23X/-23=X",
+  "expected_answer": "-23x/-23 = x; inverses",
+  "test_ids": [
+   "EX-4.4c"
+  ]
+ },
+ {
+  "item_id": "EX-4.5",
+  "what_question_gives": "f(x)=3√(x-1)+2",
+  "solver_path": "3 → 1:FIND → 6:A√(BX+C)+D",
+  "student_enters": "A=3 INSIDE=X-1 D=2",
+  "calculator_shows": "F⁻¹(X)=((X-2)/3)²+1 / FOR X≥2 / D=[2,INF) / R=[1,INF)",
+  "expected_answer": "((x-2)/3)²+1, x≥2",
+  "test_ids": [
+   "EX-4.5"
+  ]
+ },
+ {
+  "item_id": "EX-4.6",
+  "what_question_gives": "f(x)=2(x-4)^(3/5)+1",
+  "solver_path": "3 → 1:FIND → 7:A(BX+C)^(M/N)+D",
+  "student_enters": "POWER=3/5 A=2 INSIDE=X-4 D=1",
+  "calculator_shows": "F⁻¹(X)=((X-1)/2)^(5/3)+4 (the WHY page shows CHECK: F(36)=17 AND F⁻¹(17)=36)",
+  "expected_answer": "((x-1)/2)^(5/3)+4, no restriction",
+  "test_ids": [
+   "EX-4.6"
+  ]
+ },
+ {
+  "item_id": "EX-4.7",
+  "what_question_gives": "f(x)=2/(x-1), g(x)=(x+2)/2: inverses? and the true inverse",
+  "solver_path": "(a) 3 → 2:VERIFY, both with 2:FRACTION; (b) 3 → 1:FIND → 2:FRACTION",
+  "student_enters": "(a) F: TOP=2 BOTTOM=X-1; G: TOP=X+2 BOTTOM=2. (b) TOP=2 BOTTOM=X-1",
+  "calculator_shows": "(a) NO, NOT INVERSES / F(G(X))=4/X≠X / G(F(X))=X/(X-1)≠X. (b) F⁻¹(X)=(X+2)/X",
+  "expected_answer": "Not inverses: f(g(x))=4/x≠x; f⁻¹(x)=(x+2)/x",
+  "test_ids": [
+   "EX-4.7a",
+   "EX-4.7b"
+  ]
+ },
+ {
+  "item_id": "EX-4.8",
+  "what_question_gives": "D_f=[-1,9), R_f=(-∞,4]",
+  "solver_path": "3 → 3:DOMAIN/RANGE OF F⁻¹ → 1:D AND R OF F (INTERVALS)",
+  "student_enters": "Domain: LEFT=-1 RIGHT=9, brackets 2:[ ). Range: LEFT=-I RIGHT=4, brackets 3:( ]",
+  "calculator_shows": "FOR F⁻¹: / D=(-INF,4] / R=[-1,9)",
+  "expected_answer": "D=(-∞,4], R=[-1,9)",
+  "test_ids": [
+   "EX-4.8"
+  ]
+ },
+ {
+  "item_id": "PR-4.1",
+  "what_question_gives": "f(x)=-3x+9",
+  "solver_path": "3 → 1:FIND → 1:AX+B",
+  "student_enters": "Y=-3X+9",
+  "calculator_shows": "F⁻¹(X)=(9-X)/3",
+  "expected_answer": "(9-x)/3 = -x/3+3",
+  "test_ids": [
+   "PR-4.1"
+  ]
+ },
+ {
+  "item_id": "PR-4.2",
+  "what_question_gives": "f(x)=(x+2)³-1",
+  "solver_path": "3 → 1:FIND → 4:A(BX+C)³+D",
+  "student_enters": "A=ENTER INSIDE=X+2 D=-1",
+  "calculator_shows": "F⁻¹(X)=³√(X+1)-2",
+  "expected_answer": "³√(x+1)-2",
+  "test_ids": [
+   "PR-4.2"
+  ]
+ },
+ {
+  "item_id": "PR-4.3",
+  "what_question_gives": "f(x)=(5x+2)/(x-4)",
+  "solver_path": "3 → 1:FIND → 2:FRACTION",
+  "student_enters": "TOP=5X+2 BOTTOM=X-4",
+  "calculator_shows": "F⁻¹(X)=(4X+2)/(X-5)",
+  "expected_answer": "(4x+2)/(x-5)",
+  "test_ids": [
+   "PR-4.3"
+  ]
+ },
+ {
+  "item_id": "PR-4.4",
+  "what_question_gives": "f(x)=6/(2x+1)",
+  "solver_path": "3 → 1:FIND → 2:FRACTION",
+  "student_enters": "TOP=6 BOTTOM=2X+1",
+  "calculator_shows": "F⁻¹(X)=(6-X)/(2X)",
+  "expected_answer": "(6-x)/(2x)",
+  "test_ids": [
+   "PR-4.4"
+  ]
+ },
+ {
+  "item_id": "PR-4.5",
+  "what_question_gives": "f=(x-1)/(x+2), g=(2x+1)/(1-x): verify both ways",
+  "solver_path": "3 → 2:VERIFY, both with 2:FRACTION",
+  "student_enters": "F: TOP=X-1 BOTTOM=X+2; G: TOP=2X+1 BOTTOM=1-X",
+  "calculator_shows": "YES, INVERSES / F(G(X))=3X/3=X / G(F(X))=3X/3=X",
+  "expected_answer": "both 3x/3=x; inverses",
+  "test_ids": [
+   "PR-4.5"
+  ]
+ },
+ {
+  "item_id": "PR-4.6",
+  "what_question_gives": "f(x)=4√(x+2)-3: f⁻¹, domain, range",
+  "solver_path": "3 → 1:FIND → 6:A√(BX+C)+D",
+  "student_enters": "A=4 INSIDE=X+2 D=-3",
+  "calculator_shows": "F⁻¹(X)=((X+3)/4)²-2 / FOR X≥-3 / D=[-3,INF) / R=[-2,INF)",
+  "expected_answer": "((x+3)/4)²-2, domain [-3,∞), range [-2,∞)",
+  "test_ids": [
+   "PR-4.6",
+   "EXTRA-inv-10"
+  ]
+ },
+ {
+  "item_id": "PR-4.7",
+  "what_question_gives": "g: domain (-5,3], range [0,12)",
+  "solver_path": "3 → 3:DOMAIN/RANGE → 1:INTERVALS",
+  "student_enters": "Domain: -5, 3, brackets 3:( ]. Range: 0, 12, brackets 2:[ )",
+  "calculator_shows": "FOR F⁻¹: / D=[0,12) / R=(-5,3]",
+  "expected_answer": "D=[0,12), R=(-5,3]",
+  "test_ids": [
+   "PR-4.7"
+  ]
+ },
+ {
+  "item_id": "PR-4.8",
+  "what_question_gives": "f(x)=x⁴+1: explain with a pair of points",
+  "solver_path": "3 → 4:HLT → 5:POWER",
+  "student_enters": "POWER=4 A=ENTER INSIDE=ENTER D=1",
+  "calculator_shows": "NO, NOT ONE-TO-ONE / F(-1)=2 / F(1)=2 / Y=2 HITS TWICE / (F IS EVEN)",
+  "expected_answer": "f(1)=2 and f(-1)=2; y=2 hits twice; fails HLT; even",
+  "test_ids": [
+   "PR-4.8"
+  ]
+ },
+ {
+  "item_id": "SOL-4.1",
+  "solver_path": "Official answer for PR-4.1",
+  "student_enters": "see PR-4.1",
+  "calculator_shows": "F⁻¹(X)=(9-X)/3",
+  "expected_answer": "(9-x)/3",
+  "test_ids": [
+   "PR-4.1"
+  ]
+ },
+ {
+  "item_id": "SOL-4.2",
+  "solver_path": "Official answer for PR-4.2",
+  "student_enters": "see PR-4.2",
+  "calculator_shows": "F⁻¹(X)=³√(X+1)-2",
+  "expected_answer": "³√(x+1)-2",
+  "test_ids": [
+   "PR-4.2"
+  ]
+ },
+ {
+  "item_id": "SOL-4.3",
+  "solver_path": "Official answer for PR-4.3",
+  "student_enters": "see PR-4.3",
+  "calculator_shows": "F⁻¹(X)=(4X+2)/(X-5); the WHY page shows Y(X-5)=4X+2 as in the solution",
+  "expected_answer": "(4x+2)/(x-5)",
+  "test_ids": [
+   "PR-4.3"
+  ]
+ },
+ {
+  "item_id": "SOL-4.4",
+  "solver_path": "Official answer for PR-4.4",
+  "student_enters": "see PR-4.4",
+  "calculator_shows": "F⁻¹(X)=(6-X)/(2X)",
+  "expected_answer": "(6-x)/(2x)",
+  "test_ids": [
+   "PR-4.4"
+  ]
+ },
+ {
+  "item_id": "SOL-4.5",
+  "solver_path": "Official answer for PR-4.5",
+  "student_enters": "see PR-4.5",
+  "calculator_shows": "YES, INVERSES / F(G(X))=3X/3=X / G(F(X))=3X/3=X",
+  "expected_answer": "3x/3=x both ways",
+  "test_ids": [
+   "PR-4.5"
+  ]
+ },
+ {
+  "item_id": "SOL-4.6",
+  "solver_path": "Official answer for PR-4.6",
+  "student_enters": "see PR-4.6",
+  "calculator_shows": "F⁻¹(X)=((X+3)/4)²-2, D=[-3,INF), R=[-2,INF)",
+  "expected_answer": "((x+3)/4)²-2; [-3,∞); [-2,∞)",
+  "test_ids": [
+   "PR-4.6"
+  ]
+ },
+ {
+  "item_id": "SOL-4.7",
+  "solver_path": "Official answer for PR-4.7",
+  "student_enters": "see PR-4.7",
+  "calculator_shows": "D=[0,12) / R=(-5,3]",
+  "expected_answer": "[0,12); (-5,3]",
+  "test_ids": [
+   "PR-4.7"
+  ]
+ },
+ {
+  "item_id": "SOL-4.8",
+  "solver_path": "Official answer for PR-4.8",
+  "student_enters": "see PR-4.8",
+  "calculator_shows": "F(-1)=2 / F(1)=2 / Y=2 HITS TWICE / (F IS EVEN)",
+  "expected_answer": "f(1)=f(-1)=2; fails HLT; even",
+  "test_ids": [
+   "PR-4.8"
+  ]
+ },
+ {
+  "item_id": "CRAM-EX-4a",
+  "what_question_gives": "f=(1+3x)/(5-2x)",
+  "solver_path": "3 → 1:FIND → 2:FRACTION",
+  "student_enters": "TOP=1+3X BOTTOM=5-2X",
+  "calculator_shows": "F⁻¹(X)=(5X-1)/(2X+3)",
+  "expected_answer": "(5x-1)/(2x+3)",
+  "test_ids": [
+   "CRAM-EX-4a"
+  ]
+ },
+ {
+  "item_id": "CRAM-EX-4b",
+  "what_question_gives": "f=7√x+4",
+  "solver_path": "3 → 1:FIND → 6:A√(BX+C)+D",
+  "student_enters": "A=7 INSIDE=ENTER D=4",
+  "calculator_shows": "F⁻¹(X)=((X-4)/7)² / FOR X≥4 / D=[4,INF) / R=[0,INF)",
+  "expected_answer": "((x-4)/7)² for x≥4",
+  "test_ids": [
+   "CRAM-EX-4b"
+  ]
+ },
+ {
+  "item_id": "CRAM-8d",
+  "what_question_gives": "Find f⁻¹ (swap, solve; rational: factor out y)",
+  "solver_path": "3 → 1:FIND (any shape); the rational case uses 2:FRACTION",
+  "student_enters": "e.g. TOP=3X+1 BOTTOM=X-2",
+  "calculator_shows": "F⁻¹(X)=(2X+1)/(X-3); WHY shows the factor-out-y line Y(X-3)=2X+1",
+  "expected_answer": "swap x↔y, solve; factor out y",
+  "test_ids": [
+   "CRAM-8d",
+   "PR-4.3",
+   "EX-4.4a"
+  ]
+ },
+ {
+  "item_id": "CRAM-8e",
+  "what_question_gives": "Are they inverses? compose both ways",
+  "solver_path": "3 → 2:VERIFY TWO FUNCTIONS",
+  "student_enters": "e.g. F: Y=2X+3; G: TOP=X-3 BOTTOM=2",
+  "calculator_shows": "YES, INVERSES / F(G(X))=2X/2=X / G(F(X))=2X/2=X",
+  "expected_answer": "both must give x",
+  "test_ids": [
+   "CRAM-8e",
+   "PR-4.5",
+   "EX-4.7a"
+  ]
+ },
+ {
+  "item_id": "CRAM-8f",
+  "what_question_gives": "Inverse is a function? HLT; even means no",
+  "solver_path": "3 → 4:HAS INVERSE? (HLT)",
+  "student_enters": "e.g. 2:PARABOLA Y=X²-2",
+  "calculator_shows": "NO, NOT ONE-TO-ONE / F(-1)=-1 / F(1)=-1 / Y=-1 HITS TWICE / (F IS EVEN)",
+  "expected_answer": "HLT; even ⇒ no",
+  "test_ids": [
+   "CRAM-8f",
+   "PR-4.8"
+  ]
+ },
+ {
+  "item_id": "CORR-2",
+  "what_question_gives": "Quiz review #8: corrected f(g(x))=36/(x-3+18)=36/(x+15); not inverses. The f and g are reconstructed from the corrected work as f(x)=36/(x+18), g(x)=x-3",
+  "solver_path": "3 → 2:VERIFY; F with 2:FRACTION, G with 1:AX+B",
+  "student_enters": "F: TOP=36 BOTTOM=X+18; G: Y=X-3",
+  "calculator_shows": "NO, NOT INVERSES / F(G(X))=36/(X+15)≠X / G(F(X))=(-3X-18)/(X+18)≠X",
+  "expected_answer": "f(g(x))=36/(x+15) (not x-15); not inverses",
+  "test_ids": [
+   "CORR-2"
+  ]
+ },
+ {
+  "item_id": "CORR-3",
+  "what_question_gives": "f=-³√(2x+8)+3, g=(1/2)(3-x)³-4",
+  "solver_path": "3 → 2:VERIFY; F with 5:A³√(BX+C)+D, G with 4:A(BX+C)³+D",
+  "student_enters": "F: A=- INSIDE=2X+8 D=3; G: A=1/2 INSIDE=3-X D=-4",
+  "calculator_shows": "YES, INVERSES / F(G(X))=X / G(F(X))=X (computed symbolically)",
+  "expected_answer": "They ARE inverses (key's 'not inverses' is wrong)",
+  "test_ids": [
+   "CORR-3"
+  ]
+ },
+ {
+  "item_id": "ICAN-04",
+  "what_question_gives": "Section 4 I Can (also S4-ICAN): HLT, find inverse incl. rational, verify by composition",
+  "solver_path": "All four HAINV choices",
+  "student_enters": "see the rows above",
+  "calculator_shows": "see the rows above",
+  "expected_answer": "I Can item",
+  "test_ids": [
+   "EX-4.1b",
+   "PR-4.3",
+   "PR-4.5"
+  ]
+ },
+ {
+  "item_id": "ICAN-08",
+  "what_question_gives": "Find the inverse of a function (including rational inverses)",
+  "solver_path": "3 → 1:FIND F⁻¹(X), 7 shapes",
+  "student_enters": "shape + typed parts",
+  "calculator_shows": "F⁻¹(X)=..., plus restriction, D and R for even roots",
+  "expected_answer": "I Can item",
+  "test_ids": [
+   "EX-4.2",
+   "EX-4.3",
+   "EX-4.4a",
+   "EX-4.5",
+   "EX-4.6",
+   "PR-4.1",
+   "PR-4.2",
+   "PR-4.3",
+   "PR-4.4",
+   "PR-4.6",
+   "CRAM-EX-4a",
+   "CRAM-EX-4b"
+  ]
+ },
+ {
+  "item_id": "ICAN-09",
+  "what_question_gives": "Use composition to verify that two functions are inverses",
+  "solver_path": "3 → 2:VERIFY TWO FUNCTIONS",
+  "student_enters": "f and g by shape",
+  "calculator_shows": "YES, INVERSES or NO, NOT INVERSES plus both compositions",
+  "expected_answer": "I Can item",
+  "test_ids": [
+   "EX-4.4b",
+   "EX-4.4c",
+   "EX-4.7a",
+   "PR-4.5",
+   "CORR-2",
+   "CORR-3"
+  ]
+ },
+ {
+  "item_id": "ICAN-10",
+  "what_question_gives": "Use the HLT to decide whether the inverse is a function",
+  "solver_path": "3 → 4:HAS INVERSE? (HLT)",
+  "student_enters": "family, plus numbers only when a witness is needed; for graphs, yes/no or corners",
+  "calculator_shows": "YES, HAS INVERSE or NO, NOT ONE-TO-ONE + F(a)=y, F(b)=y",
+  "expected_answer": "I Can item",
+  "test_ids": [
+   "EX-4.1a",
+   "EX-4.1b",
+   "PR-4.8",
+   "EXTRA-inv-15"
+  ]
+ },
+ {
+  "item_id": "MIST-4-1",
+  "what_question_gives": "Writing f⁻¹(x)=1/f(x)",
+  "solver_path": "FIND always computes the swap-and-solve inverse, never 1/f",
+  "student_enters": "any FIND input",
+  "calculator_shows": "The true inverse; the WHY page ends with (F⁻¹ IS NOT 1/F.)",
+  "expected_answer": "mistake prevented",
+  "test_ids": [
+   "EX-4.2",
+   "PR-4.4"
+  ]
+ },
+ {
+  "item_id": "MIST-4-2",
+  "what_question_gives": "Forgetting to swap x and y",
+  "solver_path": "FIND swaps internally; the WHY page starts SWAP X AND Y, SOLVE FOR Y.",
+  "student_enters": "any FIND input",
+  "calculator_shows": "the inverse, not a rearranged f",
+  "expected_answer": "mistake prevented",
+  "test_ids": [
+   "PR-4.1",
+   "PR-4.3"
+  ]
+ },
+ {
+  "item_id": "MIST-4-3",
+  "what_question_gives": "Rational inverses: leaving y-terms on both sides",
+  "solver_path": "FIND 2:FRACTION; the WHY page shows Y TERMS TO ONE SIDE: Y(X-5)=4X+2",
+  "student_enters": "TOP, BOTTOM",
+  "calculator_shows": "finished (num)/(den) with the y-terms collected",
+  "expected_answer": "mistake prevented",
+  "test_ids": [
+   "PR-4.3",
+   "EX-4.4a",
+   "CRAM-EX-4a"
+  ]
+ },
+ {
+  "item_id": "MIST-4-4",
+  "what_question_gives": "Squaring or cubing only part of a side",
+  "solver_path": "FIND root/power shapes always wrap the whole isolated piece",
+  "student_enters": "A, INSIDE, D",
+  "calculator_shows": "((X-2)/3)²+1, not (X-2)²/3+1",
+  "expected_answer": "mistake prevented",
+  "test_ids": [
+   "EX-4.5",
+   "EX-4.3"
+  ]
+ },
+ {
+  "item_id": "MIST-4-5",
+  "what_question_gives": "Checking only one composition",
+  "solver_path": "VERIFY always computes and prints both F(G(X)) and G(F(X))",
+  "student_enters": "f and g",
+  "calculator_shows": "two composition lines every time",
+  "expected_answer": "mistake prevented",
+  "test_ids": [
+   "PR-4.5",
+   "EX-4.7a"
+  ]
+ },
+ {
+  "item_id": "MIST-4-6",
+  "what_question_gives": "Dropping the restriction on a square-root inverse",
+  "solver_path": "FIND 6:A√(BX+C)+D always prints FOR X≥(range of f) plus D and R of F⁻¹",
+  "student_enters": "A, INSIDE, D",
+  "calculator_shows": "FOR X≥2 / D=[2,INF) / R=[1,INF)",
+  "expected_answer": "x≥2 kept",
+  "test_ids": [
+   "EX-4.5",
+   "PR-4.6",
+   "CRAM-EX-4b"
+  ]
+ },
+ {
+  "item_id": "MIST-4-7",
+  "what_question_gives": "Thinking x² or x^(2/3) has an inverse function",
+  "solver_path": "FIND 7:POWER (or HLT 5:POWER) with an even numerator",
+  "student_enters": "POWER=2/3, then ENTER three times",
+  "calculator_shows": "NO INVERSE FUNCTION / (NOT ONE-TO-ONE) / F(-1)=1 / F(1)=1 / Y=1 HITS TWICE / (F IS EVEN)",
+  "expected_answer": "no inverse function",
+  "test_ids": [
+   "MIST-4-7",
+   "EX-4.1i"
+  ]
+ },
+ {
+  "item_id": "CRAM-MIST-8",
+  "what_question_gives": "Checking only one composition, or writing f⁻¹=1/f",
+  "solver_path": "VERIFY prints both; FIND gives the true inverse",
+  "student_enters": "as in VERIFY/FIND",
+  "calculator_shows": "both F(G(X)) and G(F(X)); true inverse",
+  "expected_answer": "mistake prevented",
+  "test_ids": [
+   "PR-4.5",
+   "EX-4.2"
+  ]
+ },
+ {
+  "item_id": "CRAM-4.1",
+  "what_question_gives": "One-to-one ⇔ HLT; yes: x³, ³√x, √x, e^x, ln x, 1/x; no: x², |x|, [[x]]",
+  "solver_path": "3 → 4:HLT families",
+  "student_enters": "family key",
+  "calculator_shows": "YES/NO with witness",
+  "expected_answer": "rule",
+  "test_ids": [
+   "EX-4.1a",
+   "EX-4.1d",
+   "EX-4.1i",
+   "EX-4.1j",
+   "EX-4.1k"
+  ]
+ },
+ {
+  "item_id": "CRAM-4.2",
+  "what_question_gives": "Find f⁻¹: swap, solve",
+  "solver_path": "3 → 1:FIND",
+  "student_enters": "shape inputs",
+  "calculator_shows": "F⁻¹(X)=...",
+  "expected_answer": "rule",
+  "test_ids": [
+   "EX-4.2"
+  ]
+ },
+ {
+  "item_id": "CRAM-4.3",
+  "what_question_gives": "Rational: multiply, collect y, factor out y",
+  "solver_path": "3 → 1:FIND → 2:FRACTION",
+  "student_enters": "TOP, BOTTOM",
+  "calculator_shows": "F⁻¹(X)=(num)/(den)",
+  "expected_answer": "rule",
+  "test_ids": [
+   "PR-4.3",
+   "CRAM-EX-4a"
+  ]
+ },
+ {
+  "item_id": "CRAM-4.4",
+  "what_question_gives": "Roots/powers: ^(3/5)↔^(5/3), ³√↔cube, √↔square",
+  "solver_path": "3 → 1:FIND → 4/5/6/7",
+  "student_enters": "A, INSIDE, D (and POWER)",
+  "calculator_shows": "flipped power with restriction when needed",
+  "expected_answer": "rule",
+  "test_ids": [
+   "EX-4.6",
+   "PR-4.2",
+   "EX-4.3",
+   "EX-4.5"
+  ]
+ },
+ {
+  "item_id": "CRAM-4.5",
+  "what_question_gives": "Verify: both compositions must equal x",
+  "solver_path": "3 → 2:VERIFY",
+  "student_enters": "f, g",
+  "calculator_shows": "YES/NO + both compositions",
+  "expected_answer": "rule",
+  "test_ids": [
+   "PR-4.5",
+   "CORR-3"
+  ]
+ },
+ {
+  "item_id": "CRAM-4.6",
+  "what_question_gives": "D_f⁻¹=R_f, R_f⁻¹=D_f; f⁻¹ is not 1/f",
+  "solver_path": "3 → 3:DOMAIN/RANGE (intervals or formula)",
+  "student_enters": "intervals with brackets, or the formula",
+  "calculator_shows": "FOR F⁻¹: D=..., R=...",
+  "expected_answer": "rule",
+  "test_ids": [
+   "EX-4.8",
+   "PR-4.7",
+   "EXTRA-inv-9"
+  ]
+ },
+ {
+  "item_id": "FIG-4-GRAPHS",
+  "what_question_gives": "y=x²-2 fails the HLT; y=(1/4)x³ passes",
+  "solver_path": "3 → 4:HLT → 2:PARABOLA / 3:X³",
+  "student_enters": "Y=X²-2; or key 3",
+  "calculator_shows": "NO, NOT ONE-TO-ONE F(-1)=-1 F(1)=-1; YES, HAS INVERSE",
+  "expected_answer": "fails / passes",
+  "test_ids": [
+   "CRAM-8f",
+   "FIG-4-GRAPHS"
+  ]
+ }
+]

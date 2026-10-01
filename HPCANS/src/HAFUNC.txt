@@ -1,0 +1,201 @@
+{N,O}→ʟFNA
+Str9→Str4
+If O≥1 and O≤9
+Goto D
+Lbl M
+ClrHome
+Disp Str4+"(X) LOOKS LIKE?"
+Disp "1:AX+B"
+Disp "2:AX²+BX+C"
+Disp "3:(AX+B)/(CX+D)"
+Disp "4:K/(AX+B)  LIKE 2/X"
+Disp "5:K√(AX+B)+C  LIKE √(X)"
+Disp "6:FRACTION WITH X²"
+Disp "7:A GRAPH"
+Disp "8:WORDS: DOMAIN AND ZEROS"
+8→θ
+prgmHAKEY
+θ→O
+If O=0
+Return
+Lbl D
+{1,0,0,0,0,0,0,0,0,0,1,1,0}→ʟFNC
+If O=1
+Goto 1
+If O=2
+Goto 2
+If O=3
+Goto 3
+If O=4
+Goto 4
+If O=5
+Goto 5
+If O=6
+Goto 6
+If O=7
+Goto 7
+If O=8
+Goto 8
+Goto 9
+Lbl 1
+ClrHome
+Disp Str4+"(X)=AX+B"
+Disp "EX: 3-X GIVES A=-1 B=3"
+Disp "NO NUMBER IN FRONT? ENTER"
+Input "A (X COEF)=",Str8
+prgmHANUM
+θ+Z→ʟFNC(5)
+Input "B (NUMBER ALONE)=",Str8
+prgmHANUM
+θ→ʟFNC(6)
+Goto F
+Lbl 2
+ClrHome
+Disp Str4+"(X)=AX²+BX+C"
+Disp "EX: 2X²-1 GIVES"
+Disp "  A=2 B=0 C=-1"
+Disp "NO NUMBER IN FRONT? ENTER"
+Disp "NO X TERM? TYPE 0"
+Input "A (X² COEF)=",Str8
+prgmHANUM
+θ+Z→ʟFNC(4)
+Input "B (X COEF)=",Str8
+prgmHANUM
+θ+Z→ʟFNC(5)
+Input "C (NUMBER ALONE)=",Str8
+prgmHANUM
+θ→ʟFNC(6)
+Goto F
+Lbl 3
+ClrHome
+Disp Str4+"(X)=(AX+B)/(CX+D)"
+Disp "EX: (X+2)/(4-X) GIVES"
+Disp "  A=1 B=2 C=-1 D=4"
+Disp "NO NUMBER IN FRONT? ENTER"
+Input "A (TOP X COEF)=",Str8
+prgmHANUM
+θ+Z→ʟFNC(5)
+Input "B (TOP NUMBER)=",Str8
+prgmHANUM
+θ→ʟFNC(6)
+Lbl 3B
+Input "C (BOTTOM X COEF)=",Str8
+prgmHANUM
+θ+Z→ʟFNC(10)
+Input "D (BOTTOM NUMBER)=",Str8
+prgmHANUM
+θ→ʟFNC(11)
+If ʟFNC(10)=0 and ʟFNC(11)=0
+Goto E3
+Goto F
+Lbl E3
+ClrHome
+Disp "THE BOTTOM CAN NOT BE 0"
+Goto 3B
+Lbl 4
+ClrHome
+Disp Str4+"(X)=K/(AX+B)"
+Disp "EX: 4/(X+1) GIVES"
+Disp "  K=4 A=1 B=1"
+Disp "NO NUMBER IN FRONT? ENTER"
+Input "K (TOP NUMBER)=",Str8
+prgmHANUM
+θ+Z→ʟFNC(6)
+Lbl 4B
+Input "A (BOTTOM X COEF)=",Str8
+prgmHANUM
+θ+Z→ʟFNC(10)
+Input "B (BOTTOM NUMBER)=",Str8
+prgmHANUM
+θ→ʟFNC(11)
+If ʟFNC(10)=0 and ʟFNC(11)=0
+Goto E4
+Goto F
+Lbl E4
+ClrHome
+Disp "THE BOTTOM CAN NOT BE 0"
+Goto 4B
+Lbl 5
+2→ʟFNC(1)
+ClrHome
+Disp Str4+"(X)=K√(AX+B)+C"
+Disp "EX: -2√(5-X)+1 GIVES"
+Disp "  K=-2 A=-1 B=5 C=1"
+Disp "NO NUMBER IN FRONT? ENTER"
+Input "K (FRONT)=",Str8
+prgmHANUM
+θ+Z→ʟFNC(12)
+Input "A (X COEF INSIDE)=",Str8
+prgmHANUM
+θ+Z→ʟFNC(5)
+Input "B (NUMBER INSIDE)=",Str8
+prgmHANUM
+θ→ʟFNC(6)
+Input "C (END NUMBER)=",Str8
+prgmHANUM
+θ→ʟFNC(13)
+Goto F
+Lbl 6
+ClrHome
+Disp Str4+"(X)=TOP/BOTTOM"
+Disp "TOP=AX²+BX+C"
+Disp "EX: X-3 GIVES A=0 B=1 C=-3"
+Disp "NO NUMBER IN FRONT? ENTER"
+Disp "NO X² OR X TERM? TYPE 0"
+Input "A (X² COEF)=",Str8
+prgmHANUM
+θ+Z→ʟFNC(4)
+Input "B (X COEF)=",Str8
+prgmHANUM
+θ+Z→ʟFNC(5)
+Input "C (NUMBER ALONE)=",Str8
+prgmHANUM
+θ→ʟFNC(6)
+ClrHome
+Disp "BOTTOM=DX²+EX+F"
+Disp "EX: X² GIVES D=1 E=0 F=0"
+Disp "NO NUMBER IN FRONT? ENTER"
+Disp "NO X² OR X TERM? TYPE 0"
+Lbl 6B
+Input "D (X² COEF)=",Str8
+prgmHANUM
+θ+Z→ʟFNC(9)
+Input "E (X COEF)=",Str8
+prgmHANUM
+θ+Z→ʟFNC(10)
+Input "F (NUMBER ALONE)=",Str8
+prgmHANUM
+θ→ʟFNC(11)
+If ʟFNC(9)=0 and ʟFNC(10)=0 and ʟFNC(11)=0
+Goto E6
+Goto F
+Lbl E6
+ClrHome
+Disp "THE BOTTOM CAN NOT BE 0"
+Goto 6B
+Lbl 7
+1→θ
+prgmHAGRAPH
+If θ=1
+Goto F
+If ʟFNA(2)=0
+Goto M
+0→θ
+Return
+Lbl 8
+prgmHAWORDS
+Goto F
+Lbl 9
+4→θ
+prgmHAGRAPH
+If θ=0
+Return
+Lbl F
+ʟFNA(1)→N
+If N=1
+ʟFNC→ʟF1
+If N=2
+ʟFNC→ʟF2
+If N=3
+ʟFNC→ʟF3
+1→θ

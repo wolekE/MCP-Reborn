@@ -1,0 +1,172 @@
+If H>0
+Goto S
+ClrHome
+Disp Str0+"(X) LOOKS LIKE:"
+Disp "1:AX+B  (A LINE)"
+Disp "2:(AX+B)/(CX+D)  FRACTION"
+Disp "3:A/(BX+C)+D  FRACTION"
+Disp "4:A(BX+C)³+D  CUBE"
+Disp "5:A³√(BX+C)+D  CUBE ROOT"
+Disp "6:A√(BX+C)+D  SQUARE ROOT"
+Disp "7:A(BX+C)^(M/N)+D  POWER"
+7→θ
+prgmHAKEY
+θ→H
+If H=0
+Return
+Lbl S
+If H=1
+Goto 1
+If H=2
+Goto 2
+If H=3
+Goto 3
+Goto 4
+Lbl 1
+ClrHome
+Disp Str0+"(X)=AX+B  (A LINE)"
+Disp "TYPE IT WITH THE X KEY."
+Disp "EX: -3X+9"
+Input "Y=",Str8
+prgmHAINV3
+If not(M)
+Goto E
+{1,K,L,0,1,1,1}→L₃
+Return
+Lbl 2
+ClrHome
+Disp Str0+"(X)=TOP/BOTTOM"
+Disp "TYPE EACH WITH THE X KEY."
+Disp "EX: (5X+2)/(X-4) GIVES"
+Disp "  TOP=5X+2  BOTTOM=X-4"
+Disp "EX: 6/(2X+1) GIVES TOP=6"
+Input "TOP=",Str8
+prgmHAINV3
+If not(M)
+Goto E
+K→A
+L→B
+Input "BOTTOM=",Str8
+prgmHAINV3
+If not(M) or (K=0 and L=0)
+Goto E
+{1,A,B,K,L,1,1}→L₃
+Return
+Lbl 3
+ClrHome
+Disp Str0+"(X)=A/(BX+C)+D"
+Disp "EX: 3/(X-2)+1 GIVES"
+Disp "  A=3 BOTTOM=X-2 D=1"
+Disp "NO NUMBER? PRESS ENTER"
+Input "A (TOP NUMBER)=",Str8
+prgmHANUM
+θ→A
+If Z
+1→A
+Input "BOTTOM=",Str8
+prgmHAINV3
+If not(M) or K=0
+Goto E
+K→B
+L→C
+Input "D (END NUMBER)=",Str8
+prgmHANUM
+θ→D
+{1,DB,A+DC,B,C,1,1}→L₃
+Return
+Lbl 4
+3→E
+1→F
+If H=5
+Then
+1→E
+3→F
+End
+If H=6
+Then
+1→E
+2→F
+End
+If H=8
+1→E
+ClrHome
+If H=4
+Then
+Disp Str0+"(X)=A(BX+C)³+D"
+Disp "EX: (X+2)³-1 GIVES"
+Disp "  A=1 INSIDE=X+2 D=-1"
+End
+If H=5
+Then
+Disp Str0+"(X)=A³√(BX+C)+D"
+Disp "EX: -³√(2X+8)+3 GIVES"
+Disp "  A=-1 INSIDE=2X+8 D=3"
+End
+If H=6
+Then
+Disp Str0+"(X)=A√(BX+C)+D"
+Disp "EX: 3√(X-1)+2 GIVES"
+Disp "  A=3 INSIDE=X-1 D=2"
+End
+If H=7
+Then
+Disp Str0+"(X)=A(BX+C)^(M/N)+D"
+Disp "EX: 2(X-4)^(3/5)+1 GIVES"
+Disp "  POWER=3/5 A=2"
+Disp "  INSIDE=X-4 D=1"
+End
+If H=8
+Then
+Disp Str0+"(X)=A|BX+C|+D"
+Disp "EX: |X|+3 GIVES"
+Disp "  A=1 INSIDE=X D=3"
+End
+Disp "NO NUMBER? PRESS ENTER"
+If H≠7
+Goto 5
+Input "POWER=",Str8
+prgmHANUM
+θ→G
+If G=0
+Goto E
+prgmHAFRAC
+If not(Z)
+Goto E
+X→E
+Y→F
+If I=4 and fPart(E/2)≠0
+Goto 7
+Lbl 5
+Input "A (FRONT)=",Str8
+prgmHANUM
+θ→A
+If Z
+1→A
+If A=0
+Goto E
+Input "INSIDE=",Str8
+prgmHAINV3
+If not(M) or K=0
+Goto E
+K→B
+L→C
+Input "D (END NUMBER)=",Str8
+prgmHANUM
+θ→D
+{2,A,B,C,D,E,F}→L₃
+If H=8
+3→L₃(1)
+Return
+Lbl 7
+{2,1,1,0,0,E,F}→L₃
+Return
+Lbl E
+ClrHome
+Disp "THAT DOES NOT FIT."
+Disp "A CAN NOT BE 0, AND EACH"
+Disp "X PART MUST LOOK LIKE"
+Disp "2X+5 (USE THE X KEY)."
+Disp ""
+Disp "PRESS ENTER, TRY AGAIN."
+Pause
+Goto S

@@ -1,0 +1,243 @@
+3→C
+If not(fPart(A/2))
+2→C
+If not(fPart(B/2))
+1→C
+1→E
+If K<0
+⁻1→E
+1→D
+If A<0
+⁻1→D
+E*D→F
+F→G
+If C=2
+⁻F→G
+"ODD"→Str3
+If C=2
+"EVEN"→Str3
+"ODD"→Str0
+If C=1
+"EVEN"→Str0
+If L=2
+Goto W
+A/B→θ
+prgmHAFRAC
+"P="+Str9+"  ("+Str3+"/"+Str0+")"→Str9
+prgmHAOUT
+If L=0
+prgmHAPOWR4
+"UNDEFINED FOR X<0"→Str9
+If C=2
+"SYMMETRY: EVEN (Y-AXIS)"→Str9
+If C=3
+"SYMMETRY: ODD (ORIGIN)"→Str9
+prgmHAOUT
+If L=0 and C=1
+Then
+"(NOT EVEN, NOT ODD)"→Str9
+prgmHAOUT
+End
+"I,III"→Str3
+If C=2
+"I,II"→Str3
+If C=1
+"I ONLY"→Str3
+If E<0 and C=3
+"II,IV"→Str3
+If E<0 and C=2
+"III,IV"→Str3
+If E<0 and C=1
+"IV ONLY"→Str3
+"QUADRANTS: "+Str3→Str9
+If C=1
+"QUADRANT: "+Str3→Str9
+prgmHAOUT
+If L=1
+Goto S
+"(-INF,INF)"→Str3
+If D<0
+"(-INF,0)U(0,INF)"→Str3
+If C=1 and D>0
+"[0,INF)"→Str3
+If C=1 and D<0
+"(0,INF)"→Str3
+"DOMAIN: "+Str3→Str9
+prgmHAOUT
+"[0,INF)"→Str3
+If E<0
+"(-INF,0]"→Str3
+If D<0 and E>0
+"(0,INF)"→Str3
+If D<0 and E<0
+"(-INF,0)"→Str3
+If C=3 and D>0
+"(-INF,INF)"→Str3
+If C=3 and D<0
+"(-INF,0)U(0,INF)"→Str3
+"RANGE: "+Str3→Str9
+prgmHAOUT
+"NEVER"→Str3
+"NEVER"→Str0
+"(0,INF)"→Str2
+If D>0
+"[0,INF)"→Str2
+If C=3 and D>0
+"(-INF,INF)"→Str2
+If C=3 and D<0
+"(-INF,0)"→Str2
+If F>0
+Str2→Str3
+If F<0
+Str2→Str0
+If C=2
+Then
+"(-INF,0)"→Str2
+If D>0
+"(-INF,0]"→Str2
+If G>0
+Str2→Str3
+If G<0
+Str2→Str0
+End
+"INCREASING: "+Str3→Str9
+prgmHAOUT
+If C=3 and D<0 and F>0
+Then
+"AND ON (0,INF)"→Str9
+prgmHAOUT
+End
+"DECREASING: "+Str0→Str9
+prgmHAOUT
+If C=3 and D<0 and F<0
+Then
+"AND ON (0,INF)"→Str9
+prgmHAOUT
+End
+"NOT BOUNDED ABOVE OR BELOW"→Str9
+If C≠3 and E>0
+"BOUNDED BELOW"→Str9
+If C≠3 and E<0
+"BOUNDED ABOVE"→Str9
+prgmHAOUT
+"ASYMPTOTES: NONE"→Str9
+If D<0
+"ASYMPTOTES: X=0, Y=0"→Str9
+prgmHAOUT
+"0"→Str3
+If D>0 and E>0
+"INF"→Str3
+If D>0 and E<0
+"-INF"→Str3
+Str3→Str0
+If C=3 and D>0 and E>0
+"-INF"→Str0
+If C=3 and D>0 and E<0
+"INF"→Str0
+"AS X->+-INF, F(X)->"+Str3→Str9
+If C=1 or Str3≠Str0
+"AS X->INF, F(X)->"+Str3→Str9
+prgmHAOUT
+If C=1
+Then
+"NO LEFT END BEHAVIOR"→Str9
+prgmHAOUT
+End
+If C≠1 and Str3≠Str0
+Then
+"AS X->-INF, F(X)->"+Str0→Str9
+prgmHAOUT
+End
+"CONTINUOUS EVERYWHERE"→Str9
+If C=1
+"CONTINUOUS ON [0,INF)"→Str9
+If D<0
+"DISCONTINUOUS AT X=0"→Str9
+prgmHAOUT
+If D<0
+Then
+"(INFINITE DISCONTINUITY)"→Str9
+prgmHAOUT
+End
+Lbl S
+"Q1: "→Str3
+If E<0
+"Q4: "→Str3
+"INCREASING"→Str0
+If F<0
+"DECREASING"→Str0
+Str3+Str0→Str9
+prgmHAOUT
+E*D*(A-B)→H
+"STRAIGHT LINE"→Str9
+If H>0
+"CURVING UP, CONCAVE UP"→Str9
+If H<0
+"CURVING DOWN, CONCAVE DOWN"→Str9
+prgmHAOUT
+If L=0 and C≠1
+Then
+"Q2: "→Str3
+If (C=2 and E<0) or (C=3 and E>0)
+"Q3: "→Str3
+"INCREASING"→Str0
+If G<0
+"DECREASING"→Str0
+Str3+Str0→Str9
+prgmHAOUT
+H→I
+If C=3
+⁻H→I
+"STRAIGHT LINE"→Str9
+If I>0
+"CURVING UP, CONCAVE UP"→Str9
+If I<0
+"CURVING DOWN, CONCAVE DOWN"→Str9
+prgmHAOUT
+End
+If L=1 and D<0
+Then
+"ASYMPTOTES: X=0, Y=0"→Str9
+prgmHAOUT
+End
+"THROUGH (1,"+Str1+")"→Str9
+If D>0 and length(Str1)≤4 and not(inString(Str1,"√(")+inString(Str1,"³√("))
+"THROUGH (0,0) AND (1,"+Str1+")"→Str9
+If D>0 and Str9="THROUGH (1,"+Str1+")"
+Then
+"THROUGH (0,0)"→Str9
+prgmHAOUT
+"AND (1,"+Str1+")"→Str9
+End
+prgmHAOUT
+Return
+Lbl W
+"WHY:"→Str9
+prgmHAPAGE
+A→θ
+prgmHAFRAC
+Str9→Str2
+B→θ
+prgmHAFRAC
+"A="+Str2+" "+Str3+", B="+Str9+" "+Str0→Str9
+prgmHAOUT
+"B EVEN: NO GRAPH FOR X<0"→Str9
+If C=2
+"A EVEN: EVEN SYMMETRY"→Str9
+If C=3
+"BOTH ODD: ODD SYMMETRY"→Str9
+prgmHAOUT
+prgmHAPOWR4
+If E<0
+Then
+"K<0: FLIP OVER X-AXIS"→Str9
+prgmHAOUT
+End
+"P=1: STRAIGHT LINE"→Str9
+If D<0
+"P<0: ASYMPTOTES X=0, Y=0"→Str9
+If A>B
+"P>1: X^P CURVES UP"→Str9
+If D>0 and A<B
+"0<P<1: X^P CURVES DOWN"→Str9
+prgmHAOUT

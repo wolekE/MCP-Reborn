@@ -1,0 +1,259 @@
+Lbl M
+ClrHome
+Disp "ABS BARS |F(X)| F(|X|)"
+Disp "WHAT DO THEY WANT?"
+Disp "1:SKETCH/GRAPH: PTS, D, R"
+Disp "2:DOMAIN ONLY"
+Disp "3:RANGE ONLY"
+Disp "4:D AND R (NO GRAPH)"
+Disp "5:ORDER OF THE STEPS"
+5→θ
+prgmHAKEY
+θ→J
+If J=0
+Return
+Lbl S
+ClrHome
+Disp "WHERE ARE THE BARS?"
+Disp "1:A|F(BX+C)+D|+K"
+Disp "  LIKE |F(X)-3|  2|F(X)|-1"
+Disp "2:A*F(B|X|+C)+K"
+Disp "  LIKE F(|X|)+1  F(|X|-3)"
+Disp "3:A*F(|BX+C|)+K"
+Disp "  LIKE F(|X-3|)"
+Disp "NO BARS? USE MAIN MENU 4"
+3→θ
+prgmHAKEY
+θ→I
+If I=0
+Goto M
+ClrHome
+If I=1
+Disp "Y=A|F(BX+C)+D|+K","EX: -2|F(X+1)-3|+4 HAS","  A=-2 C=1 D=-3 K=4"
+If I=2
+Disp "Y=A*F(B|X|+C)+K","EX: 3F(|X|-1)+2 HAS","  A=3 C=-1 K=2"
+If I=3
+Disp "Y=A*F(|BX+C|)+K","EX: 3F(|X-1|)+2 HAS","  A=3 C=-1 K=2"
+Disp "NO NUMBER? PRESS ENTER"
+1→A
+1→B
+0→C
+0→D
+0→K
+If J=2
+Goto B
+0→A
+While A=0
+Input "A (FRONT)=",Str8
+prgmHANUM
+θ→A
+If Z
+1→A
+End
+Lbl B
+If J=3 and I=1
+Goto D
+0→B
+While B=0
+If I=2
+Then
+Input "B (|X| COEF)=",Str8
+Else
+Input "B (X COEF)=",Str8
+End
+prgmHANUM
+θ→B
+If Z
+1→B
+End
+Input "C (INSIDE NUMBER)=",Str8
+prgmHANUM
+θ→C
+Lbl D
+If J=2
+Goto Q
+If I=1
+Then
+Input "D (AFTER F( ))=",Str8
+prgmHANUM
+θ→D
+End
+Input "K (END NUMBER)=",Str8
+prgmHANUM
+θ→K
+If J=1
+Goto P
+If J=5
+Goto O
+Lbl Q
+1→M
+If J=3 and I=1
+Goto R
+"ORIGINAL DOMAIN OF F:"→Str9
+prgmHAIVL
+{S,T,U,V}→L₄
+If I=2
+(B>0 and S≥C) or (B<0 and T≤C)→M
+If I=3
+S≥0→M
+Lbl R
+If J≠2 and M
+Then
+"ORIGINAL RANGE OF F:"→Str9
+prgmHAIVL
+{S,T,U,V}→L₅
+End
+prgmHAANS
+If J=3 and I=1
+Goto T
+L₄(1)→E
+L₄(2)→F
+L₄(3)→G
+L₄(4)→H
+prgmHAABS2
+If J=3
+Goto T
+"D="+Str1→Str9
+inString(Str9,"U")→L
+If length(Str9)>26 and L>0
+Then
+sub(Str9,L+1,length(Str9)-L)→Str3
+sub(Str9,1,L)→Str9
+prgmHAOUT
+Str3→Str9
+End
+prgmHAOUT
+Lbl T
+If J=2
+Goto F
+If not(M)
+Goto U
+L₅(1)→E
+L₅(2)→F
+L₅(3)→G
+L₅(4)→H
+prgmHAABS3
+"R="+Str2→Str9
+prgmHAOUT
+Goto F
+Lbl U
+If Str1="NO REAL NUMBERS"
+Goto W
+Goto V
+Lbl W
+"R=NO REAL NUMBERS"→Str9
+prgmHAOUT
+Goto F
+Lbl V
+"R CAN NOT BE FOUND FROM"→Str9
+prgmHAOUT
+"D AND R ALONE: IT DEPENDS"→Str9
+prgmHAOUT
+0→E
+If I=2
+C→E
+E→θ
+prgmHAFRAC
+If I=2 and B<0
+Then
+"ON WHAT F DOES FOR X≤"+Str9→Str9
+Else
+"ON WHAT F DOES FOR X≥"+Str9→Str9
+End
+prgmHAOUT
+"(USE 1 WITH THE GRAPH)"→Str9
+prgmHAOUT
+Goto F
+Lbl P
+If dim(ʟBX)=0
+Goto N
+ClrHome
+Disp "GRAPH CORNERS OF F:"
+Disp "1:USE THE SAVED GRAPH"
+Disp "2:TYPE A NEW GRAPH"
+2→θ
+prgmHAKEY
+If θ=0
+Goto M
+If θ=1
+Goto G
+Lbl N
+"BASE GRAPH OF F"→Str9
+prgmHAPTS
+If dim(ʟHX)=0
+Goto N
+ʟHX→ʟBX
+ʟHY→ʟBY
+ʟHC→ʟBC
+Lbl G
+prgmHAABS4
+prgmHAANS
+If Str1="NO REAL NUMBERS"
+Goto E
+""→Str0
+For(L,1,dim(L₁))
+L₁(L)→N
+L₂(L)→O
+prgmHAPTXT
+If length(Str0)+length(Str5)>24
+Then
+Str0→Str9
+prgmHAOUT
+""→Str0
+End
+If length(Str0)
+Str0+"  "→Str0
+Str0+Str5→Str0
+End
+Str0→Str9
+prgmHAOUT
+"D="+Str1→Str9
+inString(Str9,"U")→L
+If length(Str9)>26 and L>0
+Then
+sub(Str9,L+1,length(Str9)-L)→Str3
+sub(Str9,1,L)→Str9
+prgmHAOUT
+Str3→Str9
+End
+prgmHAOUT
+"R="+Str2→Str9
+prgmHAOUT
+Goto F
+Lbl E
+"D=NO REAL NUMBERS"→Str9
+prgmHAOUT
+"(NOTHING TO GRAPH)"→Str9
+prgmHAOUT
+Lbl F
+"1:AGAIN  2:HOME  3:WHY"→Str9
+3→θ
+prgmHAEND
+If θ=1
+Goto S
+If θ≠3
+Return
+"WHY:"→Str9
+prgmHAPAGE
+"STEPS IN ORDER:"→Str9
+If J=2
+"ONLY X STEPS CHANGE D:"→Str9
+If J=3
+"ONLY Y STEPS CHANGE R:"→Str9
+prgmHAOUT
+prgmHAABS5
+"1:AGAIN  2:HOME"→Str9
+2→θ
+prgmHAEND
+If θ=1
+Goto S
+Return
+Lbl O
+prgmHAANS
+prgmHAABS5
+"1:AGAIN  2:HOME"→Str9
+2→θ
+prgmHAEND
+If θ=1
+Goto S
+Return

@@ -1,0 +1,10 @@
+If not(fPart(J/2))
+"G(X)="+Str9→Str9
+If fPart(J/2)
+"F(X)="+Str9→Str9
+If J≥2 and not(fPart(J/2))
+"OR "+Str9→Str9
+If J≥3 and fPart(J/2)
+"   "+Str9→Str9
+prgmHAOUT
+J+1→J

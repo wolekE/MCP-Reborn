@@ -1,0 +1,307 @@
+ʟF1→ʟOPA
+ʟF2→ʟOPB
+If K=5
+Then
+ʟF2→ʟOPA
+ʟF1→ʟOPB
+End
+If K=2 and ʟOPB(1)=1
+Then
+For(I,2,6)
+⁻ʟOPB(I)→ʟOPB(I)
+End
+End
+If K=2 and ʟOPB(1)=2
+Then
+⁻ʟOPB(12)→ʟOPB(12)
+⁻ʟOPB(13)→ʟOPB(13)
+End
+If K≤2 and ʟOPA(1)=1 and ʟOPB(1)=1
+Goto S
+If K≤2
+Goto T
+""→Str2
+""→Str3
+For(I,1,2)
+If I=1
+ʟOPA→ʟF3
+If I=2
+ʟOPB→ʟF3
+""→Str1
+ʟF3(12)→D
+If ʟF3(1)=2
+Then
+If ʟF3(13)=0
+1→ʟF3(12)
+3→N
+prgmHAFSTR
+Str5→Str1
+If ʟF3(13)≠0
+Then
+"("+Str1+")"→Str1
+1→D
+End
+{1,0,0,0,0,D,0,0,0,0,1,1,0}→ʟF3
+End
+If I=1
+ʟF3→ʟOPA
+If I=2
+ʟF3→ʟOPB
+If I=1 or K=3
+Str2+Str1→Str2
+If I=2 and K≥4
+Str1→Str3
+End
+If K=3
+augment(augment(seq(ʟOPA(I),I,2,6),seq(ʟOPB(I),I,2,6)),augment(seq(ʟOPA(I),I,7,11),seq(ʟOPB(I),I,7,11)))→ʟOPF
+If K≥4
+augment(augment(seq(ʟOPA(I),I,2,6),seq(ʟOPB(I),I,7,11)),augment(seq(ʟOPA(I),I,7,11),seq(ʟOPB(I),I,2,6)))→ʟOPF
+Goto Z
+Lbl S
+seq(ʟOPA(I),I,2,6)→L₁
+seq(ʟOPA(I),I,7,11)→L₂
+seq(ʟOPB(I),I,2,6)→L₃
+seq(ʟOPB(I),I,7,11)→L₄
+1→I
+While L₄(I)=0
+I+1→I
+End
+L₂(I)/L₄(I)→A
+0→B
+If max(abs(L₂-A*L₄))<ᴇ⁻9
+1→B
+If B=0 and max(abs(seq(L₄(I),I,1,4)))=0
+2→B
+If B=0 and max(abs(seq(L₂(I),I,1,4)))=0
+3→B
+If B=1
+Then
+L₁+A*L₃→L₁
+{0,0,0,0,1}→L₄
+End
+If B=2
+Then
+seq(L₃(I),I,3,5)/L₄(5)→ʟPA
+seq(L₂(I),I,3,5)→ʟPB
+prgmHAPMUL
+L₁+ʟPC→L₁
+{0,0,0,0,1}→L₄
+End
+If B=3
+Then
+seq(L₁(I),I,3,5)/L₂(5)→ʟPA
+seq(L₄(I),I,3,5)→ʟPB
+prgmHAPMUL
+ʟPC+L₃→L₁
+L₄→L₂
+{0,0,0,0,1}→L₄
+End
+If B=0
+Then
+seq(L₁(I),I,3,5)→ʟPA
+seq(L₄(I),I,3,5)→ʟPB
+prgmHAPMUL
+ʟPC→L₅
+seq(L₃(I),I,3,5)→ʟPA
+seq(L₂(I),I,3,5)→ʟPB
+prgmHAPMUL
+L₅+ʟPC→L₁
+End
+augment(augment(L₁,{0,0,0,0,1}),augment(L₂,L₄))→ʟOPF
+""→Str2
+""→Str3
+Goto Z
+Lbl T
+If ʟOPA(1)=2 and ʟOPB(1)=2
+Then
+ʟOPA(13)+ʟOPB(13)→ʟOPA(13)
+0→ʟOPB(13)
+End
+If ʟOPA(1)=2 and ʟOPB(1)=1 and max(abs(seq(ʟOPB(I),I,7,10)))=0
+Then
+ʟOPB(6)+ʟOPA(13)*ʟOPB(11)→ʟOPB(6)
+0→ʟOPA(13)
+End
+If ʟOPB(1)=2 and ʟOPA(1)=1 and max(abs(seq(ʟOPA(I),I,7,10)))=0
+Then
+ʟOPA(6)+ʟOPB(13)*ʟOPA(11)→ʟOPA(6)
+0→ʟOPB(13)
+End
+ʟOPA→ʟF3
+3→N
+prgmHAFSTR
+Str5→Str1
+ʟOPB→ʟF3
+3→N
+prgmHAFSTR
+If Str5="0"
+Return
+If Str1="0"
+Then
+Str5→Str1
+Else
+If sub(Str5,1,1)≠"-"
+"+"+Str5→Str5
+Str1+Str5→Str1
+End
+Return
+Lbl Z
+ʟOPF*(abs(ʟOPF)≥ᴇ⁻9)→ʟOPF
+If max(abs(seq(ʟOPF(I),I,11,15)))=0 or max(abs(seq(ʟOPF(I),I,16,20)))=0
+Goto UD
+If max(abs(seq(ʟOPF(I),I,1,5)))=0 or max(abs(seq(ʟOPF(I),I,6,10)))=0
+Goto ZR
+For(B,3,4)
+{ʟOPF(5B-2),ʟOPF(5B-1),ʟOPF(5B)}→ʟQC
+prgmHAROOT
+θ→C
+ʟRT→ʟOPQ
+For(E,1,C)
+ʟOPQ(E)→A
+For(D,1,2)
+1→L
+While L
+0→F
+0→G
+For(M,1,5)
+F*A+ʟOPF(5D-5+M)→F
+G*A+ʟOPF(5B-5+M)→G
+End
+abs(F)<ᴇ⁻9 and abs(G)<ᴇ⁻9→L
+If L
+Then
+For(M,5D-3,5D)
+ʟOPF(M)+A*ʟOPF(M-1)→ʟOPF(M)
+End
+For(M,5D,5D-3,⁻1)
+ʟOPF(M-1)→ʟOPF(M)
+End
+0→ʟOPF(5D-4)
+For(M,5B-3,5B)
+ʟOPF(M)+A*ʟOPF(M-1)→ʟOPF(M)
+End
+For(M,5B,5B-3,⁻1)
+ʟOPF(M-1)→ʟOPF(M)
+End
+0→ʟOPF(5B-4)
+End
+End
+End
+End
+If C=0 and ʟOPF(5B-2)≠0
+Then
+For(D,1,2)
+If ʟOPF(5D-2)≠0 and ʟOPF(5B-2)≠0
+Then
+ʟOPF(5D-2)/ʟOPF(5B-2)→A
+If max(abs(seq(ʟOPF(5D-5+M)-A*ʟOPF(5B-5+M),M,1,5)))<ᴇ⁻9
+Then
+For(M,1,5)
+0→ʟOPF(5D-5+M)
+0→ʟOPF(5B-5+M)
+End
+A→ʟOPF(5D)
+1→ʟOPF(5B)
+End
+End
+End
+End
+End
+ʟOPF*(abs(ʟOPF)≥ᴇ⁻9)→ʟOPF
+If length(Str2)+length(Str3)=0 and max(abs(seq(ʟOPF(I),I,11,14)))=0 and max(abs(seq(ʟOPF(I),I,16,19)))=0
+Goto P
+1→A
+0→F
+0→G
+0→C
+""→Str1
+For(B,1,4)
+seq(ʟOPF(I),I,5B-4,5B)→ʟPLY
+sum(ʟPLY≠0)→D
+If D=1 and B≤2
+Then
+A*sum(ʟPLY)→A
+F+sum((ʟPLY≠0)*{4,3,2,1,0})→F
+End
+If D=1 and B>2
+Then
+A/sum(ʟPLY)→A
+G+sum((ʟPLY≠0)*{4,3,2,1,0})→G
+End
+If D>1
+Then
+prgmHAPOLY
+If B≤2
+Str1+"("+Str7+")"→Str1
+If B>2
+Str2+"("+Str7+")"→Str2
+C+(B>2)→C
+End
+If B=2
+Then
+Str1+Str2→Str1
+""→Str2
+End
+End
+Str2+Str3→Str2
+If length(Str3)
+C+1→C
+""→Str3
+If F=1
+"X"→Str3
+If F=2
+"X²"→Str3
+If F=3
+"X³"→Str3
+If F=4
+"X^4"→Str3
+Str3+Str1→Str1
+""→Str3
+If G=1
+"X"→Str3
+If G=2
+"X²"→Str3
+If G=3
+"X³"→Str3
+If G=4
+"X^4"→Str3
+Str3+Str2→Str2
+If G>0
+C+1→C
+A→θ
+prgmHAFRAC
+X→D
+Y→E
+If abs(D)≠1 or length(Str1)=0
+Then
+abs(D)→θ
+prgmHAFRAC
+Str9+Str1→Str1
+End
+If D<0
+"-"+Str1→Str1
+If E≠1
+Then
+E→θ
+prgmHAFRAC
+Str9+Str2→Str2
+C+1→C
+End
+If C>1
+"("+Str2+")"→Str2
+If length(Str2)
+Str1+"/"+Str2→Str1
+Return
+Lbl P
+seq(ʟOPF(I),I,3,5)→ʟPA
+seq(ʟOPF(I),I,8,10)→ʟPB
+prgmHAPMUL
+ʟPC/(ʟOPF(15)*ʟOPF(20))→ʟPLY
+prgmHAPOLY
+Str7→Str1
+Return
+Lbl UD
+"UNDEFINED"→Str1
+Return
+Lbl ZR
+"0"→Str1

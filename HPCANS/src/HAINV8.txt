@@ -1,0 +1,37 @@
+dim(ʟHX)→L
+0→E
+0→J
+For(G,1,L-1)
+If not(J)
+Then
+ʟHY(G+1)-ʟHY(G)→H
+If H=0
+Then
+ʟHX(G)→A
+ʟHX(G+1)→B
+If G=1 and not(ʟHC(1))
+(3A+B)/4→A
+If G+1=L and not(ʟHC(2))
+(A+3B)/4→B
+ʟHY(G)→C
+1→J
+End
+If H≠0 and EH<0
+Then
+ʟHY(G)→C
+ʟHY(G-1)→D
+ʟHY(G+1)→F
+D→M
+If abs(F-C)<abs(D-C)
+F→M
+If (M=D and G=2 and not(ʟHC(1))) or (M=F and G+1=L and not(ʟHC(2)))
+(C+M)/2→M
+ʟHX(G-1)+(M-D)(ʟHX(G)-ʟHX(G-1))/(C-D)→A
+ʟHX(G)+(M-C)(ʟHX(G+1)-ʟHX(G))/(F-C)→B
+M→C
+1→J
+End
+If H≠0
+H→E
+End
+End

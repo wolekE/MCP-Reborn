@@ -1,0 +1,27 @@
+1→L
+1→G
+For(K,1,dim(L₅))
+L₅(K)→θ
+prgmHAFRAC
+If Z=0 or L>ᴇ7
+0→G
+If G
+lcm(L,Y)→L
+End
+If G=0
+Return
+For(K,1,dim(L₅))
+round(L*L₅(K),0)→L₅(K)
+End
+0→E
+For(K,1,dim(L₅))
+If E=0
+abs(L₅(K))→E
+If L₅(K)≠0
+gcd(E,abs(L₅(K)))→E
+End
+If E=0
+1→E
+If sum(L₅>0)=0
+⁻E→E
+L₅/E→L₅

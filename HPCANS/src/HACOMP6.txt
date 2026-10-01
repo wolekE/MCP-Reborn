@@ -1,0 +1,16 @@
+For(K,1,dim(ʟDL))
+If abs(ʟDL(K))≥ᴇ9 and abs(ʟDL(K))<ᴇ98
+Then
+ᴇ99*(ʟDL(K)>0)-ᴇ99*(ʟDL(K)<0)→ʟDL(K)
+0→ʟDA(K)
+End
+If abs(ʟDR(K))≥ᴇ9 and abs(ʟDR(K))<ᴇ98
+Then
+ᴇ99*(ʟDR(K)>0)-ᴇ99*(ʟDR(K)<0)→ʟDR(K)
+0→ʟDB(K)
+End
+End
+3→θ
+prgmHADOM
+5→θ
+prgmHADOM

@@ -1,0 +1,512 @@
+[
+ {
+  "item_id": "EX-6.1",
+  "what_question_gives": "y=|f(x)|, base graph A(-4,2) B(-2,-2) C(1,4) D(3,0)",
+  "solver_path": "5:ABS BARS → 1:SKETCH/GRAPH: PTS, D, R → 1:A|F(BX+C)+D|+K → 1:USE THE SAVED GRAPH (or 2:TYPE A NEW GRAPH, 4 corners, 1:SOLID)",
+  "student_enters": "A,B,C,D,K all ENTER",
+  "calculator_shows": "ANSWER: (-4,2)  (-3,0)  (-2,2) / (-1,0)  (1,4)  (3,0) / D=[-4,3] / R=[0,4]",
+  "expected_answer": "Points (-4,2),(-3,0),(-2,2),(-1,0),(1,4),(3,0); D=[-4,3], R=[0,4]",
+  "test_ids": [
+   "EX-6.1",
+   "MIST-6-3"
+  ]
+ },
+ {
+  "item_id": "EX-6.2",
+  "what_question_gives": "y=f(|x|), base graph",
+  "solver_path": "5 → 1:SKETCH/GRAPH → 2:A*F(B|X|+C)+K → saved graph",
+  "student_enters": "A,B,C,K all ENTER",
+  "calculator_shows": "ANSWER: (-3,0)  (-1,4)  (0,2) / (1,4)  (3,0) / D=[-3,3] / R=[0,4]",
+  "expected_answer": "Points (-3,0),(-1,4),(0,2),(1,4),(3,0); D=[-3,3], R=[0,4]",
+  "test_ids": [
+   "EX-6.2"
+  ]
+ },
+ {
+  "item_id": "EX-6.3",
+  "what_question_gives": "m(x)=-2|f(x-1)|+3, base graph; asks the order, the mapping table with x-intercepts, D_m, R_m",
+  "solver_path": "order: 5 → 5:ORDER OF THE STEPS → 1:A|F(BX+C)+D|+K; points: 5 → 1:SKETCH/GRAPH → 1 → saved graph",
+  "student_enters": "A=-2 B=ENTER C=-1 D=ENTER K=3",
+  "calculator_shows": "order: RIGHT 1 / |Y|: FLIP NEGATIVES UP / REFLECT X-AXIS / VERT STRETCH 2 / UP 3; points: (-3,-1)  (-2,3)  (-1,-1) / (0,3)  (2,-5)  (4,3) / D=[-3,4] / R=[-5,3]",
+  "expected_answer": "(1) right 1 (2) |y| (3) ×-2 (4) up 3; (-3,-1),(-2,3),(-1,-1),(0,3),(2,-5),(4,3); D=[-3,4], R=[-5,3]",
+  "test_ids": [
+   "EX-6.3a",
+   "EX-6.3b",
+   "EXTRA-abs-5"
+  ]
+ },
+ {
+  "item_id": "EX-6.4",
+  "what_question_gives": "k(x)=|f(x)-3|, base graph",
+  "solver_path": "5 → 1:SKETCH/GRAPH → 1:A|F(BX+C)+D|+K → saved graph",
+  "student_enters": "A,B,C=ENTER D=-3 K=ENTER",
+  "calculator_shows": "ANSWER: (-4,1)  (-2,5)  (1/2,0) / (1,1)  (3/2,0)  (3,3) / D=[-4,3] / R=[0,5]; the side note |f(x)|-3 (K=-3, D=ENTER) gives R=[-3,1]",
+  "expected_answer": "(-4,1),(-2,5),(1/2,0),(1,1),(3/2,0),(3,3); D=[-4,3], R=[0,5]; |f(x)|-3 has range [-3,1]",
+  "test_ids": [
+   "EX-6.4",
+   "EX-6.4x"
+  ]
+ },
+ {
+  "item_id": "EX-6.5-a",
+  "what_question_gives": "D_f=[-3,4], R_f=[-5,2]; domain of 3f(|x|)-2",
+  "solver_path": "5 → 2:DOMAIN ONLY → 2:A*F(B|X|+C)+K (only B and C are asked)",
+  "student_enters": "B=ENTER C=ENTER; LEFT END=-3 RIGHT END=4, 1:[ ]",
+  "calculator_shows": "ANSWER: D=[-4,4]",
+  "expected_answer": "[-4,4]",
+  "test_ids": [
+   "EX-6.5-a"
+  ]
+ },
+ {
+  "item_id": "EX-6.5-b",
+  "what_question_gives": "R_f=[-5,2]; range of 3|f(x)|-2",
+  "solver_path": "5 → 3:RANGE ONLY → 1:A|F(BX+C)+D|+K (only A, D, K asked)",
+  "student_enters": "A=3 D=ENTER K=-2; R_f -5 to 2, 1:[ ]",
+  "calculator_shows": "ANSWER: R=[-2,13]",
+  "expected_answer": "[-2,13]",
+  "test_ids": [
+   "EX-6.5-b",
+   "EXTRA-abs-23"
+  ]
+ },
+ {
+  "item_id": "EX-6.5-c",
+  "what_question_gives": "D_f=[-3,4], R_f=[-5,2]; D and R of k(x)=-f(2x-6)+1 (no bars)",
+  "solver_path": "No bars, so main menu 4:A*F(BX+C)+K → 3:NEW DOMAIN AND RANGE → 1:D AND R (the ABS shape menu says 'NO BARS? USE MAIN MENU 4')",
+  "student_enters": "A=-1 B=2 C=-6 K=1; D -3 to 4 [ ]; R -5 to 2 [ ]",
+  "calculator_shows": "ANSWER: D=[3/2,5] / R=[-1,6]",
+  "expected_answer": "D_k=[3/2,5], R_k=[-1,6]",
+  "test_ids": [
+   "EX-6.5-c"
+  ]
+ },
+ {
+  "item_id": "EX-6.5-d",
+  "what_question_gives": "D_f=[-3,4], R_f=[-5,2]; why not the range of f(|x|)",
+  "solver_path": "5 → 3:RANGE ONLY → 2:A*F(B|X|+C)+K; the program sees that f is used only for x≥0 and that D_f has negatives, so it does not ask R_f",
+  "student_enters": "A,B,C,K=ENTER; D_f -3 to 4, 1:[ ]",
+  "calculator_shows": "ANSWER: R CAN NOT BE FOUND FROM / D AND R ALONE: IT DEPENDS / ON WHAT F DOES FOR X≥0 / (USE 1 WITH THE GRAPH)",
+  "expected_answer": "It depends on which outputs f reaches for x>=0; D and R alone don't tell you",
+  "test_ids": [
+   "EX-6.5-d"
+  ]
+ },
+ {
+  "item_id": "PR-6.1",
+  "what_question_gives": "Sketch y=|f(x)|-2; D, R (base graph)",
+  "solver_path": "5 → 1:SKETCH/GRAPH → 1:A|F(BX+C)+D|+K → type graph (or saved)",
+  "student_enters": "A,B,C,D=ENTER K=-2; HOW MANY POINTS=4, (-4,2) (-2,-2) (1,4) (3,0), 1:BOTH SOLID",
+  "calculator_shows": "ANSWER: (-4,0)  (-3,-2)  (-2,0) / (-1,-2)  (1,2)  (3,-2) / D=[-4,3] / R=[-2,2]",
+  "expected_answer": "(-4,0),(-3,-2),(-2,0),(-1,-2),(1,2),(3,-2); D=[-4,3], R=[-2,2]",
+  "test_ids": [
+   "PR-6.1"
+  ]
+ },
+ {
+  "item_id": "PR-6.2",
+  "what_question_gives": "Sketch y=f(|x|)+1; D, R",
+  "solver_path": "5 → 1:SKETCH/GRAPH → 2:A*F(B|X|+C)+K → saved graph",
+  "student_enters": "A,B,C=ENTER K=1",
+  "calculator_shows": "ANSWER: (-3,1)  (-1,5)  (0,3) / (1,5)  (3,1) / D=[-3,3] / R=[1,5]",
+  "expected_answer": "(-3,1),(-1,5),(0,3),(1,5),(3,1); D=[-3,3], R=[1,5]",
+  "test_ids": [
+   "PR-6.2",
+   "EXTRA-abs-21"
+  ]
+ },
+ {
+  "item_id": "PR-6.3",
+  "what_question_gives": "Sketch y=-f(|x|); D, R",
+  "solver_path": "5 → 1:SKETCH/GRAPH → 2:A*F(B|X|+C)+K → saved graph",
+  "student_enters": "A=(-) alone B,C,K=ENTER",
+  "calculator_shows": "ANSWER: (-3,0)  (-1,-4)  (0,-2) / (1,-4)  (3,0) / D=[-3,3] / R=[-4,0]",
+  "expected_answer": "(-3,0),(-1,-4),(0,-2),(1,-4),(3,0); D=[-3,3], R=[-4,0]",
+  "test_ids": [
+   "PR-6.3"
+  ]
+ },
+ {
+  "item_id": "PR-6.4",
+  "what_question_gives": "Sketch y=|f(x+2)|; D, R",
+  "solver_path": "5 → 1:SKETCH/GRAPH → 1:A|F(BX+C)+D|+K → saved graph",
+  "student_enters": "A,B=ENTER C=2 D,K=ENTER",
+  "calculator_shows": "ANSWER: (-6,2)  (-5,0)  (-4,2) / (-3,0)  (-1,4)  (1,0) / D=[-6,1] / R=[0,4]",
+  "expected_answer": "(-6,2),(-5,0),(-4,2),(-3,0),(-1,4),(1,0); D=[-6,1], R=[0,4]",
+  "test_ids": [
+   "PR-6.4"
+  ]
+ },
+ {
+  "item_id": "PR-6.5",
+  "what_question_gives": "D_f=[-5,1], R_f=[-6,-2]; (a) domain of f(|x|) (b) range of |f(x)| (c) range of -3|f(x)|+1",
+  "solver_path": "(a) 5 → 2:DOMAIN ONLY → 2; (b),(c) 5 → 3:RANGE ONLY → 1 (AGAIN goes from (b) to (c))",
+  "student_enters": "(a) B,C=ENTER; -5 to 1 [ ]. (b) A,D,K=ENTER; -6 to -2 [ ]. (c) A=-3 D=ENTER K=1; -6 to -2 [ ]",
+  "calculator_shows": "(a) D=[-1,1]; (b) R=[2,6]; (c) R=[-17,-5]",
+  "expected_answer": "(a) [-1,1]; (b) [2,6]; (c) [-17,-5]",
+  "test_ids": [
+   "PR-6.5a",
+   "PR-6.5b",
+   "PR-6.5c",
+   "EXTRA-abs-19"
+  ]
+ },
+ {
+  "item_id": "PR-6.6",
+  "what_question_gives": "D_f=[2,7]; domain of f(|x|)",
+  "solver_path": "5 → 2:DOMAIN ONLY → 2:A*F(B|X|+C)+K",
+  "student_enters": "B,C=ENTER; 2 to 7, 1:[ ]",
+  "calculator_shows": "ANSWER: D=[-7,-2]U[2,7]",
+  "expected_answer": "[-7,-2]U[2,7]",
+  "test_ids": [
+   "PR-6.6"
+  ]
+ },
+ {
+  "item_id": "SOL-6.1",
+  "what_question_gives": "Official solution to 6.1",
+  "solver_path": "same as PR-6.1 (saved graph)",
+  "student_enters": "A,B,C,D=ENTER K=-2",
+  "calculator_shows": "(-4,0)  (-3,-2)  (-2,0) / (-1,-2)  (1,2)  (3,-2) / D=[-4,3] / R=[-2,2]",
+  "expected_answer": "D=[-4,3], R=[-2,2] and the 6 listed points",
+  "test_ids": [
+   "SOL-6.1",
+   "PR-6.1"
+  ]
+ },
+ {
+  "item_id": "SOL-6.2",
+  "what_question_gives": "Official solution to 6.2",
+  "solver_path": "same as PR-6.2",
+  "student_enters": "A,B,C=ENTER K=1",
+  "calculator_shows": "(-3,1)  (-1,5)  (0,3) / (1,5)  (3,1) / D=[-3,3] / R=[1,5]",
+  "expected_answer": "D=[-3,3], R=[1,5]",
+  "test_ids": [
+   "PR-6.2"
+  ]
+ },
+ {
+  "item_id": "SOL-6.3",
+  "what_question_gives": "Official solution to 6.3",
+  "solver_path": "same as PR-6.3",
+  "student_enters": "A=(-) B,C,K=ENTER",
+  "calculator_shows": "(-3,0)  (-1,-4)  (0,-2) / (1,-4)  (3,0) / D=[-3,3] / R=[-4,0]",
+  "expected_answer": "D=[-3,3], R=[-4,0]",
+  "test_ids": [
+   "PR-6.3"
+  ]
+ },
+ {
+  "item_id": "SOL-6.4",
+  "what_question_gives": "Official solution to 6.4",
+  "solver_path": "same as PR-6.4",
+  "student_enters": "C=2, rest ENTER",
+  "calculator_shows": "(-6,2)  (-5,0)  (-4,2) / (-3,0)  (-1,4)  (1,0) / D=[-6,1] / R=[0,4]",
+  "expected_answer": "D=[-6,1], R=[0,4]",
+  "test_ids": [
+   "SOL-6.4",
+   "PR-6.4"
+  ]
+ },
+ {
+  "item_id": "SOL-6.5",
+  "what_question_gives": "Official solution to 6.5",
+  "solver_path": "same as PR-6.5",
+  "student_enters": "see PR-6.5",
+  "calculator_shows": "D=[-1,1]; R=[2,6]; R=[-17,-5]",
+  "expected_answer": "(a) [-1,1]; (b) [2,6]; (c) [-17,-5]",
+  "test_ids": [
+   "PR-6.5a",
+   "PR-6.5b",
+   "PR-6.5c"
+  ]
+ },
+ {
+  "item_id": "SOL-6.6",
+  "what_question_gives": "Official solution to 6.6",
+  "solver_path": "same as PR-6.6",
+  "student_enters": "B,C=ENTER; 2 to 7 [ ]",
+  "calculator_shows": "D=[-7,-2]U[2,7]",
+  "expected_answer": "[-7,-2]U[2,7]",
+  "test_ids": [
+   "PR-6.6"
+  ]
+ },
+ {
+  "item_id": "CRAM-EX-6",
+  "what_question_gives": "D_f=[-2,5], R_f=[-4,3]; domain of 2f(|x|)+1; range of 2|f(x)|+1",
+  "solver_path": "5 → 2:DOMAIN ONLY → 2; then 5 → 3:RANGE ONLY → 1",
+  "student_enters": "domain: B,C=ENTER; -2 to 5 [ ]. range: A=2 D=ENTER K=1; -4 to 3 [ ]",
+  "calculator_shows": "D=[-5,5]; R=[1,9]",
+  "expected_answer": "[-5,5]; [1,9]",
+  "test_ids": [
+   "CRAM-EX-6a",
+   "CRAM-EX-6b"
+  ]
+ },
+ {
+  "item_id": "CRAM-8i",
+  "what_question_gives": "|f(x)| or f(|x|): method",
+  "solver_path": "5 → 5:ORDER OF THE STEPS → shape 1 or 2 (and 1:SKETCH/GRAPH does it on the points)",
+  "student_enters": "all ENTER",
+  "calculator_shows": "|f(x)|: '|Y|: FLIP NEGATIVES UP'; f(|x|): 'KEEP X≥0, MIRROR TO LEFT'",
+  "expected_answer": "|f(x)|: flip the negatives up; f(|x|): mirror the right side",
+  "test_ids": [
+   "CRAM-8i-a",
+   "CRAM-8i-b",
+   "EX-6.1",
+   "EX-6.2"
+  ]
+ },
+ {
+  "item_id": "CRAM-6.3",
+  "what_question_gives": "Order of steps: f(|x|-3), f(|x-3|), 2|f(x+1)|-1, |f(x)-1|+2",
+  "solver_path": "5 → 5:ORDER OF THE STEPS → shape 2 / 3 / 1 / 1",
+  "student_enters": "f(|x|-3): C=-3; f(|x-3|): C=-3; 2|f(x+1)|-1: A=2 C=1 K=-1; |f(x)-1|+2: D=-1 K=2 (rest ENTER)",
+  "calculator_shows": "RIGHT 3 / KEEP X≥0, MIRROR TO LEFT; KEEP X≥0, MIRROR TO LEFT / RIGHT 3; LEFT 1 / |Y|: FLIP NEGATIVES UP / VERT STRETCH 2 / DOWN 1; DOWN 1 / |Y|: FLIP NEGATIVES UP / UP 2",
+  "expected_answer": "right 3 then mirror; mirror then right 3; left 1, |y|, ×2, down 1; down 1, |y|, up 2",
+  "test_ids": [
+   "CRAM-6.3a",
+   "CRAM-6.3b",
+   "CRAM-6.3c",
+   "CRAM-6.3d",
+   "EXTRA-abs-1",
+   "EXTRA-abs-2"
+  ]
+ },
+ {
+  "item_id": "CRAM-6.1",
+  "what_question_gives": "Rule: |f(x)| keeps y≥0, reflects negatives, keeps x-intercepts, domain unchanged",
+  "solver_path": "5 → 1 / 2 / 3 / 4 with shape 1",
+  "student_enters": "coefficients",
+  "calculator_shows": "x-intercepts are added as points before |y|; D unchanged (EX-6.1)",
+  "expected_answer": "rule",
+  "test_ids": [
+   "EX-6.1",
+   "MIST-6-3"
+  ]
+ },
+ {
+  "item_id": "CRAM-6.2",
+  "what_question_gives": "Rule: f(|x|) deletes x<0 and mirrors the right side; even symmetry",
+  "solver_path": "5 → 1 / 2 / 3 / 4 with shape 2",
+  "student_enters": "coefficients",
+  "calculator_shows": "points mirrored about the y-axis (EX-6.2)",
+  "expected_answer": "rule",
+  "test_ids": [
+   "EX-6.2",
+   "PR-6.2"
+  ]
+ },
+ {
+  "item_id": "RULE-6-KEYIDEA",
+  "what_question_gives": "Key idea table for |f(x)| and f(|x|), including range [0,max(|c|,d)] and domain [-q,q]",
+  "solver_path": "Built in: HAABS3 (range: +D, |y| with the 3 cases c≥0, d≤0, c<0<d, then A,K) and HAABS2 (domain: mirror rule incl. p>0 → two intervals, p=0 open → hole at 0)",
+  "student_enters": "—",
+  "calculator_shows": "e.g. R=[0,5] from [-5,2]; D=[-5,5] from [-2,5]",
+  "expected_answer": "rule",
+  "test_ids": [
+   "MIST-6-5",
+   "CRAM-EX-6a",
+   "PR-6.6",
+   "EXTRA-abs-10"
+  ]
+ },
+ {
+  "item_id": "RULE-6-COMBINE",
+  "what_question_gives": "Order: inside work first, then f, then |y|, ×a, +k; track endpoints and intercepts",
+  "solver_path": "HAABS4 applies exactly this order to every corner; 5:ORDER OF THE STEPS lists it",
+  "student_enters": "—",
+  "calculator_shows": "EX-6.3 order and points",
+  "expected_answer": "rule",
+  "test_ids": [
+   "EX-6.3a",
+   "EX-6.3b"
+  ]
+ },
+ {
+  "item_id": "RULE-6-WHY",
+  "what_question_gives": "Why |f| flips and f(|x|) is even",
+  "solver_path": "WHY page (3:WHY after any answer) lists the steps in order",
+  "student_enters": "—",
+  "calculator_shows": "WHY: STEPS IN ORDER: ... (not on the ANSWER screen)",
+  "expected_answer": "explanation",
+  "test_ids": [
+   "EXTRA-abs-21"
+  ]
+ },
+ {
+  "item_id": "RULE-6-RECOGNIZE",
+  "what_question_gives": "Bars around f → |y|; bars on x → f(|x|); shift before bars; D/R-only questions",
+  "solver_path": "Shape menu 'WHERE ARE THE BARS?' shows the 3 templates with examples (|F(X)-3|, 2|F(X)|-1 / F(|X|)+1, F(|X|-3) / F(|X-3|)); 2:DOMAIN ONLY and 3:RANGE ONLY for D/R-only",
+  "student_enters": "the shape key",
+  "calculator_shows": "—",
+  "expected_answer": "method",
+  "test_ids": [
+   "EX-6.4",
+   "EX-6.5-a",
+   "EX-6.5-b"
+  ]
+ },
+ {
+  "item_id": "RULE-6-CHECK",
+  "what_question_gives": "Check: nothing below the x-axis for |f|; mirror image for f(|x|)",
+  "solver_path": "Output points already satisfy it",
+  "student_enters": "—",
+  "calculator_shows": "EX-6.1: no negative y; EX-6.2: symmetric list",
+  "expected_answer": "check",
+  "test_ids": [
+   "EX-6.1",
+   "EX-6.2"
+  ]
+ },
+ {
+  "item_id": "MIST-6-1",
+  "what_question_gives": "Mixing up |f(x)| and f(|x|)",
+  "solver_path": "Shape menu separates bars around F (1) from bars on X (2, 3), with examples; the program applies the right rule",
+  "student_enters": "the shape that looks like the paper",
+  "calculator_shows": "|f(x)| and f(|x|) give different point lists (EX-6.1 vs EX-6.2)",
+  "expected_answer": "handled",
+  "test_ids": [
+   "EX-6.1",
+   "EX-6.2"
+  ]
+ },
+ {
+  "item_id": "MIST-6-2",
+  "what_question_gives": "For f(|x|), mirroring the left side",
+  "solver_path": "HAABS4 keeps only x≥0 points (plus the cut point at x=0) and mirrors them",
+  "student_enters": "—",
+  "calculator_shows": "EX-6.2 shows (-1,4),(-3,0), never the old left side (-2,-2)",
+  "expected_answer": "handled",
+  "test_ids": [
+   "EX-6.2",
+   "PR-6.3"
+  ]
+ },
+ {
+  "item_id": "MIST-6-3",
+  "what_question_gives": "Forgetting x-intercepts",
+  "solver_path": "HAABS4 adds every crossing of f(x)+D=0 (exact interpolation) before |y|",
+  "student_enters": "only the corners",
+  "calculator_shows": "(-3,0) and (-1,0) appear for |f(x)|; (1/2,0),(3/2,0) for |f(x)-3|",
+  "expected_answer": "handled",
+  "test_ids": [
+   "MIST-6-3",
+   "EX-6.4"
+  ]
+ },
+ {
+  "item_id": "MIST-6-4",
+  "what_question_gives": "Taking |y| before a shift inside the bars",
+  "solver_path": "D (inside the bars) is applied before |y|, K after; separate prompts 'D (AFTER F( ))=' and 'K (END NUMBER)='",
+  "student_enters": "|f(x)-3|: D=-3; |f(x)|-3: K=-3",
+  "calculator_shows": "R=[0,5] vs R=[-3,1]",
+  "expected_answer": "handled",
+  "test_ids": [
+   "EX-6.4",
+   "EX-6.4x"
+  ]
+ },
+ {
+  "item_id": "MIST-6-5",
+  "what_question_gives": "Range of |f| from R_f=[-5,2]",
+  "solver_path": "5 → 3:RANGE ONLY → 1",
+  "student_enters": "A,D,K=ENTER; -5 to 2 [ ]",
+  "calculator_shows": "ANSWER: R=[0,5]",
+  "expected_answer": "[0,5]",
+  "test_ids": [
+   "MIST-6-5"
+  ]
+ },
+ {
+  "item_id": "CRAM-MIST-4",
+  "what_question_gives": "Mixing up |x| (left/right) and |y| (up/down)",
+  "solver_path": "Shape menu by where the bars are; ORDER lists 'KEEP X≥0, MIRROR TO LEFT' vs '|Y|: FLIP NEGATIVES UP'",
+  "student_enters": "—",
+  "calculator_shows": "see CRAM-8i",
+  "expected_answer": "handled",
+  "test_ids": [
+   "CRAM-8i-a",
+   "CRAM-8i-b"
+  ]
+ },
+ {
+  "item_id": "CRAM-MIST-5",
+  "what_question_gives": "Dropping x-intercepts before |y|",
+  "solver_path": "same as MIST-6-3",
+  "student_enters": "—",
+  "calculator_shows": "x-intercepts listed as corners",
+  "expected_answer": "handled",
+  "test_ids": [
+   "MIST-6-3",
+   "EX-6.4"
+  ]
+ },
+ {
+  "item_id": "ICAN-6",
+  "what_question_gives": "I Can: graph an absolute value transformation; find its domain and range",
+  "solver_path": "5 → 1:SKETCH/GRAPH (points+D+R), 2/3/4 for D,R from intervals, 5 for the order",
+  "student_enters": "coefficients + corners or intervals",
+  "calculator_shows": "points, D=, R=",
+  "expected_answer": "skill",
+  "test_ids": [
+   "EX-6.3b",
+   "PR-6.1",
+   "PR-6.6"
+  ]
+ },
+ {
+  "item_id": "S6-ICAN",
+  "what_question_gives": "Same I Can sentence (Section 6 intro)",
+  "solver_path": "same as ICAN-6",
+  "student_enters": "—",
+  "calculator_shows": "—",
+  "expected_answer": "skill",
+  "test_ids": [
+   "EX-6.3b",
+   "PR-6.2"
+  ]
+ },
+ {
+  "item_id": "ICAN-15",
+  "what_question_gives": "I Can row: graph a function with an absolute value transformation",
+  "solver_path": "5 → 1:SKETCH/GRAPH",
+  "student_enters": "coefficients + corners",
+  "calculator_shows": "important points sorted by x, D, R",
+  "expected_answer": "skill",
+  "test_ids": [
+   "PR-6.1",
+   "PR-6.2",
+   "PR-6.3",
+   "PR-6.4"
+  ]
+ },
+ {
+  "item_id": "ICAN-14",
+  "what_question_gives": "I Can row: D and R after a transformation (Sections 5, 6); the Section 6 part",
+  "solver_path": "5 → 2/3/4 (from D_f, R_f) or 1 (from a graph)",
+  "student_enters": "coefficients + intervals",
+  "calculator_shows": "D=..., R=...",
+  "expected_answer": "skill",
+  "test_ids": [
+   "EX-6.5-a",
+   "EX-6.5-b",
+   "EXTRA-abs-23"
+  ]
+ },
+ {
+  "item_id": "TEST-3",
+  "what_question_gives": "Test list: D and R of transformed functions, including absolute value",
+  "solver_path": "5 → 2/3/4 and 1; menu 4 for no bars",
+  "student_enters": "—",
+  "calculator_shows": "—",
+  "expected_answer": "topic",
+  "test_ids": [
+   "EX-6.5-a",
+   "EX-6.5-b",
+   "EX-6.5-c",
+   "PR-6.5a"
+  ]
+ }
+]

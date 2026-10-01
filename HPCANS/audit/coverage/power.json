@@ -1,0 +1,864 @@
+[
+ {
+  "item_id": "EX-7.1-1",
+  "what_question_gives": "y = x^5",
+  "expected_answer": "yes: k = 1, p = 5",
+  "solver_path": "6 → 1:FIND K,P",
+  "student_enters": "1:-3X^5; NUMBER IN FRONT=ENTER POWER ON X=5",
+  "calculator_shows": "ANSWER: Y=X^5 / K=1 / P=5 / YES, A POWER FUNCTION",
+  "test_ids": [
+   "EX-7.1-1"
+  ]
+ },
+ {
+  "item_id": "EX-7.1-2",
+  "what_question_gives": "y = -3/x^2",
+  "expected_answer": "yes: k = -3, p = -2",
+  "solver_path": "6 → 1:FIND K,P",
+  "student_enters": "3:-1/(4X^6); TOP NUMBER=-3 BOTTOM NUMBER=ENTER POWER ON X=2",
+  "calculator_shows": "ANSWER: Y=-3X^(-2) / K=-3 / P=-2 / YES, A POWER FUNCTION",
+  "test_ids": [
+   "EX-7.1-2"
+  ]
+ },
+ {
+  "item_id": "EX-7.1-3",
+  "what_question_gives": "y = sqrt(25x)",
+  "expected_answer": "yes: k = 5, p = 1/2",
+  "solver_path": "6 → 1:FIND K,P",
+  "student_enters": "2:-7√(16X^3); NUMBER IN FRONT=ENTER ROOT INDEX=ENTER NUMBER UNDER ROOT=25 X POWER UNDER ROOT=ENTER",
+  "calculator_shows": "ANSWER: Y=5X^(1/2) / K=5 / P=1/2 / YES, A POWER FUNCTION",
+  "test_ids": [
+   "EX-7.1-3"
+  ]
+ },
+ {
+  "item_id": "EX-7.1-4",
+  "what_question_gives": "y = 4/cbrt(x)",
+  "expected_answer": "yes: k = 4, p = -1/3",
+  "solver_path": "6 → 1:FIND K,P",
+  "student_enters": "4:5/(2√(9X)); TOP NUMBER=4 NUMBER BEFORE ROOT=ENTER ROOT INDEX=3 NUMBER UNDER ROOT=ENTER X POWER UNDER ROOT=ENTER",
+  "calculator_shows": "ANSWER: Y=4X^(-1/3) / K=4 / P=-1/3 / YES, A POWER FUNCTION",
+  "test_ids": [
+   "EX-7.1-4"
+  ]
+ },
+ {
+  "item_id": "EX-7.1-5",
+  "what_question_gives": "y = 7",
+  "expected_answer": "no: constant function (7x^0 has power 0)",
+  "solver_path": "6 → 1:FIND K,P",
+  "student_enters": "7:Y=7",
+  "calculator_shows": "ANSWER: NOT A POWER FUNCTION / CONSTANT FUNCTION / (IT IS KX^0: POWER 0)",
+  "test_ids": [
+   "EX-7.1-5"
+  ]
+ },
+ {
+  "item_id": "EX-7.1-6",
+  "what_question_gives": "y = 2^x",
+  "expected_answer": "no: exponential (the variable is in the exponent)",
+  "solver_path": "6 → 1:FIND K,P",
+  "student_enters": "8:Y=2^X",
+  "calculator_shows": "ANSWER: NOT A POWER FUNCTION / EXPONENTIAL FUNCTION / (X IS IN THE EXPONENT)",
+  "test_ids": [
+   "EX-7.1-6"
+  ]
+ },
+ {
+  "item_id": "EX-7.2a",
+  "what_question_gives": "y = sqrt(16x^5)",
+  "expected_answer": "4x^(5/2): k = 4, p = 5/2",
+  "solver_path": "6 → 1:FIND K,P",
+  "student_enters": "2:-7√(16X^3); NUMBER IN FRONT=ENTER ROOT INDEX=ENTER NUMBER UNDER ROOT=16 X POWER UNDER ROOT=5",
+  "calculator_shows": "ANSWER: Y=4X^(5/2) / K=4 / P=5/2 / YES, A POWER FUNCTION",
+  "test_ids": [
+   "EX-7.2a"
+  ]
+ },
+ {
+  "item_id": "EX-7.2b",
+  "what_question_gives": "y = -6/nthroot(4, x^3) (fourth root of x^3 in the denominator)",
+  "expected_answer": "-6x^(-3/4): k = -6, p = -3/4",
+  "solver_path": "6 → 1:FIND K,P",
+  "student_enters": "4:5/(2√(9X)); TOP NUMBER=-6 NUMBER BEFORE ROOT=ENTER ROOT INDEX=4 NUMBER UNDER ROOT=ENTER X POWER UNDER ROOT=3",
+  "calculator_shows": "ANSWER: Y=-6X^(-3/4) / K=-6 / P=-3/4 / YES, A POWER FUNCTION",
+  "test_ids": [
+   "EX-7.2b"
+  ]
+ },
+ {
+  "item_id": "EX-7.2c",
+  "what_question_gives": "y = 5/(2 sqrt(9x))",
+  "expected_answer": "(5/6)x^(-1/2): k = 5/6, p = -1/2",
+  "solver_path": "6 → 1:FIND K,P",
+  "student_enters": "4:5/(2√(9X)); TOP NUMBER=5 NUMBER BEFORE ROOT=2 ROOT INDEX=ENTER NUMBER UNDER ROOT=9 X POWER UNDER ROOT=ENTER",
+  "calculator_shows": "ANSWER: Y=(5/6)X^(-1/2) / K=5/6 / P=-1/2 / YES, A POWER FUNCTION",
+  "test_ids": [
+   "EX-7.2c"
+  ]
+ },
+ {
+  "item_id": "EX-7.3",
+  "what_question_gives": "f(x) = -2x^(-2/3); k = -2, p = -2/3, a = -2, b = 3",
+  "expected_answer": "Domain: (-∞, 0) ∪ (0, ∞) (x ≠ 0); Range: (-∞, 0); Continuity: discontinuous at x = 0 (infinite); Increasing: (0, ∞); Decreasing: (-∞, 0); Boundedness: bounded above (never reaches 0); Asymptotes: x = 0 and y = 0; End behavior: lim_{x→±∞} f(x) = 0; Symmetry: even (\"even for x < 0\")",
+  "solver_path": "6 → 3:ALL PROPERTIES",
+  "student_enters": "K=-2 P=-2/3",
+  "calculator_shows": "ANSWER: P=-2/3 (EVEN/ODD) / X^(-2/3)=1/(³√(X))² / SYMMETRY: EVEN (Y-AXIS) / QUADRANTS: III,IV / DOMAIN: (-INF,0)U(0,INF) / RANGE: (-INF,0) / INCREASING: (0,INF) / DECREASING: (-INF,0) / BOUNDED ABOVE / ASYMPTOTES: X=0, Y=0 / AS X->+-INF, F(X)->0 / DISCONTINUOUS AT X=0 / (INFINITE DISCONTINUITY) / Q4: INCREASING / CURVING DOWN, CONCAVE DOWN / Q3: DECREASING / CURVING DOWN, CONCAVE DOWN / THROUGH (1,-2)",
+  "test_ids": [
+   "EX-7.3"
+  ]
+ },
+ {
+  "item_id": "EX-7.4",
+  "what_question_gives": "f(x) = 3x^(5/4); k = 3, p = 5/4, b = 4",
+  "expected_answer": "Q1 only, undefined for x < 0; increasing and curving up; Domain [0, ∞), range [0, ∞), increasing on [0, ∞), bounded below, no asymptotes, lim_{x→∞} f(x) = ∞, no left end behavior. Passes through (0, 0) and (1, 3).",
+  "solver_path": "6 → 3:ALL PROPERTIES",
+  "student_enters": "K=3 P=5/4",
+  "calculator_shows": "ANSWER: P=5/4 (ODD/EVEN) / X^(5/4)=(4TH ROOT X)^5 / UNDEFINED FOR X<0 / (NOT EVEN, NOT ODD) / QUADRANT: I ONLY / DOMAIN: [0,INF) / RANGE: [0,INF) / INCREASING: [0,INF) / DECREASING: NEVER / BOUNDED BELOW / ASYMPTOTES: NONE / AS X->INF, F(X)->INF / NO LEFT END BEHAVIOR / CONTINUOUS ON [0,INF) / Q1: INCREASING / CURVING UP, CONCAVE UP / THROUGH (0,0) AND (1,3)",
+  "test_ids": [
+   "EX-7.4"
+  ]
+ },
+ {
+  "item_id": "EX-7.5a",
+  "what_question_gives": "Graph (a): Q1 & Q2, cusp at the origin, both sides concave down",
+  "expected_answer": "y = x^(4/5) (or x^(2/3), x^(8/11))",
+  "solver_path": "6 → 4:BUILD EQUATION",
+  "student_enters": "3:I AND II; 1:INCREASING, CURVING DOWN (LEVELS OFF/SHARP POINT)",
+  "calculator_shows": "ANSWER: Y=X^(2/3) / K=1, P=2/3",
+  "test_ids": [
+   "EX-7.5a"
+  ]
+ },
+ {
+  "item_id": "EX-7.5b",
+  "what_question_gives": "Graph (b): Q2 & Q4 with asymptotes x=0, y=0",
+  "expected_answer": "y = -x^(-3/5) (or -x^(-1/3), -x^(-5/3))",
+  "solver_path": "6 → 4:BUILD EQUATION",
+  "student_enters": "6:II AND IV; 3:INCREASING TOWARD X-AXIS (ASYMPTOTES)",
+  "calculator_shows": "ANSWER: Y=-X^(-3/5) / K=-1, P=-3/5",
+  "test_ids": [
+   "EX-7.5b"
+  ]
+ },
+ {
+  "item_id": "EX-7.5c",
+  "what_question_gives": "Graph (c): Q4 only, starts flat at the origin, falls more and more steeply",
+  "expected_answer": "y = -x^(3/2) (or -x^(5/2), -x^(7/4))",
+  "solver_path": "6 → 4:BUILD EQUATION",
+  "student_enters": "2:IV ONLY; 2:DECREASING, CURVING DOWN (GETS STEEPER)",
+  "calculator_shows": "ANSWER: Y=-X^(3/2) / K=-1, P=3/2",
+  "test_ids": [
+   "EX-7.5c"
+  ]
+ },
+ {
+  "item_id": "EX-7.5d",
+  "what_question_gives": "Graph (d): Q4 only, vertical tangent at the origin, levels off",
+  "expected_answer": "y = -x^(1/2) (or -x^(3/4), -x^(5/6))",
+  "solver_path": "6 → 4:BUILD EQUATION",
+  "student_enters": "2:IV ONLY; 1:DECREASING, CURVING UP (LEVELS OFF/SHARP POINT)",
+  "calculator_shows": "ANSWER: Y=-X^(1/2) / K=-1, P=1/2",
+  "test_ids": [
+   "EX-7.5d"
+  ]
+ },
+ {
+  "item_id": "PR-7.1a",
+  "what_question_gives": "y = -7 nthroot(4, x) (negative seven times the fourth root of x)",
+  "expected_answer": "-7x^(1/4): k = -7, p = 1/4.",
+  "solver_path": "6 → 1:FIND K,P",
+  "student_enters": "2:-7√(16X^3); NUMBER IN FRONT=-7 ROOT INDEX=4 NUMBER UNDER ROOT=ENTER X POWER UNDER ROOT=ENTER",
+  "calculator_shows": "ANSWER: Y=-7X^(1/4) / K=-7 / P=1/4 / YES, A POWER FUNCTION",
+  "test_ids": [
+   "PR-7.1a"
+  ]
+ },
+ {
+  "item_id": "PR-7.1b",
+  "what_question_gives": "y = 2/(x sqrt(x))",
+  "expected_answer": "2/(x · x^(1/2)) = 2/x^(3/2) = 2x^(-3/2): k = 2, p = -3/2.",
+  "solver_path": "6 → 1:FIND K,P",
+  "student_enters": "6:2/(X√(X)); TOP NUMBER=2 BOTTOM NUMBER=ENTER X POWER OUTSIDE ROOT=ENTER ROOT INDEX=ENTER NUMBER UNDER ROOT=ENTER X POWER UNDER ROOT=ENTER",
+  "calculator_shows": "ANSWER: Y=2X^(-3/2) / K=2 / P=-3/2 / YES, A POWER FUNCTION",
+  "test_ids": [
+   "PR-7.1b"
+  ]
+ },
+ {
+  "item_id": "PR-7.1c",
+  "what_question_gives": "y = sqrt(49x^3)",
+  "expected_answer": "sqrt(49) sqrt(x^3) = 7x^(3/2): k = 7, p = 3/2.",
+  "solver_path": "6 → 1:FIND K,P",
+  "student_enters": "2:-7√(16X^3); NUMBER IN FRONT=ENTER ROOT INDEX=ENTER NUMBER UNDER ROOT=49 X POWER UNDER ROOT=3",
+  "calculator_shows": "ANSWER: Y=7X^(3/2) / K=7 / P=3/2 / YES, A POWER FUNCTION",
+  "test_ids": [
+   "PR-7.1c"
+  ]
+ },
+ {
+  "item_id": "PR-7.1d",
+  "what_question_gives": "y = -1/(4x^6)",
+  "expected_answer": "-(1/4)x^(-6): k = -1/4, p = -6.",
+  "solver_path": "6 → 1:FIND K,P",
+  "student_enters": "3:-1/(4X^6); TOP NUMBER=-1 BOTTOM NUMBER=4 POWER ON X=6",
+  "calculator_shows": "ANSWER: Y=-(1/4)X^(-6) / K=-1/4 / P=-6 / YES, A POWER FUNCTION",
+  "test_ids": [
+   "PR-7.1d"
+  ]
+ },
+ {
+  "item_id": "PR-7.2a",
+  "what_question_gives": "5x^(3/7)",
+  "expected_answer": "3/7: odd/odd, so odd; k > 0: Q1 & Q3.",
+  "solver_path": "6 → 2:SYMMETRY/QUADS",
+  "student_enters": "K=5 P=3/7",
+  "calculator_shows": "ANSWER: P=3/7 (ODD/ODD) / SYMMETRY: ODD (ORIGIN) / QUADRANTS: I,III / ...",
+  "test_ids": [
+   "PR-7.2a",
+   "PR-7.3a"
+  ]
+ },
+ {
+  "item_id": "PR-7.2b",
+  "what_question_gives": "-x^(6/5)",
+  "expected_answer": "6/5: even/odd, so even; k < 0: Q3 & Q4.",
+  "solver_path": "6 → 2:SYMMETRY/QUADS",
+  "student_enters": "K=(-) P=6/5",
+  "calculator_shows": "ANSWER: P=6/5 (EVEN/ODD) / SYMMETRY: EVEN (Y-AXIS) / QUADRANTS: III,IV / ...",
+  "test_ids": [
+   "PR-7.2b",
+   "PR-7.3b"
+  ]
+ },
+ {
+  "item_id": "PR-7.2c",
+  "what_question_gives": "2x^(-5/2)",
+  "expected_answer": "-5/2: denominator even, so undefined for x < 0; k > 0: Q1.",
+  "solver_path": "6 → 2:SYMMETRY/QUADS",
+  "student_enters": "K=2 P=-5/2",
+  "calculator_shows": "ANSWER: P=-5/2 (ODD/EVEN) / UNDEFINED FOR X<0 / QUADRANT: I ONLY / ...",
+  "test_ids": [
+   "PR-7.2c",
+   "PR-7.3c"
+  ]
+ },
+ {
+  "item_id": "PR-7.2d",
+  "what_question_gives": "-4x^(-1/3)",
+  "expected_answer": "-1/3: odd/odd, so odd; k < 0: Q2 & Q4.",
+  "solver_path": "6 → 2:SYMMETRY/QUADS",
+  "student_enters": "K=-4 P=-1/3",
+  "calculator_shows": "ANSWER: P=-1/3 (ODD/ODD) / SYMMETRY: ODD (ORIGIN) / QUADRANTS: II,IV / ...",
+  "test_ids": [
+   "PR-7.2d",
+   "PR-7.3d"
+  ]
+ },
+ {
+  "item_id": "PR-7.3a",
+  "what_question_gives": "5x^(3/7)",
+  "expected_answer": "Q1: increasing, curving down, through (0, 0) and (1, 5).",
+  "solver_path": "6 → 2:SYMMETRY/QUADS",
+  "student_enters": "K=5 P=3/7",
+  "calculator_shows": "ANSWER: P=3/7 (ODD/ODD) / SYMMETRY: ODD (ORIGIN) / QUADRANTS: I,III / Q1: INCREASING / CURVING DOWN, CONCAVE DOWN / THROUGH (0,0) AND (1,5)",
+  "test_ids": [
+   "PR-7.3a",
+   "PR-7.2a"
+  ]
+ },
+ {
+  "item_id": "PR-7.3b",
+  "what_question_gives": "-x^(6/5)",
+  "expected_answer": "Q4: decreasing, curving down (the p > 1 shape flipped), through (0, 0) and (1, -1).",
+  "solver_path": "6 → 2:SYMMETRY/QUADS",
+  "student_enters": "K=(-) P=6/5",
+  "calculator_shows": "ANSWER: P=6/5 (EVEN/ODD) / SYMMETRY: EVEN (Y-AXIS) / QUADRANTS: III,IV / Q4: DECREASING / CURVING DOWN, CONCAVE DOWN / THROUGH (0,0) AND (1,-1)",
+  "test_ids": [
+   "PR-7.3b",
+   "PR-7.2b"
+  ]
+ },
+ {
+  "item_id": "PR-7.3c",
+  "what_question_gives": "2x^(-5/2)",
+  "expected_answer": "Q1: decreasing, curving up, asymptotes x = 0 and y = 0, through (1, 2).",
+  "solver_path": "6 → 2:SYMMETRY/QUADS",
+  "student_enters": "K=2 P=-5/2",
+  "calculator_shows": "ANSWER: P=-5/2 (ODD/EVEN) / UNDEFINED FOR X<0 / QUADRANT: I ONLY / Q1: DECREASING / CURVING UP, CONCAVE UP / ASYMPTOTES: X=0, Y=0 / THROUGH (1,2)",
+  "test_ids": [
+   "PR-7.3c",
+   "PR-7.2c"
+  ]
+ },
+ {
+  "item_id": "PR-7.3d",
+  "what_question_gives": "-4x^(-1/3)",
+  "expected_answer": "Q4: increasing toward the x-axis, curving down, asymptotes x = 0 and y = 0, through (1, -4).",
+  "solver_path": "6 → 2:SYMMETRY/QUADS",
+  "student_enters": "K=-4 P=-1/3",
+  "calculator_shows": "ANSWER: P=-1/3 (ODD/ODD) / SYMMETRY: ODD (ORIGIN) / QUADRANTS: II,IV / Q4: INCREASING / CURVING DOWN, CONCAVE DOWN / ASYMPTOTES: X=0, Y=0 / THROUGH (1,-4)",
+  "test_ids": [
+   "PR-7.3d",
+   "PR-7.2d"
+  ]
+ },
+ {
+  "item_id": "PR-7.4",
+  "what_question_gives": "f(x) = x^(-4/3)",
+  "expected_answer": "p = -4/3: numerator even, denominator odd, so even symmetry; k = 1 > 0, so Q1 & Q2; p < 0, so asymptotes. Domain (-∞, 0) ∪ (0, ∞); range (0, ∞); increasing on (-∞, 0); decreasing on (0, ∞); bounded below; asymptotes x = 0, y = 0; lim_{x→±∞} f(x) = 0; infinite discontinuity at x = 0.",
+  "solver_path": "6 → 3:ALL PROPERTIES",
+  "student_enters": "K=ENTER P=-4/3",
+  "calculator_shows": "ANSWER: P=-4/3 (EVEN/ODD) / X^(-4/3)=1/(³√(X))^4 / SYMMETRY: EVEN (Y-AXIS) / QUADRANTS: I,II / DOMAIN: (-INF,0)U(0,INF) / RANGE: (0,INF) / INCREASING: (-INF,0) / DECREASING: (0,INF) / BOUNDED BELOW / ASYMPTOTES: X=0, Y=0 / AS X->+-INF, F(X)->0 / DISCONTINUOUS AT X=0 / (INFINITE DISCONTINUITY) / Q1: DECREASING / CURVING UP, CONCAVE UP / Q2: INCREASING / CURVING UP, CONCAVE UP / THROUGH (1,1)",
+  "test_ids": [
+   "PR-7.4"
+  ]
+ },
+ {
+  "item_id": "PR-7.5a",
+  "what_question_gives": "Q1 and Q3, increasing, curving down in Q1",
+  "expected_answer": "Odd/odd with 0 < p < 1, k > 0: y = x^(3/5) (or x^(1/3)).",
+  "solver_path": "6 → 4:BUILD EQUATION",
+  "student_enters": "5:I AND III; 1:INCREASING, CURVING DOWN (LEVELS OFF/SHARP POINT)",
+  "calculator_shows": "ANSWER: Y=X^(3/5) / K=1, P=3/5",
+  "test_ids": [
+   "PR-7.5a"
+  ]
+ },
+ {
+  "item_id": "PR-7.5b",
+  "what_question_gives": "Q3 and Q4, sharp point at the origin",
+  "expected_answer": "Even/odd with 0 < p < 1 (that's what makes the sharp point), k < 0: y = -x^(2/3) (or -x^(4/5)).",
+  "solver_path": "6 → 4:BUILD EQUATION",
+  "student_enters": "4:III AND IV; 1:DECREASING, CURVING UP (LEVELS OFF/SHARP POINT)",
+  "calculator_shows": "ANSWER: Y=-X^(2/3) / K=-1, P=2/3",
+  "test_ids": [
+   "PR-7.5b"
+  ]
+ },
+ {
+  "item_id": "PR-7.5c",
+  "what_question_gives": "Q1 only, decreases toward the x-axis",
+  "expected_answer": "Even denominator, p < 0, k > 0: y = x^(-1/2) (or x^(-3/4)).",
+  "solver_path": "6 → 4:BUILD EQUATION",
+  "student_enters": "1:I ONLY; 3:DECREASING TOWARD X-AXIS (ASYMPTOTES)",
+  "calculator_shows": "ANSWER: Y=X^(-1/2) / K=1, P=-1/2",
+  "test_ids": [
+   "PR-7.5c"
+  ]
+ },
+ {
+  "item_id": "PR-7.6",
+  "what_question_gives": "y = x^(2/3), y = x^(3/2)",
+  "expected_answer": "x^(2/3) = (cbrt(x))^2. A cube root of a negative number is real (cbrt(-8) = -2), and squaring makes it positive. So x^(2/3) exists for x < 0, with even symmetry. x^(3/2) = (sqrt(x))^3 needs a square root first, and sqrt(negative) isn't real. So x^(3/2) is undefined for x < 0.",
+  "solver_path": "6 → 3:ALL PROPERTIES",
+  "student_enters": "K=ENTER P=2/3; 1:AGAIN; K=ENTER P=3/2 (3:WHY also shows the root form and the reason)",
+  "calculator_shows": "ANSWER: P=2/3 (EVEN/ODD) / X^(2/3)=(³√(X))² / SYMMETRY: EVEN (Y-AXIS) / QUADRANTS: I,II / DOMAIN: (-INF,INF) / ... || ANSWER: P=3/2 (ODD/EVEN) / X^(3/2)=(√(X))³ / UNDEFINED FOR X<0 / (NOT EVEN, NOT ODD) / QUADRANT: I ONLY / DOMAIN: [0,INF) / ...",
+  "test_ids": [
+   "PR-7.6"
+  ]
+ },
+ {
+  "item_id": "SOL-7.1",
+  "what_question_gives": "Section 9 answer to Practice 7.1",
+  "expected_answer": "(a) k = -7, p = 1/4; (b) k = 2, p = -3/2; (c) k = 7, p = 3/2; (d) k = -1/4, p = -6",
+  "solver_path": "6 → 1:FIND K,P",
+  "student_enters": "same inputs as PR-7.1a, PR-7.1b, PR-7.1c, PR-7.1d (one run per part)",
+  "calculator_shows": "PR-7.1a: Y=-7X^(1/4) / K=-7 / P=1/4 ;; PR-7.1b: Y=2X^(-3/2) / K=2 / P=-3/2 ;; PR-7.1c: Y=7X^(3/2) / K=7 / P=3/2 ;; PR-7.1d: Y=-(1/4)X^(-6) / K=-1/4 / P=-6",
+  "test_ids": [
+   "PR-7.1a",
+   "PR-7.1b",
+   "PR-7.1c",
+   "PR-7.1d"
+  ]
+ },
+ {
+  "item_id": "SOL-7.2",
+  "what_question_gives": "Section 9 answer to Practice 7.2",
+  "expected_answer": "(a) odd; Q1 & Q3 (b) even; Q3 & Q4 (c) undefined for x < 0; Q1 (d) odd; Q2 & Q4",
+  "solver_path": "6 → 2:SYMMETRY/QUADS",
+  "student_enters": "same inputs as PR-7.2a, PR-7.2b, PR-7.2c, PR-7.2d (one run per part)",
+  "calculator_shows": "PR-7.2a: SYMMETRY: ODD (ORIGIN) / QUADRANTS: I,III ;; PR-7.2b: SYMMETRY: EVEN (Y-AXIS) / QUADRANTS: III,IV ;; PR-7.2c: UNDEFINED FOR X<0 / QUADRANT: I ONLY ;; PR-7.2d: SYMMETRY: ODD (ORIGIN) / QUADRANTS: II,IV",
+  "test_ids": [
+   "PR-7.2a",
+   "PR-7.2b",
+   "PR-7.2c",
+   "PR-7.2d"
+  ]
+ },
+ {
+  "item_id": "SOL-7.3",
+  "what_question_gives": "Section 9 answer to Practice 7.3",
+  "expected_answer": "(a) Q1 increasing, curving down, (0,0),(1,5) (b) Q4 decreasing, curving down, (0,0),(1,-1) (c) Q1 decreasing, curving up, asymptotes x=0,y=0, (1,2) (d) Q4 increasing toward x-axis, curving down, asymptotes x=0,y=0, (1,-4)",
+  "solver_path": "6 → 2:SYMMETRY/QUADS",
+  "student_enters": "same inputs as PR-7.3a, PR-7.3b, PR-7.3c, PR-7.3d (one run per part)",
+  "calculator_shows": "PR-7.3a: Q1: INCREASING / CURVING DOWN, CONCAVE DOWN / THROUGH (0,0) AND (1,5) ;; PR-7.3b: Q4: DECREASING / CURVING DOWN, CONCAVE DOWN / THROUGH (0,0) AND (1,-1) ;; PR-7.3c: Q1: DECREASING / CURVING UP, CONCAVE UP / ASYMPTOTES: X=0, Y=0 / THROUGH (1,2) ;; PR-7.3d: Q4: INCREASING / CURVING DOWN, CONCAVE DOWN / ASYMPTOTES: X=0, Y=0 / THROUGH (1,-4)",
+  "test_ids": [
+   "PR-7.3a",
+   "PR-7.3b",
+   "PR-7.3c",
+   "PR-7.3d"
+  ]
+ },
+ {
+  "item_id": "SOL-7.4",
+  "what_question_gives": "Section 9 answer to Practice 7.4",
+  "expected_answer": "Domain (-∞, 0) ∪ (0, ∞); range (0, ∞); increasing on (-∞, 0); decreasing on (0, ∞); bounded below; asymptotes x = 0, y = 0; lim_{x→±∞} f(x) = 0; infinite discontinuity at x = 0",
+  "solver_path": "6 → 3:ALL PROPERTIES",
+  "student_enters": "same inputs as PR-7.4",
+  "calculator_shows": "PR-7.4: DOMAIN: (-INF,0)U(0,INF) / RANGE: (0,INF) / INCREASING: (-INF,0) / DECREASING: (0,INF) / BOUNDED BELOW / ASYMPTOTES: X=0, Y=0 / AS X->+-INF, F(X)->0 / DISCONTINUOUS AT X=0 / (INFINITE DISCONTINUITY)",
+  "test_ids": [
+   "PR-7.4"
+  ]
+ },
+ {
+  "item_id": "SOL-7.5",
+  "what_question_gives": "Section 9 answer to Practice 7.5",
+  "expected_answer": "(a) y = x^(3/5) (or x^(1/3)) (b) y = -x^(2/3) (or -x^(4/5)) (c) y = x^(-1/2) (or x^(-3/4))",
+  "solver_path": "6 → 4:BUILD EQUATION",
+  "student_enters": "same inputs as PR-7.5a, PR-7.5b, PR-7.5c (one run per part)",
+  "calculator_shows": "PR-7.5a: Y=X^(3/5) / K=1, P=3/5 ;; PR-7.5b: Y=-X^(2/3) / K=-1, P=2/3 ;; PR-7.5c: Y=X^(-1/2) / K=1, P=-1/2",
+  "test_ids": [
+   "PR-7.5a",
+   "PR-7.5b",
+   "PR-7.5c"
+  ]
+ },
+ {
+  "item_id": "SOL-7.6",
+  "what_question_gives": "Section 9 answer to Practice 7.6",
+  "expected_answer": "x^(2/3) = (cbrt(x))^2 exists for x < 0 (even symmetry); x^(3/2) = (sqrt(x))^3 is undefined for x < 0",
+  "solver_path": "6 → 3:ALL PROPERTIES",
+  "student_enters": "same inputs as PR-7.6",
+  "calculator_shows": "PR-7.6: X^(2/3)=(³√(X))² / SYMMETRY: EVEN (Y-AXIS) / DOMAIN: (-INF,INF) || X^(3/2)=(√(X))³ / UNDEFINED FOR X<0 / DOMAIN: [0,INF)",
+  "test_ids": [
+   "PR-7.6"
+  ]
+ },
+ {
+  "item_id": "CRAM-EX-7a",
+  "what_question_gives": "f(x) = −x^(4/7)",
+  "expected_answer": "even, QIII + QIV, range (−∞, 0], bounded above, f(x) → −∞ as x → ±∞",
+  "solver_path": "6 → 3:ALL PROPERTIES",
+  "student_enters": "K=(-) P=4/7",
+  "calculator_shows": "ANSWER: P=4/7 (EVEN/ODD) / X^(4/7)=(7TH ROOT X)^4 / SYMMETRY: EVEN (Y-AXIS) / QUADRANTS: III,IV / DOMAIN: (-INF,INF) / RANGE: (-INF,0] / INCREASING: (-INF,0] / DECREASING: [0,INF) / BOUNDED ABOVE / ASYMPTOTES: NONE / AS X->+-INF, F(X)->-INF / CONTINUOUS EVERYWHERE / Q4: DECREASING / CURVING UP, CONCAVE UP / Q3: INCREASING / CURVING UP, CONCAVE UP / THROUGH (0,0) AND (1,-1)",
+  "test_ids": [
+   "CRAM-EX-7a"
+  ]
+ },
+ {
+  "item_id": "CRAM-EX-7b",
+  "what_question_gives": "f(x) = x^(−3/5)",
+  "expected_answer": "odd, D: x ≠ 0, R: y ≠ 0, asymptotes x = 0, y = 0, decreasing on (−∞, 0) and on (0, ∞)",
+  "solver_path": "6 → 3:ALL PROPERTIES",
+  "student_enters": "K=ENTER P=-3/5",
+  "calculator_shows": "ANSWER: P=-3/5 (ODD/ODD) / X^(-3/5)=1/(5TH ROOT X)³ / SYMMETRY: ODD (ORIGIN) / QUADRANTS: I,III / DOMAIN: (-INF,0)U(0,INF) / RANGE: (-INF,0)U(0,INF) / INCREASING: NEVER / DECREASING: (-INF,0) / AND ON (0,INF) / NOT BOUNDED ABOVE OR BELOW / ASYMPTOTES: X=0, Y=0 / AS X->+-INF, F(X)->0 / DISCONTINUOUS AT X=0 / (INFINITE DISCONTINUITY) / Q1: DECREASING / CURVING UP, CONCAVE UP / Q3: DECREASING / CURVING DOWN, CONCAVE DOWN / THROUGH (1,1)",
+  "test_ids": [
+   "CRAM-EX-7b"
+  ]
+ },
+ {
+  "item_id": "CRAM-7.1",
+  "what_question_gives": "k = coefficient, p = power. Not power functions: y = 2 (constant), y = e^x (exponential).",
+  "expected_answer": "HOW HANDLED: FIND K,P choices 7:Y=7 and 8:Y=2^X answer NOT A POWER FUNCTION (CONSTANT / EXPONENTIAL); typing K=0 or P=0 in the property screens also answers NOT A POWER FUNCTION.",
+  "solver_path": "6 → 1:FIND K,P",
+  "student_enters": "7:Y=7 (or 8:Y=2^X)",
+  "calculator_shows": "ANSWER: NOT A POWER FUNCTION / CONSTANT FUNCTION / (IT IS KX^0: POWER 0)",
+  "test_ids": [
+   "EX-7.1-5",
+   "EX-7.1-6",
+   "EXTRA-power-16",
+   "EXTRA-power-17"
+  ]
+ },
+ {
+  "item_id": "CRAM-7.2",
+  "what_question_gives": "sqrt(4x^3), −3/sqrt(4x), 1/(2cbrt(x^2))",
+  "expected_answer": "sqrt(4x^3) = 2x^(3/2); −3/sqrt(4x) = −(3/2)x^(−1/2); 1/(2cbrt(x^2)) = (1/2)x^(−2/3)",
+  "solver_path": "6 → 1:FIND K,P",
+  "student_enters": "2: FRONT=ENTER INDEX=ENTER UNDER=4 POWER=3 | 4: TOP=-3 BEFORE=ENTER INDEX=ENTER UNDER=4 POWER=ENTER | 4: TOP=ENTER BEFORE=2 INDEX=3 UNDER=ENTER POWER=2",
+  "calculator_shows": "ANSWER: Y=2X^(3/2) / K=2 / P=3/2 ;; ANSWER: Y=-(3/2)X^(-1/2) / K=-3/2 / P=-1/2 ;; ANSWER: Y=(1/2)X^(-2/3) / K=1/2 / P=-2/3",
+  "test_ids": [
+   "CRAM-7.2a",
+   "CRAM-7.2b",
+   "CRAM-7.2c",
+   "MIST-7-4"
+  ]
+ },
+ {
+  "item_id": "CRAM-7.3",
+  "what_question_gives": "QI shape: p > 1: curves up (concave up) | 0 < p < 1: curves down (concave down) | p < 0: decreases toward both axes; asymptotes x = 0, y = 0",
+  "expected_answer": "p > 1: concave up; 0 < p < 1: concave down; p < 0: decreases toward both axes, asymptotes x = 0, y = 0 | HOW HANDLED: The Q1:/Q4: lines: p>1 CURVING UP, 0<p<1 CURVING DOWN, p<0 DECREASING + ASYMPTOTES: X=0, Y=0 (flipped when k<0).",
+  "solver_path": "6 → 2:SYMMETRY/QUADS",
+  "student_enters": "K=5 P=3/7",
+  "calculator_shows": "ANSWER: P=3/7 (ODD/ODD) / SYMMETRY: ODD (ORIGIN) / QUADRANTS: I,III / Q1: INCREASING / CURVING DOWN, CONCAVE DOWN / THROUGH (0,0) AND (1,5)",
+  "test_ids": [
+   "PR-7.3a",
+   "PR-7.3b",
+   "PR-7.3c",
+   "PR-7.3d",
+   "RULE-7-ORGANIZER"
+  ]
+ },
+ {
+  "item_id": "CRAM-7.4",
+  "what_question_gives": "Where: b even: QI only, undefined for x < 0 | a even, b odd: even sym., QI + QII | a odd, b odd: odd sym., QI + QIII",
+  "expected_answer": "b even: QI only (undefined for x < 0); a even, b odd: even, QI + QII; a odd, b odd: odd, QI + QIII | HOW HANDLED: Symmetry and quadrant lines come from the parity of a and b after reducing p.",
+  "solver_path": "6 → 2:SYMMETRY/QUADS",
+  "student_enters": "P=1/2, 1:AGAIN P=2/3, 1:AGAIN P=1/3, 1:AGAIN K=(-) P=1/2",
+  "calculator_shows": "ANSWER: P=1/2 (ODD/EVEN) / UNDEFINED FOR X<0 / QUADRANT: I ONLY / ... || ANSWER: P=2/3 (EVEN/ODD) / SYMMETRY: EVEN (Y-AXIS) / QUADRANTS: I,II / ... || ANSWER: P=1/3 (ODD/ODD) / SYMMETRY: ODD (ORIGIN) / QUADRANTS: I,III / ... || ANSWER: ... QUADRANT: IV ONLY",
+  "test_ids": [
+   "CRAM-8j",
+   "REG-P1",
+   "REG-P2",
+   "REG-P3"
+  ]
+ },
+ {
+  "item_id": "CRAM-7.5",
+  "what_question_gives": "k < 0 flips over the x-axis: QI→QIV, QII→QIII, QIII→QII.",
+  "expected_answer": "HOW HANDLED: k<0: QUADRANTS flip (I->IV, II->III, III->II) and increasing/decreasing and curving swap.",
+  "solver_path": "6 → 2:SYMMETRY/QUADS",
+  "student_enters": "K=-1 P=4/7",
+  "calculator_shows": "ANSWER: P=4/7 (EVEN/ODD) / SYMMETRY: EVEN (Y-AXIS) / QUADRANTS: III,IV / Q4: DECREASING / CURVING UP, CONCAVE UP / THROUGH (0,0) AND (1,-1)",
+  "test_ids": [
+   "REG-P4",
+   "PR-7.2b",
+   "PR-7.2d",
+   "EXTRA-power-13"
+  ]
+ },
+ {
+  "item_id": "CRAM-7.6",
+  "what_question_gives": "Describe: domain, range, continuity, increasing/decreasing, bounded (above/below), asymptotes, end behavior lim_(x→±∞) f(x).",
+  "expected_answer": "HOW HANDLED: 3:ALL PROPERTIES lists domain, range, increasing/decreasing, bounded, asymptotes, end behavior (AS X->+-INF, F(X)->...), continuity, and each piece's shape.",
+  "solver_path": "6 → 3:ALL PROPERTIES",
+  "student_enters": "K=-2 P=-2/3",
+  "calculator_shows": "ANSWER: P=-2/3 (EVEN/ODD) / X^(-2/3)=1/(³√(X))² / SYMMETRY: EVEN (Y-AXIS) / QUADRANTS: III,IV / DOMAIN: (-INF,0)U(0,INF) / RANGE: (-INF,0) / INCREASING: (0,INF) / DECREASING: (-INF,0) / BOUNDED ABOVE / ASYMPTOTES: X=0, Y=0 / ...",
+  "test_ids": [
+   "EX-7.3",
+   "PR-7.4",
+   "CRAM-EX-7a"
+  ]
+ },
+ {
+  "item_id": "CRAM-7.7",
+  "what_question_gives": "Model a graph: quadrants → parity of a, b; QI shape → size of p; flipped → k < 0. Use a non-integer p.",
+  "expected_answer": "HOW HANDLED: 4:BUILD EQUATION: quadrants give the parity of a, b and the sign of k; the Q1/Q4 shape gives the size of p; p is always a non-integer from the guide's own answer lists.",
+  "solver_path": "6 → 4:BUILD EQUATION",
+  "student_enters": "3:I AND II; 1:INCREASING, CURVING DOWN (LEVELS OFF/SHARP POINT)",
+  "calculator_shows": "ANSWER: Y=X^(2/3) / K=1, P=2/3",
+  "test_ids": [
+   "EX-7.5a",
+   "EX-7.5b",
+   "EX-7.5c",
+   "EX-7.5d",
+   "PR-7.5a",
+   "PR-7.5b",
+   "PR-7.5c"
+  ]
+ },
+ {
+  "item_id": "CRAM-8j",
+  "what_question_gives": "k x^(a/b)",
+  "expected_answer": "b even: QI only; a even: even; odd/odd: odd; k < 0: flip",
+  "solver_path": "6 → 2:SYMMETRY/QUADS",
+  "student_enters": "P=1/2, 1:AGAIN P=2/3, 1:AGAIN P=1/3, 1:AGAIN K=(-) P=1/2",
+  "calculator_shows": "ANSWER: P=1/2 (ODD/EVEN) / UNDEFINED FOR X<0 / QUADRANT: I ONLY / ... || ANSWER: P=2/3 (EVEN/ODD) / SYMMETRY: EVEN (Y-AXIS) / QUADRANTS: I,II / ... || ANSWER: P=1/3 (ODD/ODD) / SYMMETRY: ODD (ORIGIN) / QUADRANTS: I,III / ... || ANSWER: P=1/2 (ODD/EVEN) / UNDEFINED FOR X<0 / QUADRANT: IV ONLY / ...",
+  "test_ids": [
+   "CRAM-8j"
+  ]
+ },
+ {
+  "item_id": "CORR-4",
+  "what_question_gives": "f(x) = (2/3)x^(-4)",
+  "expected_answer": "Decreasing in Q1 (on (0, ∞)); increasing on (-∞, 0) (Q2); concave up; even; k = 2/3",
+  "solver_path": "6 → 3:ALL PROPERTIES",
+  "student_enters": "K=2/3 P=-4",
+  "calculator_shows": "ANSWER: P=-4 (EVEN/ODD) / SYMMETRY: EVEN (Y-AXIS) / QUADRANTS: I,II / DOMAIN: (-INF,0)U(0,INF) / RANGE: (0,INF) / INCREASING: (-INF,0) / DECREASING: (0,INF) / BOUNDED BELOW / ASYMPTOTES: X=0, Y=0 / AS X->+-INF, F(X)->0 / DISCONTINUOUS AT X=0 / (INFINITE DISCONTINUITY) / Q1: DECREASING / CURVING UP, CONCAVE UP / Q2: INCREASING / CURVING UP, CONCAVE UP / THROUGH (1,2/3)",
+  "test_ids": [
+   "CORR-4"
+  ]
+ },
+ {
+  "item_id": "MIST-7-1",
+  "what_question_gives": "Not reducing p: x^(2/4) is x^(1/2), so it's Q1 only.",
+  "expected_answer": "HOW HANDLED: P is reduced before any rule is applied: typing 2/4 shows P=1/2 (ODD/EVEN), UNDEFINED FOR X<0, QUADRANT: I ONLY.",
+  "solver_path": "6 → 2:SYMMETRY/QUADS",
+  "student_enters": "K=ENTER P=2/4",
+  "calculator_shows": "ANSWER: P=1/2 (ODD/EVEN) / UNDEFINED FOR X<0 / QUADRANT: I ONLY / Q1: INCREASING / CURVING DOWN, CONCAVE DOWN / THROUGH (0,0) AND (1,1)",
+  "test_ids": [
+   "MIST-7-1"
+  ]
+ },
+ {
+  "item_id": "MIST-7-2",
+  "what_question_gives": "Swapping the roles: the numerator decides even or odd; the denominator decides whether x < 0 exists.",
+  "expected_answer": "HOW HANDLED: The program reads parity itself: numerator a decides EVEN/ODD symmetry, denominator b decides UNDEFINED FOR X<0; the P line shows the a/b parity tag; WHY spells out the rule.",
+  "solver_path": "6 → 2:SYMMETRY/QUADS",
+  "student_enters": "P=2/3; 1:AGAIN; P=3/2",
+  "calculator_shows": "ANSWER: P=2/3 (EVEN/ODD) / SYMMETRY: EVEN (Y-AXIS) / QUADRANTS: I,II / ... || ANSWER: P=3/2 (ODD/EVEN) / UNDEFINED FOR X<0 / QUADRANT: I ONLY / ...",
+  "test_ids": [
+   "MIST-7-2"
+  ]
+ },
+ {
+  "item_id": "MIST-7-3",
+  "what_question_gives": "Calling x^(-2) \"odd\" because of the minus sign. The numerator is -2, which is even, so the graph is in Q1 & Q2.",
+  "expected_answer": "HOW HANDLED: x^(-2): P=-2 (EVEN/ODD) -> SYMMETRY: EVEN (Y-AXIS), QUADRANTS: I,II (the minus sign of p never makes it odd).",
+  "solver_path": "6 → 2:SYMMETRY/QUADS",
+  "student_enters": "K=ENTER P=-2",
+  "calculator_shows": "ANSWER: P=-2 (EVEN/ODD) / SYMMETRY: EVEN (Y-AXIS) / QUADRANTS: I,II / Q1: DECREASING / CURVING UP, CONCAVE UP / ASYMPTOTES: X=0, Y=0 / THROUGH (1,1)",
+  "test_ids": [
+   "MIST-7-3"
+  ]
+ },
+ {
+  "item_id": "MIST-7-4",
+  "what_question_gives": "Leaving a number inside k unsimplified: sqrt(4x^3) = 2x^(3/2), not 4x^(3/2).",
+  "expected_answer": "HOW HANDLED: FIND K,P takes the root of the number out exactly: sqrt(4x^3) -> K=2, P=3/2 (not 4). Non-perfect powers stay exact too (sqrt(8x^3) -> K=2√(2)).",
+  "solver_path": "6 → 1:FIND K,P",
+  "student_enters": "2:-7√(16X^3); NUMBER IN FRONT=ENTER ROOT INDEX=ENTER NUMBER UNDER ROOT=4 X POWER UNDER ROOT=3",
+  "calculator_shows": "ANSWER: Y=2X^(3/2) / K=2 / P=3/2 / YES, A POWER FUNCTION",
+  "test_ids": [
+   "MIST-7-4",
+   "EXTRA-power-2"
+  ]
+ },
+ {
+  "item_id": "MIST-7-5",
+  "what_question_gives": "Increasing vs. decreasing with k < 0: the flip reverses both. (-2x^(3/4) is decreasing in Q4.)",
+  "expected_answer": "HOW HANDLED: k<0 flips the Q1 description: -2x^(3/4) shows Q4: DECREASING, CURVING UP.",
+  "solver_path": "6 → 2:SYMMETRY/QUADS",
+  "student_enters": "K=-2 P=3/4",
+  "calculator_shows": "ANSWER: P=3/4 (ODD/EVEN) / UNDEFINED FOR X<0 / QUADRANT: IV ONLY / Q4: DECREASING / CURVING UP, CONCAVE UP / THROUGH (0,0) AND (1,-2)",
+  "test_ids": [
+   "MIST-7-5"
+  ]
+ },
+ {
+  "item_id": "MIST-7-6",
+  "what_question_gives": "Saying a function with p < 0 is continuous everywhere: x = 0 isn't in the domain.",
+  "expected_answer": "HOW HANDLED: Every p<0 answer says DISCONTINUOUS AT X=0 (INFINITE DISCONTINUITY) and gives a domain without 0.",
+  "solver_path": "6 → 3:ALL PROPERTIES",
+  "student_enters": "K=ENTER P=-1",
+  "calculator_shows": "ANSWER: P=-1 (ODD/ODD) / SYMMETRY: ODD (ORIGIN) / QUADRANTS: I,III / DOMAIN: (-INF,0)U(0,INF) / RANGE: (-INF,0)U(0,INF) / INCREASING: NEVER / DECREASING: (-INF,0) / AND ON (0,INF) / NOT BOUNDED ABOVE OR BELOW / ASYMPTOTES: X=0, Y=0 / ... / DISCONTINUOUS AT X=0 / (INFINITE DISCONTINUITY)",
+  "test_ids": [
+   "MIST-7-6"
+  ]
+ },
+ {
+  "item_id": "CRAM-MIST-9",
+  "what_question_gives": "✗ Calling x^−2 odd: its numerator −2 is even, so it lives in QI + QII.",
+  "expected_answer": "even; QI + QII | HOW HANDLED: Same as MIST-7-3: x^-2 -> EVEN, QUADRANTS: I,II.",
+  "solver_path": "6 → 2:SYMMETRY/QUADS",
+  "student_enters": "K=ENTER P=-2",
+  "calculator_shows": "ANSWER: P=-2 (EVEN/ODD) / SYMMETRY: EVEN (Y-AXIS) / QUADRANTS: I,II / Q1: DECREASING / CURVING UP, CONCAVE UP / ASYMPTOTES: X=0, Y=0 / THROUGH (1,1)",
+  "test_ids": [
+   "CRAM-MIST-9"
+  ]
+ },
+ {
+  "item_id": "RULE-7-KEY",
+  "what_question_gives": "Key idea. Power function f(x) = k x^p, k ≠ 0, p ≠ 0, p = a/b in lowest terms; not power functions; Q1 shapes; parity rules; k<0 flips",
+  "expected_answer": "HOW HANDLED: All class rules are coded: p=a/b reduced; b even -> UNDEFINED FOR X<0, Q1 (Q4 if k<0); a even -> EVEN, Q1,Q2; odd/odd -> ODD, Q1,Q3; k<0 flips; p>1 curves up, 0<p<1 curves down, p<0 asymptotes; graph through (1,k); y=2 and e^x are rejected by FIND (7:Y=7, 8:Y=2^X).",
+  "solver_path": "6 → 2:SYMMETRY/QUADS (or 3:ALL PROPERTIES)",
+  "student_enters": "K=1 P=3/7",
+  "calculator_shows": "ANSWER: P=3/7 (ODD/ODD) / SYMMETRY: ODD (ORIGIN) / QUADRANTS: I,III / Q1: INCREASING / CURVING DOWN, CONCAVE DOWN / THROUGH (0,0) AND (1,1)",
+  "test_ids": [
+   "REG-P1",
+   "REG-P2",
+   "REG-P3",
+   "REG-P4",
+   "REG-P5",
+   "CRAM-8j",
+   "EX-7.1-5",
+   "EX-7.1-6"
+  ]
+ },
+ {
+  "item_id": "RULE-7-ORGANIZER",
+  "what_question_gives": "Graphic organizer (k=1): rows Q1 only / Q1&Q3 / Q1&Q2, columns p>1 / 0<p<1 / p<0",
+  "expected_answer": "HOW HANDLED: Each organizer cell typed as K=ENTER, P=a/b in 2:SYMMETRY/QUADS gives its row (quadrants/symmetry) and column (Q1 shape or asymptotes).",
+  "solver_path": "6 → 2:SYMMETRY/QUADS for each cell (1:AGAIN between)",
+  "student_enters": "K=ENTER with P=3/2, 1/2, -1/2, 3, 1/3, -1/3, 2, 2/3, -2 (1:AGAIN between)",
+  "calculator_shows": "ANSWER: P=3/2 (ODD/EVEN) / UNDEFINED FOR X<0 / QUADRANT: I ONLY / Q1: INCREASING / CURVING UP, CONCAVE UP / THROUGH (0,0) AND (1,1) || ANSWER: P=1/2 ... CURVING DOWN, CONCAVE DOWN || ANSWER: P=-1/2 ... Q1: DECREASING / CURVING UP, CONCAVE UP / ASYMPTOTES: X=0, Y=0 || ...",
+  "test_ids": [
+   "RULE-7-ORGANIZER"
+  ]
+ },
+ {
+  "item_id": "RULE-7-WHY",
+  "what_question_gives": "Why it works. x^(a/b) = (nthroot(b, x))^a; even root of a negative isn't real; even power erases the sign, odd keeps it",
+  "expected_answer": "HOW HANDLED: ALL PROPERTIES and every WHY page print the root form, e.g. X^(2/3)=(³√(X))², X^(3/2)=(√(X))³, X^(-2/3)=1/(³√(X))², and WHY adds the reason line (B EVEN: NO GRAPH FOR X<0 / A EVEN: EVEN SYMMETRY / BOTH ODD: ODD SYMMETRY).",
+  "solver_path": "6 → 3:ALL PROPERTIES (then 3:WHY)",
+  "student_enters": "K=ENTER P=2/3; 1:AGAIN; K=ENTER P=3/2",
+  "calculator_shows": "ANSWER: P=2/3 (EVEN/ODD) / X^(2/3)=(³√(X))² / SYMMETRY: EVEN (Y-AXIS) / ... || ANSWER: P=3/2 (ODD/EVEN) / X^(3/2)=(√(X))³ / UNDEFINED FOR X<0 / ...; WHY: A=-2 EVEN, B=3 ODD / A EVEN: EVEN SYMMETRY / X^(-2/3)=1/(³√(X))² / K<0: FLIP OVER X-AXIS / P<0: ASYMPTOTES X=0, Y=0",
+  "test_ids": [
+   "PR-7.6",
+   "EXTRA-power-23"
+  ]
+ },
+ {
+  "item_id": "RULE-7-RECOGNIZE",
+  "what_question_gives": "How to recognize it & choose a method: identify k and p / even-odd-undefined / Q1 or Q4 portion / attributes / write an equation",
+  "expected_answer": "HOW HANDLED: Each question type has its own menu entry: identify k and p -> 1:FIND K,P; even/odd/undefined and quadrants -> 2:SYMMETRY/QUADS; Q1/Q4 portion -> 2:SYMMETRY/QUADS (Q1:/Q4: lines); attributes -> 3:ALL PROPERTIES; write an equation for a graph -> 4:BUILD EQUATION.",
+  "solver_path": "6 → 1, 2, 3 or 4 (by question type)",
+  "student_enters": "the numbers on the paper, in the menu entry that matches the question type (see the listed tests)",
+  "calculator_shows": "ANSWER: Y=-7X^(1/4) / K=-7 / P=1/4 / YES, A POWER FUNCTION (PR-7.1a); see PR-7.2a, PR-7.3a, PR-7.4, PR-7.5a",
+  "test_ids": [
+   "PR-7.1a",
+   "PR-7.2a",
+   "PR-7.3a",
+   "PR-7.4",
+   "PR-7.5a"
+  ]
+ },
+ {
+  "item_id": "RULE-7-MATCHING",
+  "what_question_gives": "Matching equations to curves: 2x^(1/4), 1.7x^(2/3), (1/2)x^(-5), -2x^(-2), -(2/3)x^4, -x^(5/3); look at (1,k) first",
+  "expected_answer": "HOW HANDLED: Run 2:SYMMETRY/QUADS for each equation: the THROUGH (1,K) line, quadrants and the Q1/Q4 shape (levels off / asymptotes / starts flat) identify the curve.",
+  "solver_path": "6 → 2:SYMMETRY/QUADS for each equation (1:AGAIN between)",
+  "student_enters": "K=2 P=1/4; K=1.7 P=2/3; K=1/2 P=-5; K=-2 P=-2; K=-2/3 P=4; K=(-) P=5/3 (1:AGAIN between)",
+  "calculator_shows": "ANSWER: P=1/4 (ODD/EVEN) / UNDEFINED FOR X<0 / QUADRANT: I ONLY / Q1: INCREASING / CURVING DOWN, CONCAVE DOWN / THROUGH (0,0) AND (1,2) || ANSWER: P=2/3 ... THROUGH (0,0) / AND (1,17/10) || ANSWER: P=-5 (ODD/ODD) / ... ASYMPTOTES: X=0, Y=0 / THROUGH (1,1/2) || ...",
+  "test_ids": [
+   "RULE-7-MATCHING"
+  ]
+ },
+ {
+  "item_id": "RULE-7-CHECK",
+  "what_question_gives": "How to check your answer. Plug in x = 1 (you should get k) and x = -1: k (even), -k (odd), or undefined (b even).",
+  "expected_answer": "HOW HANDLED: Every SYMMETRY/QUADS and ALL PROPERTIES answer ends with THROUGH (1,K) (and (0,0) when p>0); the symmetry line tells what x=-1 gives (k for EVEN, -k for ODD, undefined for b even).",
+  "solver_path": "6 → 2:SYMMETRY/QUADS",
+  "student_enters": "K=5 P=3/7",
+  "calculator_shows": "ANSWER: P=3/7 (ODD/ODD) / SYMMETRY: ODD (ORIGIN) / QUADRANTS: I,III / Q1: INCREASING / CURVING DOWN, CONCAVE DOWN / THROUGH (0,0) AND (1,5)",
+  "test_ids": [
+   "PR-7.3a",
+   "PR-7.3b",
+   "PR-7.3c",
+   "PR-7.3d"
+  ]
+ },
+ {
+  "item_id": "ICAN-7",
+  "what_question_gives": "I Can (Days 8–9): identify the coefficient and exponent of a power function; sketch its graph from them.",
+  "expected_answer": "HOW HANDLED: Identify: 1:FIND K,P turns any disguise into K= and P=. Sketch: 2:SYMMETRY/QUADS gives quadrants, the Q1/Q4 shape (increasing/decreasing, curving up/down), asymptotes and the points (0,0), (1,k); 3:ALL PROPERTIES adds the other side.",
+  "solver_path": "6 → 1:FIND K,P, then 3:ALL PROPS (or 6 → 2:SYMMETRY/QUADS)",
+  "student_enters": "1:-3X^5; NUMBER IN FRONT=ENTER POWER ON X=5",
+  "calculator_shows": "ANSWER: Y=X^5 / K=1 / P=5 / YES, A POWER FUNCTION",
+  "test_ids": [
+   "EX-7.1-1",
+   "PR-7.1a",
+   "PR-7.3a",
+   "RULE-7-ORGANIZER"
+  ]
+ },
+ {
+  "item_id": "S7-ICAN",
+  "what_question_gives": "I Can (Days 8–9): identify the coefficient and exponent of a power function; sketch its graph from them.",
+  "expected_answer": "HOW HANDLED: Same as ICAN-7.",
+  "solver_path": "6 → 1:FIND K,P, then 3:ALL PROPS (or 6 → 2:SYMMETRY/QUADS)",
+  "student_enters": "1:-3X^5; NUMBER IN FRONT=ENTER POWER ON X=5",
+  "calculator_shows": "ANSWER: Y=X^5 / K=1 / P=5 / YES, A POWER FUNCTION",
+  "test_ids": [
+   "EX-7.1-1",
+   "PR-7.1a",
+   "PR-7.3a",
+   "RULE-7-ORGANIZER"
+  ]
+ },
+ {
+  "item_id": "ICAN-16",
+  "what_question_gives": "Identify the coefficient and exponent of a power function",
+  "expected_answer": "HOW HANDLED: 1:FIND K,P wizard (8 look-alike shapes): roots of numbers taken out exactly, powers combined, bottom powers made negative, p reduced; answer Y=KX^P, K=, P=.",
+  "solver_path": "6 → 1:FIND K,P",
+  "student_enters": "1:-3X^5; NUMBER IN FRONT=ENTER POWER ON X=5",
+  "calculator_shows": "ANSWER: Y=X^5 / K=1 / P=5 / YES, A POWER FUNCTION",
+  "test_ids": [
+   "EX-7.1-1",
+   "EX-7.2a",
+   "PR-7.1a",
+   "PR-7.1b",
+   "PR-7.1c",
+   "PR-7.1d"
+  ]
+ },
+ {
+  "item_id": "ICAN-17",
+  "what_question_gives": "Sketch a power function from its coefficient and exponent",
+  "expected_answer": "HOW HANDLED: 2:SYMMETRY/QUADS gives everything needed to sketch: quadrants, Q1/Q4 piece (increasing/decreasing, curving), asymptotes, points (0,0) and (1,k).",
+  "solver_path": "6 → 2:SYMMETRY/QUADS",
+  "student_enters": "K=5 P=3/7",
+  "calculator_shows": "ANSWER: P=3/7 (ODD/ODD) / SYMMETRY: ODD (ORIGIN) / QUADRANTS: I,III / Q1: INCREASING / CURVING DOWN, CONCAVE DOWN / THROUGH (0,0) AND (1,5)",
+  "test_ids": [
+   "PR-7.3a",
+   "PR-7.3b",
+   "PR-7.3c",
+   "PR-7.3d",
+   "RULE-7-ORGANIZER"
+  ]
+ },
+ {
+  "item_id": "TEST-5",
+  "what_question_gives": "Power functions: identify k and p, symmetry, other properties",
+  "expected_answer": "HOW HANDLED: Identify k and p -> 1:FIND K,P; symmetry -> 2:SYMMETRY/QUADS; other properties -> 3:ALL PROPERTIES.",
+  "solver_path": "6 → 1, 2 or 3",
+  "student_enters": "the numbers on the paper, in the menu entry that matches the question (see the listed tests)",
+  "calculator_shows": "ANSWER: Y=-7X^(1/4) / K=-7 / P=1/4 / YES, A POWER FUNCTION (PR-7.1a); see PR-7.2a and PR-7.4",
+  "test_ids": [
+   "PR-7.1a",
+   "PR-7.2a",
+   "PR-7.4"
+  ]
+ },
+ {
+  "item_id": "NOT-8",
+  "what_question_gives": "f(x) = k x^p, p = a/b — power function: k = coefficient, p = power; a = numerator, b = denominator",
+  "expected_answer": "HOW HANDLED: Uses the teacher's letters: the P line shows p and the a/b parity tag, e.g. P=6/5 (EVEN/ODD); WHY shows A=-2 EVEN, B=3 ODD; FIND shows K= and P=.",
+  "solver_path": "6 → 2:SYMMETRY/QUADS",
+  "student_enters": "K=(-) P=6/5",
+  "calculator_shows": "ANSWER: P=6/5 (EVEN/ODD) / SYMMETRY: EVEN (Y-AXIS) / QUADRANTS: III,IV / Q4: DECREASING / CURVING DOWN, CONCAVE DOWN / THROUGH (0,0) AND (1,-1)",
+  "test_ids": [
+   "PR-7.2b",
+   "EXTRA-power-23"
+  ]
+ },
+ {
+  "item_id": "NOTATION-8",
+  "what_question_gives": "f(x) = k x^p, p = a/b : power function: k = coefficient, p = power; a = numerator, b = denominator",
+  "expected_answer": "HOW HANDLED: Same as NOT-8.",
+  "solver_path": "6 → 2:SYMMETRY/QUADS",
+  "student_enters": "K=(-) P=6/5",
+  "calculator_shows": "ANSWER: P=6/5 (EVEN/ODD) / SYMMETRY: EVEN (Y-AXIS) / QUADRANTS: III,IV / ...",
+  "test_ids": [
+   "PR-7.2b",
+   "EXTRA-power-23"
+  ]
+ },
+ {
+  "item_id": "EXACT-1",
+  "what_question_gives": "This unit's answers are exact: write x ≠ 10/3, not x ≠ 3.33; write x^(2/3), not x^0.667.",
+  "expected_answer": "HOW HANDLED: All K and P are exact fractions (K=5/6, P=-2/3) or exact simplified radicals (K=2√(2), K=(3/2)√(2)); a rounded decimal power such as 0.6667 is refused with TYPE POWERS AS FRACTIONS, LIKE 2/3, NOT 0.667.",
+  "solver_path": "6 → 1:FIND K,P",
+  "student_enters": "1; FRONT=ENTER POWER=0.6667",
+  "calculator_shows": "ANSWER: TYPE POWERS AS FRACTIONS, / LIKE 2/3, NOT 0.667",
+  "test_ids": [
+   "EXTRA-power-25",
+   "EX-7.2c",
+   "EXTRA-power-2",
+   "EXTRA-power-3"
+  ]
+ },
+ {
+  "item_id": "EXACT-2",
+  "what_question_gives": "If a calculator shows nothing for x < 0 on y = x^(2/3), type it as (cbrt(x))^2.",
+  "expected_answer": "HOW HANDLED: The program never graphs; it applies the parity rules, so x^(2/3) is reported EVEN with DOMAIN (-INF,INF) even where a calculator graph shows nothing for x<0.",
+  "solver_path": "6 → 3:ALL PROPERTIES",
+  "student_enters": "K=ENTER P=2/3",
+  "calculator_shows": "ANSWER: P=2/3 (EVEN/ODD) / X^(2/3)=(³√(X))² / SYMMETRY: EVEN (Y-AXIS) / QUADRANTS: I,II / DOMAIN: (-INF,INF) / ...",
+  "test_ids": [
+   "PR-7.6"
+  ]
+ }
+]

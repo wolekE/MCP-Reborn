@@ -1,0 +1,101 @@
+{0,0,0,0,0,0}→ʟOPV
+For(I,1,2)
+I→N
+E→O
+prgmHAFEVAL
+If I=1
+Then
+P→F
+Q→A
+ʟF1→ʟOPW
+Else
+P→G
+Q→D
+ʟF2→ʟOPW
+End
+P→ʟOPV(3I-2)
+If ʟOPW(1)=2 and Q=1
+Then
+0→B
+0→L
+For(M,2,6)
+B*E+ʟOPW(M)→B
+L*E+ʟOPW(M+5)→L
+End
+ʟOPW(13)→ʟOPV(3I-2)
+ʟOPW(12)→ʟOPV(3I-1)
+max(0,B/L)→ʟOPV(3I)
+End
+End
+1→C
+If A=2 or D=2
+2→C
+If K=3 and ((A=1 and F=0) or (D=1 and G=0))
+1→C
+If (K=4 and D=1 and abs(G)<ᴇ⁻9) or (K=5 and A=1 and abs(F)<ᴇ⁻9)
+3→C
+If A=0 or D=0
+0→C
+If C≠1
+Return
+For(I,1,2)
+If ʟOPV(3I-1)≠0
+Then
+√(ʟOPV(3I))→θ
+prgmHAFRAC
+If Z
+Then
+ʟOPV(3I-2)+ʟOPV(3I-1)*√(ʟOPV(3I))→ʟOPV(3I-2)
+0→ʟOPV(3I-1)
+End
+End
+End
+ʟOPV(3)→L
+If ʟOPV(2)=0
+ʟOPV(6)→L
+If ʟOPV(2)≠0 and ʟOPV(5)≠0 and ʟOPV(3)≠ʟOPV(6)
+Goto D
+If K=1
+{ʟOPV(1)+ʟOPV(4),ʟOPV(2)+ʟOPV(5),L}→ʟOPR
+If K=2
+{ʟOPV(1)-ʟOPV(4),ʟOPV(2)-ʟOPV(5),L}→ʟOPR
+If K=3
+{ʟOPV(1)*ʟOPV(4)+ʟOPV(2)*ʟOPV(5)*L,ʟOPV(1)*ʟOPV(5)+ʟOPV(2)*ʟOPV(4),L}→ʟOPR
+If K=4
+Then
+ʟOPV(4)²-ʟOPV(5)²*L→B
+{(ʟOPV(1)*ʟOPV(4)-ʟOPV(2)*ʟOPV(5)*L)/B,(ʟOPV(2)*ʟOPV(4)-ʟOPV(1)*ʟOPV(5))/B,L}→ʟOPR
+End
+If K=5
+Then
+ʟOPV(1)²-ʟOPV(2)²*L→B
+{(ʟOPV(4)*ʟOPV(1)-ʟOPV(5)*ʟOPV(2)*L)/B,(ʟOPV(5)*ʟOPV(1)-ʟOPV(4)*ʟOPV(2))/B,L}→ʟOPR
+End
+prgmHAOPS5
+Return
+Lbl D
+If ʟOPV(1)≠0 or ʟOPV(4)≠0 or K≤2
+Goto E
+If K=3
+{0,ʟOPV(2)*ʟOPV(5),ʟOPV(3)*ʟOPV(6)}→ʟOPR
+If K=4
+{0,ʟOPV(2)/ʟOPV(5),ʟOPV(3)/ʟOPV(6)}→ʟOPR
+If K=5
+{0,ʟOPV(5)/ʟOPV(2),ʟOPV(6)/ʟOPV(3)}→ʟOPR
+prgmHAOPS5
+Return
+Lbl E
+F+G→B
+If K=2
+F-G→B
+If K=3
+F*G→B
+If K=4
+F/G→B
+If K=5
+G/F→B
+B→θ
+prgmHAFRAC
+Str9→Str1
+If not(Z)
+"ABOUT "+Str1→Str1

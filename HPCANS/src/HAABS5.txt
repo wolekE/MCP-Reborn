@@ -1,0 +1,88 @@
+If I=3
+Then
+"KEEP X≥0, MIRROR TO LEFT"→Str9
+prgmHAOUT
+End
+If B<0
+Then
+"REFLECT Y-AXIS"→Str9
+prgmHAOUT
+End
+If abs(B)≠1
+Then
+1/abs(B)→θ
+prgmHAFRAC
+If abs(B)>1
+Then
+"HORIZ COMPRESS "+Str9→Str9
+Else
+"HORIZ STRETCH "+Str9→Str9
+End
+prgmHAOUT
+End
+⁻C/B→E
+If abs(E)<ᴇ⁻9
+0→E
+If E≠0
+Then
+abs(E)→θ
+prgmHAFRAC
+If E>0
+Then
+"RIGHT "+Str9→Str9
+Else
+"LEFT "+Str9→Str9
+End
+prgmHAOUT
+End
+If I=2
+Then
+"KEEP X≥0, MIRROR TO LEFT"→Str9
+prgmHAOUT
+End
+If I=1 and D≠0
+Then
+abs(D)→θ
+prgmHAFRAC
+If D>0
+Then
+"UP "+Str9→Str9
+Else
+"DOWN "+Str9→Str9
+End
+prgmHAOUT
+End
+If I=1
+Then
+"|Y|: FLIP NEGATIVES UP"→Str9
+prgmHAOUT
+End
+If A<0
+Then
+"REFLECT X-AXIS"→Str9
+prgmHAOUT
+End
+If abs(A)≠1
+Then
+abs(A)→θ
+prgmHAFRAC
+If abs(A)>1
+Then
+"VERT STRETCH "+Str9→Str9
+Else
+"VERT COMPRESS "+Str9→Str9
+End
+prgmHAOUT
+End
+If K≠0
+Then
+abs(K)→θ
+prgmHAFRAC
+If K>0
+Then
+"UP "+Str9→Str9
+Else
+"DOWN "+Str9→Str9
+End
+prgmHAOUT
+End

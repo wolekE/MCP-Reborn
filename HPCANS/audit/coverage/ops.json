@@ -1,0 +1,566 @@
+[
+ {
+  "item_id": "EX-1.1",
+  "what_question_gives": "f(x)=√(x+3), g(x)=x−1; find f+g, fg, f/g, g/f and each domain",
+  "solver_path": "1:F+G OR F/G → 3:FORMULA → 1:F+G / 3:FG / 4:F/G / 5:G/F (formula plus its domain). 1:DOMAIN → 4:F/G gives D(F/G) and D(G/F) together. 4:SAME F,G keeps f and g for the next part.",
+  "student_enters": "F: 5:K√(AX+B)+C K=ENTER A=ENTER B=3 C=ENTER; G: 1:AX+B A=ENTER B=-1",
+  "calculator_shows": "(F+G)(X)=√(X+3)+X-1, D(F+G)=[-3,INF); (FG)(X)=(X-1)√(X+3), D(FG)=[-3,INF); (F/G)(X)=√(X+3)/(X-1), D(F/G)=[-3,1)U(1,INF); (G/F)(X)=(X-1)/√(X+3), D(G/F)=(-3,INF)",
+  "expected_answer": "√(x+3)+x−1 and (x−1)√(x+3) on [−3,∞); √(x+3)/(x−1) on [−3,1)∪(1,∞); (x−1)/√(x+3) on (−3,∞)",
+  "test_ids": [
+   "EX-1.1a",
+   "EX-1.1b",
+   "EX-1.1c",
+   "EX-1.1d",
+   "EX-1.1e"
+  ]
+ },
+ {
+  "item_id": "EX-1.2",
+  "what_question_gives": "f(x)=(x−3)/x², g(x)=(x+2)/(4−x); domains (and formulas) of f/g and g/f",
+  "solver_path": "1:F+G OR F/G → 1:DOMAIN → 4:F/G (also shows G/F); or 3:FORMULA → 4:F/G or 5:G/F",
+  "student_enters": "F: 6:FRACTION WITH X² A=0 B=ENTER C=-3 D=ENTER E=0 F=ENTER; G: 3:(AX+B)/(CX+D) A=ENTER B=2 C=-1 D=4",
+  "calculator_shows": "D(F/G)=ALL REALS, X≠-2,0,4; D(G/F)=ALL REALS, X≠0,3,4; (F/G)(X)=(X-3)(-X+4)/(X²(X+2)); (G/F)(X)=X²(X+2)/((-X+4)(X-3))",
+  "expected_answer": "(x−3)(4−x)/(x²(x+2)), ℝ, x≠−2,0,4; x²(x+2)/((4−x)(x−3)), ℝ, x≠0,3,4",
+  "test_ids": [
+   "EX-1.2a",
+   "EX-1.2b",
+   "EX-1.2c",
+   "EX-1.2d"
+  ]
+ },
+ {
+  "item_id": "EX-1.3",
+  "what_question_gives": "Graphs of f (corners (-6,2),(-3,-1),(1,3),(4,0),(7,3)) and g (corners (-5,3),(-2,0),(1,0),(3,2),(6,-1)), solid ends; (a) (f+g)(-3) (b) (fg)(3) (c) D f+g (d) D f/g (e) D g/f",
+  "solver_path": "(a),(b): 1:F+G OR F/G → 2:A VALUE → 1:F+G or 3:FG → X. (c)-(e): 1:DOMAIN → 1:F+G / 4:F/G / 5:G/F",
+  "student_enters": "F: 7:A GRAPH → type 5 corners + 1:BOTH SOLID, or 2:USE SAVED GRAPH OF F; G: 7:A GRAPH → 1:TYPE (corners) or 3:USE SAVED GRAPH OF G; X=-3 / X=3",
+  "calculator_shows": "(F+G)(-3)=0; (FG)(3)=2; D(F+G)=[-5,6]; D(F/G)=[-5,-2)U(1,5)U(5,6]; D(G/F)=[-5,-4)U(-4,-2)U / (-2,4)U(4,6] (2 rows)",
+  "expected_answer": "(a) 0 (b) 2 (c) [−5,6] (d) [−5,−2)∪(1,5)∪(5,6] (e) [−5,−4)∪(−4,−2)∪(−2,4)∪(4,6]",
+  "test_ids": [
+   "EX-1.3a",
+   "EX-1.3b",
+   "EX-1.3c",
+   "EX-1.3d",
+   "EX-1.3e"
+  ]
+ },
+ {
+  "item_id": "PR-1.1",
+  "what_question_gives": "f(x)=2x²−1, g(x)=3−x; find (f−g)(x) and (fg)(−2)",
+  "solver_path": "1:F+G OR F/G → 3:FORMULA → 2:F-G; then 4:SAME F,G → 2:A VALUE → 3:FG → X=-2",
+  "student_enters": "F: 2:AX²+BX+C A=2 B=0 C=-1; G: 1:AX+B A=-1 B=3; X=-2",
+  "calculator_shows": "(F-G)(X)=2X²+X-4, D(F-G)=ALL REALS; (FG)(-2)=35",
+  "expected_answer": "2x²+x−4; 35",
+  "test_ids": [
+   "PR-1.1a",
+   "PR-1.1b",
+   "EXTRA-ops-15"
+  ]
+ },
+ {
+  "item_id": "SOL-1.1",
+  "what_question_gives": "Section 9 answer to Practice 1.1",
+  "solver_path": "same as PR-1.1",
+  "student_enters": "same as PR-1.1",
+  "calculator_shows": "(F-G)(X)=2X²+X-4; (FG)(-2)=35 (WHY page: F(-2)=7, G(-2)=5)",
+  "expected_answer": "2x²+x−4 (boxed); 35 (boxed)",
+  "test_ids": [
+   "PR-1.1a",
+   "PR-1.1b",
+   "EXTRA-ops-15"
+  ]
+ },
+ {
+  "item_id": "PR-1.2",
+  "what_question_gives": "f(x)=√(5−x), g(x)=x+1; domains of f/g and g/f in interval notation",
+  "solver_path": "1:F+G OR F/G → 1:DOMAIN → 4:F/G (also shows G/F) or 5:G/F",
+  "student_enters": "F: 5:K√(AX+B)+C K=ENTER A=-1 B=5 C=ENTER; G: 1:AX+B A=ENTER B=1",
+  "calculator_shows": "D(F/G)=(-INF,-1)U(-1,5]; D(G/F)=(-INF,5)",
+  "expected_answer": "(−∞,−1)∪(−1,5]; (−∞,5)",
+  "test_ids": [
+   "PR-1.2a",
+   "PR-1.2b"
+  ]
+ },
+ {
+  "item_id": "SOL-1.2",
+  "what_question_gives": "Section 9 answer to Practice 1.2",
+  "solver_path": "same as PR-1.2",
+  "student_enters": "same as PR-1.2",
+  "calculator_shows": "D(F/G)=(-INF,-1)U(-1,5]; D(G/F)=(-INF,5) (WHY: D(F)=(-INF,5], D(G)=ALL REALS, ZEROS OF F: 5, ZEROS OF G: -1)",
+  "expected_answer": "(−∞,−1)∪(−1,5] (boxed); (−∞,5) (boxed)",
+  "test_ids": [
+   "PR-1.2a",
+   "PR-1.2b"
+  ]
+ },
+ {
+  "item_id": "PR-1.3",
+  "what_question_gives": "f(x)=(x+1)/(x−2), g(x)=(x−5)/x; domains of f/g and g/f",
+  "solver_path": "1:F+G OR F/G → 1:DOMAIN → 4:F/G or 5:G/F",
+  "student_enters": "F: 3:(AX+B)/(CX+D) A=ENTER B=1 C=ENTER D=-2; G: 3:(AX+B)/(CX+D) A=ENTER B=-5 C=ENTER D=ENTER",
+  "calculator_shows": "D(F/G)=ALL REALS, X≠0,2,5; D(G/F)=ALL REALS, X≠-1,0,2",
+  "expected_answer": "ℝ, x≠0,2,5; ℝ, x≠−1,0,2",
+  "test_ids": [
+   "PR-1.3a",
+   "PR-1.3b",
+   "EXTRA-ops-22"
+  ]
+ },
+ {
+  "item_id": "SOL-1.3",
+  "what_question_gives": "Section 9 answer to Practice 1.3",
+  "solver_path": "same as PR-1.3",
+  "student_enters": "same as PR-1.3",
+  "calculator_shows": "D(F/G)=ALL REALS, X≠0,2,5; D(G/F)=ALL REALS, X≠-1,0,2",
+  "expected_answer": "ℝ, x≠0,2,5 (boxed); ℝ, x≠−1,0,2 (boxed)",
+  "test_ids": [
+   "PR-1.3a",
+   "PR-1.3b"
+  ]
+ },
+ {
+  "item_id": "PR-1.4",
+  "what_question_gives": "f: domain [−4,9], f=0 only at −1 and 6; g: domain [−6,5], g=0 on [2,3]; domains of f+g, f/g, g/f",
+  "solver_path": "1:F+G OR F/G → 1:DOMAIN → 1:F+G, 4:F/G (also shows G/F) or 5:G/F",
+  "student_enters": "F: 8:WORDS LEFT END=-4 RIGHT END=9 1:[ ] HOW MANY X VALUES=2 X=-1 X=6 HOW MANY INTERVALS=ENTER; G: 8:WORDS -6, 5, 1:[ ], X VALUES=ENTER, INTERVALS=1 FROM X=2 TO X=3",
+  "calculator_shows": "D(F+G)=[-4,5]; D(F/G)=[-4,2)U(3,5]; D(G/F)=[-4,-1)U(-1,5]",
+  "expected_answer": "[−4,5]; [−4,2)∪(3,5]; [−4,−1)∪(−1,5]",
+  "test_ids": [
+   "PR-1.4a",
+   "PR-1.4b",
+   "PR-1.4c"
+  ]
+ },
+ {
+  "item_id": "SOL-1.4",
+  "what_question_gives": "Section 9 answer to Practice 1.4",
+  "solver_path": "same as PR-1.4",
+  "student_enters": "same as PR-1.4",
+  "calculator_shows": "D(F+G)=[-4,5]; D(F/G)=[-4,2)U(3,5]; D(G/F)=[-4,-1)U(-1,5] (6 is outside D(G) so it is never shown)",
+  "expected_answer": "[−4,5]; [−4,2)∪(3,5]; [−4,−1)∪(−1,5] (all boxed)",
+  "test_ids": [
+   "PR-1.4a",
+   "PR-1.4b",
+   "PR-1.4c"
+  ]
+ },
+ {
+  "item_id": "CRAM-EX-1",
+  "what_question_gives": "f=(x+2)/x², g=(x+1)/(1−x); domains of f/g and g/f",
+  "solver_path": "1:F+G OR F/G → 1:DOMAIN → 4:F/G or 5:G/F",
+  "student_enters": "F: 6:FRACTION WITH X² A=0 B=ENTER C=2 D=ENTER E=0 F=ENTER; G: 3:(AX+B)/(CX+D) A=ENTER B=1 C=-1 D=1",
+  "calculator_shows": "D(F/G)=ALL REALS, X≠-1,0,1; D(G/F)=ALL REALS, X≠-2,0,1",
+  "expected_answer": "ℝ, x≠0,1,−1; ℝ, x≠0,1,−2",
+  "test_ids": [
+   "CRAM-EX-1a",
+   "CRAM-EX-1b"
+  ]
+ },
+ {
+  "item_id": "CRAM-8a",
+  "what_question_gives": "Problem type: domain of f/g → D_f ∩ D_g, then drop the zeros of g",
+  "solver_path": "1:F+G OR F/G → 1:DOMAIN → 4:F/G. HAOPS4 takes D_f∩D_g, then removes every zero of the bottom, including whole stretches (HAFZERO).",
+  "student_enters": "instance: F: 5 with ENTER×4 (√x); G: 2:AX²+BX+C A=ENTER B=0 C=-4",
+  "calculator_shows": "D(F/G)=[0,2)U(2,INF); D(G/F)=(0,INF)",
+  "expected_answer": "[0,∞) minus x=2 (x=−2 is already outside D_f)",
+  "test_ids": [
+   "CRAM-8a",
+   "EX-1.3d",
+   "PR-1.4b"
+  ]
+ },
+ {
+  "item_id": "CORR-6",
+  "what_question_gives": "g=√x; f with D_f=[−4,8] and f(x)=0 at x=2; domain of g/f (slide said (2,∞))",
+  "solver_path": "1:F+G OR F/G → 1:DOMAIN → 5:G/F",
+  "student_enters": "F: 8:WORDS -4, 8, 1:[ ], HOW MANY X VALUES=1 X=2, INTERVALS=ENTER; G: 5:K√(AX+B)+C ENTER×4",
+  "calculator_shows": "D(G/F)=[0,2)U(2,8] (also D(F/G)=(0,8])",
+  "expected_answer": "[0,2)∪(2,8] (corrected answer)",
+  "test_ids": [
+   "CORR-6"
+  ]
+ },
+ {
+  "item_id": "MIST-1-1",
+  "what_question_gives": "Mistake: excluding the zeros of the numerator",
+  "solver_path": "DOMAIN removes only the zeros of the bottom function (HAFZERO on g for F/G, on f for G/F); zeros of the top are never removed",
+  "student_enters": "e.g. F: 1:AX+B ENTER,-3; G: 1:AX+B ENTER,1",
+  "calculator_shows": "D(F/G)=ALL REALS, X≠-1 (x=3 kept); D(G/F)=ALL REALS, X≠3",
+  "expected_answer": "only the denominator's zeros are excluded",
+  "test_ids": [
+   "MIST-1-1",
+   "PR-1.3a"
+  ]
+ },
+ {
+  "item_id": "MIST-1-2",
+  "what_question_gives": "Mistake: simplifying first and losing a restriction (x≠0, x≠4 in Ex 1.2)",
+  "solver_path": "Domain is always computed from the original f and g records (HAOPS4), separately from the simplified formula (HAOPS2). FORMULA shows both lines.",
+  "student_enters": "e.g. F: 2:AX²+BX+C ENTER,0,-9; G: 1:AX+B ENTER,3; or the Ex 1.2 functions",
+  "calculator_shows": "(F/G)(X)=X-3 with D(F/G)=ALL REALS, X≠-3; Ex 1.2: D(F/G)=ALL REALS, X≠-2,0,4",
+  "expected_answer": "cancelled factors still restrict the domain",
+  "test_ids": [
+   "MIST-1-2",
+   "EX-1.2c",
+   "EX-1.2d",
+   "EXTRA-ops-6",
+   "EXTRA-ops-12"
+  ]
+ },
+ {
+  "item_id": "MIST-1-3",
+  "what_question_gives": "Mistake: missing a segment on the x-axis (g=0 on [−2,1])",
+  "solver_path": "HAFZERO reports flat zero segments of a graph or of WORDS intervals as closed stretches, and HAOPS4 removes them whole",
+  "student_enters": "graph corners of g including (-2,0),(1,0)",
+  "calculator_shows": "D(F/G)=[-5,-2)U(1,5)U(5,6]",
+  "expected_answer": "the whole interval [−2,1] leaves the domain",
+  "test_ids": [
+   "EX-1.3d",
+   "PR-1.4b"
+  ]
+ },
+ {
+  "item_id": "MIST-1-4",
+  "what_question_gives": "Mistake: writing [−5,−2] when g(−2)=0",
+  "solver_path": "The removed points become open ends in the HADOM rendering",
+  "student_enters": "as EX-1.3(d)",
+  "calculator_shows": "[-5,-2)U(1,5)U(5,6] (open at -2 and 1)",
+  "expected_answer": "open bracket on an excluded endpoint",
+  "test_ids": [
+   "EX-1.3d",
+   "EX-1.3e",
+   "CORR-6"
+  ]
+ },
+ {
+  "item_id": "MIST-1-5",
+  "what_question_gives": "Mistake: using D_f or D_g alone instead of the overlap",
+  "solver_path": "Every domain starts from D_f ∩ D_g (HAFDOM on both records)",
+  "student_enters": "as PR-1.4 / EX-1.3(c)",
+  "calculator_shows": "D(F+G)=[-4,5]; D(F+G)=[-5,6]",
+  "expected_answer": "overlap of both domains",
+  "test_ids": [
+   "PR-1.4a",
+   "EX-1.3c"
+  ]
+ },
+ {
+  "item_id": "S1-ICAN",
+  "what_question_gives": "I Can (Day 1): evaluate from a graph; add/subtract/multiply/divide and simplify; domain from an equation or a graph",
+  "solver_path": "1:F+G OR F/G → 2:A VALUE / 3:FORMULA / 1:DOMAIN, with formulas, graphs (typed or saved) or words",
+  "student_enters": "shape menu numbers, corners or words",
+  "calculator_shows": "values, simplified formulas with domains, domains",
+  "expected_answer": "",
+  "test_ids": [
+   "EX-1.3a",
+   "PR-1.1a",
+   "EX-1.1a",
+   "EX-1.3c",
+   "EX-1.3d",
+   "PR-1.2a"
+  ]
+ },
+ {
+  "item_id": "ICAN-01",
+  "what_question_gives": "Evaluate a function given a graph",
+  "solver_path": "2:A VALUE with 7:A GRAPH for f and/or g; the WHY page shows F(a) and G(a) separately",
+  "student_enters": "corners (or saved graph), X",
+  "calculator_shows": "(F+G)(-3)=0, WHY: F(-3)=-1 G(-3)=1",
+  "expected_answer": "",
+  "test_ids": [
+   "EX-1.3a",
+   "EX-1.3b",
+   "EXTRA-ops-23"
+  ]
+ },
+ {
+  "item_id": "ICAN-02",
+  "what_question_gives": "Add, subtract, multiply and divide two functions and simplify",
+  "solver_path": "3:FORMULA → 1..5. Polynomials are combined and expanded; sums of fractions use one common bottom; products and quotients are one fraction in factored form; common factors cancel; roots are written as text",
+  "student_enters": "f and g by shape",
+  "calculator_shows": "2X²+X-4; -2X³+6X²+X-3; (2X²-6X+10)/(X(X-2)); (X+1)/(X+3); (X-1)√(X+3)",
+  "expected_answer": "",
+  "test_ids": [
+   "PR-1.1a",
+   "EX-1.1a",
+   "EX-1.1b",
+   "EX-1.2c",
+   "EXTRA-ops-7",
+   "EXTRA-ops-12",
+   "EXTRA-ops-13"
+  ]
+ },
+ {
+  "item_id": "ICAN-03",
+  "what_question_gives": "Domain of a sum, difference or product (equation or graph)",
+  "solver_path": "1:DOMAIN → 1:F+G / 2:F-G / 3:FG (D_f ∩ D_g)",
+  "student_enters": "f, g by shape, graph or words",
+  "calculator_shows": "D(F+G)=[-5,6]; D(F+G)=[-4,5]; D(FG)=[-3,INF)",
+  "expected_answer": "",
+  "test_ids": [
+   "EX-1.3c",
+   "PR-1.4a",
+   "EX-1.1b",
+   "EX-1.1e"
+  ]
+ },
+ {
+  "item_id": "ICAN-04",
+  "what_question_gives": "Domain of a quotient (equation or graph)",
+  "solver_path": "1:DOMAIN → 4:F/G or 5:G/F (shows both orders)",
+  "student_enters": "f, g by shape, graph or words",
+  "calculator_shows": "D(F/G)=..., D(G/F)=...",
+  "expected_answer": "",
+  "test_ids": [
+   "PR-1.2a",
+   "PR-1.3a",
+   "EX-1.2a",
+   "EX-1.3d",
+   "EX-1.3e",
+   "CRAM-EX-1a",
+   "CORR-6"
+  ]
+ },
+ {
+  "item_id": "RULE-1-0",
+  "what_question_gives": "(f±g)(x)=f(x)±g(x), (fg)(x)=f(x)g(x), (f/g)(x)=f(x)/g(x)",
+  "solver_path": "FORMULA and VALUE apply these definitions (HAOPS2, HAOPS6)",
+  "student_enters": "—",
+  "calculator_shows": "—",
+  "test_ids": [
+   "PR-1.1a",
+   "PR-1.1b"
+  ]
+ },
+ {
+  "item_id": "RULE-1-1",
+  "what_question_gives": "Domain of f+g, f−g, fg is D_f ∩ D_g",
+  "solver_path": "HAOPS4 with B=1",
+  "student_enters": "—",
+  "calculator_shows": "D(F+G)=...",
+  "test_ids": [
+   "EX-1.3c",
+   "PR-1.4a"
+  ]
+ },
+ {
+  "item_id": "RULE-1-2",
+  "what_question_gives": "Domain of f/g: overlap minus g(x)=0 (for g/f, minus the zeros of f)",
+  "solver_path": "HAOPS4 with B=4 or 5 (HAFZERO on the bottom function)",
+  "student_enters": "—",
+  "calculator_shows": "D(F/G)=..., D(G/F)=...",
+  "test_ids": [
+   "PR-1.3a",
+   "PR-1.3b",
+   "EX-1.1e"
+  ]
+ },
+ {
+  "item_id": "RULE-1-3",
+  "what_question_gives": "Find the domain before you simplify",
+  "solver_path": "Domain is taken from the original records, never from the simplified formula; the formula WHY page says FIND D BEFORE SIMPLIFYING",
+  "student_enters": "—",
+  "calculator_shows": "(F/G)(X)=X-3 with D(F/G)=ALL REALS, X≠-3",
+  "test_ids": [
+   "MIST-1-2",
+   "EXTRA-ops-6"
+  ]
+ },
+ {
+  "item_id": "RULE-1-4",
+  "what_question_gives": "Evaluating from a graph: read both heights, then combine",
+  "solver_path": "2:A VALUE (HAFEVAL interpolates between corners)",
+  "student_enters": "graph and X",
+  "calculator_shows": "(FG)(3)=2",
+  "test_ids": [
+   "EX-1.3a",
+   "EX-1.3b"
+  ]
+ },
+ {
+  "item_id": "RULE-1-5",
+  "what_question_gives": "(fg)(x) means multiply, not compose",
+  "solver_path": "Menu entry 3:FG (F TIMES G); composition is main menu 2",
+  "student_enters": "3",
+  "calculator_shows": "(FG)(X)=(X-1)√(X+3)",
+  "test_ids": [
+   "EX-1.1b",
+   "PR-1.1b"
+  ]
+ },
+ {
+  "item_id": "WHY-1",
+  "what_question_gives": "Why: both pieces must exist; you can't divide by 0; simplifying does not bring x back",
+  "solver_path": "Footer 3:WHY: the domain page shows D(F), D(G), the zeros of F and G, and the rules; the formula page shows F(X), G(X) and the rules; the value page shows F(a), G(a) and why a value is undefined",
+  "student_enters": "3 at the footer",
+  "calculator_shows": "WHY: D(F)=... D(G)=... KEEP X IN BOTH D(F), D(G) ZEROS OF F: ... D(F/G): TAKE OUT G=0",
+  "test_ids": [
+   "EXTRA-ops-23",
+   "EXTRA-ops-10"
+  ]
+ },
+ {
+  "item_id": "RECOG-1-1",
+  "what_question_gives": "Find (f/g)(x) and its domain → build the fraction, list restrictions, simplify",
+  "solver_path": "3:FORMULA → 4:F/G shows the simplified fraction and its domain together",
+  "student_enters": "f, g",
+  "calculator_shows": "(F/G)(X)=... and D(F/G)=...",
+  "test_ids": [
+   "EX-1.1c",
+   "EX-1.2c"
+  ]
+ },
+ {
+  "item_id": "RECOG-1-2",
+  "what_question_gives": "Functions given as graphs: read the domains, overlap, the denominator's zeros (points or a segment)",
+  "solver_path": "Shape 7:A GRAPH (type the corners or use the saved graph) → DOMAIN",
+  "student_enters": "corner points and end dots",
+  "calculator_shows": "D(F/G)=[-5,-2)U(1,5)U(5,6]",
+  "test_ids": [
+   "EX-1.3c",
+   "EX-1.3d",
+   "EX-1.3e",
+   "EXTRA-ops-11"
+  ]
+ },
+ {
+  "item_id": "RECOG-1-3",
+  "what_question_gives": "Domain written in words → same steps",
+  "solver_path": "Shape 8:WORDS (domain interval, single zeros, zero intervals) → DOMAIN",
+  "student_enters": "ends, brackets, zeros",
+  "calculator_shows": "D(F/G)=[-4,2)U(3,5]",
+  "test_ids": [
+   "PR-1.4a",
+   "PR-1.4b",
+   "PR-1.4c",
+   "CORR-6",
+   "EXTRA-ops-5"
+  ]
+ },
+ {
+  "item_id": "CHECK-1",
+  "what_question_gives": "Check: test an excluded value and a value inside each interval",
+  "solver_path": "The WHY page lists D(F), D(G) and the zeros used; 2:A VALUE can test any x (it shows UNDEFINED for excluded x)",
+  "student_enters": "X",
+  "calculator_shows": "(F/G)(1)=UNDEFINED",
+  "test_ids": [
+   "EXTRA-ops-10",
+   "EXTRA-ops-23"
+  ]
+ },
+ {
+  "item_id": "GRAPH-1.3",
+  "what_question_gives": "Example 1.3 graphs reused in Section 2",
+  "solver_path": "A typed graph is saved (ʟGFX.. for F, ʟGGX.. for G) and offered again as USE SAVED GRAPH OF F / OF G",
+  "student_enters": "corners once",
+  "calculator_shows": "saved graph offered on the graph menu",
+  "test_ids": [
+   "EX-1.3a",
+   "EX-1.3b",
+   "EX-1.3e",
+   "EXTRA-ops-25"
+  ]
+ },
+ {
+  "item_id": "CRAM-1.1",
+  "what_question_gives": "Cram rule: (f±g)(x), (fg)(x), (f/g)(x)",
+  "solver_path": "same as RULE-1-0",
+  "student_enters": "—",
+  "calculator_shows": "—",
+  "test_ids": [
+   "PR-1.1a",
+   "EX-1.1a"
+  ]
+ },
+ {
+  "item_id": "CRAM-1.2",
+  "what_question_gives": "Cram rule: domain of f+g, f−g, fg is D_f ∩ D_g",
+  "solver_path": "1:DOMAIN → 1/2/3",
+  "student_enters": "—",
+  "calculator_shows": "D(F+G)=...",
+  "test_ids": [
+   "PR-1.4a",
+   "EX-1.3c"
+  ]
+ },
+ {
+  "item_id": "CRAM-1.3",
+  "what_question_gives": "Cram rule: domain of f/g removes every g(x)=0, including whole segments",
+  "solver_path": "1:DOMAIN → 4:F/G",
+  "student_enters": "—",
+  "calculator_shows": "D(F/G)=[-5,-2)U(1,5)U(5,6]",
+  "test_ids": [
+   "EX-1.3d",
+   "PR-1.4b"
+  ]
+ },
+ {
+  "item_id": "CRAM-1.4",
+  "what_question_gives": "Cram rule: find restrictions before simplifying (a cancelled x² still means x≠0)",
+  "solver_path": "same as RULE-1-3",
+  "student_enters": "—",
+  "calculator_shows": "(G/F)(X)=X²(X+2)/((-X+4)(X-3)) with D(G/F)=ALL REALS, X≠0,3,4",
+  "test_ids": [
+   "EX-1.2d",
+   "MIST-1-2"
+  ]
+ },
+ {
+  "item_id": "CRAM-1.5",
+  "what_question_gives": "Cram rule: graph domain from leftmost to rightmost point (solid included, hollow excluded)",
+  "solver_path": "Graph entry asks THE END DOTS ARE 1:BOTH SOLID 2:LEFT OPEN 3:RIGHT OPEN 4:BOTH OPEN",
+  "student_enters": "end-dot choice",
+  "calculator_shows": "D(F/G)=(0,1)U(1,4] for a hollow left end",
+  "test_ids": [
+   "EXTRA-ops-11",
+   "EX-1.3c"
+  ]
+ },
+ {
+  "item_id": "TEST-1",
+  "what_question_gives": "On the test: operations with functions and domain restrictions",
+  "solver_path": "main menu 1:F+G OR F/G",
+  "student_enters": "—",
+  "calculator_shows": "—",
+  "test_ids": [
+   "PR-1.1a",
+   "PR-1.2a",
+   "PR-1.3a",
+   "PR-1.4a"
+  ]
+ },
+ {
+  "item_id": "NOT-4",
+  "what_question_gives": "Notation ℝ, x≠−5,−17/4 for 'all reals except'",
+  "solver_path": "Rendered as ALL REALS, X≠a,b,... (HADOM op 9)",
+  "student_enters": "—",
+  "calculator_shows": "D(F/G)=ALL REALS, X≠0,2,5",
+  "test_ids": [
+   "PR-1.3a",
+   "EX-1.2a"
+  ]
+ },
+ {
+  "item_id": "CRAM-8-EXACT",
+  "what_question_gives": "Exact answers (−17/4, not −4.25)",
+  "solver_path": "Every number goes through HAFRAC. Values with roots are shown exactly as a+b√(n), with square factors pulled out (HAOPS5). Only values that cannot be shown exactly are prefixed ABOUT",
+  "student_enters": "—",
+  "calculator_shows": "(F-G)(-1/2)=17/3; (F+G)(12)=12+2√(3); (G/F)(0)=-(1/3)√(3)",
+  "test_ids": [
+   "EXTRA-ops-24",
+   "EXTRA-ops-8",
+   "EXTRA-ops-9",
+   "EXTRA-ops-1"
+  ]
+ },
+ {
+  "item_id": "CRAM-8-CHECK",
+  "what_question_gives": "Check: test an x next to each excluded value",
+  "solver_path": "2:A VALUE at any x; WHY pages",
+  "student_enters": "X",
+  "calculator_shows": "UNDEFINED at excluded x",
+  "test_ids": [
+   "EXTRA-ops-10"
+  ]
+ }
+]

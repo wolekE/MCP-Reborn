@@ -1,0 +1,23 @@
+1→θ
+prgmHADOM
+1→N
+0→O
+prgmHAFDOM
+θ→C
+2→N
+0→O
+prgmHAFDOM
+C and θ→C
+If B≥4
+Then
+6-B→N
+0→O
+1→P
+prgmHAFZERO
+C and θ→C
+End
+9→θ
+prgmHADOM
+Str6→Str1
+If not(C)
+"CAN NOT DO THIS ONE"→Str1
