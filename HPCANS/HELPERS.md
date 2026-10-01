@@ -7,7 +7,7 @@ layer's variables or lower ones (`tools/check_static.py` enforces this).
 |---|---|---|---|
 | low | HADIG HAFRAC HANUM HAKEY HAANS HAPAGE HAOUT HAEND HAROOT | W X Y Z θ | Str8 Str9 |
 | mid | HAPOLY HAPMUL HADOM HAIVL | S T U V | Str6 Str7 |
-| high | HAPTS HAABCK HAEQN HAPTXT HAFUNC HAGRAPH HAFSTR HAFEVAL | N O P Q R | Str4 Str5 |
+| high | HAPTS HAABCK HAEQN HAPTXT HAFUNC HAGRAPH HAFSTR HAFEVAL HAFDOM HAFZERO HAWORDS | N O P Q R | Str4 Str5 |
 | solver (default for any other program) | HPCANS HAOPS HACOMP HAINV HATRANS HAABS HAPOWER HADECOMP + their own helpers | A–M | Str0–Str3, L₁–L₅ |
 
 A call to a helper may change every variable of that helper's layer **and all lower layers**.

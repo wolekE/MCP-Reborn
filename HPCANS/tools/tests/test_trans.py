@@ -88,4 +88,11 @@ CASES = [
        ["D=[-36,-12]", "R=[-31,9]"], "D_h=[-36,-12]; R_h=[-31,9]"),
     changes("CRAM-5c", "-f(x)+3", "⁻", "", "", "3", ["REFLECT X-AXIS", "UP 3"], "reflect, then up 3"),
     changes("CRAM-5d", "f(4x-2)", "", "4", "-2", "", ["HORIZ COMPRESS 1/4", "RIGHT 1/2"], "right 1/2 (after compress)"),
+    dict(id="CORR-1", source="Quiz review #1 (corrected): h(x)=-2f(-x)+3 on f's points (-4,0),(-3,4),(0,-2),(2,2)",
+         actions=["k4", "k2", "t:-2", "t:⁻", "t:", "t:3", "k2", "t:4", "t:-4", "t:0", "t:-3", "t:4", "t:0", "t:-2",
+                  "t:2", "t:2", "k1", "k2"],
+         expect=["(-2,-1)", "(0,7)", "(3,-5)", "(4,3)", "D=[-2,4]", "R=[-5,7]"],
+         official="(4,3), (3,-5), (0,7), (-2,-1); range [-5,7] (not [-7,7]); domain [-2,4]",
+         path="4 → 2:NEW POINT(S); A=-2 B=(-) C=ENTER K=3; 2:ALL CORNERS; 4 points; 1:SOLID",
+         graph="the quiz's points typed in"),
 ]

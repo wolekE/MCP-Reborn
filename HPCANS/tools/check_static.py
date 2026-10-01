@@ -28,7 +28,7 @@ SRC = HERE.parent / "src"
 
 LOW = {"HADIG", "HAFRAC", "HANUM", "HAKEY", "HAANS", "HAPAGE", "HAOUT", "HAEND", "HAROOT"}
 MID = {"HAPOLY", "HAPMUL", "HADOM", "HAIVL"}
-HIGH = {"HAFUNC", "HAGRAPH", "HAFSTR", "HAFEVAL", "HAABCK", "HAPTS", "HAEQN", "HAPTXT"}
+HIGH = {"HAFUNC", "HAGRAPH", "HAFSTR", "HAFEVAL", "HAFDOM", "HAFZERO", "HAWORDS", "HAABCK", "HAPTS", "HAEQN", "HAPTXT"}
 LAYER_VARS = {
     "low": set("WXYZ") | {"θ", "Str8", "Str9"},
     "mid": set("STUV") | {"Str6", "Str7"},

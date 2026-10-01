@@ -14,7 +14,7 @@ OUT = HERE.parent / "TESTS.md"
 def load(only=None):
     cases = []
     for p in sorted((HERE / "tests").glob("test_*.py")):
-        if only and only not in p.stem:
+        if only and p.stem[5:] not in only.split(","):
             continue
         spec = importlib.util.spec_from_file_location(p.stem, p)
         mod = importlib.util.module_from_spec(spec)

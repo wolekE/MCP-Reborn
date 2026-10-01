@@ -1,0 +1,441 @@
+[
+ {
+  "item_id": "EX-5.1",
+  "what_question_gives": "h(x)=2f(x+1)-3 and the base graph",
+  "solver_path": "4:A*F(BX+C)+K → 1:LIST CHANGES; then 4:A*F(BX+C)+K → 2:NEW POINT(S) → ALL CORNERS",
+  "student_enters": "A=2 B=ENTER C=1 K=-3; saved or typed corners",
+  "calculator_shows": "",
+  "test_ids": [
+   "EX-5.1a",
+   "EX-5.1b"
+  ]
+ },
+ {
+  "item_id": "EX-5.2-1",
+  "what_question_gives": "g(x)=f(3x+6)-1",
+  "solver_path": "4:A*F(BX+C)+K → 1:LIST CHANGES",
+  "student_enters": "A=ENTER B=3 C=6 K=-1",
+  "calculator_shows": "",
+  "test_ids": [
+   "EX-5.2a"
+  ]
+ },
+ {
+  "item_id": "EX-5.2-2",
+  "what_question_gives": "y=f(2x-6)",
+  "solver_path": "4:A*F(BX+C)+K → 1:LIST CHANGES",
+  "student_enters": "A=ENTER B=2 C=-6 K=ENTER",
+  "calculator_shows": "",
+  "test_ids": [
+   "EX-5.2b"
+  ]
+ },
+ {
+  "item_id": "EX-5.2-3",
+  "what_question_gives": "y=f(-x+3)",
+  "solver_path": "4:A*F(BX+C)+K → 1:LIST CHANGES",
+  "student_enters": "A=ENTER B=(-) C=3 K=ENTER",
+  "calculator_shows": "",
+  "test_ids": [
+   "EX-5.2c"
+  ]
+ },
+ {
+  "item_id": "EX-5.3",
+  "what_question_gives": "h(x)=-1/2 f(-2x+4)+1 and the base graph",
+  "solver_path": "4:A*F(BX+C)+K → 1:LIST CHANGES; 4:A*F(BX+C)+K → 2:NEW POINT(S) → ALL CORNERS",
+  "student_enters": "A=-1/2 B=-2 C=4 K=1",
+  "calculator_shows": "",
+  "test_ids": [
+   "EX-5.3a",
+   "EX-5.3b"
+  ]
+ },
+ {
+  "item_id": "EX-5.4",
+  "what_question_gives": "D_f=[-3,5], R_f=[-2,6], h(x)=4f(-1/2x+3)-1",
+  "solver_path": "4:A*F(BX+C)+K → 3:DOMAIN/RANGE → 1:D AND R",
+  "student_enters": "A=4 B=-1/2 C=3 K=-1; D ends -3, 5 [ ]; R ends -2, 6 [ ]",
+  "calculator_shows": "",
+  "test_ids": [
+   "EX-5.4"
+  ]
+ },
+ {
+  "item_id": "EX-5.5-i",
+  "what_question_gives": "Horizontal stretch by 3, then left 2",
+  "solver_path": "4:A*F(BX+C)+K → 4:WRITE EQUATION",
+  "student_enters": "4 then 3; 5 then -2; 7:DONE",
+  "calculator_shows": "",
+  "test_ids": [
+   "EX-5.5i"
+  ]
+ },
+ {
+  "item_id": "EX-5.5-ii",
+  "what_question_gives": "Reflect over the x-axis, then down 4",
+  "solver_path": "4:A*F(BX+C)+K → 4:WRITE EQUATION",
+  "student_enters": "1; 6 then -4; 7:DONE",
+  "calculator_shows": "",
+  "test_ids": [
+   "EX-5.5ii"
+  ]
+ },
+ {
+  "item_id": "EX-5.5-iii",
+  "what_question_gives": "Down 4, THEN reflect over the x-axis",
+  "solver_path": "4:A*F(BX+C)+K → 4:WRITE EQUATION",
+  "student_enters": "6 then -4; 1; 7:DONE (steps in the order the words say)",
+  "calculator_shows": "",
+  "test_ids": [
+   "EX-5.5iii"
+  ]
+ },
+ {
+  "item_id": "PR-5.1",
+  "what_question_gives": "y=-f(x-5)+2",
+  "solver_path": "4:A*F(BX+C)+K → 1:LIST CHANGES",
+  "student_enters": "A=(-) B=ENTER C=-5 K=2",
+  "calculator_shows": "",
+  "test_ids": [
+   "PR-5.1"
+  ]
+ },
+ {
+  "item_id": "PR-5.2",
+  "what_question_gives": "y=3f(1/2x+2)-4",
+  "solver_path": "4:A*F(BX+C)+K → 1:LIST CHANGES",
+  "student_enters": "A=3 B=1/2 C=2 K=-4",
+  "calculator_shows": "",
+  "test_ids": [
+   "PR-5.2"
+  ]
+ },
+ {
+  "item_id": "PR-5.3",
+  "what_question_gives": "h(x)=-f(2x)+3, base graph corners (-4,2),(-2,-2),(1,4),(3,0)",
+  "solver_path": "4:A*F(BX+C)+K → 2:NEW POINT(S) → 2:ALL CORNERS",
+  "student_enters": "A=(-) B=2 C=ENTER K=3; 4 corners typed; 1:SOLID ends",
+  "calculator_shows": "",
+  "test_ids": [
+   "PR-5.3"
+  ]
+ },
+ {
+  "item_id": "PR-5.4",
+  "what_question_gives": "D_f=[-6,2], R_f=[-3,5], k(x)=-2f(3x-3)+4",
+  "solver_path": "4:A*F(BX+C)+K → 3:DOMAIN/RANGE → 1:D AND R",
+  "student_enters": "A=-2 B=3 C=-3 K=4; D -6, 2 [ ]; R -3, 5 [ ]",
+  "calculator_shows": "",
+  "test_ids": [
+   "PR-5.4"
+  ]
+ },
+ {
+  "item_id": "PR-5.5",
+  "what_question_gives": "vertical stretch 5, horizontal compression 1/2, right 3, down 1",
+  "solver_path": "4:A*F(BX+C)+K → 4:WRITE EQUATION",
+  "student_enters": "3 then 5; 4 then 1/2; 5 then 3; 6 then -1; 7:DONE",
+  "calculator_shows": "",
+  "test_ids": [
+   "PR-5.5"
+  ]
+ },
+ {
+  "item_id": "PR-5.6",
+  "what_question_gives": "y=f(3x-12): 'shifted right 12'?",
+  "solver_path": "4:A*F(BX+C)+K → 1:LIST CHANGES",
+  "student_enters": "A=ENTER B=3 C=-12 K=ENTER",
+  "calculator_shows": "",
+  "test_ids": [
+   "PR-5.6"
+  ]
+ },
+ {
+  "item_id": "SOL-5.1",
+  "what_question_gives": "Section 9 answer to PR-5.1",
+  "solver_path": "same as PR-5.1",
+  "student_enters": "same as PR-5.1",
+  "calculator_shows": "",
+  "test_ids": [
+   "PR-5.1"
+  ]
+ },
+ {
+  "item_id": "SOL-5.2",
+  "what_question_gives": "Section 9 answer to PR-5.2",
+  "solver_path": "same as PR-5.2",
+  "student_enters": "same as PR-5.2",
+  "calculator_shows": "",
+  "test_ids": [
+   "PR-5.2"
+  ]
+ },
+ {
+  "item_id": "SOL-5.3",
+  "what_question_gives": "Section 9 answer to PR-5.3",
+  "solver_path": "same as PR-5.3",
+  "student_enters": "same as PR-5.3",
+  "calculator_shows": "",
+  "test_ids": [
+   "PR-5.3"
+  ]
+ },
+ {
+  "item_id": "SOL-5.4",
+  "what_question_gives": "Section 9 answer to PR-5.4",
+  "solver_path": "same as PR-5.4",
+  "student_enters": "same as PR-5.4",
+  "calculator_shows": "",
+  "test_ids": [
+   "PR-5.4"
+  ]
+ },
+ {
+  "item_id": "SOL-5.5",
+  "what_question_gives": "Section 9 answer to PR-5.5",
+  "solver_path": "same as PR-5.5",
+  "student_enters": "same as PR-5.5",
+  "calculator_shows": "",
+  "test_ids": [
+   "PR-5.5"
+  ]
+ },
+ {
+  "item_id": "SOL-5.6",
+  "what_question_gives": "Section 9 answer to PR-5.6",
+  "solver_path": "same as PR-5.6",
+  "student_enters": "same as PR-5.6",
+  "calculator_shows": "",
+  "test_ids": [
+   "PR-5.6"
+  ]
+ },
+ {
+  "item_id": "CRAM-EX-5a",
+  "what_question_gives": "h=2f(-4/3x+4)-3, D_f=[-4,8], R_f=[-2,4]",
+  "solver_path": "4:A*F(BX+C)+K → 1:LIST CHANGES; 4:A*F(BX+C)+K → 3:DOMAIN/RANGE",
+  "student_enters": "A=2 B=-4/3 C=4 K=-3; D -4, 8; R -2, 4",
+  "calculator_shows": "",
+  "test_ids": [
+   "CRAM-5a",
+   "REG-T4"
+  ]
+ },
+ {
+  "item_id": "CRAM-EX-5b",
+  "what_question_gives": "D_f=[-2,6], R_f=[-1,7], h=-5f(-1/3x-6)+4",
+  "solver_path": "4:A*F(BX+C)+K → 3:DOMAIN/RANGE",
+  "student_enters": "A=-5 B=-1/3 C=-6 K=4; D -2, 6; R -1, 7",
+  "calculator_shows": "",
+  "test_ids": [
+   "CRAM-5b"
+  ]
+ },
+ {
+  "item_id": "CRAM-8g",
+  "what_question_gives": "f(bx+c): factor first",
+  "solver_path": "4:A*F(BX+C)+K → 1:LIST CHANGES (the calculator factors: H=-C/B; WHY page shows the factored form)",
+  "student_enters": "raw A, B, C, K exactly as printed",
+  "calculator_shows": "",
+  "test_ids": [
+   "REG-T2",
+   "PR-5.6",
+   "CRAM-5d"
+  ]
+ },
+ {
+  "item_id": "CRAM-8h",
+  "what_question_gives": "D/R after a transform: x/b+h on D, ay+k on R, re-order",
+  "solver_path": "4:A*F(BX+C)+K → 3:DOMAIN/RANGE",
+  "student_enters": "the D and R ends as printed",
+  "calculator_shows": "",
+  "test_ids": [
+   "PR-5.4",
+   "EX-5.4",
+   "CRAM-5b"
+  ]
+ },
+ {
+  "item_id": "CORR-1",
+  "what_question_gives": "h(x)=-2f(-x)+3 on the quiz's table points",
+  "solver_path": "4:A*F(BX+C)+K → 2:NEW POINT(S) → 2:ALL CORNERS",
+  "student_enters": "A=-2 B=(-) C=ENTER K=3; the 4 original points",
+  "calculator_shows": "",
+  "test_ids": [
+   "CORR-1"
+  ]
+ },
+ {
+  "item_id": "CORR-7",
+  "what_question_gives": "A domain D_h=[-6,-3] (sign hard to read in the scan)",
+  "solver_path": "4:A*F(BX+C)+K → 3:DOMAIN/RANGE (computes the ends exactly, so no sign is misread)",
+  "student_enters": "A, B, C, K and the D ends",
+  "calculator_shows": "",
+  "test_ids": []
+ },
+ {
+  "item_id": "ICAN-11",
+  "what_question_gives": "Describe the transformations",
+  "solver_path": "4:A*F(BX+C)+K → 1:LIST CHANGES",
+  "student_enters": "A, B, C, K as printed",
+  "calculator_shows": "",
+  "test_ids": [
+   "REG-T1",
+   "PR-5.1",
+   "PR-5.2"
+  ]
+ },
+ {
+  "item_id": "ICAN-12",
+  "what_question_gives": "Graph a transformed function",
+  "solver_path": "4:A*F(BX+C)+K → 2:NEW POINT(S) (every corner, then D and R)",
+  "student_enters": "A, B, C, K and the corners",
+  "calculator_shows": "",
+  "test_ids": [
+   "PR-5.3",
+   "EX-5.1b"
+  ]
+ },
+ {
+  "item_id": "ICAN-13",
+  "what_question_gives": "Order of transformations",
+  "solver_path": "4:A*F(BX+C)+K → 1:LIST CHANGES (always prints in class order) and 4:A*F(BX+C)+K → 4:WRITE EQUATION (keeps the order the words say)",
+  "student_enters": "",
+  "calculator_shows": "",
+  "test_ids": [
+   "EX-5.3a",
+   "EX-5.5iii"
+  ]
+ },
+ {
+  "item_id": "ICAN-14",
+  "what_question_gives": "Domain and range after a transformation",
+  "solver_path": "4:A*F(BX+C)+K → 3:DOMAIN/RANGE",
+  "student_enters": "A, B, C, K and the D, R ends",
+  "calculator_shows": "",
+  "test_ids": [
+   "PR-5.4",
+   "EX-5.4"
+  ]
+ },
+ {
+  "item_id": "ICAN-5",
+  "what_question_gives": "Section 5 I Can (describe, graph, order, D and R)",
+  "solver_path": "menu 4, all four choices",
+  "student_enters": "",
+  "calculator_shows": "",
+  "test_ids": [
+   "PR-5.1",
+   "PR-5.3",
+   "PR-5.4",
+   "PR-5.5"
+  ]
+ },
+ {
+  "item_id": "S5-ICAN",
+  "what_question_gives": "Section 5 I Can",
+  "solver_path": "menu 4",
+  "student_enters": "",
+  "calculator_shows": "",
+  "test_ids": [
+   "PR-5.1",
+   "PR-5.3",
+   "PR-5.4",
+   "PR-5.5"
+  ]
+ },
+ {
+  "item_id": "MIST-5-1",
+  "what_question_gives": "(mistake)",
+  "solver_path": "handled inside menu 4",
+  "student_enters": "The student never factors: they type B=4, C=-8 and the calculator shows RIGHT 2.",
+  "calculator_shows": "",
+  "test_ids": [
+   "REG-T2"
+  ]
+ },
+ {
+  "item_id": "MIST-5-2",
+  "what_question_gives": "(mistake)",
+  "solver_path": "handled inside menu 4",
+  "student_enters": "The calculator prints HORIZ COMPRESS 1/|B| or STRETCH 1/|B| itself.",
+  "calculator_shows": "",
+  "test_ids": [
+   "REG-T2",
+   "PR-5.2"
+  ]
+ },
+ {
+  "item_id": "MIST-5-3",
+  "what_question_gives": "(mistake)",
+  "solver_path": "handled inside menu 4",
+  "student_enters": "Direction comes from H=-C/B; (x-3) prints RIGHT 3.",
+  "calculator_shows": "",
+  "test_ids": [
+   "PR-5.1"
+  ]
+ },
+ {
+  "item_id": "MIST-5-4",
+  "what_question_gives": "(mistake)",
+  "solver_path": "handled inside menu 4",
+  "student_enters": "LIST CHANGES prints dilations/reflections before translations; WRITE EQUATION takes the steps in the order the words give (THEN).",
+  "calculator_shows": "",
+  "test_ids": [
+   "EX-5.5iii"
+  ]
+ },
+ {
+  "item_id": "MIST-5-5",
+  "what_question_gives": "(mistake)",
+  "solver_path": "handled inside menu 4",
+  "student_enters": "NEW POINT applies the inside rule to x only and the outside rule to y only.",
+  "calculator_shows": "",
+  "test_ids": [
+   "REG-T3",
+   "PR-5.3"
+  ]
+ },
+ {
+  "item_id": "MIST-5-6",
+  "what_question_gives": "(mistake)",
+  "solver_path": "handled inside menu 4",
+  "student_enters": "D and R ends are re-ordered small to large, brackets follow their numbers.",
+  "calculator_shows": "",
+  "test_ids": [
+   "PR-5.4",
+   "CRAM-5b"
+  ]
+ },
+ {
+  "item_id": "CRAM-MIST-1",
+  "what_question_gives": "(mistake)",
+  "solver_path": "handled inside menu 4",
+  "student_enters": "Same as MIST-5-1.",
+  "calculator_shows": "",
+  "test_ids": [
+   "REG-T2"
+  ]
+ },
+ {
+  "item_id": "CRAM-MIST-2",
+  "what_question_gives": "(mistake)",
+  "solver_path": "handled inside menu 4",
+  "student_enters": "Same as MIST-5-2.",
+  "calculator_shows": "",
+  "test_ids": [
+   "REG-T2"
+  ]
+ },
+ {
+  "item_id": "CRAM-MIST-3",
+  "what_question_gives": "(mistake)",
+  "solver_path": "handled inside menu 4",
+  "student_enters": "Same as MIST-5-6.",
+  "calculator_shows": "",
+  "test_ids": [
+   "PR-5.4"
+  ]
+ }
+]
