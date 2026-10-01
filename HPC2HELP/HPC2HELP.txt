@@ -1,0 +1,1069 @@
+Float
+Normal
+Lbl M0
+Menu("U1 TOPIC 2 HELP","DOMAIN/COMP",A0,"DECOMP/INVERSE",B0,"TRANSFORM",C0,"ABS VALUE",D0,"POWER FUNCS",E0,"TOP MISTAKES",F0,"EXIT",Z0)
+Lbl A0
+Menu("DOMAIN/COMP","OPS + DOMAIN",A1,"OPS MISTAKES",A2,"COMPOSITION",A3,"COMP DOMAIN",A4,"COMP MISTAKES",A5,"COMP CHECK",A6,"MAIN MENU",M0)
+Lbl A1
+ClrHome
+Disp "OPS+DOMAIN 1/5"
+Disp "(F+G)(X)="
+Disp "  F(X)+G(X)"
+Disp "(F-G)(X)="
+Disp "  F(X)-G(X)"
+Disp "(FG)(X)="
+Disp "  F(X)*G(X)"
+Pause
+ClrHome
+Disp "OPS+DOMAIN 2/5"
+Disp "(F/G)(X)="
+Disp "  F(X)/G(X)"
+Disp ""
+Disp "(FG)(X) MEANS"
+Disp "MULTIPLY. IT IS"
+Disp "NOT F(G(X))."
+Pause
+ClrHome
+Disp "OPS+DOMAIN 3/5"
+Disp "F+G, F-G, FG"
+Disp "DOMAIN=OVERLAP"
+Disp "OF DF AND DG."
+Disp "F/G = OVERLAP,"
+Disp "THEN CUT EACH X"
+Disp "WHERE G(X)=0."
+Disp "(NO DIVIDE BY 0)"
+Pause
+ClrHome
+Disp "OPS+DOMAIN 4/5"
+Disp "CUT ONLY THE"
+Disp "DENOMINATOR"
+Disp "ZEROS. FIND"
+Disp "RESTRICTIONS"
+Disp "BEFORE SIMPLIFY."
+Disp "CANCELING DOES"
+Disp "NOT RESTORE X."
+Pause
+ClrHome
+Disp "FROM GRAPH 5/5"
+Disp "USE THE OVERLAP"
+Disp "OF BOTH DOMAINS."
+Disp "IF G=0 ON A"
+Disp "SEGMENT, CUT THE"
+Disp "WHOLE INTERVAL."
+Disp "EXCLUDED END"
+Disp "GETS OPEN ( )."
+Pause
+Goto A0
+Lbl A2
+ClrHome
+Disp "MISTAKES 1/2"
+Disp "-EXCLUDING A"
+Disp " NUMERATOR ZERO"
+Disp "-SIMPLIFYING"
+Disp " BEFORE FINDING"
+Disp " RESTRICTIONS"
+Disp "-FORGETTING THE"
+Disp " DOMAIN OVERLAP"
+Pause
+ClrHome
+Disp "MISTAKES 2/2"
+Disp "-MISSING A WHOLE"
+Disp " SEGMENT WHERE"
+Disp " DENOMINATOR=0"
+Disp "-CLOSED BRACKET"
+Disp " AT AN END WHERE"
+Disp " DENOMINATOR=0"
+Disp " (MUST BE OPEN)"
+Pause
+Goto A0
+Lbl A3
+ClrHome
+Disp "COMPOSITION 1/2"
+Disp "(F O G)(X)"
+Disp "  =F(G(X))"
+Disp "WORK INSIDE-OUT"
+Disp "G FIRST, THEN F."
+Disp "USUALLY"
+Disp "F(G(X))≠G(F(X))"
+Pause
+ClrHome
+Disp "COMPOSITION 2/2"
+Disp "REPLACE EVERY X"
+Disp "IN OUTER F WITH"
+Disp "THE WHOLE INNER"
+Disp "G(X) IN ( )."
+Disp "COMPLEX FRACTION"
+Disp "MULTIPLY TOP AND"
+Disp "BOTTOM BY LCD."
+Pause
+Goto A0
+Lbl A4
+ClrHome
+Disp "COMP DOMAIN 1/3"
+Disp "D OF F(G(X))"
+Disp "1) X MUST BE"
+Disp "   IN DG"
+Disp "2) G(X) MUST BE"
+Disp "   IN DF"
+Disp "FIND THESE"
+Disp "BEFORE SIMPLIFY."
+Pause
+ClrHome
+Disp "COMP DOMAIN 2/3"
+Disp "OUTER F CAN ADD"
+Disp "RESTRICTIONS."
+Disp "√(F(X)) FROM A"
+Disp "GRAPH, KEEP THE"
+Disp "X WHERE F(X)≥0"
+Disp "(ON OR ABOVE"
+Disp "THE X-AXIS)"
+Pause
+ClrHome
+Disp "EXAMPLE 3/3"
+Disp "A=(X+2)/(X-4)"
+Disp "B=3/(X+5)"
+Disp "A(B(X)) NEEDS"
+Disp "X≠-5 (FROM B)"
+Disp "B(X)≠4 (FROM A)"
+Disp "SO X≠-5, -17/4"
+Pause
+Goto A0
+Lbl A5
+ClrHome
+Disp "MISTAKES 1/2"
+Disp "-WRONG ORDER"
+Disp " (G GOES INSIDE)"
+Disp "-FORGETTING"
+Disp " PARENTHESES"
+Disp "-REPLACING ONLY"
+Disp " SOME OF THE X"
+Pause
+ClrHome
+Disp "MISTAKES 2/2"
+Disp "-LOSING INNER"
+Disp " RESTRICTIONS"
+Disp " AFTER SIMPLIFY"
+Disp "-FORGETTING THE"
+Disp " RESTRICTIONS"
+Disp " FROM OUTER F"
+Pause
+Goto A0
+Lbl A6
+ClrHome
+Disp "CHECK 1/2"
+Disp "PICK AN EASY X"
+Disp "(LIKE 0 OR 1)."
+Disp "FIND G(X), THEN"
+Disp "F OF THAT VALUE."
+Disp "PUT SAME X IN"
+Disp "SIMPLIFIED RULE."
+Disp "BOTH MUST MATCH."
+Pause
+ClrHome
+Disp "CHECK 2/2"
+Disp "ALSO PUT EACH"
+Disp "EXCLUDED X INTO"
+Disp "THE ORIGINAL"
+Disp "PIECES. EACH ONE"
+Disp "MUST FAIL"
+Disp "SOMEWHERE."
+Pause
+Goto A0
+Lbl B0
+Menu("DECOMP/INVERSE","DECOMP RULES",B1,"DECOMP EXAMPLE",B2,"INVERSE BASICS",B3,"FIND INVERSE",B4,"VERIFY INVERSE",B5,"BY FUNC TYPE",B6,"MAIN MENU",M0)
+Lbl B1
+ClrHome
+Disp "DECOMP 1/2"
+Disp "H(X)=F(G(X))"
+Disp "G = INSIDE CHUNK"
+Disp "IN ( ), UNDER A"
+Disp "RADICAL, IN A"
+Disp "DENOMINATOR, OR"
+Disp "IN AN EXPONENT."
+Pause
+ClrHome
+Disp "DECOMP 2/2"
+Disp "F = WHAT IS DONE"
+Disp "TO THAT CHUNK."
+Disp "NEITHER F NOR G"
+Disp "CAN BE JUST X."
+Disp "MORE THAN 1 WAY."
+Disp "CHECK BY F(G(X))"
+Disp "EXACTLY = H(X)."
+Pause
+Goto B0
+Lbl B2
+ClrHome
+Disp "EXAMPLE 1/3"
+Disp "H(X)=(5X-1)^4"
+Disp "G(X)=5X-1"
+Disp "F(X)=X^4"
+Disp "CHECK"
+Disp "F(G(X))=(5X-1)^4"
+Pause
+ClrHome
+Disp "EXAMPLE 2/3"
+Disp "H(X)=3/√(X²+4)"
+Disp "WAY 1"
+Disp " G(X)=X²+4"
+Disp " F(X)=3/√(X)"
+Disp "WAY 2"
+Disp " G(X)=√(X²+4)"
+Disp " F(X)=3/X"
+Pause
+ClrHome
+Disp "EXAMPLE 3/3"
+Disp "H(X)=1/(X³+2)²"
+Disp "WAY 1"
+Disp " G(X)=X³+2"
+Disp " F(X)=1/X²"
+Disp "WAY 2"
+Disp " G(X)=(X³+2)²"
+Disp " F(X)=1/X"
+Pause
+Goto B0
+Lbl B3
+ClrHome
+Disp "INVERSES 1/3"
+Disp "F⁻¹ UNDOES F."
+Disp "(A,B) ON F"
+Disp "BECOMES (B,A)"
+Disp "ON F⁻¹."
+Disp "GRAPHS REFLECT"
+Disp "OVER Y=X."
+Pause
+ClrHome
+Disp "INVERSES 2/3"
+Disp "D AND R SWAP"
+Disp "D OF F⁻¹=R OF F"
+Disp "R OF F⁻¹=D OF F"
+Disp ""
+Disp "F⁻¹(X) IS NOT"
+Disp "1/F(X)."
+Pause
+ClrHome
+Disp "INVERSES 3/3"
+Disp "ONE-TO-ONE MEANS"
+Disp "IT PASSES THE"
+Disp "HORIZONTAL LINE"
+Disp "TEST (HLT)."
+Disp "EVEN FUNCS FAIL"
+Disp "UNLESS DOMAIN IS"
+Disp "RESTRICTED."
+Pause
+Goto B0
+Lbl B4
+ClrHome
+Disp "FIND F⁻¹ 1/3"
+Disp "1) WRITE Y=F(X)"
+Disp "2) SWAP X AND Y"
+Disp "3) SOLVE FOR Y"
+Disp "4) RENAME Y AS"
+Disp "   F⁻¹(X)"
+Pause
+ClrHome
+Disp "RATIONAL 2/3"
+Disp "1)SWAP X AND Y"
+Disp "2)MULT BY DENOM"
+Disp "3)EXPAND"
+Disp "4)ALL Y TERMS TO"
+Disp "  ONE SIDE"
+Disp "5)FACTOR OUT Y"
+Disp "6)DIVIDE"
+Pause
+ClrHome
+Disp "EXAMPLE 3/3"
+Disp "F=(1+3X)/(5-2X)"
+Disp "X=(1+3Y)/(5-2Y)"
+Disp "5X-2XY=1+3Y"
+Disp "5X-1=3Y+2XY"
+Disp "5X-1=Y(3+2X)"
+Disp "F⁻¹=(5X-1)/(2X+3)"
+Pause
+Goto B0
+Lbl B5
+ClrHome
+Disp "VERIFY 1/2"
+Disp "ARE F AND G"
+Disp "INVERSES?"
+Disp "FIND F(G(X))"
+Disp "AND G(F(X))."
+Disp "BOTH MUST"
+Disp "SIMPLIFY TO X."
+Pause
+ClrHome
+Disp "VERIFY 2/2"
+Disp "ONE CHECK IS"
+Disp "NOT ENOUGH."
+Disp ""
+Disp "CHECK BOTH WAYS."
+Disp "IF EITHER FAILS,"
+Disp "THEY ARE NOT"
+Disp "INVERSES."
+Pause
+Goto B0
+Lbl B6
+ClrHome
+Disp "LINEAR 1/5"
+Disp "SUBTRACT, THEN"
+Disp "DIVIDE."
+Disp "F(X)=4X-7"
+Disp "SWAP X=4Y-7"
+Disp "X+7=4Y"
+Disp "F⁻¹(X)=(X+7)/4"
+Pause
+ClrHome
+Disp "CUBE/ROOT 2/5"
+Disp "ISOLATE IT, THEN"
+Disp "CUBE/CUBE ROOT."
+Disp "F=³√(2X+5)-1"
+Disp "X=³√(2Y+5)-1"
+Disp "(X+1)³=2Y+5"
+Disp "F⁻¹=((X+1)³-5)/2"
+Pause
+ClrHome
+Disp "SQUARE ROOT 3/5"
+Disp "ISOLATE ROOT,"
+Disp "THEN SQUARE."
+Disp "KEEP RESTRICTION"
+Disp "D OF F⁻¹=R OF F"
+Disp "F=7√(X)+4 GIVES"
+Disp "F⁻¹=((X-4)/7)²"
+Disp "FOR X≥4"
+Pause
+ClrHome
+Disp "RATIONAL 4/5"
+Disp "SWAP X AND Y,"
+Disp "MULTIPLY BY THE"
+Disp "DENOMINATOR,"
+Disp "EXPAND, MOVE Y"
+Disp "TERMS TO 1 SIDE,"
+Disp "FACTOR OUT Y,"
+Disp "DIVIDE."
+Pause
+ClrHome
+Disp "FRAC POWER 5/5"
+Disp "ISOLATE POWER,"
+Disp "RAISE BOTH SIDES"
+Disp "TO RECIPROCAL."
+Disp "F=2(X-4)^(3/5)+1"
+Disp "F⁻¹="
+Disp "((X-1)/2)^(5/3)"
+Disp "    +4"
+Pause
+Goto B0
+Lbl C0
+Menu("TRANSFORM","OUTSIDE (Y)",C1,"INSIDE (X)",C2,"FACTOR + ORDER",C3,"MAP + D/R",C4,"POINT TOOL",T1,"D/R TOOL",T2,"MAIN MENU",M0)
+Lbl C1
+ClrHome
+Disp "OUTSIDE 1/2"
+Disp "Y=A*F(B(X-H))+K"
+Disp "A,K ACT ON Y"
+Disp "A<0  REFLECT"
+Disp "  OVER X-AXIS"
+Disp "ABS(A)>1  VERT"
+Disp "  STRETCH BY"
+Disp "  ABS(A)"
+Pause
+ClrHome
+Disp "OUTSIDE 2/2"
+Disp "0<ABS(A)<1  VERT"
+Disp "  COMPRESS BY"
+Disp "  ABS(A)"
+Disp "+K  UP K"
+Disp "-K  DOWN K"
+Disp "EX 3F(X)-2 VERT"
+Disp "STRETCH 3,DOWN 2"
+Pause
+Goto C0
+Lbl C2
+ClrHome
+Disp "INSIDE 1/3"
+Disp "Y=A*F(B(X-H))+K"
+Disp "B,H ACT ON X"
+Disp "(HORIZONTAL,"
+Disp " BACKWARDS)"
+Disp "B<0  REFLECT"
+Disp "  OVER Y-AXIS"
+Pause
+ClrHome
+Disp "INSIDE 2/3"
+Disp "ABS(B)>1  HORIZ"
+Disp "  COMPRESS BY"
+Disp "  1/ABS(B)"
+Disp "0<ABS(B)<1 HORIZ"
+Disp "  STRETCH BY"
+Disp "  1/ABS(B)"
+Pause
+ClrHome
+Disp "INSIDE 3/3"
+Disp "(X-H)  RIGHT H"
+Disp "(X+H)  LEFT H"
+Disp "F(X-3) RIGHT 3"
+Disp "F(X+3) LEFT 3"
+Disp "F(4X) COMPRESS"
+Disp "  BY 1/4"
+Disp "F(X/2) STRETCH 2"
+Pause
+Goto C0
+Lbl C3
+ClrHome
+Disp "FACTOR 1/4"
+Disp "FACTOR B OUT OF"
+Disp "THE INSIDE FIRST"
+Disp "F(4X-8)"
+Disp " =F(4(X-2))"
+Disp "COMPRESS 1/4,"
+Disp "RIGHT 2."
+Disp "NOT RIGHT 8."
+Pause
+ClrHome
+Disp "FACTOR 2/4"
+Disp "F(-X+3)"
+Disp " =F(-(X-3))"
+Disp "REFLECT OVER"
+Disp "Y-AXIS, RIGHT 3"
+Disp "F(4X-2)"
+Disp " =F(4(X-1/2))"
+Disp "RIGHT 1/2"
+Pause
+ClrHome
+Disp "ORDER 3/4"
+Disp "1) A  VERTICAL"
+Disp "  REFLECT/DILATE"
+Disp "2) B  HORIZONTAL"
+Disp "  REFLECT/DILATE"
+Disp "3) H  LEFT/RIGHT"
+Disp "4) K  UP/DOWN"
+Pause
+ClrHome
+Disp "ORDER 4/4"
+Disp "REFLECTIONS AND"
+Disp "DILATIONS BEFORE"
+Disp "TRANSLATIONS."
+Disp "-F(X)+3  REFLECT"
+Disp "  THEN UP 3"
+Disp "-(F(X)+3)  UP 3"
+Disp "  THEN REFLECT"
+Pause
+Goto C0
+Lbl C4
+ClrHome
+Disp "MAPPING 1/4"
+Disp "(X,Y) GOES TO"
+Disp "(X/B+H,A*Y+K)"
+Disp "NEW X = X/B+H"
+Disp "NEW Y = A*Y+K"
+Disp "TABLE COLUMNS"
+Disp "X/B+H AND A*Y+K"
+Pause
+ClrHome
+Disp "EXAMPLE 2/4"
+Disp "A=2, B=-4/3"
+Disp "H=3, K=-3"
+Disp "OLD (-4,2)"
+Disp "X  -4/(-4/3)+3=6"
+Disp "Y  2(2)-3=1"
+Disp "NEW (6,1)"
+Pause
+ClrHome
+Disp "D AND R 3/4"
+Disp "DOMAIN ENDS GO"
+Disp "THRU X/B+H."
+Disp "RANGE ENDS GO"
+Disp "THRU A*Y+K."
+Disp "B<0 FLIPS D ENDS"
+Disp "A<0 FLIPS R ENDS"
+Disp "REORDER [LOW,HI]"
+Pause
+ClrHome
+Disp "EXAMPLE 4/4"
+Disp "SAME A,B,H,K"
+Disp "DF=[-4,8] GIVES"
+Disp " 6 AND -3"
+Disp "DH=[-3,6]"
+Disp "RF=[-2,4] GIVES"
+Disp " -7 AND 5"
+Disp "RH=[-7,5]"
+Pause
+Goto C0
+Lbl T1
+ClrHome
+Disp "POINT TOOL"
+Disp "Y=A*F(B(X-H))+K"
+Disp "FACTOR B FIRST."
+Disp "F(X+3) MEANS"
+Disp " H=-3"
+Disp "FRACTIONS OK"
+Disp " LIKE -4/3"
+Pause
+Lbl T3
+ClrHome
+Input "A=",A
+Input "B=",B
+Input "H=",H
+Input "K=",K
+If B=0
+Goto T6
+If A=0
+Goto T7
+Lbl T4
+ClrHome
+Input "OLD X=",P
+Input "OLD Y=",Q
+P/B+H→U
+A*Q+K→V
+ClrHome
+Disp "NEW POINT"
+Disp "X=X/B+H"
+Disp U►Frac
+Disp "Y=A*Y+K"
+Disp V►Frac
+Pause
+Menu("POINT TOOL","NEXT POINT",T4,"NEW A,B,H,K",T3,"TRANSFORM MENU",C0,"MAIN MENU",M0)
+Lbl T6
+Menu("B CANNOT BE 0","RE-ENTER",T3,"TRANSFORM MENU",C0,"MAIN MENU",M0)
+Lbl T7
+Menu("A CANNOT BE 0","RE-ENTER",T3,"TRANSFORM MENU",C0,"MAIN MENU",M0)
+Lbl T2
+ClrHome
+Disp "D/R TOOL"
+Disp "Y=A*F(B(X-H))+K"
+Disp "FACTOR B FIRST."
+Disp "ENTER THE ENDS"
+Disp "OF DF AND RF."
+Disp "BRACKET TYPE"
+Disp "STAYS WITH ITS"
+Disp "OWN ENDPOINT."
+Pause
+Lbl T5
+ClrHome
+Input "A=",A
+Input "B=",B
+Input "H=",H
+Input "K=",K
+If B=0
+Goto T8
+If A=0
+Goto T9
+ClrHome
+Input "DOMAIN LOW=",C
+Input "DOMAIN HIGH=",D
+Input "RANGE LOW=",R
+Input "RANGE HIGH=",S
+C/B+H→M
+D/B+H→N
+A*R+K→U
+A*S+K→V
+min(M,N)→I
+max(M,N)→J
+min(U,V)→F
+max(U,V)→G
+ClrHome
+Disp "NEW DOMAIN"
+Disp "LOW END"
+Disp I►Frac
+Disp "HIGH END"
+Disp J►Frac
+If B<0
+Disp "B<0 ENDS SWAPPED"
+Pause
+ClrHome
+Disp "NEW RANGE"
+Disp "LOW END"
+Disp F►Frac
+Disp "HIGH END"
+Disp G►Frac
+If A<0
+Disp "A<0 ENDS SWAPPED"
+Pause
+Menu("D/R TOOL","NEW VALUES",T5,"TRANSFORM MENU",C0,"MAIN MENU",M0)
+Lbl T8
+Menu("B CANNOT BE 0","RE-ENTER",T5,"TRANSFORM MENU",C0,"MAIN MENU",M0)
+Lbl T9
+Menu("A CANNOT BE 0","RE-ENTER",T5,"TRANSFORM MENU",C0,"MAIN MENU",M0)
+Lbl D0
+Menu("ABS VALUE","ABS(F(X)) ON Y",D1,"F(ABS(X)) ON X",D2,"MNEMONIC",D3,"COMBINATIONS",D4,"MAIN MENU",M0)
+Lbl D1
+ClrHome
+Disp "ABS(F(X)) 1/2"
+Disp "ABS VALUE OF"
+Disp "THE OUTPUT (Y)"
+Disp "KEEP Y≥0 PARTS."
+Disp "REFLECT NEGATIVE"
+Disp "Y PARTS OVER"
+Disp "THE X-AXIS."
+Pause
+ClrHome
+Disp "ABS(F(X)) 2/2"
+Disp "KEEP THE"
+Disp "X-INTERCEPTS."
+Disp "DOMAIN SAME."
+Disp "NOTHING ENDS UP"
+Disp "IN QIII OR QIV."
+Disp "RF=[-4,3] GIVES"
+Disp "R=[0,4]"
+Pause
+Goto D0
+Lbl D2
+ClrHome
+Disp "F(ABS(X)) 1/2"
+Disp "ABS VALUE OF"
+Disp "THE INPUT (X)"
+Disp "DELETE THE X<0"
+Disp "PART. KEEP THE"
+Disp "X≥0 SIDE, THEN"
+Disp "MIRROR IT OVER"
+Disp "THE Y-AXIS."
+Pause
+ClrHome
+Disp "F(ABS(X)) 2/2"
+Disp "ALWAYS EVEN"
+Disp "(SYMMETRIC OVER"
+Disp " THE Y-AXIS)"
+Disp "RANGE = WHAT F"
+Disp "HITS FOR X≥0."
+Disp "DF=[-2,5] GIVES"
+Disp "D=[-5,5]"
+Pause
+Goto D0
+Lbl D3
+ClrHome
+Disp "MNEMONIC"
+Disp "BARS OUTSIDE = Y"
+Disp "ABS(F(X)) FLIPS"
+Disp "NEGATIVE Y UP"
+Disp ""
+Disp "BARS INSIDE = X"
+Disp "F(ABS(X)) COPIES"
+Disp "RIGHT TO LEFT"
+Pause
+Goto D0
+Lbl D4
+ClrHome
+Disp "COMBOS 1/4"
+Disp "INSIDE (X) STEPS"
+Disp "HAPPEN BEFORE F."
+Disp "OUTSIDE STEPS"
+Disp "HAPPEN AFTER"
+Disp "ABS(Y), *A, +K."
+Disp "TRACK ENDPOINTS"
+Disp "AND INTERCEPTS."
+Pause
+ClrHome
+Disp "COMBOS 2/4"
+Disp "2ABS(F(X+1))-1"
+Disp "1) LEFT 1"
+Disp "2) ABS OF Y"
+Disp "3) VERT STRETCH"
+Disp "   BY 2"
+Disp "4) DOWN 1"
+Pause
+ClrHome
+Disp "COMBOS 3/4"
+Disp "ABS(F(X)-1)+2"
+Disp "1) DOWN 1"
+Disp "2) ABS OF Y"
+Disp "3) UP 2"
+Disp "FIND THE NEW"
+Disp "X-INTERCEPTS"
+Disp "AFTER DOWN 1."
+Pause
+ClrHome
+Disp "COMBOS 4/4"
+Disp "F(ABS(X)-3)"
+Disp " RIGHT 3, THEN"
+Disp " MIRROR"
+Disp "F(ABS(X-3))"
+Disp " MIRROR, THEN"
+Disp " RIGHT 3"
+Pause
+Goto D0
+Lbl E0
+Menu("POWER FUNCS","DEFINITIONS",E1,"QI SHAPES",E2,"SYMMETRY",E3,"K<0 + REWRITE",E4,"MISTAKES",E5,"CLASSIFIER",E6,"MAIN MENU",M0)
+Lbl E1
+ClrHome
+Disp "POWER 1/2"
+Disp "F(X)=K*X^P"
+Disp "K = COEFFICIENT"
+Disp "P = POWER"
+Disp "P=A/B IN LOWEST"
+Disp "TERMS"
+Disp "(A=TOP,B=BOTTOM)"
+Pause
+ClrHome
+Disp "POWER 2/2"
+Disp "NOT POWER FUNCS"
+Disp "Y=2  CONSTANT"
+Disp "Y=E^X  VARIABLE"
+Disp " IN EXPONENT"
+Disp "EVERY K*X^P"
+Disp "PASSES THROUGH"
+Disp "(1,K)."
+Pause
+Goto E0
+Lbl E2
+ClrHome
+Disp "QI SHAPE 1/2"
+Disp "(SHOWN FOR K>0)"
+Disp "P>1  INCREASING"
+Disp " CURVES UP"
+Disp " (CONCAVE UP)"
+Disp "0<P<1 INCREASING"
+Disp " CURVES DOWN"
+Disp " (CONCAVE DOWN)"
+Pause
+ClrHome
+Disp "QI SHAPE 2/2"
+Disp "P<0  DECREASES"
+Disp " TOWARD AXES."
+Disp " ASYMPTOTES"
+Disp " X=0 AND Y=0"
+Disp " (X=0 EXCLUDED)"
+Disp "P=1  LINE Y=KX"
+Disp "ALL PASS (1,K)."
+Pause
+Goto E0
+Lbl E3
+ClrHome
+Disp "SYMMETRY 1/3"
+Disp "REDUCE P=A/B"
+Disp "FIRST."
+Disp "B EVEN"
+Disp " UNDEFINED X<0"
+Disp " RIGHT SIDE ONLY"
+Disp " P>0 STARTS AT 0"
+Disp " P<0 EXCLUDES 0"
+Pause
+ClrHome
+Disp "SYMMETRY 2/3"
+Disp "B ODD, A EVEN"
+Disp " EVEN SYMMETRY"
+Disp " QI AND QII"
+Disp "B ODD, A ODD"
+Disp " ODD SYMMETRY"
+Disp " QI AND QIII"
+Disp "(FOR K>0)"
+Pause
+ClrHome
+Disp "SYMMETRY 3/3"
+Disp "A=TOP  SETS"
+Disp " EVEN OR ODD"
+Disp "B=BOTTOM  SETS"
+Disp " THE ROOT"
+Disp "NEGATIVE A KEEPS"
+Disp "ITS PARITY. -2"
+Disp "IS EVEN."
+Pause
+Goto E0
+Lbl E4
+ClrHome
+Disp "K<0 1/2"
+Disp "K<0 REFLECTS"
+Disp "OVER THE X-AXIS"
+Disp "QI GOES TO QIV"
+Disp "QII GOES TO QIII"
+Disp "QIII GOES TO QII"
+Disp "INC/DEC SWAP,"
+Disp "CONCAVITY FLIPS."
+Pause
+ClrHome
+Disp "REWRITE 2/2"
+Disp "NTH ROOT OF X^M"
+Disp " =X^(M/N)"
+Disp "1/X^N=X^(-N)"
+Disp "√(4X³)=2X^(3/2)"
+Disp "NUMBERS INSIDE A"
+Disp "ROOT GO INTO K."
+Pause
+Goto E0
+Lbl E5
+ClrHome
+Disp "MISTAKES 1/2"
+Disp "-NOT REDUCING P"
+Disp " FIRST"
+Disp "-SWAPPING ROLES"
+Disp " OF A AND B"
+Disp "-CALLING X^-2"
+Disp " ODD. -2 IS EVEN"
+Pause
+ClrHome
+Disp "MISTAKES 2/2"
+Disp "-NUMBER INSIDE A"
+Disp " ROOT LEFT OUT"
+Disp " OF K"
+Disp "-FORGETTING K<0"
+Disp " SWAPS INC/DEC"
+Disp "-SAYING P<0 IS"
+Disp " CONTINUOUS AT 0"
+Pause
+Goto E0
+Lbl E6
+ClrHome
+Disp "CLASSIFIER"
+Disp "F(X)=K*X^(A/B)"
+Disp "ENTER K, THEN"
+Disp "A=TOP, B=BOTTOM"
+Disp "(INTEGERS)."
+Disp "AUTO-REDUCES."
+Disp "X^-2  A=-2, B=1"
+Pause
+Lbl E7
+ClrHome
+Input "K=",K
+Input "TOP A=",A
+Input "BOTTOM B=",B
+If K=0
+Goto Q1
+If B=0
+Goto Q2
+If fPart(A) or fPart(B)
+Goto Q3
+If A=0
+Goto Q4
+If abs(A)>999 or abs(B)>999
+Goto Q5
+If B<0
+Then
+⁻A→A
+⁻B→B
+End
+gcd(abs(A),B)→G
+A/G→A
+B/G→B
+not(fPart(B/2))→I
+not(fPart(A/2))→J
+ClrHome
+Output(1,1,"P=")
+Output(1,3,A)
+4+(A<0)+(abs(A)≥10)+(abs(A)≥100)→C
+Output(1,C,"/")
+Output(1,C+1,B)
+If J
+Output(2,1,"A IS EVEN")
+If not(J)
+Output(2,1,"A IS ODD")
+If I
+Output(3,1,"B IS EVEN")
+If not(I)
+Output(3,1,"B IS ODD")
+If A<0
+Output(4,1,"P<0  NEGATIVE")
+If A>0 and A<B
+Output(4,1,"0<P<1  POSITIVE")
+If A=B
+Output(4,1,"P=1  LINE")
+If A>B
+Output(4,1,"P>1  POSITIVE")
+If I
+Output(5,1,"UNDEFINED X<0")
+If J
+Output(5,1,"EVEN SYMMETRY")
+If not(I or J)
+Output(5,1,"ODD SYMMETRY")
+If K>0
+Output(6,1,"K>0  NO FLIP")
+If K<0
+Output(6,1,"K<0 FLIP X-AXIS")
+If I and K>0
+Output(7,1,"IN QI ONLY")
+If I and K<0
+Output(7,1,"IN QIV ONLY")
+If J and K>0
+Output(7,1,"IN QI AND QII")
+If J and K<0
+Output(7,1,"IN QIII AND QIV")
+If not(I or J) and K>0
+Output(7,1,"IN QI AND QIII")
+If not(I or J) and K<0
+Output(7,1,"IN QII AND QIV")
+If G>1
+Output(8,1,"(P WAS REDUCED)")
+Pause
+ClrHome
+Output(1,1,"DOMAIN")
+If I and A>0
+Output(2,1,"[0,INF)")
+If I and A<0
+Output(2,1,"(0,INF)")
+If not(I) and A>0
+Output(2,1,"ALL REALS")
+If not(I) and A<0
+Output(2,1,"ALL REALS, X≠0")
+Output(3,1,"RANGE")
+If not(I or J) and A>0
+Output(4,1,"ALL REALS")
+If not(I or J) and A<0
+Output(4,1,"ALL REALS, Y≠0")
+If (I or J) and A>0 and K>0
+Output(4,1,"[0,INF)")
+If (I or J) and A>0 and K<0
+Output(4,1,"(-INF,0]")
+If (I or J) and A<0 and K>0
+Output(4,1,"(0,INF)")
+If (I or J) and A<0 and K<0
+Output(4,1,"(-INF,0)")
+If A<0
+Then
+Output(5,1,"X=0 EXCLUDED")
+Output(6,1,"ASYMPTOTES")
+Output(7,1,"X=0 AND Y=0")
+Output(8,1,"NOT CONT AT X=0")
+Else
+Output(5,1,"X=0 IN DOMAIN")
+Output(6,1,"NO ASYMPTOTES")
+Output(7,1,"CONTINUOUS")
+End
+Pause
+ClrHome
+If K>0
+Output(1,1,"QI PIECE (K>0)")
+If K<0
+Output(1,1,"QIV PIECE (K<0)")
+If (K>0)=(A>0)
+Output(2,1,"INCREASING")
+If (K>0)≠(A>0)
+Output(2,1,"DECREASING")
+(A≠B)*(1+(K>0 xor (A>0 and A<B)))→U
+If U=0
+Output(3,1,"STRAIGHT LINE")
+If U=1
+Output(3,1,"CURVES DOWN")
+If U=1
+Output(4,1,"(CONCAVE DOWN)")
+If U=2
+Output(3,1,"CURVES UP")
+If U=2
+Output(4,1,"(CONCAVE UP)")
+If A<0
+Output(5,1,"NEAR BOTH AXES")
+If A>0
+Output(5,1,"THROUGH (0,0)")
+Output(6,1,"THROUGH (1,K)")
+Pause
+Menu("CLASSIFIER","NEW FUNCTION",E7,"POWER MENU",E0,"MAIN MENU",M0)
+Lbl Q1
+ClrHome
+Disp "ERROR"
+Disp "K CANNOT BE 0."
+Disp "(K*X^P WOULD BE"
+Disp " JUST Y=0)"
+Pause
+Goto E0
+Lbl Q2
+ClrHome
+Disp "ERROR"
+Disp "B CANNOT BE 0."
+Disp "(A/B UNDEFINED)"
+Pause
+Goto E0
+Lbl Q3
+ClrHome
+Disp "ERROR"
+Disp "A AND B MUST BE"
+Disp "INTEGERS."
+Disp "X^(2/3)  A=2,B=3"
+Pause
+Goto E0
+Lbl Q4
+ClrHome
+Disp "ERROR"
+Disp "A=0 MEANS P=0."
+Disp "Y=K IS CONSTANT,"
+Disp "NOT A POWER FUNC"
+Pause
+Goto E0
+Lbl Q5
+ClrHome
+Disp "ERROR"
+Disp "KEEP A AND B"
+Disp "UNDER 1000."
+Pause
+Goto E0
+Lbl F0
+Menu("TOP MISTAKES","READ ALL 12",F1,"1-5 TRANSFORMS",F2,"6-9 DOMAIN/INV",F4,"10-12 POWER",F6,"MAIN MENU",M0)
+Lbl F1
+1→W
+Goto F3
+Lbl F2
+0→W
+Lbl F3
+ClrHome
+Disp "TOP MISTAKES 1"
+Disp "1) F(4X-8)"
+Disp " =F(4(X-2))"
+Disp " RIGHT 2, NOT 8"
+Disp "2) HORIZ FACTOR"
+Disp " IS 1/ABS(B),"
+Disp " NOT B"
+Pause
+ClrHome
+Disp "TOP MISTAKES 2"
+Disp "3) REORDER ENDS"
+Disp " AFTER A"
+Disp " REFLECTION"
+Disp "4) ABS(F(X)) IS"
+Disp " VERTICAL, BUT"
+Disp " F(ABS(X)) IS"
+Disp " HORIZONTAL"
+Pause
+ClrHome
+Disp "TOP MISTAKES 3"
+Disp "5) KEEP THE"
+Disp " X-INTERCEPTS"
+Disp " WHEN TAKING"
+Disp " ABS(F(X))"
+Pause
+If W
+Goto F5
+Goto F0
+Lbl F4
+0→W
+Lbl F5
+ClrHome
+Disp "TOP MISTAKES 4"
+Disp "6) FIND DOMAIN"
+Disp " RESTRICTIONS"
+Disp " BEFORE SIMPLIFY"
+Disp "7) F(G(X)) GETS"
+Disp " RESTRICTIONS"
+Disp " FROM BOTH F, G"
+Pause
+ClrHome
+Disp "TOP MISTAKES 5"
+Disp "8) VERIFY F⁻¹"
+Disp " BOTH WAYS"
+Disp " F(G(X))=X AND"
+Disp " G(F(X))=X"
+Disp "9) F⁻¹(X) IS NOT"
+Disp " 1/F(X)"
+Pause
+If W
+Goto F7
+Goto F0
+Lbl F6
+0→W
+Lbl F7
+ClrHome
+Disp "TOP MISTAKES 6"
+Disp "10) REDUCE"
+Disp " P=A/B BEFORE"
+Disp " CLASSIFYING"
+Disp "11) X^-2 IS NOT"
+Disp " ODD. A=-2 IS"
+Disp " EVEN, IN QI+QII"
+Pause
+ClrHome
+Disp "TOP MISTAKES 7"
+Disp "12) KEEP EXACT"
+Disp " FRACTIONS"
+Disp " (X≠-17/4, NOT"
+Disp " -4.25) UNLESS"
+Disp " TOLD TO ROUND"
+Pause
+Goto F0
+Lbl Z0
+ClrHome
+Disp "GOOD LUCK ON"
+Disp "YOUR QUIZ."
+Stop
