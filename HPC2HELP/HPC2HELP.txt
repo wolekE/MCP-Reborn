@@ -224,7 +224,7 @@ Pause
 Goto B0
 Lbl B3
 ClrHome
-Disp "INVERSES 1/3"
+Disp "INVERSES 1/4"
 Disp "F⁻¹ UNDOES F."
 Disp "(A,B) ON F"
 Disp "BECOMES (B,A)"
@@ -233,7 +233,7 @@ Disp "GRAPHS REFLECT"
 Disp "OVER Y=X."
 Pause
 ClrHome
-Disp "INVERSES 2/3"
+Disp "INVERSES 2/4"
 Disp "D AND R SWAP"
 Disp "D OF F⁻¹=R OF F"
 Disp "R OF F⁻¹=D OF F"
@@ -242,13 +242,21 @@ Disp "F⁻¹(X) IS NOT"
 Disp "1/F(X)."
 Pause
 ClrHome
-Disp "INVERSES 3/3"
+Disp "INVERSES 3/4"
 Disp "ONE-TO-ONE MEANS"
 Disp "IT PASSES THE"
 Disp "HORIZONTAL LINE"
 Disp "TEST (HLT)."
-Disp "EVEN FUNCS FAIL"
-Disp "UNLESS DOMAIN IS"
+Disp "PASSES HLT MEANS"
+Disp "F⁻¹ IS A FUNCTION"
+Pause
+ClrHome
+Disp "INVERSES 4/4"
+Disp "EVEN FUNCTIONS"
+Disp "LIKE X², ABS(X),"
+Disp "FAIL THE HLT"
+Disp "UNLESS THE"
+Disp "DOMAIN IS"
 Disp "RESTRICTED."
 Pause
 Goto B0
@@ -408,7 +416,7 @@ Pause
 Goto C0
 Lbl C3
 ClrHome
-Disp "FACTOR 1/4"
+Disp "FACTOR 1/6"
 Disp "FACTOR B OUT OF"
 Disp "THE INSIDE FIRST"
 Disp "F(4X-8)"
@@ -418,17 +426,23 @@ Disp "RIGHT 2."
 Disp "NOT RIGHT 8."
 Pause
 ClrHome
-Disp "FACTOR 2/4"
+Disp "FACTOR 2/6"
 Disp "F(-X+3)"
 Disp " =F(-(X-3))"
 Disp "REFLECT OVER"
-Disp "Y-AXIS, RIGHT 3"
-Disp "F(4X-2)"
-Disp " =F(4(X-1/2))"
-Disp "RIGHT 1/2"
+Disp "Y-AXIS, THEN"
+Disp "RIGHT 3."
 Pause
 ClrHome
-Disp "ORDER 3/4"
+Disp "FACTOR 3/6"
+Disp "F(4X-2)"
+Disp " =F(4(X-1/2))"
+Disp "COMPRESS BY 1/4,"
+Disp "THEN RIGHT 1/2."
+Disp "(NOT RIGHT 2)"
+Pause
+ClrHome
+Disp "ORDER 4/6"
 Disp "1) A  VERTICAL"
 Disp "  REFLECT/DILATE"
 Disp "2) B  HORIZONTAL"
@@ -437,14 +451,24 @@ Disp "3) H  LEFT/RIGHT"
 Disp "4) K  UP/DOWN"
 Pause
 ClrHome
-Disp "ORDER 4/4"
+Disp "ORDER 5/6"
 Disp "REFLECTIONS AND"
 Disp "DILATIONS BEFORE"
 Disp "TRANSLATIONS."
 Disp "-F(X)+3  REFLECT"
 Disp "  THEN UP 3"
-Disp "-(F(X)+3)  UP 3"
-Disp "  THEN REFLECT"
+Disp "-(F(X)+3)  UP 3,"
+Disp "REFLECT=-F(X)-3"
+Pause
+ClrHome
+Disp "ORDER 6/6"
+Disp "USE A,B,H,K ON"
+Disp "TESTS. AN X STEP"
+Disp "AND A Y STEP CAN"
+Disp "TRADE PLACES,"
+Disp "BUT IN ONE"
+Disp "DIRECTION DILATE"
+Disp "BEFORE SHIFTING."
 Pause
 Goto C0
 Lbl C4
@@ -481,10 +505,10 @@ Disp "EXAMPLE 4/4"
 Disp "SAME A,B,H,K"
 Disp "DF=[-4,8] GIVES"
 Disp " 6 AND -3"
-Disp "DH=[-3,6]"
+Disp "NEW D=[-3,6]"
 Disp "RF=[-2,4] GIVES"
 Disp " -7 AND 5"
-Disp "RH=[-7,5]"
+Disp "NEW R=[-7,5]"
 Pause
 Goto C0
 Lbl T1
@@ -594,7 +618,7 @@ Lbl D0
 Menu("ABS VALUE","ABS(F(X)) ON Y",D1,"F(ABS(X)) ON X",D2,"MNEMONIC",D3,"COMBINATIONS",D4,"MAIN MENU",M0)
 Lbl D1
 ClrHome
-Disp "ABS(F(X)) 1/2"
+Disp "ABS(F(X)) 1/3"
 Disp "ABS VALUE OF"
 Disp "THE OUTPUT (Y)"
 Disp "KEEP Y≥0 PARTS."
@@ -603,19 +627,27 @@ Disp "Y PARTS OVER"
 Disp "THE X-AXIS."
 Pause
 ClrHome
-Disp "ABS(F(X)) 2/2"
+Disp "ABS(F(X)) 2/3"
 Disp "KEEP THE"
 Disp "X-INTERCEPTS."
 Disp "DOMAIN SAME."
 Disp "NOTHING ENDS UP"
 Disp "IN QIII OR QIV."
+Pause
+ClrHome
+Disp "ABS(F(X)) 3/3"
+Disp "RANGE EXAMPLES"
 Disp "RF=[-4,3] GIVES"
-Disp "R=[0,4]"
+Disp " [0,4]"
+Disp "RF=[-6,-2] GIVES"
+Disp " [2,6]"
+Disp "0 IS IN IT ONLY"
+Disp "IF 0 IS IN RF."
 Pause
 Goto D0
 Lbl D2
 ClrHome
-Disp "F(ABS(X)) 1/2"
+Disp "F(ABS(X)) 1/3"
 Disp "ABS VALUE OF"
 Disp "THE INPUT (X)"
 Disp "DELETE THE X<0"
@@ -625,14 +657,22 @@ Disp "MIRROR IT OVER"
 Disp "THE Y-AXIS."
 Pause
 ClrHome
-Disp "F(ABS(X)) 2/2"
+Disp "F(ABS(X)) 2/3"
 Disp "ALWAYS EVEN"
 Disp "(SYMMETRIC OVER"
 Disp " THE Y-AXIS)"
 Disp "RANGE = WHAT F"
 Disp "HITS FOR X≥0."
+Pause
+ClrHome
+Disp "F(ABS(X)) 3/3"
+Disp "DOMAIN EXAMPLES"
 Disp "DF=[-2,5] GIVES"
-Disp "D=[-5,5]"
+Disp " [-5,5]"
+Disp "DF=[2,7] GIVES"
+Disp " [-7,-2] U [2,7]"
+Disp "(MIRROR THE X≥0"
+Disp " PART OF DF)"
 Pause
 Goto D0
 Lbl D3
@@ -649,17 +689,26 @@ Pause
 Goto D0
 Lbl D4
 ClrHome
-Disp "COMBOS 1/4"
+Disp "COMBOS 1/5"
 Disp "INSIDE (X) STEPS"
-Disp "HAPPEN BEFORE F."
-Disp "OUTSIDE STEPS"
-Disp "HAPPEN AFTER"
-Disp "ABS(Y), *A, +K."
-Disp "TRACK ENDPOINTS"
-Disp "AND INTERCEPTS."
+Disp "COME FIRST, IN"
+Disp "REVERSE ORDER."
+Disp "OUTSIDE (Y)"
+Disp "STEPS COME AFTER"
+Disp "F, IN THE ORDER"
+Disp "YOU COMPUTE THEM"
 Pause
 ClrHome
-Disp "COMBOS 2/4"
+Disp "COMBOS 2/5"
+Disp "TRACK ENDPOINTS"
+Disp "AND INTERCEPTS"
+Disp "THROUGH EVERY"
+Disp "STEP. UNDER"
+Disp "ABS(Y), X-INTS"
+Disp "BECOME CORNERS."
+Pause
+ClrHome
+Disp "COMBOS 3/5"
 Disp "2ABS(F(X+1))-1"
 Disp "1) LEFT 1"
 Disp "2) ABS OF Y"
@@ -668,7 +717,7 @@ Disp "   BY 2"
 Disp "4) DOWN 1"
 Pause
 ClrHome
-Disp "COMBOS 3/4"
+Disp "COMBOS 4/5"
 Disp "ABS(F(X)-1)+2"
 Disp "1) DOWN 1"
 Disp "2) ABS OF Y"
@@ -678,7 +727,7 @@ Disp "X-INTERCEPTS"
 Disp "AFTER DOWN 1."
 Pause
 ClrHome
-Disp "COMBOS 4/4"
+Disp "COMBOS 5/5"
 Disp "F(ABS(X)-3)"
 Disp " RIGHT 3, THEN"
 Disp " MIRROR"
@@ -781,8 +830,8 @@ Disp "NTH ROOT OF X^M"
 Disp " =X^(M/N)"
 Disp "1/X^N=X^(-N)"
 Disp "√(4X³)=2X^(3/2)"
-Disp "NUMBERS INSIDE A"
-Disp "ROOT GO INTO K."
+Disp "ROOT OF A NUMBER"
+Disp "GOES INTO K."
 Pause
 Goto E0
 Lbl E5
