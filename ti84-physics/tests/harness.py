@@ -22,9 +22,20 @@ _SIM = None
 
 
 def sim():
+    """TISIM_FROM=8xp runs the built .8xp files. TISIM_SINGLE=1 runs every old entry point
+    (PHYSOLVE, PHYSREF, ZFMT, ...) on the merged one-program build PHYSICS, found under
+    TISIM_ROOT (default: this directory)."""
     global _SIM
     if _SIM is None:
-        _SIM = TISim.load(use_src=os.environ.get("TISIM_FROM", "src") != "8xp")
+        use_src = os.environ.get("TISIM_FROM", "src") != "8xp"
+        root = Path(os.environ.get("TISIM_ROOT", ROOT))
+        if os.environ.get("TISIM_SINGLE"):
+            from merge import single_sim
+            single = single_sim(TISim)
+            base = TISim.load(use_src=use_src, root=root)
+            _SIM = single({k: v for k, v in base.programs.items() if k == "PHYSICS"})
+        else:
+            _SIM = TISim.load(use_src=use_src, root=root)
         errs = _SIM.syntax_errors()
         if errs:
             raise AssertionError("syntax errors:\n" + "\n".join(errs))

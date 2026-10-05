@@ -571,6 +571,7 @@ class TISim:
         self.programs = programs
         self.seed = seed
         self.coverage = set()     # (program, statement index) executed in any run
+        self.call_alias = None    # optional f(program name, variables) -> name to record in Result.calls
 
     @classmethod
     def load(cls, use_src=False, root=ROOT, **kw):
@@ -959,7 +960,7 @@ class TISim:
                 raise TIError("UNDEFINED", f"prgm{st.name}")
             if len(stack) >= 12:
                 raise TIError("MEMORY", "programs nested too deeply (recursion?)")
-            self.res.calls.append(st.name)
+            self.res.calls.append(self.call_alias(st.name, self.vars) if self.call_alias else st.name)
             stack.append(Frame(self.programs[st.name]))
         elif k == "DelVar":
             tg = st.target

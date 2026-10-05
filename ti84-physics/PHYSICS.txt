@@ -1,0 +1,4591 @@
+Degree
+If U=⁻1ᴇ⁻99
+Goto AA
+If U=⁻2ᴇ⁻99
+Goto AB
+If U=⁻3ᴇ⁻99
+Goto AC
+If U=⁻4ᴇ⁻99
+Goto AD
+If U=⁻5ᴇ⁻99
+Goto AE
+If U=⁻6ᴇ⁻99
+Goto AF
+If U=⁻7ᴇ⁻99
+Goto AG
+If U=⁻8ᴇ⁻99
+Goto AH
+If U=⁻9ᴇ⁻99
+Goto AI
+If U=⁻11ᴇ⁻99
+Goto AJ
+{A,B,C,D,E,F,G,H,I,J,K,L,M,N,P,Q,S,U,V,W,Z}→ʟPSAV
+Lbl AK
+Menu("PHYSICS  KINEMATICS","SOLVERS",AL,"FORMULA REFERENCE",A2,"QUIT",A3)
+Lbl AL
+Menu("PHYSOLVE 1/2  KINEMATICS","VOVFSTA SOLVER",AN,"FREE FALL",AO,"HORIZONTAL LAUNCH",AP,"ANGLED LAUNCH",AQ,"THROW LAB (BACKWARD)",AS,"MORE >",AM,"QUIT TO MAIN MENU",AK)
+Lbl AM
+Menu("PHYSOLVE 2/2  KINEMATICS","RIVER CROSSING",AU,"CHASE PROBLEM",AV,"VECTOR COMPONENTS",AW,"AVG SPEED/VELOCITY",AZ,"FACTOR OF CHANGE",A0,"LAB TOOLS",A1,"BACK",AL)
+Lbl AN
+1→K
+⁻4ᴇ⁻99→U
+prgmPHYSICS
+Goto AL
+Lbl AO
+⁻5ᴇ⁻99→U
+prgmPHYSICS
+Goto AL
+Lbl AP
+1→K
+⁻6ᴇ⁻99→U
+prgmPHYSICS
+Goto AL
+Lbl AQ
+2→K
+⁻6ᴇ⁻99→U
+prgmPHYSICS
+Goto AL
+Lbl AS
+3→K
+⁻6ᴇ⁻99→U
+prgmPHYSICS
+Goto AL
+Lbl AU
+⁻8ᴇ⁻99→U
+prgmPHYSICS
+Goto AM
+Lbl AV
+⁻7ᴇ⁻99→U
+prgmPHYSICS
+Goto AM
+Lbl AW
+1→K
+⁻9ᴇ⁻99→U
+prgmPHYSICS
+Goto AM
+Lbl AZ
+2→K
+⁻9ᴇ⁻99→U
+prgmPHYSICS
+Goto AM
+Lbl A0
+3→K
+⁻9ᴇ⁻99→U
+prgmPHYSICS
+Goto AM
+Lbl A1
+4→K
+⁻9ᴇ⁻99→U
+prgmPHYSICS
+Goto AM
+Lbl A2
+⁻11ᴇ⁻99→U
+prgmPHYSICS
+Goto AK
+Lbl A3
+ʟPSAV(1)→A
+ʟPSAV(2)→B
+ʟPSAV(3)→C
+ʟPSAV(4)→D
+ʟPSAV(5)→E
+ʟPSAV(6)→F
+ʟPSAV(7)→G
+ʟPSAV(8)→H
+ʟPSAV(9)→I
+ʟPSAV(10)→J
+ʟPSAV(11)→K
+ʟPSAV(12)→L
+ʟPSAV(13)→M
+ʟPSAV(14)→N
+ʟPSAV(15)→P
+ʟPSAV(16)→Q
+ʟPSAV(17)→S
+ʟPSAV(18)→U
+ʟPSAV(19)→V
+ʟPSAV(20)→W
+ʟPSAV(21)→Z
+DelVar ʟPSAV
+ClrHome
+Return
+Lbl AA
+0→U
+Degree
+If abs(Z)<1ᴇ⁻9
+Then
+"0"→Str9
+Else
+int(log(abs(Z)))→W
+round(abs(Z)/₁₀^(W),2)→U
+If U≥10
+Then
+U/10→U
+W+1→W
+End
+round(100U,0)→U
+sub("0123456789",int(U/100)+1,1)+sub("0123456789",int(U/10)-10int(U/100)+1,1)+sub("0123456789",U-10int(U/10)+1,1)→Str8
+If W≥6 or W≤⁻4
+Then
+sub(Str8,1,1)+"."+sub(Str8,2,2)+"E"→Str9
+If W<0
+Str9+"-"→Str9
+abs(W)→U
+If U≥10
+Str9+sub("0123456789",int(U/10)+1,1)→Str9
+Str9+sub("0123456789",U-10int(U/10)+1,1)→Str9
+Else
+If W≥2
+Str8→Str9
+If W≥3
+Str9+sub("000",1,W-2)→Str9
+If W=1
+sub(Str8,1,2)+"."+sub(Str8,3,1)→Str9
+If W=0
+sub(Str8,1,1)+"."+sub(Str8,2,2)→Str9
+If W<0
+sub("0.000",1,1-W)+Str8→Str9
+End
+If Z<0
+"-"+Str9→Str9
+End
+Return
+Lbl AB
+0→U
+Degree
+1→W
+While W≤length(Str0)
+Disp sub(Str0,W,min(26,length(Str0)-W+1))
+W+26→W
+End
+Return
+Lbl AC
+0→U
+Degree
+ClrHome
+Disp "SOLVE QUADRATIC FOR T"
+L→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Str9+"T²"→Str0
+M→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+If M≥0
+"+"+Str9→Str9
+Str0+Str9+"T"→Str0
+N→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+If N≥0
+"+"+Str9→Str9
+Str0+Str9+"=0"→Str0
+⁻2ᴇ⁻99→U
+prgmPHYSICS
+If L=0
+Then
+Disp "NO T² TERM, SO LINEAR"
+If M=0
+Then
+0→J
+Disp "NO SOLUTION FOR T"
+Else
+1→J
+⁻N/M→H
+H→I
+H→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "T = "+Str9+" S"
+End
+Else
+M²-4LN→G
+If abs(G)<1ᴇ⁻10(M²+abs(4LN))
+0→G
+G→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "T=(-B+/-√(B²-4AC))/(2A)"
+Disp "B²-4AC = "+Str9
+If G<0
+Then
+0→J
+Disp "B²-4AC<0 SO NO REAL ROOT"
+Else
+2→J
+If M≥0
+(⁻M-√(G))/2→Z
+If M<0
+(⁻M+√(G))/2→Z
+If Z=0
+Then
+0→H
+0→I
+Else
+Z/L→H
+N/Z→I
+End
+If H>I
+Then
+H→Z
+I→H
+Z→I
+End
+H→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "T1 = "+Str9+" S"
+I→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "T2 = "+Str9+" S"
+End
+End
+Return
+Lbl AD
+0→U
+Degree
+1→Q
+If K=2
+2→Q
+ClrHome
+If Q=1
+Then
+Disp "VOVFSTA SOLVER"
+Disp "KNOW 3 OF V0,VF,S,T,A."
+Else
+Disp "FREE FALL (VOVFSTA)"
+Disp "A IS -9.8 M/S² (GRAVITY)."
+Disp "KNOW 2 OF V0,VF,S,T."
+End
+Disp "IT FINDS THE OTHER 2."
+Disp "ENTER 999 IF UNKNOWN."
+If Q=1
+Then
+Disp "UP/FORWARD IS +"
+Disp "DOWN/BACKWARD IS -"
+Disp "UNITS M/S, M, S, M/S²"
+Else
+Disp "UP IS +, DOWN IS -"
+Disp "DROPPED MEANS V0 IS 0."
+Disp "S IS -45 IF IT FALLS 45 M."
+Disp "UNITS M/S, M, S"
+End
+Pause 
+ClrHome
+Disp "999 MEANS UNKNOWN"
+Disp "NEGATIVE = (-) KEY"
+If Q=2
+Disp "A IS -9.8 M/S² (AUTO)"
+Input "V0 (M/S)=",V
+Input "VF (M/S)=",F
+Input "S (M)=",S
+Input "T (S)=",D
+If Q=1
+Input "A (M/S²)=",A
+If Q=2
+⁻9.8→A
+(V=999)+(F=999)+(S=999)+(D=999)+(A=999)→J
+If J≠2
+Goto BM
+0→E
+If abs(V)>1ᴇ9 or (V≠0 and abs(V)<1ᴇ⁻9)
+1→E
+If abs(F)>1ᴇ9 or (F≠0 and abs(F)<1ᴇ⁻9)
+1→E
+If abs(S)>1ᴇ9 or (S≠0 and abs(S)<1ᴇ⁻9)
+1→E
+If abs(D)>1ᴇ9 or (D≠0 and abs(D)<1ᴇ⁻9)
+1→E
+If abs(A)>1ᴇ9 or (A≠0 and abs(A)<1ᴇ⁻9)
+1→E
+If E=1
+Goto BN
+If D≠999 and D≤0
+Goto BO
+If F=999 and S=999
+Then
+1→C
+"VF"→Str1
+"VF=V0+AT"→Str2
+"S"→Str3
+"S=V0T+(1/2)AT²"→Str4
+End
+If F=999 and D=999
+Then
+2→C
+"T"→Str1
+"S=V0T+(1/2)AT²"→Str2
+"VF"→Str3
+"VF=V0+AT"→Str4
+End
+If F=999 and A=999
+Then
+3→C
+"VF"→Str1
+"S=(1/2)(V0+VF)T"→Str2
+"A"→Str3
+"VF=V0+AT"→Str4
+End
+If V=999 and S=999
+Then
+4→C
+"V0"→Str1
+"VF=V0+AT"→Str2
+"S"→Str3
+"S=VFT-(1/2)AT²"→Str4
+End
+If V=999 and D=999
+Then
+5→C
+"T"→Str1
+"S=VFT-(1/2)AT²"→Str2
+"V0"→Str3
+"VF=V0+AT"→Str4
+End
+If V=999 and A=999
+Then
+6→C
+"V0"→Str1
+"S=(1/2)(V0+VF)T"→Str2
+"A"→Str3
+"VF=V0+AT"→Str4
+End
+If S=999 and D=999
+Then
+7→C
+"S"→Str1
+"VF²=V0²+2AS"→Str2
+"T"→Str3
+"VF=V0+AT"→Str4
+End
+If S=999 and A=999
+Then
+8→C
+"S"→Str1
+"S=(1/2)(V0+VF)T"→Str2
+"A"→Str3
+"VF=V0+AT"→Str4
+End
+If D=999 and A=999
+Then
+9→C
+"T"→Str1
+"S=(1/2)(V0+VF)T"→Str2
+"A"→Str3
+"VF²=V0²+2AS"→Str4
+End
+If V=999 and F=999
+Then
+10→C
+"V0"→Str1
+"S=V0T+(1/2)AT²"→Str2
+"VF"→Str3
+"S=VFT-(1/2)AT²"→Str4
+End
+ClrHome
+Disp "GIVEN"
+If V≠999
+Then
+V→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "V0 = "+Str9+" M/S"
+End
+If F≠999
+Then
+F→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "VF = "+Str9+" M/S"
+End
+If S≠999
+Then
+S→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "S = "+Str9+" M"
+End
+If D≠999
+Then
+D→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "T = "+Str9+" S"
+End
+If A≠999
+Then
+A→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+"A = "+Str9+" M/S²"→Str0
+If Q=2
+Str0+" (AUTO)"→Str0
+Disp Str0
+End
+Disp "UNKNOWNS ARE "+Str1+" AND "+Str3
+Disp "1) "+Str1+" FROM "+Str2
+Disp "   (IT HAS NO "+Str3+")"
+Disp "2) "+Str3+" FROM "+Str4
+If C=2 or C=3 or C=5 or C=6
+Disp "   (NOW "+Str1+" IS KNOWN)"
+If C≠2 and C≠3 and C≠5 and C≠6
+Disp "   (IT HAS NO "+Str1+")"
+Pause 
+If C=7 and A=0 and F=V
+Goto BS
+If C=7 and A=0
+Goto BU
+If C=7 and F=V
+Goto BV
+If C=7 and (F-V)A<0
+Goto BW
+If C=9 and abs(V+F)≤1ᴇ⁻12(abs(V)+abs(F)) and S=0
+Goto BZ
+If C=9 and abs(V+F)≤1ᴇ⁻12(abs(V)+abs(F))
+Goto B0
+If C=9 and S=0
+Goto B1
+If C=9 and S(V+F)<0
+Goto B2
+If C=2 and A=0 and V=0
+Goto B3
+If C=5 and A=0 and F=0
+Goto B3
+1→E
+If C=2 or C=5
+Goto BJ
+ClrHome
+Disp "STEP 1 - FIND "+Str1
+Disp "USE "+Str2
+Disp "(IT HAS NO "+Str3+")"
+If C=1
+Goto A4
+If C=3
+Goto A5
+If C=4
+Goto A6
+If C=6
+Goto A7
+If C=7
+Goto A8
+If C=8
+Goto A9
+If C=9
+Goto BA
+Goto BB
+Lbl A4
+V+AD→F
+V→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+"VF=("+Str9+")+("→Str0
+A→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Str0+Str9+")("→Str0
+D→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Str0+Str9+")"→Str0
+⁻2ᴇ⁻99→U
+prgmPHYSICS
+F→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "VF = "+Str9+" M/S"
+Pause 
+Goto BC
+Lbl A5
+Disp "SO VF=2S/T-V0"
+2S/D-V→F
+S→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+"VF=2("+Str9+")/("→Str0
+D→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Str0+Str9+")-("→Str0
+V→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Str0+Str9+")"→Str0
+⁻2ᴇ⁻99→U
+prgmPHYSICS
+F→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "VF = "+Str9+" M/S"
+Pause 
+Goto BC
+Lbl A6
+Disp "SO V0=VF-AT"
+F-AD→V
+F→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+"V0=("+Str9+")-("→Str0
+A→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Str0+Str9+")("→Str0
+D→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Str0+Str9+")"→Str0
+⁻2ᴇ⁻99→U
+prgmPHYSICS
+V→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "V0 = "+Str9+" M/S"
+Pause 
+Goto BC
+Lbl A7
+Disp "SO V0=2S/T-VF"
+2S/D-F→V
+S→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+"V0=2("+Str9+")/("→Str0
+D→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Str0+Str9+")-("→Str0
+F→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Str0+Str9+")"→Str0
+⁻2ᴇ⁻99→U
+prgmPHYSICS
+V→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "V0 = "+Str9+" M/S"
+Pause 
+Goto BC
+Lbl A8
+Disp "SO S=(VF²-V0²)/(2A)"
+(F²-V²)/(2A)→S
+F→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+"S=(("+Str9+")²-("→Str0
+V→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Str0+Str9+")²)"→Str0
+⁻2ᴇ⁻99→U
+prgmPHYSICS
+A→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+"  /(2("+Str9+"))"→Str0
+⁻2ᴇ⁻99→U
+prgmPHYSICS
+S→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "S = "+Str9+" M"
+Pause 
+Goto BC
+Lbl A9
+(V+F)D/2→S
+V→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+"S=(1/2)(("+Str9+")+("→Str0
+F→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Str0+Str9+"))"→Str0
+⁻2ᴇ⁻99→U
+prgmPHYSICS
+D→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+"  *("+Str9+")"→Str0
+⁻2ᴇ⁻99→U
+prgmPHYSICS
+S→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "S = "+Str9+" M"
+Pause 
+Goto BC
+Lbl BA
+Disp "SO T=2S/(V0+VF)"
+2S/(V+F)→D
+S→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+"T=2("+Str9+")"→Str0
+⁻2ᴇ⁻99→U
+prgmPHYSICS
+V→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+"  /(("+Str9+")+("→Str0
+F→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Str0+Str9+"))"→Str0
+⁻2ᴇ⁻99→U
+prgmPHYSICS
+D→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "T = "+Str9+" S"
+Pause 
+Goto BC
+Lbl BB
+Disp "SO V0=(S-(1/2)AT²)/T"
+(S-AD²/2)/D→V
+S→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+"V0=(("+Str9+")"→Str0
+⁻2ᴇ⁻99→U
+prgmPHYSICS
+A→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+"  -(1/2)("+Str9+")("→Str0
+D→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Str0+Str9+")²)"→Str0
+⁻2ᴇ⁻99→U
+prgmPHYSICS
+"  /("+Str9+")"→Str0
+⁻2ᴇ⁻99→U
+prgmPHYSICS
+V→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "V0 = "+Str9+" M/S"
+Pause 
+Lbl BC
+ClrHome
+Disp "STEP 2 - FIND "+Str3
+Disp "USE "+Str4
+If C=3 or C=6
+Disp "(NOW "+Str1+" IS KNOWN)"
+If C≠3 and C≠6
+Disp "(IT HAS NO "+Str1+")"
+If C=1
+Goto BE
+If C=4
+Goto BF
+If C=7
+Goto BG
+If C=9
+Goto BH
+If C=10
+Goto BI
+Lbl BD
+Disp "SO A=(VF-V0)/T"
+(F-V)/D→A
+F→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+"A=(("+Str9+")-("→Str0
+V→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Str0+Str9+"))"→Str0
+⁻2ᴇ⁻99→U
+prgmPHYSICS
+D→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+"  /("+Str9+")"→Str0
+⁻2ᴇ⁻99→U
+prgmPHYSICS
+A→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "A = "+Str9+" M/S²"
+Pause 
+Goto BK
+Lbl BE
+VD+AD²/2→S
+V→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+"S=("+Str9+")("→Str0
+D→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Str0+Str9+")"→Str0
+⁻2ᴇ⁻99→U
+prgmPHYSICS
+A→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+"  +(1/2)("+Str9+")("→Str0
+D→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Str0+Str9+")²"→Str0
+⁻2ᴇ⁻99→U
+prgmPHYSICS
+S→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "S = "+Str9+" M"
+Pause 
+Goto BK
+Lbl BF
+FD-AD²/2→S
+F→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+"S=("+Str9+")("→Str0
+D→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Str0+Str9+")"→Str0
+⁻2ᴇ⁻99→U
+prgmPHYSICS
+A→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+"  -(1/2)("+Str9+")("→Str0
+D→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Str0+Str9+")²"→Str0
+⁻2ᴇ⁻99→U
+prgmPHYSICS
+S→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "S = "+Str9+" M"
+Pause 
+Goto BK
+Lbl BG
+Disp "SO T=(VF-V0)/A"
+(F-V)/A→D
+F→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+"T=(("+Str9+")-("→Str0
+V→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Str0+Str9+"))"→Str0
+⁻2ᴇ⁻99→U
+prgmPHYSICS
+A→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+"  /("+Str9+")"→Str0
+⁻2ᴇ⁻99→U
+prgmPHYSICS
+D→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "T = "+Str9+" S"
+Pause 
+Goto BK
+Lbl BH
+Disp "SO A=(VF²-V0²)/(2S)"
+(F²-V²)/(2S)→A
+F→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+"A=(("+Str9+")²-("→Str0
+V→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Str0+Str9+")²)"→Str0
+⁻2ᴇ⁻99→U
+prgmPHYSICS
+S→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+"  /(2("+Str9+"))"→Str0
+⁻2ᴇ⁻99→U
+prgmPHYSICS
+A→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "A = "+Str9+" M/S²"
+Pause 
+Goto BK
+Lbl BI
+Disp "SO VF=(S+(1/2)AT²)/T"
+(S+AD²/2)/D→F
+S→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+"VF=(("+Str9+")"→Str0
+⁻2ᴇ⁻99→U
+prgmPHYSICS
+A→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+"  +(1/2)("+Str9+")("→Str0
+D→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Str0+Str9+")²)"→Str0
+⁻2ᴇ⁻99→U
+prgmPHYSICS
+"  /("+Str9+")"→Str0
+⁻2ᴇ⁻99→U
+prgmPHYSICS
+F→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "VF = "+Str9+" M/S"
+Pause 
+Goto BK
+Lbl BJ
+ClrHome
+Disp "STEP 1 - FIND T"
+Disp "USE "+Str2
+Disp "(IT HAS NO "+Str3+")"
+S→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+"("+Str9+")=("→Str0
+If C=2
+Then
+V→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Str0+Str9+")T"→Str0
+⁻2ᴇ⁻99→U
+prgmPHYSICS
+"  +(1/2)("→Str0
+Else
+F→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Str0+Str9+")T"→Str0
+⁻2ᴇ⁻99→U
+prgmPHYSICS
+"  -(1/2)("→Str0
+End
+A→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Str0+Str9+")T²"→Str0
+⁻2ᴇ⁻99→U
+prgmPHYSICS
+Disp "T IS SQUARED, SO WRITE"
+If C=2
+Disp "(1/2)AT²+V0T-S=0 AND USE"
+If C=5
+Disp "-(1/2)AT²+VFT-S=0 AND USE"
+Disp "THE QUADRATIC FORMULA WITH"
+If C=2
+Disp "A,B,C AS (1/2)A, V0, -S"
+If C=5
+Disp "A,B,C AS -(1/2)A, VF, -S"
+Pause 
+A/2→L
+V→M
+If C=5
+Then
+⁻A/2→L
+F→M
+End
+⁻S→N
+⁻3ᴇ⁻99→U
+prgmPHYSICS
+If J=2 and abs(H)<abs(I)
+N/(LI)→H
+If J=2 and abs(I)<abs(H)
+N/(LH)→I
+0→E
+If J=1 and H>0
+Then
+1→E
+H→D
+Disp "T>0, SO IT IS PHYSICAL."
+End
+If J=2 and H≤0 and I>0
+Then
+1→E
+I→D
+If S≠0
+Disp "T1<0 IS BEFORE THE START,"
+If S=0
+Disp "T1 IS 0 (THE START),"
+I→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "SO T = "+Str9+" S"
+End
+If J=2 and H>0 and G=0
+Then
+1→E
+H→D
+Disp "ONE ROOT (B²-4AC IS 0)."
+If C=2
+Disp "IT JUST REACHES S, VF IS 0"
+If C=5
+Disp "IT STARTED AT REST."
+End
+If J=2 and H>0 and G≠0
+Then
+2→E
+H→D
+I→P
+Disp "T1 AND T2 ARE BOTH > 0,"
+If C=2
+Then
+Disp "SO BOTH WORK. IT PASSES S"
+Disp "TWICE (EX. UP, THEN DOWN)."
+Else
+Disp "SO BOTH WORK. THERE ARE"
+Disp "2 POSSIBLE STARTS (V0)."
+End
+End
+If E=0
+Disp "NO PHYSICAL T. SEE NEXT."
+Pause 
+If J=0
+Goto BP
+If E=0
+Goto BQ
+ClrHome
+Disp "STEP 2 - FIND "+Str3
+Disp "USE VF=V0+AT"
+Disp "(NOW T IS KNOWN)"
+If C=5
+Disp "SO V0=VF-AT"
+For(L,1,E)
+D→N
+If L=2
+P→N
+If C=2
+Then
+V+AN→M
+V→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+"VF=("+Str9+")+("→Str0
+Else
+F-AN→M
+F→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+"V0=("+Str9+")-("→Str0
+End
+A→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Str0+Str9+")("→Str0
+N→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Str0+Str9+")"→Str0
+⁻2ᴇ⁻99→U
+prgmPHYSICS
+M→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Str3+" = "→Str0
+If E=2
+Str3+"(T"+sub("12",L,1)+") = "→Str0
+Disp Str0+Str9+" M/S"
+If L=2
+M→B
+If L=1 and C=2
+M→F
+If L=1 and C=5
+M→V
+End
+Pause 
+Lbl BK
+ClrHome
+If E=2
+Goto BL
+If Q=1
+Disp "SUMMARY"
+If Q=2
+Disp "SUMMARY (FREE FALL)"
+V→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+"V0 = "+Str9+" M/S"→Str0
+If Q=2 and V≥1ᴇ⁻9
+Str0+" (UP)"→Str0
+If Q=2 and V≤⁻1ᴇ⁻9
+Str0+" (DOWN)"→Str0
+Disp Str0
+F→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+"VF = "+Str9+" M/S"→Str0
+If Q=2 and F≥1ᴇ⁻9
+Str0+" (UP)"→Str0
+If Q=2 and F≤⁻1ᴇ⁻9
+Str0+" (DOWN)"→Str0
+Disp Str0
+S→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+"S = "+Str9+" M"→Str0
+If Q=2 and S≥1ᴇ⁻9
+Str0+" (UP)"→Str0
+If Q=2 and S≤⁻1ᴇ⁻9
+Str0+" (DOWN)"→Str0
+Disp Str0
+D→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "T = "+Str9+" S"
+A→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "A = "+Str9+" M/S²"
+Disp Str1+" FROM "+Str2
+Disp Str3+" FROM "+Str4
+Pause 
+Return
+Lbl BL
+Disp "SUMMARY (2 ANSWERS)"
+If C=2
+Then
+V→M
+V→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+"V0 = "+Str9+" M/S"→Str0
+Else
+F→M
+F→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+"VF = "+Str9+" M/S"→Str0
+End
+If Q=2 and M≥1ᴇ⁻9
+Str0+" (UP)"→Str0
+If Q=2 and M≤⁻1ᴇ⁻9
+Str0+" (DOWN)"→Str0
+Disp Str0
+S→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+"S = "+Str9+" M"→Str0
+If Q=2 and S≥1ᴇ⁻9
+Str0+" (UP)"→Str0
+If Q=2 and S≤⁻1ᴇ⁻9
+Str0+" (DOWN)"→Str0
+Disp Str0
+A→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "A = "+Str9+" M/S²"
+For(N,1,2)
+D→M
+If N=2
+P→M
+M→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "T"+sub("12",N,1)+" = "+Str9+" S"
+F→M
+If C=5
+V→M
+If N=2
+B→M
+M→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Str3+"(T"+sub("12",N,1)+") = "+Str9+" M/S"→Str0
+If Q=2 and M≥1ᴇ⁻9 and length(Str0)≤21
+Str0+" (UP)"→Str0
+If Q=2 and M≤⁻1ᴇ⁻9 and length(Str0)≤19
+Str0+" (DOWN)"→Str0
+Disp Str0
+End
+Disp Str1+" FROM "+Str2
+Disp Str3+" FROM "+Str4
+Pause 
+Return
+Lbl BM
+ClrHome
+Disp "WRONG NUMBER OF UNKNOWNS"
+Disp "YOU ENTERED 999 (UNKNOWN)"
+"FOR "+sub("012345",J+1,1)+" OF THE "→Str0
+If Q=1
+Disp Str0+"5 VALUES."
+If Q=2
+Disp Str0+"4 VALUES."
+If Q=1
+Then
+Disp "ENTER EXACTLY 3 KNOWNS"
+Else
+Disp "A IS -9.8 (AUTO), SO ENTER"
+Disp "EXACTLY 2 OF V0,VF,S,T"
+End
+Disp "AND 999 FOR THE OTHER 2."
+Pause 
+Return
+Lbl BN
+ClrHome
+Disp "NUMBER OUT OF RANGE"
+Disp "EACH KNOWN MUST BE 0, OR"
+Disp "FROM 1E-9 TO 1E9 IN SIZE"
+Disp "(+ OR -)."
+Disp "999 MEANS UNKNOWN."
+Pause 
+Return
+Lbl BO
+ClrHome
+Disp "CHECK T"
+Disp "T MUST BE MORE THAN 0."
+Disp "T IS THE TIME FROM THE"
+Disp "START TO THE END, SO IT"
+Disp "CANNOT BE 0 OR NEGATIVE."
+Pause 
+Return
+Lbl BP
+ClrHome
+Disp "IMPOSSIBLE"
+Disp "B²-4AC<0, SO THERE IS NO"
+Disp "REAL T (A NEGATIVE NUMBER"
+Disp "UNDER THE √)."
+If C=2
+Then
+Disp "IT NEVER GETS TO THAT S."
+Disp "(EX. A BALL THROWN UP AT"
+Disp "10 M/S NEVER RISES 10 M.)"
+Else
+Disp "NO START VELOCITY CAN END"
+Disp "AT THIS VF AFTER THIS S."
+Disp "(EX. A BALL CANNOT BE AT"
+Disp "ITS TOP BELOW ITS START.)"
+End
+Disp "CHECK S AND THE SIGNS."
+Disp "(DOWN/BACKWARD IS -.)"
+Pause 
+Return
+Lbl BQ
+ClrHome
+Disp "NO PHYSICAL SOLUTION"
+If S=0
+Then
+Disp "S IS 0 ONLY AT THE START"
+Disp "(T IS 0). IT NEVER COMES"
+Disp "BACK TO ITS START."
+Else
+Disp "NO ROOT IS AFTER THE START"
+Disp "(T>0). IT WAS AT S ONLY"
+Disp "BEFORE THE START, SO IT"
+Disp "NEVER GETS THERE."
+End
+Disp "CHECK S AND THE SIGNS."
+Pause 
+Return
+Lbl BS
+ClrHome
+Disp "NOT ENOUGH INFORMATION"
+Disp "A IS 0 AND VF IS THE SAME"
+Disp "AS V0 (STEADY VELOCITY)."
+Disp "S IS V0 TIMES T, BUT BOTH"
+Disp "ARE UNKNOWN, SO THEY"
+Disp "CANNOT BE FOUND."
+Disp "USE S OR T AS A KNOWN"
+Disp "INSTEAD OF VF."
+Pause 
+Return
+Lbl BU
+ClrHome
+Disp "IMPOSSIBLE"
+Disp "A IS 0, SO THE VELOCITY"
+Disp "CANNOT CHANGE, BUT VF IS"
+Disp "NOT THE SAME AS V0."
+Disp "CHECK A, V0 AND VF."
+Pause 
+Return
+Lbl BV
+ClrHome
+Disp "NO MOTION TO SOLVE"
+Disp "VF IS THE SAME AS V0 AND"
+Disp "A IS NOT 0, SO T IS 0 AND"
+Disp "S IS 0 (STILL AT THE"
+Disp "START). CHECK V0 AND VF."
+Pause 
+Return
+Lbl BW
+ClrHome
+Disp "NO PHYSICAL SOLUTION"
+Disp "A HAS THE WRONG SIGN."
+Disp "T IS (VF-V0)/A, WHICH IS"
+Disp "NEGATIVE HERE. VF-V0 AND A"
+Disp "MUST HAVE THE SAME SIGN."
+Disp "(UP/FORWARD IS +.)"
+Disp "CHECK THE SIGNS."
+Pause 
+Return
+Lbl BZ
+ClrHome
+Disp "NOT ENOUGH INFORMATION"
+Disp "V0+VF IS 0 AND S IS 0."
+Disp "MANY T AND A FIT THIS"
+Disp "(EX. THROWN UP, CAUGHT AT"
+Disp "THE SAME HEIGHT)."
+Disp "USE T OR A AS A KNOWN."
+Pause 
+Return
+Lbl B0
+ClrHome
+Disp "IMPOSSIBLE"
+Disp "S IS (1/2)(V0+VF)T, AND"
+Disp "V0+VF IS 0, SO S IS 0 FOR"
+Disp "ANY T. BUT S IS NOT 0."
+Disp "CHECK V0, VF AND S."
+Pause 
+Return
+Lbl B1
+ClrHome
+Disp "NO MOTION TO SOLVE"
+Disp "S IS 0 BUT V0+VF IS NOT,"
+Disp "SO T IS 2S/(V0+VF), WHICH"
+Disp "IS 0 (THE START). THEN A"
+Disp "CANNOT BE FOUND."
+Disp "CHECK V0, VF AND S."
+Pause 
+Return
+Lbl B2
+ClrHome
+Disp "NO PHYSICAL SOLUTION"
+Disp "T IS 2S/(V0+VF), WHICH IS"
+Disp "NEGATIVE HERE. S AND V0+VF"
+Disp "MUST HAVE THE SAME SIGN."
+Disp "(UP/FORWARD IS +.)"
+Disp "CHECK THE SIGNS."
+Pause 
+Return
+Lbl B3
+ClrHome
+If S=0
+Disp "NOT ENOUGH INFORMATION"
+If S≠0
+Disp "IMPOSSIBLE"
+If C=2
+Disp "A IS 0 AND V0 IS 0, SO"
+If C=5
+Disp "A IS 0 AND VF IS 0, SO"
+Disp "IT NEVER MOVES."
+If S=0
+Then
+Disp "S IS 0 FOR ANY T, SO T"
+Disp "CANNOT BE FOUND."
+Else
+Disp "IT CAN NEVER GET TO S."
+End
+Disp "CHECK YOUR VALUES."
+Pause 
+Return
+Return
+Lbl AE
+0→U
+Degree
+Lbl B4
+Menu("FREE FALL (A=-9.8)","DROPPED (HEIGHT H)",B5,"THROWN UP (SAME LEVEL)",B7,"THROWN DOWN (HEIGHT H)",CA,"THROWN UP (HEIGHT H)",CB,"VOVFSTA (A=-9.8)",CG,"BACK",CQ)
+Lbl B5
+ClrHome
+Disp "DROPPED FROM HEIGHT H"
+Disp "STARTS AT REST (V0 IS 0)."
+Disp "UP IS +, SO A IS -9.8 M/S²"
+Disp "ENTER H, THE HEIGHT ABOVE"
+Disp "THE GROUND, AS A POSITIVE"
+Disp "NUMBER."
+Input "HEIGHT H (M)=",Q
+If Q<0
+Goto CH
+If Q>1ᴇ9
+Goto CP
+If Q=0
+Goto CI
+Lbl B6
+1→P
+0→V
+⁻9.8→A
+⁻Q→S
+√(2S/A)→D
+ClrHome
+Disp "STEP 1  TIME TO GROUND"
+Disp "IT ENDS H BELOW THE START,"
+S→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Str9→Str1
+Disp "S = "+Str1+" M"
+Disp "VF NOT KNOWN, SO USE"
+Disp "S=V0T+(1/2)AT² (V0 IS 0)"
+Disp Str1+"=0+(1/2)(-9.8)T²"
+Disp "T=√(2S/A)"
+"T=√(2("+Str1+")/(-9.8))"→Str0
+⁻2ᴇ⁻99→U
+prgmPHYSICS
+D→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "T = "+Str9+" S"
+Pause 
+Goto CD
+Lbl B7
+ClrHome
+Disp "THROWN UP, LANDS BACK AT"
+Disp "THE SAME LEVEL IT LEFT."
+Disp "UP IS +, SO A IS -9.8 M/S²"
+Disp "ENTER V0 (THE SPEED UP)"
+Disp "AS A POSITIVE NUMBER."
+Input "V0 UP (M/S)=",V
+Lbl B8
+If V<0
+Goto CK
+If V>1ᴇ9
+Goto CP
+If V=0
+Goto CL
+2→P
+Lbl B9
+⁻9.8→A
+⁻V/A→B
+⁻V²/(2A)→C
+ClrHome
+Disp "STEP 1  TIME TO THE TOP"
+Disp "AT THE TOP VF IS 0."
+Disp "USE VF=V0+AT (NO S)"
+V→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Str9→Str1
+Disp "0="+Str1+"+(-9.8)T"
+Disp "T=V0/9.8"
+Disp "T="+Str1+"/9.8"
+B→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "T TO TOP = "+Str9+" S"
+Pause 
+ClrHome
+Disp "STEP 2  MAX HEIGHT"
+Disp "AT THE TOP VF IS 0."
+Disp "USE VF²=V0²+2AS (NO T)"
+Disp "0=("+Str1+")²+2(-9.8)S"
+Disp "S=V0²/(2(9.8))"
+Disp "S=("+Str1+")²/(2(9.8))"
+C→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+If P=2
+Then
+Disp "MAX HEIGHT = "+Str9+" M"
+Disp "(ABOVE THE LAUNCH POINT)"
+Else
+Q+C→E
+Disp "ABOVE LAUNCH = "+Str9+" M"
+Disp "ABOVE GROUND IS H+S"
+E→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "ABOVE GROUND = "+Str9+" M"
+End
+Pause 
+If P=4
+Goto CC
+2B→D
+⁻V→F
+ClrHome
+Disp "STEP 3  TOTAL TIME"
+Disp "IT LANDS AT LAUNCH HEIGHT,"
+Disp "SO S IS 0. USE"
+Disp "S=V0T+(1/2)AT²"
+"0=("+Str1+")T+(1/2)(-9.8)T²"→Str0
+⁻2ᴇ⁻99→U
+prgmPHYSICS
+Disp "T IS 0 (THE LAUNCH) OR"
+Disp "T=2V0/9.8 (2X T TO TOP)"
+Disp "T=2("+Str1+")/9.8"
+D→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "T TOTAL = "+Str9+" S"
+Pause 
+ClrHome
+Disp "STEP 4  IMPACT VELOCITY"
+Disp "USE VF=V0+AT"
+"VF="+Str1+"+(-9.8)("→Str0
+D→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Str0+Str9+")"→Str0
+⁻2ᴇ⁻99→U
+prgmPHYSICS
+F→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "VF = "+Str9+" M/S (DOWN)"
+Disp "SAME SPEED AS THE THROW,"
+Disp "NOW DOWNWARD (VF IS -V0)."
+Pause 
+ClrHome
+Disp "SUMMARY (UP, SAME LEVEL)"
+Disp "V0 = "+Str1+" M/S (UP)"
+B→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "T TO TOP = "+Str9+" S"
+C→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "MAX HEIGHT = "+Str9+" M"
+Disp "(ABOVE THE LAUNCH POINT)"
+D→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "T TOTAL = "+Str9+" S"
+F→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "VF = "+Str9+" M/S (DOWN)"
+Pause 
+Goto B4
+Lbl CA
+ClrHome
+Disp "THROWN DOWN FROM HEIGHT H"
+Disp "UP IS +, SO A IS -9.8 M/S²"
+Disp "ENTER H (ABOVE GROUND) AND"
+Disp "THE THROW SPEED, BOTH AS"
+Disp "POSITIVE NUMBERS. V0 WILL"
+Disp "BE MADE NEGATIVE (DOWN)."
+Input "HEIGHT H (M)=",Q
+Input "SPEED DOWN (M/S)=",V
+If Q<0
+Goto CH
+If Q>1ᴇ9
+Goto CP
+If V<0
+Goto CJ
+If V>1ᴇ9
+Goto CP
+If Q=0
+Goto CI
+If V=0
+Goto CM
+3→P
+⁻V→V
+⁻9.8→A
+ClrHome
+Disp "STEP 1  SIGN OF V0"
+Disp "UP IS +, SO A THROW DOWN"
+Disp "HAS A NEGATIVE V0-"
+V→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "V0 = "+Str9+" M/S"
+Disp "A = -9.8 M/S² (GRAVITY)"
+Disp "NO TIME TO TOP- IT IS"
+Disp "ALREADY MOVING DOWN, SO"
+Disp "ITS HIGHEST POINT IS THE"
+Disp "START, H ABOVE THE GROUND."
+Pause 
+Goto CC
+Lbl CB
+ClrHome
+Disp "THROWN UP FROM HEIGHT H"
+Disp "(ROOF/CLIFF), LANDS ON THE"
+Disp "GROUND BELOW. UP IS +,"
+Disp "SO A IS -9.8 M/S²."
+Disp "ENTER H AND V0 AS"
+Disp "POSITIVE NUMBERS."
+Input "HEIGHT H (M)=",Q
+Input "V0 UP (M/S)=",V
+If Q<0
+Goto CH
+If Q>1ᴇ9
+Goto CP
+If V<0
+Goto CK
+If V>1ᴇ9
+Goto CP
+If Q=0
+Goto CN
+If V=0
+Goto CM
+4→P
+Goto B9
+Lbl CC
+⁻9.8→A
+⁻Q→S
+ClrHome
+"STEP 2"→Str1
+If P=4
+"STEP 3"→Str1
+Disp Str1+"  TIME TO GROUND"
+Disp "IT ENDS H BELOW THE START,"
+S→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Str9→Str1
+Disp "S = "+Str1+" M"
+Disp "VF NOT KNOWN, SO USE"
+Disp "S=V0T+(1/2)AT²"
+V→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Str1+"=("+Str9+")T-4.9T²"→Str0
+⁻2ᴇ⁻99→U
+prgmPHYSICS
+Disp "((1/2)(-9.8) IS -4.9)"
+Disp "REARRANGE TO 4.9T²-V0T+S=0"
+Pause 
+4.9→L
+⁻V→M
+S→N
+0→I
+⁻3ᴇ⁻99→U
+prgmPHYSICS
+If J<2 or I≤0
+Goto CO
+I→D
+Disp "T1<0 IS BEFORE THE THROW,"
+Disp "SO USE T2-"
+D→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "T TOTAL = "+Str9+" S"
+Pause 
+If P=3
+Goto CD
+√(2E/9.8)→G
+ClrHome
+Disp "STEP 4  TOP TO GROUND"
+Disp "AT THE TOP V IS 0, THEN IT"
+Disp "FALLS THE WHOLE MAX HEIGHT"
+E→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "ABOVE GROUND = "+Str9+" M"
+Disp "S=(1/2)AT², SO T=√(2S/A)"
+"T=√(2(-"+Str9+")/(-9.8))"→Str0
+⁻2ᴇ⁻99→U
+prgmPHYSICS
+G→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "T TOP TO GND = "+Str9+" S"
+Disp "CHECK- T TO TOP PLUS THIS"
+Disp "GIVES T TOTAL."
+Pause 
+Lbl CD
+V²+2AS→N
+⁻√(N)→F
+ClrHome
+"STEP 2"→Str1
+If P=3
+"STEP 3"→Str1
+If P=4
+"STEP 5"→Str1
+Disp Str1+"  IMPACT VELOCITY"
+Disp "USE VF²=V0²+2AS (NO T)"
+V→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "VF²=("+Str9+")²"
+S→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "   +2(-9.8)("+Str9+")"
+N→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Str9→Str1
+Disp "VF² IS "+Str1
+Disp "IT MOVES DOWN, SO VF IS"
+Disp "THE NEGATIVE ROOT-"
+Disp "VF=-√("+Str1+")"
+F→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "VF = "+Str9+" M/S (DOWN)"
+Pause 
+If P=1
+Goto CE
+If P=3
+Goto CF
+ClrHome
+Disp "SUMMARY (UP FROM HEIGHT)"
+V→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "V0 = "+Str9+" M/S (UP)"
+B→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "T TO TOP = "+Str9+" S"
+Disp "MAX HEIGHT REACHED-"
+C→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "ABOVE LAUNCH = "+Str9+" M"
+E→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "ABOVE GROUND = "+Str9+" M"
+G→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "T TOP TO GND = "+Str9+" S"
+D→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "T TOTAL = "+Str9+" S"
+F→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "VF = "+Str9+" M/S (DOWN)"
+Pause 
+Goto B4
+Lbl CE
+ClrHome
+Disp "SUMMARY (DROPPED)"
+Disp "V0 = 0 M/S"
+Disp "T TO TOP = 0 S"
+Disp "(IT STARTS AT THE TOP)"
+Q→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "MAX HEIGHT = "+Str9+" M"
+D→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "T TOTAL = "+Str9+" S"
+F→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "VF = "+Str9+" M/S (DOWN)"
+Pause 
+Goto B4
+Lbl CF
+ClrHome
+Disp "SUMMARY (THROWN DOWN)"
+V→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "V0 = "+Str9+" M/S (DOWN)"
+Disp "T TO TOP- NONE (ALREADY"
+Disp "MOVING DOWN)"
+Q→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "MAX HEIGHT = "+Str9+" M"
+Disp "(THE START IS THE TOP)"
+D→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "T TOTAL = "+Str9+" S"
+F→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "VF = "+Str9+" M/S (DOWN)"
+Pause 
+Goto B4
+Lbl CG
+ClrHome
+2→K
+⁻4ᴇ⁻99→U
+prgmPHYSICS
+Goto B4
+Lbl CH
+ClrHome
+Disp "H CANNOT BE NEGATIVE."
+Disp "ENTER H AS A POSITIVE"
+Disp "NUMBER- THE HEIGHT OF THE"
+Disp "START ABOVE THE GROUND."
+Disp "THE PROGRAM MAKES S"
+Disp "NEGATIVE FOR YOU."
+Pause 
+Goto B4
+Lbl CI
+ClrHome
+Disp "H IS 0, SO IT STARTS ON"
+Disp "THE GROUND AND HAS NO"
+Disp "ROOM TO FALL. ENTER A"
+Disp "HEIGHT ABOVE 0."
+Pause 
+Goto B4
+Lbl CJ
+ClrHome
+Disp "ENTER THE SPEED AS A"
+Disp "POSITIVE NUMBER. THE"
+Disp "PROGRAM MAKES V0 NEGATIVE"
+Disp "FOR YOU (DOWN IS -)."
+Pause 
+Goto B4
+Lbl CK
+ClrHome
+Disp "ENTER V0 AS A POSITIVE"
+Disp "NUMBER (THE SPEED UP)."
+Disp "FOR A THROW DOWNWARD USE"
+Disp "THROWN DOWN (OPTION 3)."
+Pause 
+Goto B4
+Lbl CL
+ClrHome
+Disp "V0 IS 0, SO IT NEVER"
+Disp "LEAVES THE HAND- NOTHING"
+Disp "TO SOLVE. TO DROP FROM A"
+Disp "HEIGHT USE OPTION 1."
+Pause 
+Goto B4
+Lbl CM
+ClrHome
+Disp "THE SPEED IS 0, SO IT IS"
+Disp "JUST DROPPED FROM REST."
+Disp "SOLVING IT AS DROPPED."
+Pause 
+Goto B6
+Lbl CN
+ClrHome
+Disp "H IS 0, SO IT LANDS BACK"
+Disp "AT LAUNCH LEVEL. SOLVING"
+Disp "IT AS THROWN UP (SAME"
+Disp "LEVEL)."
+Pause 
+Goto B8
+Lbl CO
+Disp "NO POSITIVE TIME FOUND."
+Disp "CHECK H AND THE SPEED."
+Pause 
+Goto B4
+Lbl CP
+ClrHome
+Disp "THAT NUMBER IS TOO LARGE."
+Disp "KEEP H AND SPEEDS AT OR"
+Disp "BELOW 1E9 (1 BILLION)."
+Pause 
+Goto B4
+Lbl CQ
+ClrHome
+Return
+Return
+Lbl AF
+0→U
+Degree
+If K=2
+Goto C5
+If K=3
+Goto DE
+Lbl CS
+Menu("HORIZONTAL LAUNCH","GIVEN H AND SPEED V",CU,"GIVEN H AND RANGE",CV,"BACK",D0)
+Lbl CU
+ClrHome
+1→P
+Disp "HORIZONTAL LAUNCH"
+Disp "LAUNCHED LEVEL (ANGLE 0)"
+Disp "FROM HEIGHT H ABOVE THE"
+Disp "LANDING POINT. UP IS +."
+Disp "ENTER H AS A POSITIVE"
+Disp "NUMBER AND THE LAUNCH"
+Disp "SPEED V."
+Input "HEIGHT H (M)=",Q
+Input "SPEED V (M/S)=",V
+Goto CW
+Lbl CV
+ClrHome
+2→P
+Disp "HORIZONTAL LAUNCH"
+Disp "LAUNCHED LEVEL (ANGLE 0)"
+Disp "FROM HEIGHT H ABOVE THE"
+Disp "LANDING POINT. UP IS +."
+Disp "ENTER H AS A POSITIVE"
+Disp "NUMBER AND THE RANGE (HOW"
+Disp "FAR IT WENT SIDEWAYS)."
+Input "HEIGHT H (M)=",Q
+Input "RANGE (M)=",E
+Lbl CW
+If Q≤0
+Goto DN
+If Q<1ᴇ⁻6 or Q>1ᴇ6
+Goto DW
+If P=2
+Goto CZ
+If V<0
+Goto DO
+If V>1ᴇ6 or (V>0 and V<1ᴇ⁻6)
+Goto DW
+Goto C0
+Lbl CZ
+If E<0
+Goto DP
+If E>1ᴇ6 or (E>0 and E<1ᴇ⁻6)
+Goto DW
+Lbl C0
+⁻Q→S
+√(2Q/9.8)→D
+ClrHome
+Disp "STEP 1  TIME TO FALL"
+Disp "VERTICAL- V0Y IS 0 AND A"
+Disp "IS -9.8 M/S². IT ENDS H"
+Disp "BELOW THE START, SO"
+S→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Str9→Str1
+Disp "S = "+Str1+" M"
+Disp "USE S=V0YT+(1/2)AT²"
+Disp Str1+"=0+(1/2)(-9.8)T²"
+Disp "T=√(2H/9.8)"
+Q→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "T=√(2("+Str9+")/9.8)"
+D→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Str9→Str2
+Disp "T FLIGHT = "+Str2+" S"
+Pause 
+If P=2
+Goto C1
+VD→E
+V→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Str9→Str3
+ClrHome
+Disp "STEP 2  RANGE"
+Disp "HORIZONTAL- A IS 0, SO VX"
+Disp "STAYS V THE WHOLE TIME."
+Disp "X AND Y SHARE THE SAME T."
+Disp "RANGE=VX*T"
+Disp "RANGE=("+Str3+")("+Str2+")"
+E→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "RANGE = "+Str9+" M"
+Pause 
+Goto C2
+Lbl C1
+E/D→V
+ClrHome
+Disp "STEP 2  LAUNCH SPEED"
+Disp "HORIZONTAL- A IS 0, SO VX"
+Disp "STAYS THE SAME THE WHOLE"
+Disp "TIME. X AND Y SHARE T."
+Disp "RANGE=VX*T, SO VX=RANGE/T"
+E→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "VX="+Str9+"/"+Str2
+V→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Str9→Str3
+Disp "VX = "+Str3+" M/S"
+Pause 
+Lbl C2
+⁻9.8D→F
+ClrHome
+Disp "STEP 3  FINAL VX AND VY"
+Disp "HORIZONTAL- VX NEVER"
+Disp "CHANGES (A IS 0), SO"
+Disp "VFX = "+Str3+" M/S"
+Disp "VERTICAL- USE VF=V0+AT"
+Disp "VFY=0+(-9.8)("+Str2+")"
+F→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Str9→Str1
+Disp "VFY = "+Str1+" M/S (DOWN)"
+Pause 
+√(V²+F²)→B
+R►Pθ(V,abs(F))→C
+ClrHome
+Disp "STEP 4  IMPACT SPEED/ANGLE"
+Disp "SPEED=√(VFX²+VFY²)"
+abs(F)→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Str9→Str4
+"SPEED=√("+Str3+"²+"+Str4+"²)"→Str0
+⁻2ᴇ⁻99→U
+prgmPHYSICS
+B→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "SPEED = "+Str9+" M/S"
+Disp "ANGLE BELOW HORIZONTAL-"
+If V=0
+Goto C3
+Disp "ANGLE=TAN⁻1(|VFY|/VFX)"
+"ANGLE=TAN⁻1("+Str4+"/"+Str3+")"→Str0
+⁻2ᴇ⁻99→U
+prgmPHYSICS
+Goto C4
+Lbl C3
+Disp "VFX IS 0, SO IT FALLS"
+Disp "STRAIGHT DOWN-"
+Lbl C4
+C→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "ANGLE = "+Str9+"° BELOW"
+Pause 
+ClrHome
+Disp "SUMMARY (HORIZONTAL)"
+Q→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "H = "+Str9+" M"
+Disp "T FLIGHT = "+Str2+" S"
+Disp "VX = "+Str3+" M/S"
+E→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "RANGE = "+Str9+" M"
+Disp "VFX = "+Str3+" M/S"
+Disp "VFY = "+Str1+" M/S (DOWN)"
+B→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "SPEED = "+Str9+" M/S"
+C→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "ANGLE = "+Str9+"° BELOW"
+Pause 
+Return
+Lbl C5
+ClrHome
+Disp "ANGLED LAUNCH (UP IS +)"
+Disp "ANGLE- DEGREES ABOVE THE"
+Disp "HORIZONTAL, - IF DOWNWARD."
+Disp "H- LAUNCH HEIGHT ABOVE THE"
+Disp "LANDING POINT (0 IF LEVEL,"
+Disp "- IF IT LANDS HIGHER)."
+Input "SPEED V0 (M/S)=",V
+Input "ANGLE (DEG)=",E
+Input "HEIGHT H (M)=",Q
+If V<0
+Goto DO
+If V>1ᴇ6 or (V>0 and V<1ᴇ⁻6)
+Goto DW
+If abs(E)>90
+Goto DQ
+If abs(Q)>1ᴇ6 or (Q≠0 and abs(Q)<1ᴇ⁻6)
+Goto DW
+Vcos(E)→B
+Vsin(E)→C
+If abs(B)<1ᴇ⁻12*V
+0→B
+If abs(C)<1ᴇ⁻12*V
+0→C
+If Q=0 and C≤0
+Goto DS
+If Q<0 and C≤0
+Goto DU
+ClrHome
+Disp "STEP 1  COMPONENTS OF V0"
+Disp "VX=V0COS(ANGLE)"
+V→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Str9→Str1
+E→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Str9→Str2
+"VX=("+Str1+")COS("+Str2+"°)"→Str0
+⁻2ᴇ⁻99→U
+prgmPHYSICS
+B→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Str9→Str3
+Disp "VX = "+Str3+" M/S"
+Disp "V0Y=V0SIN(ANGLE)"
+"V0Y=("+Str1+")SIN("+Str2+"°)"→Str0
+⁻2ᴇ⁻99→U
+prgmPHYSICS
+C→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Str9→Str4
+"V0Y = "+Str4+" M/S"→Str0
+If C>0
+Str0+" (UP)"→Str0
+If C<0
+Str0+" (DOWN)"→Str0
+Disp Str0
+Pause 
+0→P
+0→S
+If C>0
+Then
+C/9.8→P
+C²/19.6→S
+End
+Q+S→A
+ClrHome
+Disp "STEP 2  TIME TO TOP, MAX H"
+If C>0
+Goto C6
+Disp "V0Y IS NOT UPWARD, SO IT"
+Disp "STARTS GOING DOWN (OR"
+Disp "LEVEL). ITS HIGHEST POINT"
+Disp "IS THE LAUNCH POINT-"
+Disp "T TOP = 0 S (AT LAUNCH)"
+Goto C7
+Lbl C6
+Disp "AT THE TOP VY IS 0."
+Disp "USE VF=V0+AT (VERTICAL)"
+Disp "0="+Str4+"+(-9.8)T"
+P→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "T TOP = "+Str9+" S"
+Disp "USE VF²=V0²+2AS"
+Disp "0=("+Str4+")²+2(-9.8)S"
+Lbl C7
+S→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+If Q=0
+Disp "MAX H = "+Str9+" M"
+If Q=0
+Goto C8
+Disp "MAX H (LAUNCH) = "+Str9+" M"
+Str9→Str2
+Q→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "H+MAX H- "+Str9+"+"+Str2
+A→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "MAX H (LAND) = "+Str9+" M"
+Lbl C8
+Pause 
+ClrHome
+Disp "STEP 3  FLIGHT TIME"
+Disp "VERTICAL- IT LANDS H BELOW"
+Disp "THE LAUNCH, SO S IS -H-"
+⁻Q→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Str9→Str2
+Disp "S = "+Str2+" M"
+Disp "USE S=V0YT+(1/2)AT²"
+Disp "(1/2)A IS -4.9, SO"
+Str2+"="+Str4+"T-4.9T²"→Str0
+⁻2ᴇ⁻99→U
+prgmPHYSICS
+Disp "4.9T²-V0YT-H=0 (QUADRATIC)"
+Disp "SOLVE IT FOR T (NEXT)."
+Pause 
+4.9→L
+⁻C→M
+⁻Q→N
+⁻3ᴇ⁻99→U
+prgmPHYSICS
+If J=0
+Goto DD
+I→D
+If Q>0
+Disp "T1<0 IS BEFORE THE LAUNCH,"
+If Q>0
+Disp "SO IT LANDS AT T2-"
+If Q=0
+Disp "T1 IS 0 (THE LAUNCH), SO"
+If Q=0
+Disp "IT LANDS AT T2-"
+If Q<0 and G>0
+Disp "T1 PASSES THAT LEVEL GOING"
+If Q<0 and G>0
+Disp "UP, T2 LANDS COMING DOWN-"
+If Q<0 and G=0
+Disp "ONE ROOT- IT JUST REACHES"
+If Q<0 and G=0
+Disp "THAT LEVEL AT ITS TOP-"
+D→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Str9→Str2
+Disp "T FLIGHT = "+Str2+" S"
+Pause 
+BD→L
+ClrHome
+Disp "STEP 4  RANGE (HORIZONTAL)"
+Disp "HORIZONTAL- A IS 0, SO VX"
+Disp "NEVER CHANGES-"
+Disp "VFX = "+Str3+" M/S"
+Disp "RANGE=VX*T"
+Disp "RANGE=("+Str3+")("+Str2+")"
+L→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "RANGE = "+Str9+" M"
+If Q=0
+Disp "LEVEL GROUND- T=2V0Y/9.8"
+If Q=0
+Disp "AND MAX RANGE IS AT 45°."
+Pause 
+C-9.8D→F
+If abs(F)<1ᴇ⁻10*abs(C)
+0→F
+ClrHome
+Disp "STEP 5  VFY AT IMPACT"
+Disp "VERTICAL- USE VF=V0+AT"
+"VFY="+Str4+"+(-9.8)("+Str2+")"→Str0
+⁻2ᴇ⁻99→U
+prgmPHYSICS
+F→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Str9→Str1
+"VFY = "+Str1+" M/S"→Str0
+If F<0
+Str0+" (DOWN)"→Str0
+Disp Str0
+If F<0
+Disp "(- MEANS MOVING DOWNWARD)"
+Pause 
+√(B²+F²)→M
+If B=0 and F=0
+⁻1→N
+If B≠0 or F≠0
+R►Pθ(B,abs(F))→N
+ClrHome
+Disp "STEP 6  IMPACT SPEED/ANGLE"
+Disp "SPEED=√(VFX²+VFY²)"
+abs(F)→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Str9→Str1
+"SPEED=√("+Str3+"²+"+Str1+"²)"→Str0
+⁻2ᴇ⁻99→U
+prgmPHYSICS
+M→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "SPEED = "+Str9+" M/S"
+If N<0
+Goto DB
+Disp "ANGLE BELOW HORIZONTAL-"
+If B=0
+Goto C9
+Disp "ANGLE=TAN⁻1(|VFY|/VFX)"
+"ANGLE=TAN⁻1("+Str1+"/"+Str3+")"→Str0
+⁻2ᴇ⁻99→U
+prgmPHYSICS
+Goto DA
+Lbl C9
+Disp "VFX IS 0, SO IT IS MOVING"
+Disp "STRAIGHT DOWN-"
+Lbl DA
+N→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "ANGLE = "+Str9+"° BELOW"
+Goto DC
+Lbl DB
+Disp "IT LANDS RIGHT AT THE TOP"
+Disp "WITH SPEED 0, SO THERE IS"
+Disp "NO IMPACT ANGLE."
+Lbl DC
+Pause 
+ClrHome
+Disp "SUMMARY (ANGLED LAUNCH)"
+Disp "VX = "+Str3+" M/S"
+"V0Y = "+Str4+" M/S"→Str0
+If C>0
+Str0+" (UP)"→Str0
+If C<0
+Str0+" (DOWN)"→Str0
+Disp Str0
+P→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+"T TOP = "+Str9+" S"→Str0
+If C≤0
+Str0+" (AT LAUNCH)"→Str0
+Disp Str0
+S→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+If Q=0
+Disp "MAX H = "+Str9+" M"
+If Q≠0
+Disp "MAX H (LAUNCH) = "+Str9+" M"
+A→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+If Q≠0
+Disp "MAX H (LAND) = "+Str9+" M"
+Disp "T FLIGHT = "+Str2+" S"
+L→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "RANGE = "+Str9+" M"
+M→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "SPEED = "+Str9+" M/S"
+N→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+If N≥0
+Disp "ANGLE = "+Str9+"° BELOW"
+If N<0
+Disp "ANGLE- NONE (SPEED IS 0)"
+Pause 
+Return
+Lbl DD
+Disp "IT NEVER GETS AS HIGH AS"
+Disp "THE LANDING POINT. CHECK"
+Disp "V0, THE ANGLE AND H."
+Goto DZ
+Lbl DE
+Menu("THROW LAB (BACKWARD)","RANGE IN METERS",DF,"RANGE IN YARDS",DG,"BACK",D0)
+Lbl DF
+ClrHome
+1→P
+Goto DH
+Lbl DG
+ClrHome
+2→P
+Lbl DH
+Disp "THROW LAB- WORK BACKWARD"
+Disp "H- LAUNCH HEIGHT ABOVE THE"
+Disp "LANDING POINT (CAN BE 0)."
+Disp "T- TIME IN THE AIR."
+Disp "RANGE- HOW FAR IT WENT"
+If P=1
+Disp "SIDEWAYS, IN METERS."
+If P=2
+Disp "SIDEWAYS, IN YARDS."
+Input "HEIGHT H (M)=",Q
+Input "TIME T (S)=",D
+If P=1
+Input "RANGE (M)=",N
+If P=2
+Input "RANGE (YD)=",N
+If abs(Q)>1ᴇ6 or (Q≠0 and abs(Q)<1ᴇ⁻6)
+Goto DW
+If D≤0
+Goto DV
+If D>1ᴇ6 or D<1ᴇ⁻6
+Goto DW
+If N<0
+Goto DP
+If N>1ᴇ6 or (N>0 and N<1ᴇ⁻6)
+Goto DW
+N→E
+If P=2
+N/1.0936→E
+E/D→B
+(4.9D²-Q)/D→C
+√(B²+C²)→V
+0→A
+If V≠0
+R►Pθ(B,C)→A
+ClrHome
+Disp "STEP 1  VX (HORIZONTAL)"
+If P=1
+Goto DI
+Disp "YARDS TO METERS- DIVIDE"
+Disp "BY 1.0936 (1 M=1.0936 YD)"
+N→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "RANGE="+Str9+"/1.0936"
+Lbl DI
+E→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Str9→Str1
+Disp "RANGE = "+Str1+" M"
+Disp "HORIZONTAL- A IS 0, SO"
+Disp "VX=RANGE/T"
+D→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Str9→Str2
+Disp "VX="+Str1+"/"+Str2
+B→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Str9→Str3
+Disp "VX = "+Str3+" M/S"
+Pause 
+ClrHome
+Disp "STEP 2  V0Y (VERTICAL)"
+Disp "IT ENDS H BELOW THE START,"
+Disp "SO S IS -H. A IS -9.8."
+⁻Q→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Str9→Str4
+Disp "S = "+Str4+" M"
+Disp "USE S=V0YT+(1/2)AT²"
+Disp "(1/2)A IS -4.9, SO"
+Disp "V0Y=(S+4.9T²)/T"
+"=("+Str4+"+4.9("+Str2+")²)/"+Str2→Str0
+⁻2ᴇ⁻99→U
+prgmPHYSICS
+C→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Str9→Str4
+"V0Y = "+Str4+" M/S"→Str0
+If C>0
+Str0+" (UP)"→Str0
+If C<0
+Str0+" (DOWN)"→Str0
+Disp Str0
+Pause 
+ClrHome
+Disp "STEP 3  LAUNCH SPEED/ANGLE"
+Disp "V0=√(VX²+V0Y²)"
+abs(C)→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+"V0=√("+Str3+"²+"+Str9+"²)"→Str0
+⁻2ᴇ⁻99→U
+prgmPHYSICS
+V→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "V0 = "+Str9+" M/S"
+If V=0
+Goto DL
+Disp "ANGLE ABOVE HORIZONTAL-"
+Disp "ANGLE=TAN⁻1(V0Y/VX)"
+If B=0
+Goto DJ
+"ANGLE=TAN⁻1("+Str4+"/"+Str3+")"→Str0
+⁻2ᴇ⁻99→U
+prgmPHYSICS
+Goto DK
+Lbl DJ
+Disp "VX IS 0, SO IT IS THROWN"
+Disp "STRAIGHT UP OR DOWN-"
+Lbl DK
+A→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+"ANGLE = "+Str9+"°"→Str0
+If A>0
+Str0+" (ABOVE)"→Str0
+If A<0
+Str0+" (BELOW)"→Str0
+Disp Str0
+Goto DM
+Lbl DL
+Disp "V0 IS 0- IT WAS DROPPED"
+Disp "FROM REST, SO THERE IS NO"
+Disp "LAUNCH ANGLE."
+Lbl DM
+Pause 
+ClrHome
+Disp "SUMMARY (THROW LAB)"
+Q→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "H = "+Str9+" M"
+Disp "T FLIGHT = "+Str2+" S"
+Disp "RANGE = "+Str1+" M"
+N→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+If P=2
+Disp "(FROM "+Str9+" YD)"
+Disp "VX = "+Str3+" M/S"
+"V0Y = "+Str4+" M/S"→Str0
+If C>0
+Str0+" (UP)"→Str0
+If C<0
+Str0+" (DOWN)"→Str0
+Disp Str0
+V→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "V0 = "+Str9+" M/S"
+A→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+"ANGLE = "+Str9+"°"→Str0
+If A>0
+Str0+" (ABOVE)"→Str0
+If A<0
+Str0+" (BELOW)"→Str0
+If V=0
+"ANGLE- NONE (V0 IS 0)"→Str0
+Disp Str0
+Pause 
+Return
+Lbl DN
+ClrHome
+Disp "H MUST BE MORE THAN 0."
+Disp "H IS THE HEIGHT OF THE"
+Disp "LAUNCH ABOVE THE LANDING"
+Disp "POINT. WITH H AT 0 IT IS"
+Disp "ALREADY ON THE GROUND."
+Goto DZ
+Lbl DO
+ClrHome
+Disp "THE SPEED CANNOT BE"
+Disp "NEGATIVE. ENTER IT AS A"
+Disp "POSITIVE NUMBER (OR 0)."
+Disp "(SPEED HAS NO DIRECTION-"
+Disp "THE PROGRAM HANDLES THE"
+Disp "SIGNS FOR YOU.)"
+Goto DZ
+Lbl DP
+ClrHome
+Disp "THE RANGE CANNOT BE"
+Disp "NEGATIVE. ENTER HOW FAR IT"
+Disp "WENT SIDEWAYS AS A"
+Disp "POSITIVE NUMBER (OR 0)."
+Goto DZ
+Lbl DQ
+ClrHome
+Disp "THE ANGLE MUST BE FROM"
+Disp "-90 TO 90 DEGREES"
+Disp "(+ IS ABOVE HORIZONTAL,"
+Disp "- IS BELOW HORIZONTAL)."
+Goto DZ
+Lbl DS
+ClrHome
+Disp "H IS 0 AND V0Y IS NOT"
+Disp "UPWARD (ANGLE ≤ 0 OR V0"
+Disp "IS 0), SO IT IS ON THE"
+Disp "GROUND RIGHT AWAY- THERE"
+Disp "IS NO FLIGHT TO SOLVE."
+Goto DZ
+Lbl DU
+ClrHome
+Disp "THE LANDING POINT IS"
+Disp "HIGHER (H<0), BUT V0Y IS"
+Disp "NOT UPWARD (ANGLE ≤ 0 OR"
+Disp "V0 IS 0), SO IT CAN NEVER"
+Disp "GET UP THERE."
+Goto DZ
+Lbl DV
+ClrHome
+Disp "THE TIME T MUST BE MORE"
+Disp "THAN 0 (HOW LONG IT WAS"
+Disp "IN THE AIR)."
+Goto DZ
+Lbl DW
+ClrHome
+Disp "THAT NUMBER IS TOO LARGE"
+Disp "OR TOO SMALL. KEEP SIZES"
+Disp "FROM 1E-6 TO 1E6 (0 IS OK"
+Disp "WHERE IT IS ALLOWED)."
+Lbl DZ
+Pause 
+Lbl D0
+Return
+Return
+Lbl AG
+0→U
+Degree
+ClrHome
+Disp "CHASE PROBLEM"
+Disp "CAR 1- CONSTANT SPEED V1."
+Disp "CAR 2- STARTS FROM REST"
+Disp "WITH ACCELERATION A."
+Disp "TIME 0- CAR 1 IS D0 AHEAD"
+Disp "OF CAR 2 (0 IF IT PASSES)."
+Disp "CAR 2 WAITS TD SECONDS"
+Disp "AFTER TIME 0 (0 IF NONE)."
+Disp "BOTH GO THE SAME WAY."
+Pause 
+ClrHome
+Disp "CHASE- ENTER EACH VALUE"
+Disp "V1- CAR 1 SPEED"
+Disp "D0- CAR 1 LEAD AT TIME 0"
+Disp "A- CAR 2 ACCELERATION"
+Disp "TD- CAR 2 WAIT (DELAY)"
+Input "V1 (M/S)=",V
+Input "D0 (M)=",B
+Input "A (M/S²)=",A
+Input "TD (S)=",C
+If V<0
+Goto D1
+If B<0
+Goto D2
+If C<0
+Goto D3
+If max(max(V,B),max(A,C))>1ᴇ9
+Goto D4
+If V=0 and B=0
+Goto D6
+If A≤0
+Goto D7
+If (V>0 and V<1ᴇ⁻6) or (B>0 and B<1ᴇ⁻6) or (C>0 and C<1ᴇ⁻6) or A<1ᴇ⁻6
+Goto D5
+B+VC→Q
+A/2→L
+⁻V→M
+⁻Q→N
+ClrHome
+Disp "STEP 1  SET X1=X2"
+Disp "T FROM TIME 0, X FROM THE"
+Disp "START POINT OF CAR 2."
+Disp "CAR 1- X1=D0+V1*T"
+Disp "CAR 2- X2=(1/2)A(T-TD)²"
+Disp "LET U=T-TD (TIME SINCE"
+Disp "CAR 2 STARTED), T=U+TD."
+Disp "X1=X2 GIVES"
+Disp "D0+V1(U+TD)=(1/2)AU²"
+Disp "(1/2)AU²-V1*U-(D0+V1*TD)=0"
+Pause 
+V→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Str9→Str1
+B→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Str9→Str2
+C→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Str9→Str3
+A→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Str9→Str4
+ClrHome
+Disp "STEP 2  PUT IN NUMBERS"
+Disp "LEAD OF CAR 1 WHEN CAR 2"
+Disp "STARTS IS D0+V1*TD-"
+"LEAD="+Str2+"+("+Str1+")("+Str3+")"→Str0
+⁻2ᴇ⁻99→U
+prgmPHYSICS
+Q→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "LEAD = "+Str9+" M"
+"(1/2)("+Str4+")U²-"+Str1+"U-"+Str9+"=0"→Str0
+⁻2ᴇ⁻99→U
+prgmPHYSICS
+Disp "ON THE NEXT SCREEN T IS U"
+Disp "(TIME AFTER CAR 2 STARTS)."
+Pause 
+⁻3ᴇ⁻99→U
+prgmPHYSICS
+I→D
+D→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Str9→Str2
+If B=0 and C=0
+Then
+Disp "T1 IS 0, THE START (SIDE"
+Disp "BY SIDE), NOT A CATCH-UP."
+Else
+Disp "T1<0 IS BEFORE CAR 2"
+Disp "STARTS- NOT PHYSICAL."
+End
+Disp "SO U = "+Str2+" S"
+Pause 
+D+C→E
+ClrHome
+Disp "STEP 3  CATCH-UP TIME"
+If C>0
+Then
+Disp "AFTER CAR 2 STARTS-"
+Disp "U = "+Str2+" S"
+Disp "AFTER TIME 0 (CAR 2"
+Disp "WAITED TD)- T=U+TD"
+Disp "T="+Str2+"+"+Str3
+E→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "T = "+Str9+" S"
+Else
+Disp "TD IS 0, SO CAR 2 STARTS"
+Disp "AT TIME 0 AND T=U."
+Disp "T = "+Str2+" S"
+End
+Pause 
+AD²/2→S
+ClrHome
+Disp "STEP 4  DISTANCE"
+Disp "CAR 2 SPEEDS UP FROM REST"
+Disp "FOR U SECONDS-"
+Disp "S=(1/2)AU²"
+"S=(1/2)("+Str4+")("+Str2+")²"→Str0
+⁻2ᴇ⁻99→U
+prgmPHYSICS
+S→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "S = "+Str9+" M"
+Disp "(FROM CAR 2 START POINT)"
+Disp "CHECK- CAR 1 X1=D0+V1*T"
+B+VE→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "X1 = "+Str9+" M"
+Pause 
+AD→F
+ClrHome
+Disp "STEP 5  CAR 2 SPEED"
+Disp "VF=V0+AT WITH V0 IS 0,"
+Disp "SO V2=AU"
+F→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "V2=("+Str4+")("+Str2+")"
+Disp "V2 = "+Str9+" M/S"
+If V>0
+Then
+F/V→P
+Disp "V2/V1="+Str9+"/"+Str1
+P→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "V2/V1 = "+Str9
+If B=0 and C=0
+Then
+Disp "RULE- FROM REST, SIDE BY"
+Disp "SIDE, IT CATCHES UP AT 2X"
+Disp "THE SPEED OF CAR 1."
+Else
+Disp "THE 2X RULE IS ONLY FOR A"
+Disp "SIDE BY SIDE START. WITH A"
+Disp "LEAD IT IS MORE THAN 2X."
+End
+Else
+Disp "CAR 1 IS PARKED (V1 IS 0)"
+Disp "SO THERE IS NO SPEED"
+Disp "RATIO."
+End
+Pause 
+ClrHome
+Disp "SUMMARY (CHASE)"
+D→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+If C>0
+Then
+Disp "U = "+Str9+" S"
+Disp "(AFTER CAR 2 STARTS)"
+E→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "T = "+Str9+" S"
+Disp "(AFTER TIME 0)"
+Else
+Disp "T = "+Str9+" S"
+Disp "(CATCH-UP TIME)"
+End
+S→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "S = "+Str9+" M"
+Disp "(FROM CAR 2 START POINT)"
+F→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "V2 = "+Str9+" M/S"
+If V>0
+Then
+P→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "V2/V1 = "+Str9
+End
+Pause 
+Return
+Lbl D1
+ClrHome
+Disp "V1 CANNOT BE NEGATIVE."
+Disp "ENTER CAR 1 SPEED AS A"
+Disp "POSITIVE NUMBER (0 IF IT"
+Disp "IS PARKED). BOTH CARS GO"
+Disp "THE SAME WAY."
+Pause 
+Return
+Lbl D2
+ClrHome
+Disp "D0 CANNOT BE NEGATIVE."
+Disp "D0 IS HOW FAR CAR 1 IS"
+Disp "AHEAD OF CAR 2 AT TIME 0"
+Disp "(0 IF IT JUST PASSES)."
+Pause 
+Return
+Lbl D3
+ClrHome
+Disp "TD CANNOT BE NEGATIVE."
+Disp "TD IS HOW LONG CAR 2 WAITS"
+Disp "AFTER TIME 0 BEFORE IT"
+Disp "STARTS (0 IF NO DELAY)."
+Pause 
+Return
+Lbl D4
+ClrHome
+Disp "THAT NUMBER IS TOO LARGE."
+Disp "KEEP EVERY NUMBER AT OR"
+Disp "BELOW 1E9 (1 BILLION)."
+Pause 
+Return
+Lbl D5
+ClrHome
+Disp "A NUMBER IS TOO SMALL."
+Disp "USE 0 OR AT LEAST 1E-6 FOR"
+Disp "V1, D0 AND TD, AND AT"
+Disp "LEAST 1E-6 FOR A."
+Pause 
+Return
+Lbl D6
+ClrHome
+Disp "CAR 1 IS PARKED (V1 IS 0)"
+Disp "RIGHT AT CAR 2 START (D0"
+Disp "IS 0), SO THEY ARE ALREADY"
+Disp "TOGETHER AT TIME 0- THE"
+Disp "CATCH-UP TIME IS 0 S."
+Pause 
+Return
+Lbl D7
+ClrHome
+Disp "A MUST BE MORE THAN 0."
+Disp "CAR 2 STARTS FROM REST, SO"
+Disp "WITH A OF 0 OR LESS IT"
+Disp "NEVER MOVES FORWARD AND"
+Disp "NEVER CATCHES CAR 1."
+Pause 
+Return
+Lbl AH
+0→U
+Degree
+ClrHome
+Disp "RIVER CROSSING"
+Disp "BOAT AIMED STRAIGHT ACROSS"
+Disp "VB IS THE BOAT SPEED IN"
+Disp "STILL WATER."
+Disp "VR IS THE RIVER SPEED."
+Disp "W IS THE RIVER WIDTH."
+Disp "ALL POSITIVE (VR CAN BE 0)"
+Input "VB (M/S)=",B
+Input "VR (M/S)=",C
+Input "W (M)=",E
+If B≤0
+Goto EA
+If C<0
+Goto EB
+If E≤0
+Goto EC
+If max(B,max(C,E))>1ᴇ9
+Goto ED
+If B<1ᴇ⁻9
+Goto EE
+B→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Str9→Str1
+C→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Str9→Str2
+E→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Str9→Str3
+E/B→D
+D→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Str9→Str4
+ClrHome
+Disp "STEP 1  CROSSING TIME"
+Disp "ACROSS AND DOWNSTREAM"
+Disp "MOTIONS ARE INDEPENDENT."
+Disp "THE BOAT IS AIMED ACROSS,"
+Disp "SO ONLY VB TAKES IT ACROSS"
+Disp "T=W/VB"
+Disp "T="+Str3+"/"+Str1
+Disp "T = "+Str4+" S"
+Pause 
+CD→S
+ClrHome
+Disp "STEP 2  DRIFT"
+Disp "MEANWHILE THE RIVER"
+Disp "CARRIES THE BOAT"
+Disp "DOWNSTREAM AT VR."
+Disp "DRIFT=VR*T"
+"DRIFT=("+Str2+")("+Str4+")"→Str0
+⁻2ᴇ⁻99→U
+prgmPHYSICS
+S→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "DRIFT = "+Str9+" M"
+Disp "(DOWNSTREAM OF THE POINT"
+Disp "STRAIGHT ACROSS)"
+Pause 
+√(B²+C²)→V
+ClrHome
+Disp "STEP 3  RESULTANT SPEED"
+Disp "VB IS ACROSS AND VR IS"
+Disp "DOWNSTREAM- THEY ARE"
+Disp "PERPENDICULAR, SO USE"
+Disp "PYTHAGORAS."
+Disp "V=√(VB²+VR²)"
+Disp "V=√("+Str1+"²+"+Str2+"²)"
+V→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "V RESULT = "+Str9+" M/S"
+Disp "(SPEED SEEN FROM SHORE)"
+Pause 
+tan⁻¹(C/B)→A
+90-A→P
+ClrHome
+Disp "STEP 4  PATH ANGLE"
+Disp "TAN(ANGLE)=VR/VB"
+"ANGLE=TAN⁻1("+Str2+"/"+Str1+")"→Str0
+⁻2ᴇ⁻99→U
+prgmPHYSICS
+A→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "FROM ACROSS = "+Str9+"°"
+Disp "(TOWARD DOWNSTREAM). FROM"
+Disp "THE BANK IT IS 90-ANGLE-"
+P→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "FROM BANK = "+Str9+"°"
+Disp "HEADING IS STRAIGHT ACROSS"
+Disp "BUT THE PATH IS SLANTED."
+Pause 
+If C≥B
+Goto D8
+sin⁻¹(C/B)→F
+√((B-C)(B+C))→Q
+E/Q→G
+ClrHome
+Disp "STEP 5  HEADING UPSTREAM"
+Disp "TO LAND DIRECTLY ACROSS,"
+Disp "THE UPSTREAM PART OF VB"
+Disp "MUST CANCEL VR-"
+Disp "VB SIN(ANGLE)=VR"
+"ANGLE=SIN⁻1("+Str2+"/"+Str1+")"→Str0
+⁻2ᴇ⁻99→U
+prgmPHYSICS
+F→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "FROM ACROSS = "+Str9+"°"
+90-F→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "FROM BANK = "+Str9+"°"
+If C=0
+Disp "(NO CURRENT- AIM ACROSS)"
+If C>0
+Disp "(AIM UPSTREAM)"
+Pause 
+ClrHome
+Disp "STEP 6  NEW CROSSING TIME"
+Disp "ONLY THE ACROSS PART OF"
+Disp "VB MOVES THE BOAT ACROSS-"
+Disp "V ACROSS=VB COS(ANGLE)"
+Disp "=√(VB²-VR²)"
+Disp "=√("+Str1+"²-"+Str2+"²)"
+Q→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "V ACROSS = "+Str9+" M/S"
+Disp "T=W/V ACROSS"
+Disp "T="+Str3+"/"+Str9
+G→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "T = "+Str9+" S"
+Pause 
+Goto D9
+Lbl D8
+ClrHome
+Disp "TO LAND DIRECTLY ACROSS"
+Disp "THE UPSTREAM PART OF VB"
+Disp "MUST CANCEL VR. BUT VR IS"
+Disp "AS FAST AS OR FASTER THAN"
+Disp "THE BOAT (VR ≥ VB), SO IT"
+Disp "IS IMPOSSIBLE. THE BOAT"
+Disp "ALWAYS DRIFTS DOWNSTREAM."
+Pause 
+Lbl D9
+ClrHome
+Disp "SUMMARY 1/2 (AIMED ACROSS)"
+Disp "T = "+Str4+" S"
+S→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "DRIFT = "+Str9+" M"
+V→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "V RESULT = "+Str9+" M/S"
+Disp "PATH ANGLE (DOWNSTREAM)-"
+A→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "FROM ACROSS = "+Str9+"°"
+P→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "FROM BANK = "+Str9+"°"
+Disp "HEADING- STRAIGHT ACROSS,"
+Disp "NOT ALONG THE PATH."
+Pause 
+ClrHome
+Disp "SUMMARY 2/2 (LAND ACROSS)"
+If C<B
+Then
+Disp "HEADING (UPSTREAM)-"
+F→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "FROM ACROSS = "+Str9+"°"
+90-F→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "FROM BANK = "+Str9+"°"
+Q→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "V ACROSS = "+Str9+" M/S"
+G→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "T = "+Str9+" S"
+Disp "DRIFT = 0 M"
+Else
+Disp "IMPOSSIBLE- THE RIVER IS"
+Disp "AS FAST AS OR FASTER THAN"
+Disp "THE BOAT (VR ≥ VB), SO IT"
+Disp "ALWAYS DRIFTS DOWNSTREAM."
+End
+Pause 
+Return
+Lbl EA
+ClrHome
+Disp "VB MUST BE MORE THAN 0."
+Disp "ENTER THE BOAT SPEED (IN"
+Disp "STILL WATER) AS A POSITIVE"
+Disp "NUMBER. A BOAT THAT DOES"
+Disp "NOT MOVE NEVER CROSSES."
+Pause 
+Return
+Lbl EB
+ClrHome
+Disp "VR CANNOT BE NEGATIVE."
+Disp "ENTER THE RIVER SPEED AS A"
+Disp "POSITIVE NUMBER (0 FOR"
+Disp "STILL WATER). ITS"
+Disp "DIRECTION IS CALLED"
+Disp "DOWNSTREAM."
+Pause 
+Return
+Lbl EC
+ClrHome
+Disp "W MUST BE MORE THAN 0."
+Disp "ENTER THE RIVER WIDTH AS"
+Disp "A POSITIVE NUMBER (M)."
+Pause 
+Return
+Lbl ED
+ClrHome
+Disp "THAT NUMBER IS TOO LARGE."
+Disp "KEEP EVERY NUMBER AT OR"
+Disp "BELOW 1E9 (1 BILLION)."
+Pause 
+Return
+Lbl EE
+ClrHome
+Disp "VB IS TOO SMALL (BELOW"
+Disp "1E-9 M/S). THE CROSSING"
+Disp "WOULD TAKE FOREVER. USE A"
+Disp "LARGER BOAT SPEED."
+Pause 
+Return
+Lbl AI
+0→U
+Degree
+If K=2
+Goto EV
+If K=3
+Goto E5
+If K=4
+Goto FF
+Lbl EF
+Menu("VECTOR COMPONENTS","MAG+ANGLE TO X,Y",EG,"X,Y TO MAG+ANGLE",EH,"BACK",FU)
+Lbl EG
+1→J
+Goto EI
+Lbl EH
+2→J
+Lbl EI
+Menu("WHAT KIND OF VECTOR?","DISPLACEMENT (M)",EJ,"VELOCITY (M/S)",EK,"ACCELERATION (M/S²)",EL,"OTHER (NO UNIT)",EM,"BACK",EF)
+Lbl EJ
+" M"→Str4
+Goto EN
+Lbl EK
+" M/S"→Str4
+Goto EN
+Lbl EL
+" M/S²"→Str4
+Goto EN
+Lbl EM
+" "→Str4
+Lbl EN
+If J=2
+Goto EO
+ClrHome
+Disp "MAG+ANGLE TO X,Y"
+Disp "ANGLE- COUNTERCLOCKWISE"
+Disp "FROM +X. 0 RIGHT, 90 UP,"
+Disp "180 LEFT, 270 OR -90 DOWN."
+Disp "120 POINTS UP AND LEFT."
+Disp "30° BELOW +X IS -30 OR 330"
+Disp "NEGATIVE = (-) KEY"
+Input "MAGNITUDE=",M
+Input "ANGLE (DEG)=",N
+If M<0
+Goto EP
+If abs(N)>360
+Goto EQ
+M→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Str9→Str1
+N→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Str9→Str2
+M*cos(N)→P
+M*sin(N)→Q
+ClrHome
+Disp "STEP 1  X COMPONENT"
+Disp "X=MAGNITUDE*COS(ANGLE)"
+"X=("+Str1+")COS("+Str2+"°)"→Str0
+⁻2ᴇ⁻99→U
+prgmPHYSICS
+P→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+"X = "+Str9+Str4→Str3
+If P≥1ᴇ⁻9
+Str3+" (RIGHT)"→Str3
+If P≤⁻1ᴇ⁻9
+Str3+" (LEFT)"→Str3
+Disp Str3
+Disp "(+X IS RIGHT, -X IS LEFT)"
+Pause 
+ClrHome
+Disp "STEP 2  Y COMPONENT"
+Disp "Y=MAGNITUDE*SIN(ANGLE)"
+"Y=("+Str1+")SIN("+Str2+"°)"→Str0
+⁻2ᴇ⁻99→U
+prgmPHYSICS
+Q→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+"Y = "+Str9+Str4→Str0
+If Q≥1ᴇ⁻9
+Str0+" (UP)"→Str0
+If Q≤⁻1ᴇ⁻9
+Str0+" (DOWN)"→Str0
+Disp Str0
+Disp "(+Y IS UP, -Y IS DOWN)"
+Pause 
+ClrHome
+Disp "SUMMARY  MAG,ANGLE TO X,Y"
+Disp "MAGNITUDE = "+Str1+Str4
+Disp "ANGLE = "+Str2+"°"
+Disp "(COUNTERCLOCKWISE FROM +X)"
+Disp Str3
+Disp Str0
+Pause 
+Goto EF
+Lbl EO
+ClrHome
+Disp "X,Y TO MAG+ANGLE"
+Disp "X IS + RIGHT, - LEFT."
+Disp "Y IS + UP, - DOWN."
+Disp "NEGATIVE = (-) KEY"
+Input "X COMPONENT=",P
+Input "Y COMPONENT=",Q
+If max(abs(P),abs(Q))>1ᴇ9
+Goto ES
+If P=0 and Q=0
+Goto EU
+P→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Str9→Str1
+Q→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Str9→Str2
+√(P²+Q²)→M
+ClrHome
+Disp "STEP 1  MAGNITUDE"
+Disp "X AND Y ARE PERPENDICULAR,"
+Disp "SO USE PYTHAGORAS-"
+Disp "MAGNITUDE=√(X²+Y²)"
+"=√(("+Str1+")²+("+Str2+")²)"→Str0
+⁻2ᴇ⁻99→U
+prgmPHYSICS
+M→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Str9→Str3
+Disp "MAGNITUDE = "+Str9+Str4
+Pause 
+R►Pθ(abs(P),abs(Q))→B
+R►Pθ(P,Q)→A
+If A<0
+A+360→A
+ClrHome
+Disp "STEP 2  REFERENCE ANGLE"
+Disp "ANGLE BETWEEN THE VECTOR"
+Disp "AND THE X AXIS (0 TO 90)-"
+Disp "REF=TAN⁻1(|Y|/|X|)"
+abs(Q)→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+"=TAN⁻1("+Str9+"/"→Str0
+abs(P)→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Str0+Str9+")"→Str0
+If P=0
+"X IS 0, SO REF IS 90°"→Str0
+⁻2ᴇ⁻99→U
+prgmPHYSICS
+B→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "REF ANGLE = "+Str9+"°"
+Pause 
+If P>0 and Q>0
+1→C
+If P<0 and Q>0
+2→C
+If P<0 and Q<0
+3→C
+If P>0 and Q<0
+4→C
+If P>0 and Q=0
+5→C
+If P<0 and Q=0
+6→C
+If P=0 and Q>0
+7→C
+If P=0 and Q<0
+8→C
+B→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+If C=1
+Str9+"° ABOVE +X"→Str2
+If C=2
+Str9+"° ABOVE -X"→Str2
+If C=3
+Str9+"° BELOW -X"→Str2
+If C=4
+Str9+"° BELOW +X"→Str2
+If C=5
+"ALONG +X (RIGHT)"→Str2
+If C=6
+"ALONG -X (LEFT)"→Str2
+If C=7
+"STRAIGHT UP (ALONG +Y)"→Str2
+If C=8
+"STRAIGHT DOWN (ALONG -Y)"→Str2
+If C=1
+"QUADRANT I (X>0, Y>0)"→Str1
+If C=2
+"QUADRANT II (X<0, Y>0)"→Str1
+If C=3
+"QUADRANT III (X<0, Y<0)"→Str1
+If C=4
+"QUADRANT IV (X>0, Y<0)"→Str1
+If C=5
+"ON THE +X AXIS (Y IS 0)"→Str1
+If C=6
+"ON THE -X AXIS (Y IS 0)"→Str1
+If C=7
+"ON THE +Y AXIS (X IS 0)"→Str1
+If C=8
+"ON THE -Y AXIS (X IS 0)"→Str1
+If C=1
+"ANGLE=REF="+Str9→Str0
+If C=2
+"ANGLE=180-REF=180-"+Str9→Str0
+If C=3
+"ANGLE=180+REF=180+"+Str9→Str0
+If C=4
+"ANGLE=360-REF=360-"+Str9→Str0
+If C=5
+"+X IS 0°"→Str0
+If C=6
+"-X IS 180°"→Str0
+If C=7
+"+Y IS 90°"→Str0
+If C=8
+"-Y IS 270°"→Str0
+ClrHome
+Disp "STEP 3  ANGLE FROM +X"
+Disp "MEASURED COUNTERCLOCKWISE"
+Disp "FROM +X (0 TO 360)-"
+Disp Str1
+⁻2ᴇ⁻99→U
+prgmPHYSICS
+A→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "ANGLE = "+Str9+"°"
+A-360→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+If A>180
+Disp "OR "+Str9+"° (CLOCKWISE)"
+Disp Str2
+Pause 
+ClrHome
+Disp "SUMMARY  X,Y TO MAG,ANGLE"
+P→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "X = "+Str9+Str4
+Q→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "Y = "+Str9+Str4
+Disp "MAGNITUDE = "+Str3+Str4
+A→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "ANGLE = "+Str9+"°"
+Disp "(CCW FROM +X, 0 TO 360)"
+A-360→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+If A>180
+Disp "OR "+Str9+"° (CLOCKWISE)"
+Disp Str2
+Pause 
+Goto EF
+Lbl EP
+ClrHome
+Disp "MAGNITUDE CANNOT BE"
+Disp "NEGATIVE (IT IS A LENGTH)."
+Disp "FOR THE OPPOSITE"
+Disp "DIRECTION, ADD 180 TO THE"
+Disp "ANGLE AND USE A POSITIVE"
+Disp "MAGNITUDE."
+Pause 
+Goto EF
+Lbl EQ
+ClrHome
+Disp "THE ANGLE MUST BE FROM"
+Disp "-360 TO 360 DEGREES,"
+Disp "COUNTERCLOCKWISE FROM +X."
+Pause 
+Goto EF
+Lbl ES
+ClrHome
+Disp "THAT NUMBER IS TOO LARGE."
+Disp "KEEP X AND Y BETWEEN"
+Disp "-1E9 AND 1E9."
+Pause 
+Goto EF
+Lbl EU
+ClrHome
+Disp "ZERO VECTOR"
+Disp "X AND Y ARE BOTH 0, SO"
+Disp "MAGNITUDE = 0"+Str4
+Disp "A ZERO VECTOR POINTS NO"
+Disp "WAY, SO ITS ANGLE IS"
+Disp "UNDEFINED."
+Pause 
+Goto EF
+Lbl EV
+ClrHome
+Disp "AVG SPEED AND VELOCITY"
+Disp "A TRIP OF 1 TO 4 LEGS."
+Disp "EACH LEG HAS A DISTANCE"
+Disp "(M), A DIRECTION (+ OR -)"
+Disp "AND A TIME (S)."
+Disp "AVG SPEED=DISTANCE/TIME"
+Disp "AVG VEL=DISPLACEMENT/TIME"
+Input "NUMBER OF LEGS=",N
+If N<1 or N>4 or fPart(N)≠0
+Goto EZ
+0→P
+0→Q
+0→D
+1→I
+Lbl EW
+ClrHome
+Disp "LEG "+sub("1234",I,1)+" OF "+sub("1234",N,1)
+Disp "DISTANCE IN M (0 OR MORE)"
+Disp "DIRECTION- 1 FOR THE +"
+Disp "WAY, -1 FOR THE - WAY"
+Disp "TIME IN S (0 OR MORE)"
+Disp "NEGATIVE = (-) KEY"
+Input "DISTANCE (M)=",A
+Input "DIRECTION (1/-1)=",B
+Input "TIME (S)=",C
+If A<0
+Goto E0
+If B≠1 and B≠⁻1
+Goto E1
+If C<0
+Goto E2
+If A>1ᴇ9 or C>1ᴇ9
+Goto E3
+P+A→P
+Q+B*A→Q
+D+C→D
+A→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+If I=1
+Str9→Str1
+If I>1
+Str1+"+"+Str9→Str1
+If B=1 and I>1
+"+"+Str9→Str9
+If B=⁻1
+"-"+Str9→Str9
+If I=1
+Str9→Str2
+If I>1
+Str2+Str9→Str2
+C→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+If I=1
+Str9→Str3
+If I>1
+Str3+"+"+Str9→Str3
+I+1→I
+If I≤N
+Goto EW
+If D<1ᴇ⁻9
+Goto E4
+P/D→E
+Q/D→F
+ClrHome
+Disp "STEP 1  TOTAL DISTANCE"
+Disp "ADD EVERY LEG AS POSITIVE"
+Disp "(DIRECTION DOES NOT"
+Disp "MATTER FOR DISTANCE)-"
+"DISTANCE="+Str1→Str0
+⁻2ᴇ⁻99→U
+prgmPHYSICS
+P→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "DISTANCE = "+Str9+" M"
+Pause 
+ClrHome
+Disp "STEP 2  DISPLACEMENT"
+Disp "ADD THE LEGS WITH THEIR"
+Disp "SIGNS (- LEGS SUBTRACT)-"
+"S="+Str2→Str0
+⁻2ᴇ⁻99→U
+prgmPHYSICS
+Q→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "DISPLACEMENT = "+Str9+" M"
+If Q≥1ᴇ⁻9
+Disp "(IN THE + DIRECTION)"
+If Q≤⁻1ᴇ⁻9
+Disp "(IN THE - DIRECTION)"
+If abs(Q)<1ᴇ⁻9
+Disp "(ENDS WHERE IT STARTED)"
+Pause 
+ClrHome
+Disp "STEP 3  TOTAL TIME"
+Disp "ADD THE TIMES OF ALL LEGS-"
+"TIME="+Str3→Str0
+⁻2ᴇ⁻99→U
+prgmPHYSICS
+D→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "TOTAL TIME = "+Str9+" S"
+Pause 
+ClrHome
+Disp "STEP 4  AVERAGE SPEED"
+Disp "AVG SPEED=DISTANCE/TIME"
+P→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+"="+Str9+"/"→Str0
+D→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Str0+Str9→Str0
+Disp Str0
+E→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "AVG SPEED = "+Str9+" M/S"
+Disp "(SPEED HAS NO DIRECTION,"
+Disp "SO IT IS NEVER NEGATIVE)"
+Pause 
+ClrHome
+Disp "STEP 5  AVERAGE VELOCITY"
+Disp "AVG VEL=DISPLACEMENT/TIME"
+Q→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+"="+Str9+"/"→Str0
+D→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Str0+Str9→Str0
+Disp Str0
+F→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "AVG VEL = "+Str9+" M/S"
+If Q≥1ᴇ⁻9
+Disp "(IN THE + DIRECTION)"
+If Q≤⁻1ᴇ⁻9
+Disp "(IN THE - DIRECTION)"
+If abs(Q)<1ᴇ⁻9
+Disp "(ENDS WHERE IT STARTED)"
+Pause 
+ClrHome
+Disp "SUMMARY  AVERAGES"
+P→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "DISTANCE = "+Str9+" M"
+Q→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "DISPLACEMENT = "+Str9+" M"
+D→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "TOTAL TIME = "+Str9+" S"
+E→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "AVG SPEED = "+Str9+" M/S"
+F→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "AVG VEL = "+Str9+" M/S"
+If Q≥1ᴇ⁻9
+Disp "(IN THE + DIRECTION)"
+If Q≤⁻1ᴇ⁻9
+Disp "(IN THE - DIRECTION)"
+If abs(Q)<1ᴇ⁻9
+Disp "(ENDS WHERE IT STARTED)"
+Pause 
+Return
+Lbl EZ
+ClrHome
+Disp "THE NUMBER OF LEGS MUST"
+Disp "BE 1, 2, 3 OR 4 (A WHOLE"
+Disp "NUMBER)."
+Pause 
+Return
+Lbl E0
+ClrHome
+Disp "DISTANCE CANNOT BE"
+Disp "NEGATIVE. ENTER HOW FAR"
+Disp "(0 OR MORE) AND SHOW THE"
+Disp "WAY WITH DIRECTION -1."
+Pause 
+Return
+Lbl E1
+ClrHome
+Disp "DIRECTION MUST BE 1 OR -1."
+Disp "USE 1 FOR THE + WAY AND"
+Disp "-1 FOR THE OPPOSITE WAY"
+Disp "(PRESS (-) THEN 1)."
+Pause 
+Return
+Lbl E2
+ClrHome
+Disp "TIME CANNOT BE NEGATIVE."
+Disp "ENTER HOW LONG THE LEG"
+Disp "TOOK (0 OR MORE SECONDS)."
+Pause 
+Return
+Lbl E3
+ClrHome
+Disp "THAT NUMBER IS TOO LARGE."
+Disp "KEEP DISTANCES AND TIMES"
+Disp "AT OR BELOW 1E9."
+Pause 
+Return
+Lbl E4
+ClrHome
+Disp "TOTAL TIME IS 0 (OR BELOW"
+Disp "1E-9 S). THE AVERAGES"
+Disp "DIVIDE BY THE TOTAL TIME,"
+Disp "SO THEY CANNOT BE FOUND."
+Pause 
+Return
+Lbl E5
+Menu("FACTOR OF CHANGE","S PROP TO V² (STOP)",E6,"S PROP TO T² (REST)",E7,"T PROP TO √(H) (FALL)",E8,"V PROP TO √(H) (DROP)",E9,"V PROP TO T (REST)",FA,"BACK",FU)
+Lbl E6
+ClrHome
+Disp "S PROP TO V² (STOPPING)"
+Disp "STOPPING (VF=0) WITH THE"
+Disp "SAME A- VF²=V0²+2AS GIVES"
+Disp "S=-V0²/(2A), SO S PROP V²."
+Disp "2X V GIVES 4X S."
+Disp "(ALSO MAX HEIGHT VS V0)"
+Disp "(K IS 3 IF V TRIPLES)"
+Input "OLD S (M)=",L
+Input "V FACTOR K=",M
+"S"→Str1
+" M"→Str2
+"V"→Str3
+2→F
+Goto FB
+Lbl E7
+ClrHome
+Disp "S PROP TO T² (FROM REST)"
+Disp "FROM REST (V0=0), SAME A-"
+Disp "S=V0T+(1/2)AT²=(1/2)AT²,"
+Disp "SO S PROP TO T²."
+Disp "2X T GIVES 4X S."
+Disp "(K IS 2 IF T DOUBLES)"
+Input "OLD S (M)=",L
+Input "T FACTOR K=",M
+"S"→Str1
+" M"→Str2
+"T"→Str3
+2→F
+Goto FB
+Lbl E8
+ClrHome
+Disp "T PROP TO √(H) (FALL TIME)"
+Disp "DROPPED FROM REST FROM A"
+Disp "HEIGHT H- H=(1/2)(9.8)T²,"
+Disp "SO T=√(2H/9.8) AND"
+Disp "T PROP TO √(H)."
+Disp "4X H GIVES 2X T."
+Disp "(K IS 2 IF H DOUBLES)"
+Input "OLD T (S)=",L
+Input "H FACTOR K=",M
+If L<0
+Goto FE
+"T"→Str1
+" S"→Str2
+"H"→Str3
+0.5→F
+Goto FB
+Lbl E9
+ClrHome
+Disp "V PROP TO √(H) (IMPACT)"
+Disp "DROPPED FROM REST FROM A"
+Disp "HEIGHT H- VF²=V0²+2AS"
+Disp "GIVES V²=2(9.8)H, SO"
+Disp "V PROP TO √(H)."
+Disp "4X H GIVES 2X V."
+Disp "(K IS 2 IF H DOUBLES)"
+Disp "NEGATIVE = (-) KEY"
+Input "OLD V (M/S)=",L
+Input "H FACTOR K=",M
+"V"→Str1
+" M/S"→Str2
+"H"→Str3
+0.5→F
+Goto FB
+Lbl FA
+ClrHome
+Disp "V PROP TO T (FROM REST)"
+Disp "FROM REST (V0=0), SAME A-"
+Disp "VF=V0+AT=AT, SO"
+Disp "V PROP TO T."
+Disp "2X T GIVES 2X V."
+Disp "(K IS 2 IF T DOUBLES)"
+Disp "NEGATIVE = (-) KEY"
+Input "OLD V (M/S)=",L
+Input "T FACTOR K=",M
+"V"→Str1
+" M/S"→Str2
+"T"→Str3
+1→F
+Lbl FB
+If M<0
+Goto FC
+If abs(L)>1ᴇ9 or M>1ᴇ9
+Goto FD
+If F=2
+M²→G
+If F=1
+M→G
+If F<1
+√(M)→G
+L*G→H
+If F=2
+"K²"→Str4
+If F=1
+"K"→Str4
+If F<1
+"√(K)"→Str4
+M→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+If F=2
+"=("+Str9+")²"→Str0
+If F=1
+"="+Str9→Str0
+If F<1
+"=√("+Str9+")"→Str0
+ClrHome
+Disp "STEP 1  MULTIPLIER"
+Disp Str3+" IS MULTIPLIED BY K, SO"
+Disp Str1+" IS MULTIPLIED BY "+Str4
+Disp "MULTIPLIER="+Str4
+Disp Str0
+G→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "MULTIPLIER = "+Str9
+Pause 
+ClrHome
+Disp "STEP 2  NEW "+Str1
+Disp "NEW "+Str1+"=OLD "+Str1+"*"+Str4
+L→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+"NEW "+Str1+"=("+Str9+")("→Str0
+G→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Str0+Str9+")"→Str0
+⁻2ᴇ⁻99→U
+prgmPHYSICS
+H→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "NEW "+Str1+" = "+Str9+Str2
+Pause 
+ClrHome
+Disp "SUMMARY  FACTOR OF CHANGE"
+Str1+" PROP TO "→Str0
+If F=2
+Str0+Str3+"²"→Str0
+If F=1
+Str0+Str3→Str0
+If F<1
+Str0+"√("+Str3+")"→Str0
+Disp Str0
+L→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "OLD "+Str1+" = "+Str9+Str2
+M→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp Str3+" FACTOR K = "+Str9
+Str9+"X "+Str3+" GIVES "→Str0
+G→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "MULTIPLIER = "+Str9
+Str0+Str9+"X "+Str1→Str0
+H→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "NEW "+Str1+" = "+Str9+Str2
+⁻2ᴇ⁻99→U
+prgmPHYSICS
+Pause 
+Goto E5
+Lbl FC
+ClrHome
+Disp "THE FACTOR K CANNOT BE"
+Disp "NEGATIVE. K TELLS HOW MANY"
+Disp "TIMES BIGGER OR SMALLER"
+Disp "THE QUANTITY GETS- 3 FOR"
+Disp "TRIPLED, 0.5 FOR HALVED."
+Pause 
+Goto E5
+Lbl FD
+ClrHome
+Disp "THAT NUMBER IS TOO LARGE."
+Disp "KEEP THE OLD VALUE AND K"
+Disp "BETWEEN -1E9 AND 1E9."
+Pause 
+Goto E5
+Lbl FE
+ClrHome
+Disp "TIME CANNOT BE NEGATIVE."
+Disp "ENTER THE OLD FALL TIME"
+Disp "(0 OR MORE SECONDS)."
+Pause 
+Goto E5
+Lbl FF
+Menu("LAB TOOLS","RAMP A FROM SLOPE",FG,"PERCENT DIFFERENCE",FH,"PERCENT ERROR",FI,"YARDS AND METERS",FJ,"KM/H OR MPH TO M/S",FM,"BACK",FU)
+Lbl FG
+ClrHome
+Disp "RAMP A FROM SLOPE"
+Disp "FROM REST, S=(1/2)AT²."
+Disp "PLOT S ON THE Y AXIS AND"
+Disp "T² ON THE X AXIS- A LINE"
+Disp "THROUGH 0 WITH SLOPE=A/2,"
+Disp "SO A=2*SLOPE."
+Disp "NEGATIVE = (-) KEY"
+Input "SLOPE (M/S²)=",M
+If abs(M)>1ᴇ9
+Goto FP
+2*M→A
+M→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Str9→Str1
+A→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Str9→Str2
+ClrHome
+Disp "STEP 1  ACCELERATION"
+Disp "S=(1/2)AT² IS A LINE"
+Disp "Y=(SLOPE)X WITH Y=S AND"
+Disp "X=T², SO SLOPE=A/2 AND"
+Disp "A=2*SLOPE"
+Disp "A=2("+Str1+")"
+Disp "A = "+Str2+" M/S²"
+Pause 
+ClrHome
+Disp "SUMMARY  RAMP"
+Disp "SLOPE = "+Str1+" M/S²"
+Disp "A = "+Str2+" M/S²"
+Disp "(ALONG THE RAMP)"
+Pause 
+Goto FF
+Lbl FH
+ClrHome
+Disp "PERCENT DIFFERENCE"
+Disp "COMPARES TWO MEASURED"
+Disp "VALUES (NEITHER IS THE"
+Disp "ACCEPTED VALUE)-"
+Disp "%DIFF=|A-B|/|AVG|*100"
+Disp "AVG=(A+B)/2"
+Disp "NEGATIVE = (-) KEY"
+Input "VALUE A=",A
+Input "VALUE B=",B
+If max(abs(A),abs(B))>1ᴇ9
+Goto FP
+(A+B)/2→C
+If C=0
+Goto FQ
+abs(A-B)→D
+100*D/abs(C)→E
+A→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Str9→Str1
+B→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Str9→Str2
+If B<0
+"("+Str9+")"→Str2
+ClrHome
+Disp "STEP 1  AVERAGE"
+Disp "AVG=(A+B)/2"
+"AVG=("+Str1+"+"+Str2+")/2"→Str0
+⁻2ᴇ⁻99→U
+prgmPHYSICS
+C→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "AVG = "+Str9
+Pause 
+abs(C)→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Str9→Str3
+ClrHome
+Disp "STEP 2  PERCENT DIFFERENCE"
+Disp "%DIFF=|A-B|/|AVG|*100"
+"=|"+Str1+"-"+Str2+"|/"+Str3+"*100"→Str0
+⁻2ᴇ⁻99→U
+prgmPHYSICS
+D→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+"="+Str9+"/"+Str3+"*100"→Str0
+⁻2ᴇ⁻99→U
+prgmPHYSICS
+E→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Str9→Str4
+Disp "PERCENT DIFF = "+Str9+" %"
+Disp "(UNROUNDED VALUES USED)"
+Pause 
+ClrHome
+Disp "SUMMARY  PERCENT DIFF"
+Disp "VALUE A = "+Str1
+B→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "VALUE B = "+Str9
+C→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "AVG = "+Str9
+Disp "PERCENT DIFF = "+Str4+" %"
+Pause 
+Goto FF
+Lbl FI
+ClrHome
+Disp "PERCENT ERROR"
+Disp "COMPARES YOUR MEASURED"
+Disp "(EXPERIMENTAL) VALUE WITH"
+Disp "THE ACCEPTED (TRUE) VALUE-"
+Disp "%ERROR=|ACC-EXP|/|ACC|*100"
+Disp "NEGATIVE = (-) KEY"
+Input "EXPERIMENTAL=",A
+Input "ACCEPTED=",B
+If max(abs(A),abs(B))>1ᴇ9
+Goto FP
+If B=0
+Goto FS
+If abs(A-B)>1ᴇ80*abs(B)
+Goto FS
+abs(A-B)→D
+100*D/abs(B)→E
+A→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Str9→Str1
+If A<0
+"("+Str9+")"→Str9
+Str9→Str2
+abs(B)→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Str9→Str3
+B→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+ClrHome
+Disp "STEP 1  PERCENT ERROR"
+Disp "%ERROR=|ACC-EXP|/|ACC|*100"
+"=|"+Str9+"-"+Str2+"|/"+Str3+"*100"→Str0
+⁻2ᴇ⁻99→U
+prgmPHYSICS
+D→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+"="+Str9+"/"+Str3+"*100"→Str0
+⁻2ᴇ⁻99→U
+prgmPHYSICS
+E→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Str9→Str4
+"PERCENT ERROR = "+Str9+" %"→Str0
+⁻2ᴇ⁻99→U
+prgmPHYSICS
+Disp "(UNROUNDED VALUES USED)"
+Pause 
+ClrHome
+Disp "SUMMARY  PERCENT ERROR"
+Disp "EXPERIMENTAL = "+Str1
+B→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Disp "ACCEPTED = "+Str9
+"PERCENT ERROR = "+Str4+" %"→Str0
+⁻2ᴇ⁻99→U
+prgmPHYSICS
+Pause 
+Goto FF
+Lbl FJ
+Menu("YARDS AND METERS","YARDS TO METERS",FK,"METERS TO YARDS",FL,"BACK",FF)
+Lbl FK
+ClrHome
+Disp "YARDS TO METERS"
+Disp "1 M IS 1.0936 YD, SO"
+Disp "METERS=YARDS/1.0936"
+Disp "NEGATIVE = (-) KEY"
+Input "YARDS=",A
+If abs(A)>1ᴇ9
+Goto FP
+A/1.0936→B
+A→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Str9→Str1
+B→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Str9→Str2
+ClrHome
+Disp "STEP 1  YARDS TO METERS"
+Disp "METERS=YARDS/1.0936"
+Disp "METERS="+Str1+"/1.0936"
+Disp "METERS = "+Str2+" M"
+Pause 
+ClrHome
+Disp "SUMMARY  YD TO M"
+Disp "YARDS = "+Str1+" YD"
+Disp "METERS = "+Str2+" M"
+Pause 
+Goto FF
+Lbl FL
+ClrHome
+Disp "METERS TO YARDS"
+Disp "1 M IS 1.0936 YD, SO"
+Disp "YARDS=METERS*1.0936"
+Disp "NEGATIVE = (-) KEY"
+Input "METERS=",A
+If abs(A)>1ᴇ9
+Goto FP
+1.0936*A→B
+A→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Str9→Str1
+B→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Str9→Str2
+ClrHome
+Disp "STEP 1  METERS TO YARDS"
+Disp "YARDS=METERS*1.0936"
+Disp "YARDS="+Str1+"*1.0936"
+Disp "YARDS = "+Str2+" YD"
+Pause 
+ClrHome
+Disp "SUMMARY  M TO YD"
+Disp "METERS = "+Str1+" M"
+Disp "YARDS = "+Str2+" YD"
+Pause 
+Goto FF
+Lbl FM
+Menu("SPEED TO M/S","KM/H TO M/S",FN,"MPH TO M/S",FO,"BACK",FF)
+Lbl FN
+ClrHome
+Disp "KM/H TO M/S"
+Disp "1 KM IS 1000 M AND 1 H IS"
+Disp "3600 S, SO 1 KM/H IS"
+Disp "1000/3600 OR 1/3.6 M/S-"
+Disp "M/S=(KM/H)/3.6"
+Disp "NEGATIVE = (-) KEY"
+Input "KM/H=",A
+A/3.6→B
+A→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Str9→Str1
+B→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Str9→Str2
+ClrHome
+Disp "STEP 1  KM/H TO M/S"
+Disp "M/S=(KM/H)/3.6"
+Disp "M/S="+Str1+"/3.6"
+Disp "SPEED = "+Str2+" M/S"
+Pause 
+ClrHome
+Disp "SUMMARY  KM/H TO M/S"
+Disp "SPEED = "+Str1+" KM/H"
+Disp "SPEED = "+Str2+" M/S"
+Pause 
+Goto FF
+Lbl FO
+ClrHome
+Disp "MPH TO M/S"
+Disp "1 MILE IS 1609.344 M AND"
+Disp "1 H IS 3600 S, SO 1 MPH"
+Disp "IS 0.44704 M/S-"
+Disp "M/S=MPH*0.44704"
+Disp "NEGATIVE = (-) KEY"
+Input "MPH=",A
+0.44704*A→B
+A→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Str9→Str1
+B→Z
+⁻1ᴇ⁻99→U
+prgmPHYSICS
+Str9→Str2
+ClrHome
+Disp "STEP 1  MPH TO M/S"
+Disp "M/S=MPH*0.44704"
+Disp "M/S="+Str1+"*0.44704"
+Disp "SPEED = "+Str2+" M/S"
+Pause 
+ClrHome
+Disp "SUMMARY  MPH TO M/S"
+Disp "SPEED = "+Str1+" MPH"
+Disp "SPEED = "+Str2+" M/S"
+Pause 
+Goto FF
+Lbl FP
+ClrHome
+Disp "THAT NUMBER IS TOO LARGE."
+Disp "KEEP EACH NUMBER BETWEEN"
+Disp "-1E9 AND 1E9."
+Pause 
+Goto FF
+Lbl FQ
+ClrHome
+Disp "THE AVERAGE (A+B)/2 IS 0,"
+Disp "SO THE PERCENT DIFFERENCE"
+Disp "WOULD DIVIDE BY 0. IT"
+Disp "CANNOT BE FOUND."
+Pause 
+Goto FF
+Lbl FS
+ClrHome
+Disp "THE ACCEPTED VALUE IS 0"
+Disp "(OR TOO CLOSE TO 0)."
+Disp "PERCENT ERROR DIVIDES BY"
+Disp "IT, SO IT CANNOT BE FOUND."
+Pause 
+Goto FF
+Lbl FU
+Return
+Return
+Lbl AJ
+0→U
+Degree
+Lbl FW
+Menu("PHYSREF 1/2  FORMULAS","SCALARS VS VECTORS",F0,"THE 5 EQUATIONS",F1,"FREE FALL",F2,"GRAPHS X-T V-T A-T",F3,"FACTOR OF CHANGE",F4,"MORE >",FZ,"QUIT TO MAIN MENU",GA)
+Lbl FZ
+Menu("PHYSREF 2/2  FORMULAS","CHASE PROBLEMS",F5,"HORIZONTAL LAUNCH",F6,"ANGLED LAUNCH",F7,"RIVER CROSSING",F8,"LABS",F9,"BACK",FW,"QUIT TO MAIN MENU",GA)
+Lbl F0
+ClrHome
+Disp "SCALARS VS VECTORS 1/3"
+Disp "SCALAR = SIZE ONLY"
+Disp "VECTOR = SIZE + DIRECTION"
+Disp " (SIGN + OR - = DIRECTION)"
+Disp "DISTANCE (SCALAR)"
+Disp " TOTAL PATH LENGTH, ≥ 0"
+Disp "DISPLACEMENT S (VECTOR)"
+Disp " S = XF - X0 (CHANGE IN X)"
+Disp "EX 5 M RIGHT THEN 2 M LEFT"
+Disp " DISTANCE 7 M, S = +3 M"
+Pause 
+ClrHome
+Disp "SCALARS VS VECTORS 2/3"
+Disp "SPEED (SCALAR) = SIZE OF V"
+Disp "VELOCITY (VECTOR) HAS SIGN"
+Disp "AVG SPEED = DISTANCE / T"
+Disp "AVG VELOCITY = S / T"
+Disp " (DISPLACEMENT / TIME)"
+Disp "EX RUN A 400 M LAP IN 80 S"
+Disp " AVG SPEED = 400/80"
+Disp "  = 5.00 M/S"
+Disp " AVG VELOCITY = 0 (S = 0)"
+Pause 
+ClrHome
+Disp "SCALARS VS VECTORS 3/3"
+Disp "ACCELERATION A (VECTOR)"
+Disp " A = (VF - V0)/T  IN M/S²"
+Disp "SPEEDING UP WHEN V AND A"
+Disp " HAVE THE SAME SIGN"
+Disp "SLOWING DOWN WHEN V AND A"
+Disp " HAVE OPPOSITE SIGNS"
+Disp "EX V = -5 M/S, A = -2 M/S²"
+Disp " SAME SIGNS, SPEEDING UP"
+Disp "NEGATIVE A ≠ SLOWING DOWN"
+Pause 
+Goto FW
+Lbl F1
+ClrHome
+Disp "THE 5 EQUATIONS 1/4"
+Disp "ONLY WHEN A IS CONSTANT"
+Disp "VF=V0+AT        (NO S)"
+Disp "S=V0T+(1/2)AT²  (NO VF)"
+Disp "S=VFT-(1/2)AT²  (NO V0)"
+Disp "VF²=V0²+2AS     (NO T)"
+Disp "S=(1/2)(V0+VF)T (NO A)"
+Disp "V0 START V    VF FINAL V"
+Disp "S DISPLACEMENT  T TIME"
+Disp "A ACCELERATION"
+Pause 
+ClrHome
+Disp "THE 5 EQUATIONS 2/4"
+Disp "HOW TO PICK AN EQUATION"
+Disp "1 LIST V0 VF S T A"
+Disp "2 FIND THE 3 KNOWNS AND"
+Disp "  THE 1 UNKNOWN YOU WANT"
+Disp "3 THE 5TH VARIABLE IS NOT"
+Disp "  GIVEN AND NOT ASKED FOR"
+Disp "4 USE THE EQUATION THAT"
+Disp "  DOES NOT HAVE IT"
+Disp "5 PUT IN SIGNS, UP IS +"
+Pause 
+ClrHome
+Disp "THE 5 EQUATIONS 3/4"
+Disp "HIDDEN KNOWNS"
+Disp "FROM REST       V0 = 0"
+Disp "DROPPED         V0 = 0"
+Disp "COMES TO A STOP VF = 0"
+Disp "TOP OF A THROW  VY = 0"
+Disp "FREE FALL       A = -9.8"
+Disp "CONSTANT SPEED  A = 0"
+Disp "LANDS H BELOW   S = -H"
+Disp "UP IS +, DOWN IS -"
+Pause 
+ClrHome
+Disp "THE 5 EQUATIONS 4/4"
+Disp "EX CAR AT 20 M/S BRAKES AT"
+Disp " 4 M/S² TO A STOP. FIND S"
+Disp "V0 = 20, VF = 0, A = -4"
+Disp " (A IS - BECAUSE IT SLOWS"
+Disp " WHILE MOVING +)"
+Disp "NO T, SO VF²=V0²+2AS"
+Disp "0 = 20² + 2(-4)S"
+Disp "0 = 400 - 8S"
+Disp "S = 50.0 M"
+Pause 
+Goto FW
+Lbl F2
+ClrHome
+Disp "FREE FALL 1/4"
+Disp "ONLY GRAVITY, NO AIR"
+Disp "A = -9.8 M/S² THE WHOLE"
+Disp " TIME, GOING UP, AT THE"
+Disp " TOP, AND COMING DOWN"
+Disp "AT THE TOP V = 0, BUT"
+Disp " A IS STILL -9.8 M/S²"
+Disp "DROPPED      V0 = 0"
+Disp "THROWN UP    V0 IS +"
+Disp "THROWN DOWN  V0 IS -"
+Pause 
+ClrHome
+Disp "FREE FALL 2/4  SYMMETRY"
+Disp "TIME UP = TIME DOWN, SAME"
+Disp " SPEED AT SAME HEIGHT"
+Disp "EX V0 = 14.7 M/S UP"
+Disp "VF=V0+AT  0 = 14.7 - 9.8T"
+Disp " T = 1.50 S (TOP, VF = 0)"
+Disp "VF²=V0²+2AS  (NO T)"
+Disp " 0 = 14.7² + 2(-9.8)S"
+Disp " S = 11.0 M (MAX HEIGHT)"
+Disp "BACK AT 3.00 S, -14.7 M/S"
+Pause 
+ClrHome
+Disp "FREE FALL 3/4  DROPPED"
+Disp "DISTANCE FALLEN FROM REST"
+Disp "       EACH SEC     TOTAL"
+Disp "1ST SEC   4.9 M     4.9 M"
+Disp "2ND SEC  14.7 M    19.6 M"
+Disp "3RD SEC  24.5 M    44.1 M"
+Disp "RATIO     1,3,5     1,4,9"
+Disp "SUCCESSIVE EQUAL TIMES"
+Disp " 1,3,5  TOTALS 1,4,9 (T²)"
+Disp "AS DISPLACEMENT S = -4.9T²"
+Pause 
+ClrHome
+Disp "FREE FALL 4/4  DROP FROM H"
+Disp "V0 = 0, A = -9.8, S = -H"
+Disp "S = V0T + (1/2)AT² GIVES"
+Disp " -H = -(1/2)(9.8)T²"
+Disp " T = √(2H/9.8)"
+Disp "VF² = V0² + 2AS GIVES"
+Disp " VF = -√(2(9.8)H)  (DOWN)"
+Disp "EX H = 20 M"
+Disp " T = √(40/9.8) = 2.02 S"
+Disp " VF = -√(392) = -19.8 M/S"
+Pause 
+Goto FW
+Lbl F3
+ClrHome
+Disp "GRAPHS 1/6  THE STACK"
+Disp "TOP     X-T  POSITION"
+Disp "MIDDLE  V-T  VELOCITY"
+Disp "BOTTOM  A-T  ACCELERATION"
+Disp "SLOPE GOES DOWN THE STACK"
+Disp " SLOPE OF X-T = V"
+Disp " SLOPE OF V-T = A"
+Disp "AREA GOES UP THE STACK"
+Disp " AREA UNDER V-T = S"
+Disp " AREA UNDER A-T = VF - V0"
+Pause 
+ClrHome
+Disp "GRAPHS 2/6  AREA"
+Disp "AREA UNDER V-T = S"
+Disp " = CHANGE IN X (XF - X0)"
+Disp "AREA UNDER A-T"
+Disp " = CHANGE IN V (VF - V0)"
+Disp "AREA BELOW THE T AXIS"
+Disp " COUNTS AS NEGATIVE"
+Disp "EX V-T 0 TO 8 M/S IN 4 S"
+Disp " TRIANGLE (1/2)(4)(8)"
+Disp " S = 16.0 M"
+Pause 
+ClrHome
+Disp "GRAPHS 3/6  X-T SHAPES"
+Disp "SLOPE OF X-T = VELOCITY"
+Disp "FLAT = AT REST (V = 0)"
+Disp "STRAIGHT LINE = CONSTANT V"
+Disp " (A = 0) STEEPER = FASTER"
+Disp " SLOPING UP V +, DOWN V -"
+Disp "CURVE (PARABOLA) ="
+Disp " ACCELERATING, CONSTANT A"
+Disp " CUP (OPENS UP) A IS +"
+Disp " CAP (OPENS DOWN) A IS -"
+Pause 
+ClrHome
+Disp "GRAPHS 4/6  V-T SHAPES"
+Disp "SLOPE OF V-T = A"
+Disp "FLAT = CONSTANT V (A = 0)"
+Disp "SLOPED LINE = CONSTANT A"
+Disp "ON THE T AXIS = AT REST"
+Disp "ABOVE AXIS = MOVING +"
+Disp "BELOW AXIS = MOVING -"
+Disp "CROSSES AXIS = REVERSES"
+Disp "AWAY FROM AXIS SPEEDS UP"
+Disp "TOWARD AXIS SLOWS DOWN"
+Pause 
+ClrHome
+Disp "GRAPHS 5/6  A-T SHAPES"
+Disp "FLAT = CONSTANT A"
+Disp " (THE 5 EQUATIONS WORK)"
+Disp "ON THE T AXIS = A IS 0"
+Disp " (CONSTANT V OR AT REST)"
+Disp "ABOVE AXIS = A IS +"
+Disp "BELOW AXIS = A IS -"
+Disp "AREA = CHANGE IN V"
+Disp "FREE FALL A-T IS FLAT"
+Disp " AT -9.8 M/S²"
+Pause 
+ClrHome
+Disp "GRAPHS 6/6  ONE MOTION"
+Disp "        X-T      V-T  A-T"
+Disp "AT REST FLAT     AT 0 AT 0"
+Disp "CONST V LINE     FLAT AT 0"
+Disp "CONST A PARABOLA LINE FLAT"
+Disp "FLAT  HORIZONTAL LINE"
+Disp "LINE  STRAIGHT, SLOPED"
+Disp "AT 0  ON THE T AXIS"
+Disp "EACH GRAPH IS THE SLOPE OF"
+Disp " THE ONE ABOVE IT"
+Pause 
+Goto FW
+Lbl F4
+ClrHome
+Disp "FACTOR OF CHANGE 1/3"
+Disp "STOPPING (SAME A)"
+Disp " VF=0 IN VF²=V0²+2AS"
+Disp " S = -V0²/(2A), A IS -"
+Disp " S PROP TO V0²"
+Disp " 2X SPEED GIVES 4X S"
+Disp " 3X SPEED GIVES 9X S"
+Disp " S2/S1 = (V2/V1)²"
+Disp "EX 20 M/S STOPS IN 30 M,"
+Disp " 40 M/S STOPS IN 120 M"
+Pause 
+ClrHome
+Disp "FACTOR OF CHANGE 2/3"
+Disp "FROM REST (SAME A)"
+Disp " S = (1/2)AT²"
+Disp " S PROP TO T²"
+Disp " 2X TIME GIVES 4X S"
+Disp " 3X TIME GIVES 9X S"
+Disp " VF = AT, VF PROP TO T"
+Disp " S2/S1 = (T2/T1)²"
+Disp "EX 5 M IN THE FIRST 1 S,"
+Disp " 20 M IN 2 S, 45 M IN 3 S"
+Pause 
+ClrHome
+Disp "FACTOR OF CHANGE 3/3"
+Disp "DROPPED FROM HEIGHT H"
+Disp " T = √(2H/9.8)"
+Disp " T PROP TO √(H)"
+Disp " T2/T1 = √(H2/H1)"
+Disp " 4X HEIGHT GIVES 2X TIME"
+Disp " 9X HEIGHT GIVES 3X TIME"
+Disp " 2X HEIGHT GIVES 1.41X T"
+Disp "EX 4.9 M TAKES 1.00 S,"
+Disp " 19.6 M TAKES 2.00 S"
+Pause 
+Goto FW
+Lbl F5
+ClrHome
+Disp "CHASE PROBLEMS 1/3"
+Disp "POSITION OF EACH OBJECT"
+Disp " X = X0 + V0T + (1/2)AT²"
+Disp " (SAME ORIGIN, SAME CLOCK)"
+Disp " CONSTANT V  X = X0 + VT"
+Disp " FROM REST   X = (1/2)AT²"
+Disp "CATCHES UP WHEN BOTH"
+Disp " POSITIONS ARE EQUAL"
+Disp " SET X1 = X2, SOLVE FOR T"
+Disp "HEAD START D  USE X0 = D"
+Pause 
+ClrHome
+Disp "CHASE PROBLEMS 2/3"
+Disp "CAR PASSES AT CONSTANT V,"
+Disp " COP STARTS FROM REST"
+Disp " AT ACCEL A, SAME MOMENT"
+Disp "SET POSITIONS EQUAL"
+Disp " (1/2)AT² = VT"
+Disp " T = 2V/A (T = 0 IS START)"
+Disp " COP VF = A(2V/A) = 2V"
+Disp "CATCHES UP AT TWICE THE"
+Disp " CAR SPEED, FOR ANY A, V"
+Pause 
+ClrHome
+Disp "CHASE PROBLEMS 3/3"
+Disp "EX CAR 15 M/S, COP FROM"
+Disp " REST AT 3 M/S²"
+Disp " (1/2)(3)T² = 15T"
+Disp " T = 2(15)/3 = 10.0 S"
+Disp " X = 15(10) = 150 M"
+Disp " COP VF = 3(10) = 30.0 M/S"
+Disp "  = TWICE 15 M/S"
+Disp "GAP IS BIGGEST WHEN THE"
+Disp " SPEEDS ARE EQUAL"
+Pause 
+Goto FZ
+Lbl F6
+ClrHome
+Disp "HORIZONTAL LAUNCH 1/3"
+Disp "X (SIDEWAYS) CONSTANT V"
+Disp " VX = V0, AX = 0"
+Disp " RANGE = VX*T"
+Disp "Y (UP/DOWN) FREE FALL"
+Disp " V0Y = 0, AY = -9.8 M/S²"
+Disp " SY = -H (LANDS H BELOW)"
+Disp "SAME T IN BOTH DIRECTIONS"
+Disp " -H = -(1/2)(9.8)T²"
+Disp " T = √(2H/G), G = 9.8"
+Pause 
+ClrHome
+Disp "HORIZONTAL LAUNCH 2/3"
+Disp "EX BALL LEAVES A 20 M"
+Disp " CLIFF AT 5 M/S SIDEWAYS"
+Disp "Y  -20 = -(1/2)(9.8)T²"
+Disp " T = √(2(20)/9.8)"
+Disp " T = 2.02 S"
+Disp "X  RANGE = VX*T = 5(2.02)"
+Disp " RANGE = 10.1 M"
+Disp "VY AT LANDING = -9.8(2.02)"
+Disp " VY = -19.8 M/S (DOWN)"
+Pause 
+ClrHome
+Disp "HORIZONTAL LAUNCH 3/3"
+Disp "LANDING VELOCITY"
+Disp " VX = V0 (NEVER CHANGES)"
+Disp " VY = -9.8T"
+Disp " SPEED = √(VX² + VY²)"
+Disp " ANGLE = TAN⁻1(|VY|/VX)"
+Disp "EX SPEED = √(5² + 19.8²)"
+Disp " = 20.4 M/S"
+Disp " ANGLE = TAN⁻1(19.8/5)"
+Disp " = 75.8° BELOW HORIZONTAL"
+Pause 
+Goto FZ
+Lbl F7
+ClrHome
+Disp "ANGLED LAUNCH 1/4"
+Disp "SPLIT V0 INTO COMPONENTS"
+Disp " VX = V0COS(ANGLE)"
+Disp " V0Y = V0SIN(ANGLE)"
+Disp "X  CONSTANT V, AX = 0"
+Disp "Y  FREE FALL, AY = -9.8"
+Disp "THE Y MOTION DECIDES T"
+Disp "RANGE = VX*T"
+Disp "AT THE TOP VY = 0 BUT"
+Disp " VX STAYS THE SAME"
+Pause 
+ClrHome
+Disp "ANGLED LAUNCH 2/4"
+Disp "LEVEL GROUND (SAME HEIGHT)"
+Disp " TIME TO TOP = V0Y/9.8"
+Disp " TOTAL T = 2V0Y/9.8"
+Disp " MAX H = V0Y²/(2*9.8)"
+Disp " RANGE = VX*T"
+Disp "LANDS HIGHER OR LOWER"
+Disp " S = V0Y*T - (1/2)(9.8)T²"
+Disp " (S IS - IF LANDING LOWER)"
+Disp " SOLVE THE QUADRATIC FOR T"
+Pause 
+ClrHome
+Disp "ANGLED LAUNCH 3/4"
+Disp "EX 20 M/S AT 30°, LEVEL"
+Disp "VX = 20COS(30) = 17.3 M/S"
+Disp "V0Y = 20SIN(30) = 10.0 M/S"
+Disp "TOTAL T = 2(10.0)/9.8"
+Disp " T = 2.04 S"
+Disp "RANGE = 17.3(2.04)"
+Disp " = 35.3 M"
+Disp "MAX H = 10.0²/19.6"
+Disp " = 5.10 M"
+Pause 
+ClrHome
+Disp "ANGLED LAUNCH 4/4"
+Disp "LEVEL GROUND ONLY"
+Disp " RANGE = V0²SIN(2*ANGLE)/G"
+Disp " MAX RANGE AT 45°"
+Disp " COMPLEMENTARY ANGLES"
+Disp " (ADD TO 90°) GIVE EQUAL"
+Disp " RANGES, EX 30° AND 60°"
+Disp " 20 M/S AT 60° ALSO 35.3 M"
+Disp " (HIGHER ANGLE = LONGER"
+Disp "  TIME, HIGHER PEAK)"
+Pause 
+Goto FZ
+Lbl F8
+ClrHome
+Disp "RIVER CROSSING 1/5"
+Disp "VB  BOAT SPEED IN WATER"
+Disp "VR  RIVER CURRENT SPEED"
+Disp "W   RIVER WIDTH"
+Disp "ACROSS AND DOWNSTREAM"
+Disp " MOTIONS ARE INDEPENDENT"
+Disp "CROSSING TIME"
+Disp " T = W / BOAT SPEED ACROSS"
+Disp "DRIFT = VR*T (DOWNSTREAM)"
+Disp "CURRENT DOES NOT CHANGE T"
+Pause 
+ClrHome
+Disp "RIVER CROSSING 2/5"
+Disp "AIMED STRAIGHT ACROSS"
+Disp " T = W/VB"
+Disp " DRIFT = VR*T"
+Disp " RESULTANT SPEED"
+Disp "  = √(VB² + VR²)"
+Disp " PATH ANGLE FROM ACROSS"
+Disp "  = TAN⁻1(VR/VB)"
+Disp "HEADING (WHERE IT POINTS)"
+Disp " IS DIFFERENT FROM PATH"
+Pause 
+ClrHome
+Disp "RIVER CROSSING 3/5"
+Disp "EX VB = 4, VR = 3 M/S,"
+Disp " W = 100 M, AIM ACROSS"
+Disp " T = 100/4 = 25.0 S"
+Disp " DRIFT = 3(25) = 75.0 M"
+Disp " SPEED = √(4² + 3²)"
+Disp "  = 5.00 M/S"
+Disp " ANGLE = TAN⁻1(3/4)"
+Disp "  = 36.9° DOWNSTREAM"
+Disp "  FROM STRAIGHT ACROSS"
+Pause 
+ClrHome
+Disp "RIVER CROSSING 4/5"
+Disp "TO LAND DIRECTLY ACROSS"
+Disp " AIM UPSTREAM AT"
+Disp " ANGLE = SIN⁻1(VR/VB)"
+Disp "  FROM STRAIGHT ACROSS"
+Disp " UPSTREAM PART CANCELS VR"
+Disp " SPEED ACROSS"
+Disp "  = √(VB² - VR²)"
+Disp " T = W/√(VB² - VR²)"
+Disp "ONLY POSSIBLE IF VB > VR"
+Pause 
+ClrHome
+Disp "RIVER CROSSING 5/5"
+Disp "EX VB = 5, VR = 3 M/S,"
+Disp " W = 100 M, LAND ACROSS"
+Disp " ANGLE = SIN⁻1(3/5)"
+Disp "  = 36.9° UPSTREAM"
+Disp " SPEED ACROSS"
+Disp "  = √(5² - 3²) = 4.00 M/S"
+Disp " T = 100/4 = 25.0 S"
+Disp " DRIFT = 0 M"
+Pause 
+Goto FZ
+Lbl F9
+ClrHome
+Disp "LABS 1/6  RAMP"
+Disp "CART FROM REST DOWN RAMP"
+Disp " S = (1/2)AT²"
+Disp "GRAPH S (Y AXIS) VS T²"
+Disp " (X AXIS), NOT VS T"
+Disp " IT IS A STRAIGHT LINE"
+Disp "SLOPE = A/2"
+Disp "SO A = 2*SLOPE"
+Disp "EX SLOPE 0.75 M/S²"
+Disp " A = 2(0.75) = 1.50 M/S²"
+Pause 
+ClrHome
+Disp "LABS 2/6  100 M DASH"
+Disp "TIMES AT EACH 10 M MARK"
+Disp "AVG VELOCITY PER INTERVAL"
+Disp " = (X2 - X1)/(T2 - T1)"
+Disp "PLOT IT AT THE MIDDLE TIME"
+Disp " OF THE INTERVAL (T1+T2)/2"
+Disp "EX 10 M AT 2.0 S AND"
+Disp " 20 M AT 3.6 S, V = 10/1.6"
+Disp " = 6.25 M/S AT T = 2.80 S"
+Disp "SLOPE OF THIS V-T = A"
+Pause 
+ClrHome
+Disp "LABS 3/6  PERCENT DIFF"
+Disp "% DIFF = |A - B|"
+Disp "  / AVERAGE * 100"
+Disp "AVERAGE = (A + B)/2"
+Disp "(A, B ARE THE TWO VALUES)"
+Disp "EX 9.6 AND 9.8"
+Disp " |9.6 - 9.8| = 0.2"
+Disp " AVERAGE = 9.7"
+Disp " 0.2/9.7 * 100 = 2.06 %"
+Pause 
+ClrHome
+Disp "LABS 4/6  UNITS"
+Disp "1 M = 1.0936 YD"
+Disp "1 YD = 0.9144 M"
+Disp "YD TO M  DIVIDE BY 1.0936"
+Disp "M TO YD  TIMES 1.0936"
+Disp "EX 100 YD = 100/1.0936"
+Disp " = 91.4 M"
+Disp "EX 100 M = 100(1.0936)"
+Disp " = 109 YD"
+Pause 
+ClrHome
+Disp "LABS 5/6  LAUNCH FROM H"
+Disp "BALL LEAVES A TABLE OF"
+Disp " HEIGHT H, LANDS ON FLOOR"
+Disp " Y DISPLACEMENT IS -H"
+Disp "-H = V0Y*T - (1/2)GT²"
+Disp "REWRITE AS"
+Disp " 4.9T² - V0Y*T - H = 0"
+Disp "QUADRATIC FORMULA, KEEP"
+Disp " THE POSITIVE ROOT"
+Disp "THEN RANGE = VX*T"
+Pause 
+ClrHome
+Disp "LABS 6/6  EXAMPLE"
+Disp "THROWN UP 10 M/S FROM 15 M"
+Disp "-15 = 10T - 4.9T²"
+Disp "4.9T² - 10T - 15 = 0"
+Disp "A = 4.9, B = -10, C = -15"
+Disp "T=(-B+/-√(B²-4AC))/(2A)"
+Disp "B²-4AC = 100 + 294 = 394"
+Disp "T = (10 + √(394))/9.8"
+Disp "T = 3.05 S (OTHER ROOT"
+Disp " -1.01 S IS BEFORE LAUNCH)"
+Pause 
+Goto FZ
+Lbl GA
+ClrHome
+Return
