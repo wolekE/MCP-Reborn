@@ -29,7 +29,7 @@ Every function returns a Result whose .screens list has one Screen per Pause scr
                     is a number (tests format it with fmt3, like prgmZFMT) or a literal string the
                     program prints as text; tail is the exact text after the number (" M/S", "°",
                     " M (RIGHT)", ...)
-Result.messages lists the message labels shown (H6..H9, I2..I7, J6..J8, K6..K8),
+Result.messages lists the message labels shown (H6..HA, I2..I7, J6..J8, K6..K8),
 Result.prompts the Input prompts asked, Result.info the rows on the screen while typing,
 Result.results the computed numbers (unrounded).
 """
@@ -89,14 +89,18 @@ MESSAGES = {
            "NEGATIVE (IT IS A LENGTH).",
            "FOR THE OPPOSITE",
            "DIRECTION, ADD 180 TO THE",
-           "ANGLE AND USE A POSITIVE",
-           "MAGNITUDE."),
+           "ANGLE (OR SUBTRACT 180 IF",
+           "IT IS ABOVE 180) AND USE A",
+           "POSITIVE MAGNITUDE."),
     "H7": ("THE ANGLE MUST BE FROM",           # |angle| > 360
            "-360 TO 360 DEGREES,",
            "COUNTERCLOCKWISE FROM +X."),
     "H8": ("THAT NUMBER IS TOO LARGE.",        # |X| or |Y| > 1E9
            "KEEP X AND Y BETWEEN",
            "-1E9 AND 1E9."),
+    "HA": ("THAT NUMBER IS TOO LARGE.",        # magnitude > 1E9
+           "KEEP THE MAGNITUDE AT OR",
+           "BELOW 1E9."),
     # H9 (zero vector) is built in vector_xy() because it shows the unit
     # I. averages (back to PHYSOLVE)
     "I2": ("THE NUMBER OF LEGS MUST",          # N not 1, 2, 3 or 4
@@ -133,7 +137,7 @@ MESSAGES = {
            "ENTER THE OLD FALL TIME",
            "(0 OR MORE SECONDS)."),
     # K. lab tools (back to the LAB TOOLS menu)
-    "K6": ("THAT NUMBER IS TOO LARGE.",        # an input > 1E9 in size
+    "K6": ("THAT NUMBER IS TOO LARGE.",        # an input > 1E9 in size (every lab tool)
            "KEEP EACH NUMBER BETWEEN",
            "-1E9 AND 1E9."),
     "K7": ("THE AVERAGE (A+B)/2 IS 0,",        # percent difference with A+B = 0
@@ -160,6 +164,7 @@ MENUS = {
     "SPEED TO M/S": ("KM/H TO M/S", "MPH TO M/S", "BACK"),
 }
 UNITS = {1: " M", 2: " M/S", 3: " M/S²", 4: " "}     # Str4 for menu choice 1..4
+NO_UNIT = {1: 0, 2: 0, 3: 0, 4: 1}                    # E: 0→E before the menu, 1→E for OTHER (NO UNIT)
 
 # ----------------------------------------------------------------------------- info screens
 INFO = {
@@ -189,16 +194,19 @@ INFO = {
     "J1": ("S PROP TO V² (STOPPING)",
            "STOPPING (VF=0) WITH THE",
            "SAME A- VF²=V0²+2AS GIVES",
-           "S=-V0²/(2A), SO S PROP V².",
+           "S=-V0²/(2A), S PROP TO V².",
            "2X V GIVES 4X S.",
            "(ALSO MAX HEIGHT VS V0)",
-           "(K IS 3 IF V TRIPLES)"),
+           "(K IS 3 IF V TRIPLES)",
+           "NEGATIVE = (-) KEY"),
     "J2": ("S PROP TO T² (FROM REST)",
            "FROM REST (V0=0), SAME A-",
            "S=V0T+(1/2)AT²=(1/2)AT²,",
            "SO S PROP TO T².",
            "2X T GIVES 4X S.",
-           "(K IS 2 IF T DOUBLES)"),
+           "(K IS 2 IF T DOUBLES)",
+           "(A DROP HAS S<0, UP IS +)",
+           "NEGATIVE = (-) KEY"),
     "J3": ("T PROP TO √(H) (FALL TIME)",
            "DROPPED FROM REST FROM A",
            "HEIGHT H- H=(1/2)(9.8)T²,",
@@ -349,12 +357,13 @@ class Result:
         raise KeyError(title)
 
 
-def fmt_sign_word(x, pos, neg):
-    """' (RIGHT)' / ' (LEFT)' style suffix: only when ZFMT shows a nonzero number."""
+def fmt_sign_word(x, pos, neg, e=0):
+    """' (RIGHT)' / ' (LEFT)' style suffix: only when ZFMT shows a nonzero number.
+    e=1 (no unit, Str4=" ") drops the word's leading space: sub(" (RIGHT)",1+E,8-E)."""
     if x >= TINY:
-        return pos
+        return pos[e:]
     if x <= -TINY:
-        return neg
+        return neg[e:]
     return ""
 
 
@@ -363,11 +372,14 @@ def vector_mag_angle(unit, m, n):
     """Menu VECTOR COMPONENTS 1 (MAG+ANGLE TO X,Y); unit = WHAT KIND OF VECTOR? choice 1..4."""
     r = Result()
     str4 = UNITS[unit]                               # " M" / " M/S" / " M/S²" / " " -> Str4
+    E = NO_UNIT[unit]                                # 0→E (Lbl HU) / 1→E (Lbl U4)
     r.info = list(INFO["MAG_ANGLE"])
     r.ask("MAG_ANGLE")
     M, N = m, n                                      # Input "MAGNITUDE=",M / "ANGLE (DEG)=",N
     if M < 0:                                        # If M<0 / Goto H6
         return r.message("H6")
+    if M > BIG:                                      # If M>1ᴇ9 / Goto HA
+        return r.message("HA")
     if abs(N) > 360:                                 # If abs(N)>360 / Goto H7
         return r.message("H7")
     str1, str2 = fmt3(M), fmt3(N)                    # Str1, Str2
@@ -376,17 +388,21 @@ def vector_mag_angle(unit, m, n):
 
     s = r.clrhome()                                  # STEP 1: X component
     s.disp("STEP 1  X COMPONENT")
+    s.disp("ANGLE IS FROM +X, SO X IS")
+    s.disp("THE ADJACENT SIDE (COS)-")
     s.disp("X=MAGNITUDE*COS(ANGLE)")
     s.zline("X=(" + str1 + ")COS(" + str2 + "°)")
-    tail_x = str4 + fmt_sign_word(P, " (RIGHT)", " (LEFT)")
+    tail_x = str4 + fmt_sign_word(P, " (RIGHT)", " (LEFT)", E)
     s.val("X", P, tail_x)                            # Str3 = "X = ..."
     s.disp("(+X IS RIGHT, -X IS LEFT)")
 
     s = r.clrhome()                                  # STEP 2: Y component
     s.disp("STEP 2  Y COMPONENT")
+    s.disp("ANGLE IS FROM +X, SO Y IS")
+    s.disp("THE OPPOSITE SIDE (SIN)-")
     s.disp("Y=MAGNITUDE*SIN(ANGLE)")
     s.zline("Y=(" + str1 + ")SIN(" + str2 + "°)")
-    tail_y = str4 + fmt_sign_word(Q, " (UP)", " (DOWN)")
+    tail_y = str4 + fmt_sign_word(Q, " (UP)", " (DOWN)", E)
     s.val("Y", Q, tail_y)                            # Str0 = "Y = ..."
     s.disp("(+Y IS UP, -Y IS DOWN)")
 
@@ -570,7 +586,7 @@ def averages(n, legs=()):
     s.disp("ADD EVERY LEG AS POSITIVE")
     s.disp("(DIRECTION DOES NOT")
     s.disp("MATTER FOR DISTANCE)-")
-    s.zline("DISTANCE=" + str1)
+    s.zline("=" + str1)
     s.val("DISTANCE", P, " M")
 
     s = r.clrhome()                                  # STEP 2: displacement
@@ -584,7 +600,7 @@ def averages(n, legs=()):
     s = r.clrhome()                                  # STEP 3: total time
     s.disp("STEP 3  TOTAL TIME")
     s.disp("ADD THE TIMES OF ALL LEGS-")
-    s.zline("TIME=" + str3)
+    s.zline("=" + str3)
     s.val("TOTAL TIME", D, " S")
 
     s = r.clrhome()                                  # STEP 4: average speed
@@ -724,12 +740,13 @@ def pct_diff(a, b):
     s.disp("AVG=(A+B)/2")
     s.zline("AVG=(" + str1 + "+" + str2 + ")/2")
     s.val("AVG", C)
-    str3 = fmt3(abs(C))
-    s = r.clrhome()                                  # STEP 2: percent difference
-    s.disp("STEP 2  PERCENT DIFFERENCE")
+    str3 = fmt3(abs(ti(A + B)))                      # abs(A+B)→Z: |AVG| is shown as (|A+B|/2) so
+    s = r.clrhome()                                  # the numbers on screen give the result shown
+    s.disp("STEP 2  PERCENT DIFFERENCE")             # (2.10, 1.95: 0.150/(4.05/2)*100 = 7.41)
     s.disp("%DIFF=|A-B|/|AVG|*100")
-    s.zline("=|" + str1 + "-" + str2 + "|/" + str3 + "*100")
-    s.zline("=" + fmt3(D) + "/" + str3 + "*100")
+    s.disp("=|A-B|/(|A+B|/2)*100")
+    s.zline("=|" + str1 + "-" + str2 + "|/(" + str3 + "/2)*100")
+    s.zline("=" + fmt3(D) + "/(" + str3 + "/2)*100")
     s.val("PERCENT DIFF", E, " %")
     s.disp("(UNROUNDED VALUES USED)")
     s = r.clrhome()                                  # SUMMARY
@@ -822,11 +839,13 @@ def m_to_yd(m):
 
 
 def kmh_to_ms(v):
-    """LAB TOOLS 5 -> SPEED TO M/S 1 (KM/H TO M/S): m/s = (km/h) / 3.6 (no size limit needed)."""
+    """LAB TOOLS 5 -> SPEED TO M/S 1 (KM/H TO M/S): m/s = (km/h) / 3.6."""
     r = Result()
     r.info = list(INFO["KMH"])
     r.ask("KMH")
     A = num(v)                                       # Input "KM/H=",A
+    if abs(A) > BIGD:                                # If abs(A)>1ᴇ9 / Goto K6 (ZFMT needs |x| < 9.995E99)
+        return r.message("K6")
     B = div(A, Decimal("3.6"))                       # A/3.6→B
     s = r.clrhome()
     s.disp("STEP 1  KM/H TO M/S")
@@ -842,11 +861,13 @@ def kmh_to_ms(v):
 
 
 def mph_to_ms(v):
-    """LAB TOOLS 5 -> SPEED TO M/S 2 (MPH TO M/S): m/s = mph * 0.44704 (no size limit needed)."""
+    """LAB TOOLS 5 -> SPEED TO M/S 2 (MPH TO M/S): m/s = mph * 0.44704."""
     r = Result()
     r.info = list(INFO["MPH"])
     r.ask("MPH")
     A = num(v)                                       # Input "MPH=",A
+    if abs(A) > BIGD:                                # If abs(A)>1ᴇ9 / Goto K6
+        return r.message("K6")
     B = ti(Decimal("0.44704") * A)                   # 0.44704*A→B
     s = r.clrhome()
     s.disp("STEP 1  MPH TO M/S")

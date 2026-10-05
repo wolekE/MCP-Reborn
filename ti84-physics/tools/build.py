@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """
-Build TI-84 Plus CE .8xp files from the TI-Basic sources in ../src/*.txt.
+Build the TI-84 Plus CE program PHYSICS.8xp (the file to send) from the TI-Basic module sources in
+../src/*.txt: each module is built on its own into build/modules/ (for testing), then all modules
+are merged by tools/merge.py into PHYSICS.txt and built into PHYSICS.8xp.
 
 Tokenizer: TI-Toolkit tivars_lib_py (https://github.com/TI-Toolkit/tivars_lib_py),
 installed with `pip install tivars` or from a clone of the GitHub repo.
@@ -33,7 +35,11 @@ from tivars.types import TIProgram
 
 ROOT = Path(__file__).resolve().parent.parent
 SRC = ROOT / "src"
-OUT = ROOT / "8xp"
+OUT = ROOT / "build" / "modules"          # each module as its own .8xp (used by the tests)
+SINGLE = "PHYSICS"                         # the one program the student sends
+SINGLE_TXT = ROOT / f"{SINGLE}.txt"
+SINGLE_8XP = ROOT / f"{SINGLE}.8xp"
+MAX_PROGRAM_BYTES = 65000                  # a TI-84 Plus CE program can hold just under 64 KB
 RT = ROOT / "build" / "roundtrip"
 REPORT = ROOT / "build" / "ROUNDTRIP.md"
 
@@ -294,6 +300,61 @@ def lint(name, text, per_line, all_names):
     return errs, warns
 
 
+def build_program(name, raw, all_names, target, src_label, write):
+    """Tokenize, lint, save, re-open, detokenize and diff one program. Returns (row, errors, warnings)."""
+    failures = []
+    if "\r" in raw:
+        return None, [f"{src_label}: CRLF line endings"], []
+    if not raw.endswith("\n") or raw.endswith("\n\n"):
+        return None, [f"{src_label}: file must end with exactly one newline"], []
+    text = raw[:-1]
+    try:
+        toks, per_line = tokenize_program(text, name)
+    except BuildError as e:
+        return None, [str(e)], []
+    errs, warns = lint(name, text, per_line, all_names)
+    failures += errs
+    prog = TIProgram(name=name)
+    prog.load_tokens(toks)
+    if write:
+        target.parent.mkdir(parents=True, exist_ok=True)
+        prog.save(str(target))
+        reopened = TIProgram.open(str(target))
+    else:
+        reopened = prog
+    # round trip: detokenize what is on disk and diff with the source text
+    back = reopened.string()
+    if write:
+        RT.mkdir(parents=True, exist_ok=True)
+        (RT / f"{name}.txt").write_text(back + "\n", encoding="utf-8")
+    diff = list(difflib.unified_diff(text.split("\n"), back.split("\n"),
+                                     src_label, f"detokenized {target.name}", lineterm=""))
+    if diff:
+        failures.append(f"{name}: ROUND-TRIP MISMATCH\n" + "\n".join(diff[:40]))
+    # re-tokenizing the detokenized text must give identical bytes
+    toks2, _ = tokenize_program(back, name)
+    if b"".join(t.bits for t in toks2) != reopened.data:
+        failures.append(f"{name}: re-tokenizing the detokenized text gives different bytes")
+    if reopened.name != name:
+        failures.append(f"{name}: var name in file is {reopened.name!r}")
+    if len(reopened.data) > MAX_PROGRAM_BYTES:
+        failures.append(f"{name}: {len(reopened.data)} bytes is over the {MAX_PROGRAM_BYTES}-byte program limit")
+    # informational: compare with tivars' default "smart" tokenization of the same text
+    smart = TIProgram(name=name)
+    try:
+        smart.load_string(text)
+        smart_same = smart.data == reopened.data
+    except Exception:
+        smart_same = False
+    sha = hashlib.sha256(target.read_bytes()).hexdigest()[:16] if write else "-"
+    n_lines = text.count("\n") + 1
+    mos = reopened.get_min_os()
+    row = (name, n_lines, len(toks), len(reopened.data), target.stat().st_size if write else 0,
+           "identical" if not diff else "DIFF", "same" if smart_same else "differs", sha,
+           f"{mos.model} {mos.version}")
+    return row, failures, warns
+
+
 def build(write=True, only=None):
     srcs = sorted(SRC.glob("*.txt"))
     if not srcs:
@@ -301,74 +362,37 @@ def build(write=True, only=None):
     all_names = {p.stem for p in srcs}
     if only:
         srcs = [p for p in srcs if p.stem in only]
-    if write:
-        RT.mkdir(parents=True, exist_ok=True)
-        OUT.mkdir(parents=True, exist_ok=True)
     report, failures, all_warns = [], [], []
-    sizes = {}
     for path in srcs:
         name = path.stem
         if not NAME_RE.match(name):
             failures.append(f"{path.name}: program name must be 1-8 chars, A-Z/0-9, starting with a letter")
             continue
-        raw = path.read_text(encoding="utf-8")
-        if "\r" in raw:
-            failures.append(f"{path.name}: CRLF line endings")
-            continue
-        if not raw.endswith("\n") or raw.endswith("\n\n"):
-            failures.append(f"{path.name}: file must end with exactly one newline")
-            continue
-        text = raw[:-1]
-        try:
-            toks, per_line = tokenize_program(text, name)
-        except BuildError as e:
-            failures.append(str(e))
-            continue
-        errs, warns = lint(name, text, per_line, all_names)
+        row, errs, warns = build_program(name, path.read_text(encoding="utf-8"), all_names,
+                                         OUT / f"{name}.8xp", f"src/{name}.txt", write)
         failures += errs
         all_warns += warns
+        if row:
+            report.append(row)
 
-        prog = TIProgram(name=name)
-        prog.load_tokens(toks)
-        target = OUT / f"{name}.8xp"
+    # the deliverable: every module merged into the single program PHYSICS
+    if not only or SINGLE in only:
+        from merge import merge
+        text = merge(SRC)
         if write:
-            prog.save(str(target))
-            reopened = TIProgram.open(str(target))
-        else:
-            reopened = prog
-        # round trip: detokenize what is on disk and diff with the source text
-        back = reopened.string()
-        if write:
-            (RT / f"{name}.txt").write_text(back + "\n", encoding="utf-8")
-        diff = list(difflib.unified_diff(text.split("\n"), back.split("\n"),
-                                         f"src/{name}.txt", f"detokenized {name}.8xp", lineterm=""))
-        if diff:
-            failures.append(f"{name}: ROUND-TRIP MISMATCH\n" + "\n".join(diff[:40]))
-        # re-tokenizing the detokenized text must give identical bytes
-        toks2, _ = tokenize_program(back, name)
-        if b"".join(t.bits for t in toks2) != reopened.data:
-            failures.append(f"{name}: re-tokenizing the detokenized text gives different bytes")
-        if reopened.name != name:
-            failures.append(f"{name}: var name in file is {reopened.name!r}")
-        # informational: compare with tivars' default "smart" tokenization of the same text
-        smart = TIProgram(name=name)
-        try:
-            smart.load_string(text)
-            smart_same = smart.data == reopened.data
-        except Exception:
-            smart_same = False
-        sha = hashlib.sha256(target.read_bytes()).hexdigest()[:16] if write else "-"
-        if write:
-            sizes[name] = target.stat().st_size
-        n_lines = text.count("\n") + 1
-        report.append((name, n_lines, len(toks), len(reopened.data),
-                       target.stat().st_size if write else 0, "identical" if not diff else "DIFF",
-                       "same" if smart_same else "differs", sha, f"{reopened.get_min_os().model} {reopened.get_min_os().version}"))
+            SINGLE_TXT.write_text(text, encoding="utf-8")
+        row, errs, warns = build_program(SINGLE, text, {SINGLE}, SINGLE_8XP, f"{SINGLE}.txt", write)
+        failures += errs
+        all_warns += warns
+        if row:
+            report.append(row)
 
     lines = ["# Round-trip report", "",
              "Each `.8xp` was re-opened from disk, detokenized with tivars_lib_py, and diffed",
-             "against `src/<NAME>.txt`. `identical` means the diff is empty. The detokenized text is in",
-             "`build/roundtrip/`.", "",
+             "against its source text (`src/<NAME>.txt` for the modules, `PHYSICS.txt` for the merged",
+             "program). `identical` means the diff is empty. The detokenized text is in `build/roundtrip/`.",
+             "", "**`PHYSICS.8xp` is the file to send.** The module builds in `build/modules/` are what the",
+             "test-suites exercise one by one.", "",
              "| Program | Lines | Tokens | Program bytes | .8xp file bytes | Round-trip diff | tivars smart-mode bytes | sha256 (16) | Min OS |",
              "|---|---|---|---|---|---|---|---|---|"]
     for r in report:
@@ -401,6 +425,8 @@ def main():
             print(" -", f)
         return 1
     print(f"\nOK: {len(report)} programs built, linted, and round-tripped with no differences.")
+    if not only:
+        print(f"Send this one file to the calculator: {SINGLE_8XP.relative_to(ROOT.parent)}")
     return 0
 
 

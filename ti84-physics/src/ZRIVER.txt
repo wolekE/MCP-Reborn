@@ -82,13 +82,19 @@ prgmZLINE
 A→Z
 prgmZFMT
 Disp "FROM ACROSS = "+Str9+"°"
+If C>0
 Disp "(TOWARD DOWNSTREAM). FROM"
-Disp "THE BANK IT IS 90-ANGLE-"
+If C=0
+Disp "(STRAIGHT ACROSS). FROM"
+Disp "THE BANK IT IS 90-ANGLE."
 P→Z
 prgmZFMT
 Disp "FROM BANK = "+Str9+"°"
 Disp "HEADING IS STRAIGHT ACROSS"
+If C>0
 Disp "BUT THE PATH IS SLANTED."
+If C=0
+Disp "NO CURRENT- SO IS THE PATH"
 Pause 
 If C≥B
 Goto N1
@@ -99,7 +105,7 @@ ClrHome
 Disp "STEP 5  HEADING UPSTREAM"
 Disp "TO LAND DIRECTLY ACROSS,"
 Disp "THE UPSTREAM PART OF VB"
-Disp "MUST CANCEL VR-"
+Disp "MUST CANCEL VR, SO"
 Disp "VB SIN(ANGLE)=VR"
 "ANGLE=SIN⁻1("+Str2+"/"+Str1+")"→Str0
 prgmZLINE
@@ -151,7 +157,10 @@ Disp "DRIFT = "+Str9+" M"
 V→Z
 prgmZFMT
 Disp "V RESULT = "+Str9+" M/S"
+If C>0
 Disp "PATH ANGLE (DOWNSTREAM)-"
+If C=0
+Disp "PATH ANGLE (NO CURRENT)-"
 A→Z
 prgmZFMT
 Disp "FROM ACROSS = "+Str9+"°"
@@ -159,22 +168,34 @@ P→Z
 prgmZFMT
 Disp "FROM BANK = "+Str9+"°"
 Disp "HEADING- STRAIGHT ACROSS,"
+If C>0
 Disp "NOT ALONG THE PATH."
+If C=0
+Disp "SAME AS THE PATH."
 Pause 
 ClrHome
 Disp "SUMMARY 2/2 (LAND ACROSS)"
 If C<B
 Then
+If C>0
 Disp "HEADING (UPSTREAM)-"
+If C=0
+Disp "HEADING (NO CURRENT)-"
 F→Z
 prgmZFMT
 Disp "FROM ACROSS = "+Str9+"°"
 90-F→Z
 prgmZFMT
 Disp "FROM BANK = "+Str9+"°"
+Disp "PATH- STRAIGHT ACROSS,"
+If C>0
+Disp "NOT ALONG THE HEADING."
+If C=0
+Disp "SAME AS THE HEADING."
 Q→Z
 prgmZFMT
 Disp "V ACROSS = "+Str9+" M/S"
+Disp "(SPEED SEEN FROM SHORE)"
 G→Z
 prgmZFMT
 Disp "T = "+Str9+" S"

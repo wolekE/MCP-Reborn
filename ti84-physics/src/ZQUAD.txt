@@ -6,12 +6,12 @@ prgmZFMT
 Str9+"T²"→Str0
 M→Z
 prgmZFMT
-If M≥0
+If M≥0 or abs(M)<1ᴇ⁻9
 "+"+Str9→Str9
 Str0+Str9+"T"→Str0
 N→Z
 prgmZFMT
-If N≥0
+If N≥0 or abs(N)<1ᴇ⁻9
 "+"+Str9→Str9
 Str0+Str9+"=0"→Str0
 prgmZLINE

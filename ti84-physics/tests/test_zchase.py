@@ -83,26 +83,36 @@ def numbers_close(a, b):
     return True
 
 
-def t1_ill_conditioned(rr):
-    """ZQUAD's smaller root (V1-sqrt(G))/A cancels when the lead is 0 or tiny next to V1^2/A; then the
-    14-digit calculator and binary floats can show different leftovers of size ~1E-13*T2."""
-    t1, t2 = rr.results.get("T1"), rr.results.get("T2")
-    return t1 is not None and abs(t1) < 1e-6 * abs(t2)
+VAR_END = re.compile(r"(VR|VB|TD|D0|V1|ANGLE)$")
+
+
+def dash_reads_as_minus(screens):
+    """Rows ending in '-' (used as a colon) where the dash reads as a minus sign: the text before it
+    is a formula ('STARTS IS D0+V1*TD-'), or a variable directly above a formula row ('=' with no
+    spaces)."""
+    bad = []
+    for scr in screens:
+        rows = rows_of(scr) + [""]
+        for a, b in zip(rows, rows[1:]):
+            if not a.endswith("-"):
+                continue
+            last = a[:-1].split(" ")[-1]
+            formula_below = "=" in b and " = " not in b
+            if re.search(r"[0-9=+*/-]", last) or (VAR_END.search(last) and formula_below):
+                bad.append((a, b))
+    return bad
 
 
 def compare_screens(screens, rr, ctx, exact=True):
     got_titles = [rows_of(s)[0] if rows_of(s) else "" for s in screens]
     want_titles = [s.title for s in rr.screens]
     assert got_titles == want_titles, f"{ctx}: screen titles {got_titles}\n  expected {want_titles}"
-    skip_t1 = t1_ill_conditioned(rr)
     for scr, want in zip(screens, rr.screens):
         got_rows = rows_of(scr)
         assert len(got_rows) == len(want.rows), \
             f"{ctx}: screen {want.title!r} has {len(got_rows)} rows, reference {len(want.rows)}\n  " + \
             "\n  ".join(got_rows) + "\n  ---\n  " + "\n  ".join(want.rows)
         for g, w in zip(got_rows, want.rows):
-            if skip_t1 and g.startswith("T1 = ") and w.startswith("T1 = "):
-                continue
             if exact:
                 assert g == w, f"{ctx}: screen {want.title!r}\n  row   {g!r}\n  wants {w!r}"
             else:
@@ -111,8 +121,6 @@ def compare_screens(screens, rr, ctx, exact=True):
         assert [(n, u) for n, v, u in got_vals] == [(n, u) for n, v, u in want.values], \
             f"{ctx}: value rows {got_vals}\n  reference {want.values}"
         for (n, v, u), (_, x, _) in zip(got_vals, want.values):
-            if skip_t1 and n == "T1":
-                continue
             ok = (v == (x if isinstance(x, str) else fmt3(x))) if exact else close3(v, x)
             assert ok, f"{ctx}: {want.title!r} {n} shows {v!r}, reference {x!r} -> {fmt3(x) if not isinstance(x, str) else x!r}"
 
@@ -153,7 +161,8 @@ def hand(v1, d0, a, td):
     s = 0.5 * a * u * u
     assert abs(s - (d0 + v1 * (u + td))) <= 1e-9 * max(1, s)     # both cars at the same place
     return dict(lead=lead, u=u, t=u + td, s=s, v2=a * u, ratio=(a * u / v1) if v1 else None,
-                t1=(v1 - math.sqrt(v1 * v1 + 2 * a * lead)) / a, disc=v1 * v1 + 2 * a * lead)
+                t1=-2 * lead / (a * u), disc=v1 * v1 + 2 * a * lead,      # t1*u = -2 lead/a (no cancellation)
+                moved=v1 * (u + td))
 
 
 # ------------------------------------------------------------------------------ setup
@@ -186,6 +195,10 @@ def t_info_and_input_screens():
     assert seen["screen"] == list(ref.INPUT_ROWS), seen["screen"]
     assert len(ref.INPUT_ROWS) + len(ref.PROMPTS) <= 10
     assert rows_of(segments(res)[0][0]) == list(ref.INFO_ROWS)
+    # CH-8: D0 = 0 means side by side at time 0 (not the ambiguous 'IF IT PASSES')
+    assert list(ref.INFO_ROWS[4:7]) == ["TIME 0- CAR 1 IS D0 AHEAD", "OF CAR 2 (D0 IS 0 IF THEY",
+                                        "ARE SIDE BY SIDE)."], ref.INFO_ROWS
+    assert len(ref.INFO_ROWS) <= 10 and all(len(r) <= 26 for r in ref.INFO_ROWS)
 
 
 # ------------------------------------------------------------------------------ required case
@@ -238,8 +251,9 @@ def t_head_start():
     h = hand(30, 100, 3, 0)
     assert abs(h["u"] - 22.9099) < 1e-3
     s = screen_dict(by_title(scr, SUM))
-    expect_values(s, {"T": "22.9", "S": "787", "V2": "68.7", "V2/V1": "2.29"}, "head start")
-    expect_values(s, {"T": fmt3(h["u"]), "S": fmt3(h["s"]), "V2": fmt3(h["v2"]), "V2/V1": fmt3(h["ratio"])}, "hand")
+    expect_values(s, {"T": "22.9", "S": "787", "CAR 1 MOVED": "687", "V2": "68.7", "V2/V1": "2.29"}, "head start")
+    expect_values(s, {"T": fmt3(h["u"]), "S": fmt3(h["s"]), "CAR 1 MOVED": fmt3(h["moved"]), "V2": fmt3(h["v2"]),
+                      "V2/V1": fmt3(h["ratio"])}, "hand")
     q = by_title(scr, QUAD)
     expect_values(screen_dict(q), {"B²-4AC": "1500", "T1": "-2.91", "T2": "22.9", "SO U": "22.9"}, "quad")
     assert "1.50T²-30.0T-100=0" in rows_of(q) and "T1<0 IS BEFORE CAR 2" in rows_of(q)
@@ -269,10 +283,67 @@ def t_head_start_and_delay():
     h = hand(30, 100, 3, 2)
     # lead 160 m; disc 1860; u = (30+43.128)/3 = 24.376; t = 26.376; s = 891.3; v2 = 73.13; ratio 2.438
     s = screen_dict(by_title(scr, SUM))
-    expect_values(s, {"U": "24.4", "T": "26.4", "S": "891", "V2": "73.1", "V2/V1": "2.44"}, "both")
+    expect_values(s, {"U": "24.4", "T": "26.4", "S": "891", "CAR 1 MOVED": "791", "V2": "73.1", "V2/V1": "2.44"},
+                  "both")
     expect_values(s, {"U": fmt3(h["u"]), "T": fmt3(h["t"]), "S": fmt3(h["s"]), "V2": fmt3(h["v2"]),
                       "V2/V1": fmt3(h["ratio"])}, "hand")
     expect_values(screen_dict(by_title(scr, QUAD)), {"B²-4AC": "1860", "T1": "-4.38", "T2": "24.4"}, "quad")
+    rows = rows_of(by_title(scr, SUM))
+    assert len(rows) == 10 and rows[5:8] == ["S = 891 M", "(FROM CAR 2 START POINT)", "CAR 1 MOVED = 791 M"], rows
+
+
+def t_car1_distance():
+    """CH-4: with a head start the summary also shows how far car 1 itself moves (V1*T, = S - D0),
+    so 'how far does the speeder travel' is not answered with S or X1 (both measured from car 2's
+    start). Without a head start that distance is S itself, and a parked car 1 moves 0: no row."""
+    res, rr, scr = one_calc(30, 100, 3, 0)
+    s = screen_dict(by_title(scr, SUM))
+    u = (30 + math.sqrt(900 + 600)) / 3                       # 22.91 s
+    assert s["CAR 1 MOVED"] == fmt3(30 * u) == "687" and s["S"] == fmt3(100 + 30 * u) == "787", s
+    for inp in [(30, 0, 3, 0), (30, 0, 3, 2), (0, 50, 4, 0), (0, 50, 4, 3)]:
+        res, rr, scr = one_calc(*inp)
+        assert "CAR 1 MOVED" not in screen_dict(by_title(scr, SUM)), inp
+    for v1, d0, a, td in [(20, 50, 2, 0), (12, 30, 1.5, 1.5), (8.5, 10, 0.75, 3)]:
+        res, rr, scr = one_calc(v1, d0, a, td)
+        h = hand(v1, d0, a, td)
+        s = screen_dict(by_title(scr, SUM))
+        assert s["CAR 1 MOVED"] == fmt3(h["moved"]) and abs(h["s"] - d0 - h["moved"]) < 1e-9 * h["s"], (v1, s)
+
+
+def t_step2_equation_rows():
+    """CH-6: the substituted equation is one row when it fits, otherwise two rows split at the minus
+    sign (never mid-number, never a lone '0' row)."""
+    cases = {(30, 0, 3, 0): ["(1/2)(3.00)U²-30.0U-0=0"],
+             (30, 0, 3, 2): ["(1/2)(3.00)U²-30.0U-60.0=0"],
+             (8.5, 10, 0.75, 3): ["(1/2)(0.750)U²", "-8.50U-35.5=0"],
+             (30, 10000, 3, 0): ["(1/2)(3.00)U²", "-30.0U-10000=0"],
+             (33.5, 12000, 0.375, 0): ["(1/2)(0.375)U²", "-33.5U-12000=0"]}
+    for inp, want in cases.items():
+        res, rr, scr = one_calc(*inp)
+        rows = rows_of(by_title(scr, "STEP 2  PUT IN NUMBERS"))
+        i = rows.index("LEAD = " + fmt3(inp[1] + inp[0] * inp[3]) + " M")
+        assert rows[i + 1:i + 1 + len(want)] == want, (inp, rows)
+        assert rows[i + 1 + len(want)] == "ON THE NEXT SCREEN T IS U", (inp, rows)
+    rng = random.Random(66)
+    for _ in range(60):                                       # realistic numbers: never split mid-token
+        v1, d0 = round(rng.uniform(1, 60), 1), rng.choice([0, round(rng.uniform(1, 20000))])
+        a, td = rng.choice([0.25, 0.5, 0.75, 1.2, 2.5, 3, 9.8]), rng.choice([0, 1.5, 4, 12.5])
+        res, rr, scr = one_calc(v1, d0, a, td)
+        rows = rows_of(by_title(scr, "STEP 2  PUT IN NUMBERS"))
+        i = [k for k, r in enumerate(rows) if r.startswith("LEAD = ")][0]
+        eq = rows[i + 1:rows.index("ON THE NEXT SCREEN T IS U")]
+        assert eq[0].startswith("(1/2)(") and eq[-1].endswith("=0") and len(eq) in (1, 2), eq
+        if len(eq) == 2:
+            assert eq[0].endswith("U²") and eq[1].startswith("-"), eq
+
+
+def t_dash_not_read_as_minus():
+    """RC-3: no row ends with a formula/variable and a '-' that reads as a minus sign."""
+    for inp in [(30, 0, 3, 0), (30, 0, 3, 2), (30, 100, 3, 2), (0, 50, 4, 3)]:
+        res, rr, scr = one_calc(*inp)
+        assert dash_reads_as_minus(scr) == [], (inp, dash_reads_as_minus(scr))
+    res, rr, scr = one_calc(30, 0, 3, 2)
+    assert "STARTS IS D0+V1*TD." in rows_of(by_title(scr, "STEP 2  PUT IN NUMBERS"))
 
 
 def t_parked_car():
@@ -376,7 +447,24 @@ EDGE = [
     ((1e-10, 0, 3, 0), "E5"), ((30, 1e-12, 3, 0), "E5"), ((30, 0, 1e-10, 0), "E5"), ((30, 0, 3, 1e-12), "E5"),
     ((0, 1e-99, 3, 0), "E5"), ((30, 0, 1e-99, 0), "E5"), ((9.99e-7, 0, 3, 0), "E5"), ((30, 0, 9.99e-7, 0), "E5"),
     ((30, 5e-7, 3, 1), "E5"), ((30, 1, 3, 5e-7), "E5"),
+    # E8: accepted inputs whose results would be nonzero but below 1E-9 (shown as 0)
+    ((1e-6, 0, 3, 1e-6), "E8"),          # lead 1E-12 (and B²-4AC 7E-12)
+    ((1e-6, 0, 1e9, 0), "E8"),           # B²-4AC 1E-12, U 2E-15
+    ((1e-5, 0, 1e-6, 0), "E8"),          # B²-4AC 1E-10 next to roots 0 and 20 s
+    ((1e-3, 0, 1e9, 0), "E8"),           # U 2E-12
+    ((4e-5, 0, 3.16e4, 0), "E8"),        # B²-4AC 1.6E-9 and U 2.5E-9 fine, but S 1E-13
+    ((1e9, 1e-6, 1, 0), "E8"),           # T1 = -2Q/(AU) = -1E-15
+    ((1e-6, 1e-6, 2e4, 0), "E8"),        # car 1 moves 1E-11 m
 ]
+
+
+def ch5_tiny(v1, d0, a, td):
+    """Independent check for E8: some nonzero shown result is below 1E-9 (would show as 0)."""
+    h = hand(v1, d0, a, td)
+    tiny = [k for k in ("lead", "disc", "u", "s", "t1") if h[k] != 0 and abs(h[k]) < 1e-9]
+    if d0 > 0 and v1 > 0 and h["moved"] < 1e-9:
+        tiny.append("moved")
+    return tiny
 
 
 def t_edge_inputs():
@@ -387,7 +475,41 @@ def t_edge_inputs():
         assert len(scr) == 2 and rows_of(scr[1]) == list(ref.MESSAGES[label]), f"{ctx}: {scr}"
         for row in rows_of(scr[1]):
             assert not VAL_RE.match(row), f"message row looks like a value: {row!r}"
+        if label == "E8":
+            assert ch5_tiny(*inp), (inp, hand(*inp))
 
+
+def t_no_nonzero_value_shows_zero():
+    """CH-5: on every accepted run, a value row shows 0 only for a value that is exactly 0 (the
+    side-by-side lead and T1), and the ZQUAD equation never loses a sign ('...T0=0')."""
+    rng = random.Random(808)
+
+    def mag(allow0):
+        if allow0 and rng.random() < 0.3:
+            return 0
+        return float(f"{10 ** rng.uniform(-6, 9):.3g}")
+
+    shown = e8 = 0
+    for _ in range(300):
+        v1, d0, a, td = mag(True), mag(True), mag(False), mag(True)
+        if v1 == 0 and d0 == 0:
+            d0 = 1.0
+        rr = ref.run(v1, d0, a, td)
+        assert rr.messages in ([], ["E8"]), (v1, d0, a, td, rr.messages)
+        assert bool(rr.messages) == bool(ch5_tiny(v1, d0, a, td)), (v1, d0, a, td, ch5_tiny(v1, d0, a, td))
+        if rr.messages:
+            e8 += 1
+            continue
+        shown += 1
+        for scr in rr.screens:
+            for n, x, u in scr.values:
+                if not isinstance(x, str) and fmt3(x) == "0":
+                    assert x == 0, (v1, d0, a, td, scr.title, n, x)
+            for row in scr.rows:
+                assert not re.search(r"T[0-9]", row.replace("T1", "").replace("T2", "")), (row, v1, d0, a, td)
+    assert shown > 100 and e8 > 10, (shown, e8)
+    for inp in [(1e-6, 0, 3, 1e-6), (1e-6, 0, 1e9, 0), (1e9, 1e-6, 1, 0), (1e-6, 1e-6, 2e4, 0)]:
+        one_calc(*inp)                                         # the simulator agrees (E8 screen)
 
 def t_boundaries():
     """Largest/smallest accepted inputs: no overflow, no error, values equal the reference."""
@@ -402,7 +524,9 @@ def t_boundaries():
 
 def t_wide_values():
     """Worst-case 9-character numbers everywhere: nothing truncated, nothing scrolls."""
-    for inp in [(30, 0, 3, 0), (30, 100, 3, 2), (0, 50, 4, 0), (0, 50, 4, 3), (30, 100, 3, 0)]:
+    for inp in [(30, 0, 3, 0), (30, 100, 3, 2), (0, 50, 4, 0), (0, 50, 4, 3), (30, 100, 3, 0), (30, 0, 3, 2),
+                (8.5, 10, 0.75, 3), (30, 10000, 3, 0), (1e-6, 0, 3, 1e-6), (-30, 0, 3, 0), (30, -5, 3, 0),
+                (30, 0, 3, -2), (2e9, 0, 3, 0), (1e-10, 0, 3, 0), (0, 0, 3, 0), (30, 0, 0, 0)]:
         res = run(script(*inp), wide=True)
         assert_clean(res, context=f"wide {inp}")
 
@@ -457,6 +581,10 @@ def t_fuzz_valid_all_magnitudes():
         if v1 == 0 and d0 == 0:
             d0 = 1.0
         res, rr, scr = one_calc(v1, d0, a, td, exact=False, seed=rng.randint(0, 10 ** 6))
+        if ch5_tiny(v1, d0, a, td):
+            assert rr.messages == ["E8"], (v1, d0, a, td, rr.messages)
+            n += 1
+            continue
         assert rr.messages == [], (v1, d0, a, td, rr.messages)
         h = hand(v1, d0, a, td)
         s = screen_dict(by_title(scr, SUM))

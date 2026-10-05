@@ -23,7 +23,8 @@ def t_zfmt_fuzz():
 
 def t_zfmt_examples():
     for v, s in [(20.6155, "20.6"), (-29.698, "-29.7"), (0.77390, "0.774"), (600, "600"), (7.4074, "7.41"),
-                 (2, "2.00"), (19.6, "19.6"), (1234567, "1.23E6"), (0.000123, "1.23E-4"), (0, "0")]:
+                 (2, "2.00"), (19.6, "19.6"), (1234567, "1.23E6"), (0.000123, "1.23E-4"), (0, "0"),
+                 (9.996e99, "9.99E99"), (-9.99999e99, "-9.99E99"), (9.994e99, "9.99E99")]:
         r = run([], program="ZFMT", init_vars={"Z": v})
         assert r.strs["Str9"] == s, (v, r.strs["Str9"], s)
 
@@ -49,6 +50,9 @@ def t_zquad():
         assert float(r.vars["L"]) == l and float(r.vars["M"]) == m and float(r.vars["N"]) == n, "ZQUAD changed L/M/N"
         rows = [row for row in sim().screen if row]
         assert len(rows) <= 7, rows
+    r = run([], program="ZQUAD", init_vars={"L": 4.9, "M": -1e-12, "N": -1e-12})
+    assert_clean(r)
+    assert "4.90T²+0T+0=0" in sim().screen, sim().screen
 
 
 def t_menu_quit_restores_vars():

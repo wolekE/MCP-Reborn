@@ -198,11 +198,17 @@ def run(vb, vr, w):
     s.disp("TAN(ANGLE)=VR/VB")
     s.zline("ANGLE=TAN⁻1(" + str2 + "/" + str1 + ")")
     s.val("FROM ACROSS", A, "°")
-    s.disp("(TOWARD DOWNSTREAM). FROM")
-    s.disp("THE BANK IT IS 90-ANGLE-")
+    if C > 0:                                        # If C>0 / Disp ...   (VR = 0: the path is
+        s.disp("(TOWARD DOWNSTREAM). FROM")          #  straight across, along the heading)
+    if C == 0:                                       # If C=0 / Disp ...
+        s.disp("(STRAIGHT ACROSS). FROM")
+    s.disp("THE BANK IT IS 90-ANGLE.")
     s.val("FROM BANK", P, "°")
     s.disp("HEADING IS STRAIGHT ACROSS")
-    s.disp("BUT THE PATH IS SLANTED.")
+    if C > 0:                                        # If C>0 / Disp ...
+        s.disp("BUT THE PATH IS SLANTED.")
+    if C == 0:                                       # If C=0 / Disp ...
+        s.disp("NO CURRENT- SO IS THE PATH")
 
     F = Q = G = None
     if C >= B:                                       # If C≥B / Goto N1
@@ -215,7 +221,7 @@ def run(vb, vr, w):
         s.disp("STEP 5  HEADING UPSTREAM")
         s.disp("TO LAND DIRECTLY ACROSS,")
         s.disp("THE UPSTREAM PART OF VB")
-        s.disp("MUST CANCEL VR-")
+        s.disp("MUST CANCEL VR, SO")
         s.disp("VB SIN(ANGLE)=VR")
         s.zline("ANGLE=SIN⁻1(" + str2 + "/" + str1 + ")")
         s.val("FROM ACROSS", F, "°")
@@ -242,19 +248,34 @@ def run(vb, vr, w):
     s.val("T", D, "S")
     s.val("DRIFT", S, "M")
     s.val("V RESULT", V, "M/S")
-    s.disp("PATH ANGLE (DOWNSTREAM)-")
+    if C > 0:                                        # If C>0 / Disp ...
+        s.disp("PATH ANGLE (DOWNSTREAM)-")
+    if C == 0:                                       # If C=0 / Disp ...
+        s.disp("PATH ANGLE (NO CURRENT)-")
     s.val("FROM ACROSS", A, "°")
     s.val("FROM BANK", P, "°")
     s.disp("HEADING- STRAIGHT ACROSS,")
-    s.disp("NOT ALONG THE PATH.")
+    if C > 0:                                        # If C>0 / Disp ...
+        s.disp("NOT ALONG THE PATH.")
+    if C == 0:                                       # If C=0 / Disp ...
+        s.disp("SAME AS THE PATH.")
 
     s = r.clrhome()                                  # SUMMARY 2/2
     s.disp("SUMMARY 2/2 (LAND ACROSS)")
     if C < B:                                        # If C<B / Then
-        s.disp("HEADING (UPSTREAM)-")
+        if C > 0:                                    # If C>0 / Disp ...
+            s.disp("HEADING (UPSTREAM)-")
+        if C == 0:                                   # If C=0 / Disp ...
+            s.disp("HEADING (NO CURRENT)-")
         s.val("FROM ACROSS", F, "°")
         s.val("FROM BANK", 90 - F, "°")
+        s.disp("PATH- STRAIGHT ACROSS,")             # heading upstream, path straight across
+        if C > 0:                                    # If C>0 / Disp ...
+            s.disp("NOT ALONG THE HEADING.")
+        if C == 0:                                   # If C=0 / Disp ...
+            s.disp("SAME AS THE HEADING.")
         s.val("V ACROSS", Q, "M/S")
+        s.disp("(SPEED SEEN FROM SHORE)")            # V ACROSS is the resultant speed seen from shore
         s.val("T", G, "S")
         s.val("DRIFT", "0", "M")
     else:                                            # Else

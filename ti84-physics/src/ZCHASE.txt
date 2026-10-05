@@ -5,7 +5,8 @@ Disp "CAR 1- CONSTANT SPEED V1."
 Disp "CAR 2- STARTS FROM REST"
 Disp "WITH ACCELERATION A."
 Disp "TIME 0- CAR 1 IS D0 AHEAD"
-Disp "OF CAR 2 (0 IF IT PASSES)."
+Disp "OF CAR 2 (D0 IS 0 IF THEY"
+Disp "ARE SIDE BY SIDE)."
 Disp "CAR 2 WAITS TD SECONDS"
 Disp "AFTER TIME 0 (0 IF NONE)."
 Disp "BOTH GO THE SAME WAY."
@@ -35,6 +36,10 @@ Goto E7
 If (V>0 and V<1ᴇ⁻6) or (B>0 and B<1ᴇ⁻6) or (C>0 and C<1ᴇ⁻6) or A<1ᴇ⁻6
 Goto E5
 B+VC→Q
+V²+2AQ→G
+(V+√(G))/A→D
+If (Q>0 and Q<1ᴇ⁻9) or G<1ᴇ⁻9 or D<1ᴇ⁻9 or AD²/2<1ᴇ⁻9 or (Q>0 and 2Q/(AD)<1ᴇ⁻9) or (B>0 and V>0 and V(D+C)<1ᴇ⁻9)
+Goto E8
 A/2→L
 ⁻V→M
 ⁻Q→N
@@ -65,14 +70,20 @@ Str9→Str4
 ClrHome
 Disp "STEP 2  PUT IN NUMBERS"
 Disp "LEAD OF CAR 1 WHEN CAR 2"
-Disp "STARTS IS D0+V1*TD-"
+Disp "STARTS IS D0+V1*TD."
 "LEAD="+Str2+"+("+Str1+")("+Str3+")"→Str0
 prgmZLINE
 Q→Z
 prgmZFMT
 Disp "LEAD = "+Str9+" M"
-"(1/2)("+Str4+")U²-"+Str1+"U-"+Str9+"=0"→Str0
-prgmZLINE
+"-"+Str1+"U-"+Str9+"=0"→Str0
+If 9+length(Str4)+length(Str0)>26
+Then
+Disp "(1/2)("+Str4+")U²"
+Else
+"(1/2)("+Str4+")U²"+Str0→Str0
+End
+Disp Str0
 Disp "ON THE NEXT SCREEN T IS U"
 Disp "(TIME AFTER CAR 2 STARTS)."
 Pause 
@@ -179,6 +190,12 @@ S→Z
 prgmZFMT
 Disp "S = "+Str9+" M"
 Disp "(FROM CAR 2 START POINT)"
+If B>0 and V>0
+Then
+VE→Z
+prgmZFMT
+Disp "CAR 1 MOVED = "+Str9+" M"
+End
 F→Z
 prgmZFMT
 Disp "V2 = "+Str9+" M/S"
@@ -246,4 +263,13 @@ Disp "CAR 2 STARTS FROM REST, SO"
 Disp "WITH A OF 0 OR LESS IT"
 Disp "NEVER MOVES FORWARD AND"
 Disp "NEVER CATCHES CAR 1."
+Pause 
+Return
+Lbl E8
+ClrHome
+Disp "THESE NUMBERS GIVE A"
+Disp "RESULT (LEAD, B²-4AC, TIME"
+Disp "OR DISTANCE) BELOW 1E-9,"
+Disp "WHICH WOULD SHOW AS 0."
+Disp "USE REALISTIC VALUES."
 Pause 

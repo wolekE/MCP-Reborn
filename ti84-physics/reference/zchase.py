@@ -18,14 +18,18 @@ TI variables (the same letters are used below):
     V = V1 (typed)   B = D0 (typed)   A = A (typed)   C = TD (typed)
     Q = lead of car 1 when car 2 starts = D0 + V1*TD
     L, M, N -> prgmZQUAD;  J, H, I, G <- prgmZQUAD (roots H <= I, discriminant G)
+    (G = V1^2+2A*Q and D = (V1+sqrt(G))/A are first computed in closed form for the E8 check;
+     ZQUAD then overwrites G and I->D replaces D with ZQUAD's root, the same value)
     D = U = I (catch-up time after car 2 starts)     E = T = U + TD (after time 0)
     S = (1/2)A U^2 (distance car 2 travels)            F = V2 = A U (car 2 speed)
     P = V2/V1 (only when V1 > 0)
+    V1*T = how far car 1 moves (summary row "CAR 1 MOVED", only when D0 > 0 and V1 > 0; with
+           D0 = 0 it equals S)
     Str1 = fmt3(V1), Str2 = fmt3(D0) then fmt3(U), Str3 = fmt3(TD), Str4 = fmt3(A)
 
 run(v1, d0, a, td) returns a Result whose .screens list has one Screen per Pause screen
 (title, values [(name, value, unit)] for every "NAME = VALUE UNIT" row, rows = exact text).
-Result.messages lists the message labels shown (E1..E7).
+Result.messages lists the message labels shown (E1..E8).
 """
 import math
 
@@ -33,8 +37,12 @@ from common import fmt3
 
 COLS = 26
 BIG = 1e9        # inputs above this are rejected (E4)
-SMALL = 1e-6     # nonzero V1, D0, TD and A below this are rejected (E5): keeps every
-                 # number ZQUAD shows (L = A/2 too) above ZFMT's 1E-9 zero cutoff, and far from overflow
+SMALL = 1e-6     # nonzero V1, D0, TD and A below this are rejected (E5): keeps every typed number
+                 # (and L = A/2) above ZFMT's 1E-9 zero cutoff and every result far from overflow.
+                 # Products of accepted inputs can still be tiny (e.g. V1 = TD = 1E-6 gives a lead
+                 # of 1E-12), so E8 separately rejects inputs whose lead, B²-4AC, T1, U, S or car-1
+                 # distance would be nonzero but below ZFMT_ZERO (shown as a misleading "0").
+ZFMT_ZERO = 1e-9 # prgmZFMT shows 0 for |Z| < 1E-9
 
 MESSAGES = {
     "E1": ("V1 CANNOT BE NEGATIVE.",            # V1 < 0
@@ -67,6 +75,11 @@ MESSAGES = {
            "WITH A OF 0 OR LESS IT",
            "NEVER MOVES FORWARD AND",
            "NEVER CATCHES CAR 1."),
+    "E8": ("THESE NUMBERS GIVE A",              # a nonzero result would be below 1E-9 (shows 0)
+           "RESULT (LEAD, B²-4AC, TIME",
+           "OR DISTANCE) BELOW 1E-9,",
+           "WHICH WOULD SHOW AS 0.",
+           "USE REALISTIC VALUES."),
 }
 
 INFO_ROWS = ("CHASE PROBLEM",
@@ -74,7 +87,8 @@ INFO_ROWS = ("CHASE PROBLEM",
              "CAR 2- STARTS FROM REST",
              "WITH ACCELERATION A.",
              "TIME 0- CAR 1 IS D0 AHEAD",
-             "OF CAR 2 (0 IF IT PASSES).",
+             "OF CAR 2 (D0 IS 0 IF THEY",
+             "ARE SIDE BY SIDE).",
              "CAR 2 WAITS TD SECONDS",
              "AFTER TIME 0 (0 IF NONE).",
              "BOTH GO THE SAME WAY.")
@@ -145,11 +159,11 @@ def zquad(s, l, m, n):
     s.disp("SOLVE QUADRATIC FOR T")
     str0 = fmt3(l) + "T²"
     str9 = fmt3(m)
-    if m >= 0:
+    if m >= 0 or abs(m) < 1e-9:
         str9 = "+" + str9
     str0 = str0 + str9 + "T"
     str9 = fmt3(n)
-    if n >= 0:
+    if n >= 0 or abs(n) < 1e-9:
         str9 = "+" + str9
     str0 = str0 + str9 + "=0"
     s.zline(str0)
@@ -205,6 +219,12 @@ def run(v1, d0, a, td):
     if (0 < V < SMALL) or (0 < B < SMALL) or (0 < C < SMALL) or A < SMALL:
         return r.message("E5")                       # Goto E5
     Q = B + V * C                                    # B+VC→Q   (lead when car 2 starts)
+    G = V ** 2 + 2 * A * Q                           # V²+2AQ→G   (= ZQUAD's B²-4AC)
+    D = (V + math.sqrt(G)) / A                       # (V+√(G))/A→D   (= ZQUAD's larger root, U)
+    if ((Q > 0 and Q < ZFMT_ZERO) or G < ZFMT_ZERO or D < ZFMT_ZERO or A * D ** 2 / 2 < ZFMT_ZERO
+            or (Q > 0 and 2 * Q / (A * D) < ZFMT_ZERO)          # |T1| = 2Q/(AU)
+            or (B > 0 and V > 0 and V * (D + C) < ZFMT_ZERO)):  # car 1 moves V1*T
+        return r.message("E8")                       # Goto E8
     L = A / 2                                        # A/2→L
     M = -V                                           # ⁻V→M
     N = -Q                                           # ⁻Q→N
@@ -226,10 +246,15 @@ def run(v1, d0, a, td):
     s = r.clrhome()                                  # STEP 2: the numbers
     s.disp("STEP 2  PUT IN NUMBERS")
     s.disp("LEAD OF CAR 1 WHEN CAR 2")
-    s.disp("STARTS IS D0+V1*TD-")
+    s.disp("STARTS IS D0+V1*TD.")
     s.zline("LEAD=" + str2 + "+(" + str1 + ")(" + str3 + ")")
     s.val("LEAD", Q, "M")
-    s.zline("(1/2)(" + str4 + ")U²-" + str1 + "U-" + fmt3(Q) + "=0")
+    str0 = "-" + str1 + "U-" + fmt3(Q) + "=0"         # "-"+Str1+"U-"+Str9+"=0"→Str0
+    if 9 + len(str4) + len(str0) > COLS:             # If 9+length(Str4)+length(Str0)>26 / Then
+        s.disp("(1/2)(" + str4 + ")U²")             # too long for one row: split at the minus sign
+    else:                                            # Else
+        str0 = "(1/2)(" + str4 + ")U²" + str0
+    s.disp(str0)                                     # Disp Str0
     s.disp("ON THE NEXT SCREEN T IS U")
     s.disp("(TIME AFTER CAR 2 STARTS).")
 
@@ -310,8 +335,12 @@ def run(v1, d0, a, td):
         s.disp("(CATCH-UP TIME)")
     s.val("S", S, "M")
     s.disp("(FROM CAR 2 START POINT)")
+    MOVED = None
+    if B > 0 and V > 0:                              # If B>0 and V>0 / Then
+        MOVED = V * E                                # VE→Z   (car 1 moves V1*T, = S - D0)
+        s.val("CAR 1 MOVED", MOVED, "M")
     s.val("V2", F, "M/S")
     if V > 0:
         s.val("V2/V1", P, "")
-    r.results = dict(LEAD=Q, J=J, T1=H, T2=I, DISC=G, U=D, T=E, S=S, X1=X1, V2=F, RATIO=P)
+    r.results = dict(LEAD=Q, J=J, T1=H, T2=I, DISC=G, U=D, T=E, S=S, X1=X1, V2=F, RATIO=P, MOVED=MOVED)
     return r                                         # Return (back to PHYSOLVE page 2)

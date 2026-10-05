@@ -577,10 +577,10 @@ class TISim:
     def load(cls, use_src=False, root=ROOT, **kw):
         progs = {}
         if use_src:
-            for p in sorted((root / "src").glob("*.txt")):
+            for p in sorted((root / "src").glob("*.txt")) + sorted(root.glob("PHYSICS.txt")):
                 progs[p.stem] = Program(p.stem, load_tokens_from_src(p))
         else:
-            for p in sorted((root / "8xp").glob("*.8xp")):
+            for p in sorted((root / "build" / "modules").glob("*.8xp")) + sorted(root.glob("PHYSICS.8xp")):
                 progs[p.stem] = Program(p.stem, load_tokens_from_8xp(p))
         return cls(progs, **kw)
 

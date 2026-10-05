@@ -10,6 +10,7 @@ every "NAME = VALUE" value is compared with fmt3(reference), and the required/ty
 also compared with values computed by hand (independently of the reference) at 3 significant
 figures. The screen shown while typing (the explanation + prompts) is checked too.
 """
+import os
 import math
 import random
 import re
@@ -244,6 +245,16 @@ def t_static_layout():
         for p in ref.PROMPTS[pr]:
             assert len(p) <= 18, p
     assert 1 + len(ref.INFO["LEG"]) + len(ref.PROMPTS["LEG"]) <= 10
+    # SPEC 7b: every input screen whose prompts accept a negative number shows the (-) key hint
+    # (J3 only takes a fall time and a factor K, both >= 0; AVG only takes the number of legs)
+    for info in ("MAG_ANGLE", "XY", "LEG", "J1", "J2", "J4", "J5", "RAMP", "PDIFF", "PERR", "YD2M", "M2YD",
+                 "KMH", "MPH"):
+        assert "NEGATIVE = (-) KEY" in ref.INFO[info], f"{info}: no NEGATIVE = (-) KEY row"
+    # "proportional to" is always written PROP TO
+    for info, rows in ref.INFO.items():
+        for row in rows:
+            assert "PROP " not in row or "PROP TO " in row, (info, row)
+    assert "S=-V0²/(2A), S PROP TO V²." in ref.INFO["J1"]
     for label, rows in ref.MESSAGES.items():
         assert len(rows) <= 9, label
         for row in rows:
@@ -260,10 +271,17 @@ def t_vec_required_examples():
     s = by_title(scr, SUM_V1)
     expect_values(screen_dict(s), {"MAGNITUDE": "20.0", "ANGLE": "30.0", "X": "17.3", "Y": "10.0"}, "20@30")
     expect_rows(s, ["X = 17.3 M (RIGHT)", "Y = 10.0 M (UP)", "ANGLE = 30.0°", "(COUNTERCLOCKWISE FROM +X)"], "20@30")
-    expect_rows(by_title(scr, "STEP 1  X COMPONENT"), ["X=MAGNITUDE*COS(ANGLE)", "X=(20.0)COS(30.0°)",
+    expect_rows(by_title(scr, "STEP 1  X COMPONENT"), ["ANGLE IS FROM +X, SO X IS", "THE ADJACENT SIDE (COS)-",
+                                                       "X=MAGNITUDE*COS(ANGLE)", "X=(20.0)COS(30.0°)",
                                                        "X = 17.3 M (RIGHT)"], "step 1")
-    expect_rows(by_title(scr, "STEP 2  Y COMPONENT"), ["Y=MAGNITUDE*SIN(ANGLE)", "Y=(20.0)SIN(30.0°)",
+    expect_rows(by_title(scr, "STEP 2  Y COMPONENT"), ["ANGLE IS FROM +X, SO Y IS", "THE OPPOSITE SIDE (SIN)-",
+                                                       "Y=MAGNITUDE*SIN(ANGLE)", "Y=(20.0)SIN(30.0°)",
                                                        "Y = 10.0 M (UP)"], "step 2")
+    # the reason row comes before the equation on both step screens
+    for title, why, eq in [("STEP 1  X COMPONENT", "THE ADJACENT SIDE (COS)-", "X=MAGNITUDE*COS(ANGLE)"),
+                           ("STEP 2  Y COMPONENT", "THE OPPOSITE SIDE (SIN)-", "Y=MAGNITUDE*SIN(ANGLE)")]:
+        rows = rows_of(by_title(scr, title))
+        assert rows.index(why) < rows.index(eq), rows
     assert screen_dict(s)["X"] == fmt3(20 * math.cos(math.radians(30)))
     # 120 deg points up and to the left: X = 10 cos 120 = -5, Y = 10 sin 120 = 8.660
     res, rr, scr = one_calc("vec1", 2, 10, 120)
@@ -291,9 +309,28 @@ def t_vec_mag_angle_hand():
 def t_vec_units():
     for unit, tail in [(1, " M"), (2, " M/S"), (3, " M/S²"), (4, " ")]:
         res, rr, scr = one_calc("vec1", unit, 20, 30)
-        expect_rows(by_title(scr, SUM_V1), [f"MAGNITUDE = 20.0{tail}".rstrip(), f"X = 17.3{tail} (RIGHT)"], unit)
+        expect_rows(by_title(scr, SUM_V1), [f"MAGNITUDE = 20.0{tail}".rstrip(), f"X = 17.3{tail.rstrip()} (RIGHT)"],
+                    unit)
         res, rr, scr = one_calc("vec2", unit, 3, 4)
         expect_rows(by_title(scr, SUM_V2), [f"MAGNITUDE = 5.00{tail}".rstrip(), f"X = 3.00{tail}".rstrip()], unit)
+
+
+def t_vec_no_unit_words():
+    """OTHER (NO UNIT): the direction word follows the number after ONE space (Str4 is " ")."""
+    cases = [((20, 120), "X = -10.0 (LEFT)", "Y = 17.3 (UP)"), ((20, 30), "X = 17.3 (RIGHT)", "Y = 10.0 (UP)"),
+             ((10, -60), "X = 5.00 (RIGHT)", "Y = -8.66 (DOWN)"), ((10, 180), "X = -10.0 (LEFT)", "Y = 0"),
+             ((10, 270), "X = 0", "Y = -10.0 (DOWN)")]
+    for (m, n), xrow, yrow in cases:
+        res, rr, scr = one_calc("vec1", 4, m, n)
+        expect_rows(by_title(scr, "STEP 1  X COMPONENT"), [xrow], (m, n))
+        expect_rows(by_title(scr, "STEP 2  Y COMPONENT"), [yrow], (m, n))
+        expect_rows(by_title(scr, SUM_V1), [xrow, yrow], (m, n))
+        for sc in scr:
+            for row in rows_of(sc):
+                assert "  (" not in row, f"double space in {row!r}"
+    # with a unit the word still has its space: "X = -10.0 M (LEFT)"
+    res, rr, scr = one_calc("vec1", 1, 20, 120)
+    expect_rows(by_title(scr, SUM_V1), ["X = -10.0 M (LEFT)", "Y = 17.3 M (UP)"], "unit M")
 
 
 def t_vec_xy_quadrants():
@@ -356,6 +393,13 @@ def t_vec_messages():
     message_only("vec1", 2, 5, -400, label="H7")
     message_only("vec1", 3, 5, 9.99e99, label="H7")
     message_only("vec1", 4, -1, 1e99, label="H6")          # the magnitude is checked first
+    # ZT-2: a magnitude above 1E9 gets a message (ZFMT itself fails from 9.995E99 up)
+    message_only("vec1", 1, 9.995e99, 45, label="HA")
+    message_only("vec1", 2, 9.999e99, 45, label="HA")
+    message_only("vec1", 3, 9.9999999999999e99, 0, label="HA")
+    message_only("vec1", 4, 1000000001, 30, label="HA")
+    message_only("vec1", 1, 2e9, 400, label="HA")           # magnitude before angle
+    message_only("vec1", 1, -2e9, 30, label="H6")           # sign before size
     message_only("vec2", 1, 2e9, 1, label="H8")
     message_only("vec2", 1, 0, -1.5e9, label="H8")
     message_only("vec2", 1, -9.99e99, 9.99e99, label="H8")
@@ -365,9 +409,31 @@ def t_vec_messages():
         assert rows[0] == "ZERO VECTOR" and ("MAGNITUDE = 0" + tail).rstrip() in rows and "UNDEFINED." in rows, rows
 
 
+def t_vec_opposite_advice():
+    """H6 tells the student how to point the opposite way; following it never gives the H7 message
+    and gives exactly the vector the negative magnitude meant."""
+    rows = rows_of(message_only("vec1", 1, -10, 300, label="H6"))
+    assert "ANGLE (OR SUBTRACT 180 IF" in rows and "IT IS ABOVE 180) AND USE A" in rows, rows
+    for n in [x / 2 for x in range(-720, 721)]:            # every typed angle -360..360 in 0.5 steps
+        new = n - 180 if n > 180 else n + 180
+        assert abs(new) <= 360, (n, new)
+    for m, n in [(10, 300), (10, 200), (10, 181), (10, 180), (10, 90), (10, -300), (4, 360), (4, -360)]:
+        new = n - 180 if n > 180 else n + 180
+        res, rr, scr = one_calc("vec1", 1, m, new)
+        assert rr.messages == [], (n, new, rr.messages)
+        d = screen_dict(by_title(scr, SUM_V1))
+        assert d["X"] == fmt3(-m * math.cos(math.radians(n))) or d["X"] == "0", (m, n, d)
+        assert d["Y"] == fmt3(-m * math.sin(math.radians(n))) or d["Y"] == "0", (m, n, d)
+    # the reviewer's sequence: -10 at 300 (message), then 10 at 120 (the advice) on the same visit
+    res, shots = drive([6, 3, 1, 1, -10, 300, 1, 1, 10, 120, 3, 7, 7])
+    assert_clean(res)
+    assert not any("MUST BE FROM" in r for s in res.screens for r in rows_of(s)), res.text()
+    expect_rows(res.screens[-1], ["X = -5.00 M (LEFT)", "Y = 8.66 M (UP)"], "advice followed")
+
+
 def t_vec_edges():
     """Boundaries: no error, values equal the reference."""
-    for args in [(1, 0, 0), (1, 1e9, 360), (1, 1e9, -360), (1, 1e-99, 45), (1, 9.99e99, 89.999999),
+    for args in [(1, 0, 0), (1, 1e9, 360), (1, 1e9, -360), (1, 1e-99, 45), (1, 1e9, 89.999999), (4, 1e9, -0.5),
                  (2, 1e-12, 359.9999), (4, 7, 1e-99)]:
         one_calc("vec1", *args, exact=False)
     for args in [(1, 1e9, 1e9), (1, -1e9, -1e9), (1, 1e-99, 0), (1, 0, -1e-99), (1, 1e-12, 1e-12),
@@ -388,9 +454,9 @@ def t_avg_required_example():
     expect_rows(s, ["DISTANCE = 150 M", "DISPLACEMENT = 50.0 M", "TOTAL TIME = 15.0 S", "AVG SPEED = 10.0 M/S",
                     "AVG VEL = 3.33 M/S", "(IN THE + DIRECTION)"], "example")
     assert screen_dict(s)["AVG VEL"] == fmt3(50 / 15) and screen_dict(s)["AVG SPEED"] == fmt3(150 / 15)
-    expect_rows(by_title(scr, "STEP 1  TOTAL DISTANCE"), ["DISTANCE=100+50.0", "DISTANCE = 150 M"], "step 1")
+    expect_rows(by_title(scr, "STEP 1  TOTAL DISTANCE"), ["=100+50.0", "DISTANCE = 150 M"], "step 1")
     expect_rows(by_title(scr, "STEP 2  DISPLACEMENT"), ["S=100-50.0", "DISPLACEMENT = 50.0 M"], "step 2")
-    expect_rows(by_title(scr, "STEP 3  TOTAL TIME"), ["TIME=10.0+5.00", "TOTAL TIME = 15.0 S"], "step 3")
+    expect_rows(by_title(scr, "STEP 3  TOTAL TIME"), ["=10.0+5.00", "TOTAL TIME = 15.0 S"], "step 3")
     expect_rows(by_title(scr, "STEP 4  AVERAGE SPEED"), ["AVG SPEED=DISTANCE/TIME", "=150/15.0",
                                                          "AVG SPEED = 10.0 M/S"], "step 4")
     expect_rows(by_title(scr, "STEP 5  AVERAGE VELOCITY"), ["AVG VEL=DISPLACEMENT/TIME", "=50.0/15.0",
@@ -421,6 +487,27 @@ def t_avg_hand_cases():
                                        "AVG SPEED": spd, "AVG VEL": vel}, ctx)
         assert rows_of(s)[-1] == word, (ctx, rows_of(s))
         assert rows_of(by_title(scr, "STEP 5  AVERAGE VELOCITY"))[-1] == word
+
+
+def t_avg_four_legs_one_row():
+    """4 legs of ordinary numbers: each sum line fits ONE row (ZLINE does not cut a number in two)."""
+    cases = [
+        ([(50, 1, 10), (50, -1, 12.5), (25, 1, 6.5), (75, -1, 0.5)],
+         "=50.0+50.0+25.0+75.0", "S=50.0-50.0+25.0-75.0", "=10.0+12.5+6.50+0.500"),
+        ([(2, 1, 0.5), (2, 1, 0.5), (2, -1, 0.5), (2, 1, 0.5)],
+         "=2.00+2.00+2.00+2.00", "S=2.00+2.00-2.00+2.00", "=0.500+0.500+0.500+0.500"),
+        ([(0.125, -1, 0.25), (0.375, -1, 0.75), (0.5, -1, 0.125), (0.625, -1, 0.875)],
+         "=0.125+0.375+0.500+0.625", "S=-0.125-0.375-0.500-0.625", "=0.250+0.750+0.125+0.875"),
+        ([(1500, 1, 120), (2500, -1, 340), (999, 1, 60), (4200, -1, 300)],
+         "=1500+2500+999+4200", "S=1500-2500+999-4200", "=120+340+60.0+300"),
+    ]
+    for legs, dist, disp, time in cases:
+        res, rr, scr = one_calc("avg", 4, legs)
+        for title, row in [("STEP 1  TOTAL DISTANCE", dist), ("STEP 2  DISPLACEMENT", disp),
+                           ("STEP 3  TOTAL TIME", time)]:
+            rows = rows_of(by_title(scr, title))
+            assert len(row) <= 26 and row in rows, (title, row, rows)
+            assert rows[rows.index(row) + 1].split(" = ")[0] in ("DISTANCE", "DISPLACEMENT", "TOTAL TIME"), rows
 
 
 def t_avg_messages():
@@ -494,6 +581,40 @@ def t_fac_hand_cases():
         expect_rows(s, [rule, f"NEW {q} = {new}{unit}"], ctx)
 
 
+def t_fac_negative_old_s():
+    """J1/J2 accept a negative old S (a drop has S < 0, up is +); the input screen shows the (-) hint."""
+    res, rr, scr = one_calc("fac", 2, -4.9, 2)          # dropped 1 s: S = -4.9 m; at 2 s: S = -19.6 m
+    expect_rows(by_title(scr, S_FAC), ["OLD S = -4.90 M", "NEW S = -19.6 M"], "drop")
+    assert fmt3(-4.9 * 2 ** 2) == "-19.6"
+    expect_rows(by_title(scr, "STEP 2  NEW S"), ["NEW S=(-4.90)(4.00)", "NEW S = -19.6 M"], "drop 2")
+    res, rr, scr = one_calc("fac", 1, -20, 3)           # stopping while moving the - way
+    expect_rows(by_title(scr, S_FAC), ["NEW S = -180 M"], "stop -")
+    for rel in (1, 2):
+        keys, rr, path = script_for("fac", rel, -4.9, 2)
+        res, shots = drive(keys)
+        assert_clean(res)
+        info = shots[0][1]
+        assert info[-1] == "NEGATIVE = (-) KEY" and len(info) + len(rr.prompts) == 10, info
+    assert "(A DROP HAS S<0, UP IS +)" in ref.INFO["J2"]
+
+
+def t_negative_hint_on_screen():
+    """At every prompt that accepts a negative, the (-) hint row is on the screen (SPEC 7b)."""
+    runs = [("vec1", (1, 20, -30)), ("vec2", (1, -3, -4)), ("avg", (1, [(5, -1, 2)])), ("fac", (1, -20, 3)),
+            ("fac", (2, -4.9, 2)), ("fac", (4, -14, 2)), ("fac", (5, -9.8, 3)), ("ramp", (-0.25,)),
+            ("pdiff", (-2, -2.2)), ("perr", (-9.0, -9.8)), ("yd2m", (-50,)), ("m2yd", (-100,)), ("kmh", (-72,)),
+            ("mph", (-60,))]
+    no_neg = {"NUMBER OF LEGS=", "H FACTOR K=", "V FACTOR K=", "T FACTOR K="}
+    for kind, args in runs:
+        keys, rr, path = script_for(kind, *args)
+        res, shots = drive(keys)
+        assert_clean(res, context=f"{kind}{args}")
+        for prompt, rows in shots:
+            if prompt not in no_neg:
+                assert "NEGATIVE = (-) KEY" in rows, f"{kind}: prompt {prompt!r} without the hint:\n  " + \
+                    "\n  ".join(rows)
+
+
 def t_fac_messages():
     for rel in (1, 2, 3, 4, 5):
         message_only("fac", rel, 10, -2, label="J6")
@@ -526,8 +647,26 @@ def t_lab_required_cases():
     expect_rows(s, ["PERCENT DIFF = 7.41 %"], "pd")
     assert screen_dict(s)["PERCENT DIFF"] == fmt3(abs(2.10 - 1.95) / ((2.10 + 1.95) / 2) * 100)
     expect_rows(by_title(scr, "STEP 1  AVERAGE"), ["AVG=(A+B)/2", "AVG=(2.10+1.95)/2", "AVG = 2.03"], "pd 1")
-    expect_rows(by_title(scr, "STEP 2  PERCENT DIFFERENCE"), ["%DIFF=|A-B|/|AVG|*100", "=|2.10-1.95|/2.03*100",
-                                                              "=0.150/2.03*100", "PERCENT DIFF = 7.41 %"], "pd 2")
+    expect_rows(by_title(scr, "STEP 2  PERCENT DIFFERENCE"),
+                ["%DIFF=|A-B|/|AVG|*100", "=|A-B|/(|A+B|/2)*100", "=|2.10-1.95|/(4.05/2)*100",
+                 "=0.150/(4.05/2)*100", "PERCENT DIFF = 7.41 %", "(UNROUNDED VALUES USED)"], "pd 2")
+    assert fmt3(0.150 / (4.05 / 2) * 100) == "7.41"      # the numbers on the screen give the answer shown
+
+
+def t_pdiff_shown_numbers():
+    """The substituted numbers on STEP 2 reproduce the PERCENT DIFF shown (when A+B has <= 3 s.f.)."""
+    sub_re = re.compile(r"^=(" + NUM + r")/\((" + NUM + r")/2\)\*100$")
+    # (A+B with more than 3 s.f., e.g. 9.81+9.75 = 19.56 shown as 19.6, is rounded on screen; the
+    # "(UNROUNDED VALUES USED)" row covers that case)
+    for a, b in [(2.10, 1.95), (10, 12), (-2, -2.2), (9.8, 9.6), (0.52, 0.48), (120, 135), (3.2, -1.1)]:
+        res, rr, scr = one_calc("pdiff", a, b)
+        rows = rows_of(by_title(scr, "STEP 2  PERCENT DIFFERENCE"))
+        subs = [sub_re.match(r) for r in rows if sub_re.match(r)]
+        assert len(subs) == 1, rows
+        d, s = float(subs[0].group(1)), float(subs[0].group(2))
+        shown = screen_dict(by_title(scr, "STEP 2  PERCENT DIFFERENCE"))["PERCENT DIFF"]
+        assert fmt3(d / (s / 2) * 100) == shown, (a, b, rows)
+        assert shown == fmt3(abs(a - b) / abs((a + b) / 2) * 100), (a, b, shown)       # independent
 
 
 def t_lab_conversions():
@@ -588,13 +727,17 @@ def t_lab_messages():
     message_only("perr", 2e9, 1, label="K6")
     message_only("yd2m", 2e9, label="K6")
     message_only("m2yd", -2e9, label="K6")
+    # ZT-2: km/h and mph are bounded too (ZFMT fails from 9.995E99 up; 9.9999999999999E99 overflowed)
+    for kind in ("kmh", "mph"):
+        for v in (9.995e99, -9.995e99, 9.999e99, -9.999e99, 9.9999999999999e99, 1.5e9, -1000000001):
+            message_only(kind, v, label="K6")
 
 
 def t_lab_edges():
     for kind, args in [("ramp", (1e9,)), ("ramp", (0,)), ("ramp", (1e-99,)), ("pdiff", (1e9, -999999999.99999)),
                        ("pdiff", (1e-99, 0)), ("pdiff", (3, 0)), ("perr", (0, 5)), ("perr", (1e9, 1e-70)),
-                       ("perr", (-1e9, 1e9)), ("yd2m", (1e9,)), ("m2yd", (-1e9,)), ("kmh", (9.99e99,)),
-                       ("mph", (-9.99e99,)), ("kmh", (1e-99,)), ("mph", (0,))]:
+                       ("perr", (-1e9, 1e9)), ("yd2m", (1e9,)), ("m2yd", (-1e9,)), ("kmh", (1e9,)),
+                       ("kmh", (-1e9,)), ("mph", (-1e9,)), ("mph", (1e9,)), ("kmh", (1e-99,)), ("mph", (0,))]:
         one_calc(kind, *args, exact=False)
 
 
@@ -669,9 +812,12 @@ def t_wide_values():
             [("vec2", (k, x, y)) for k in (3, 4) for x, y in [(3, 4), (-3, 4), (-3, -4), (4, -3), (5, 0),
                                                               (-5, 0), (0, 7), (0, -7), (0, 0)]] + \
             [("avg", (n, [(100, -1, 10)] * n)) for n in (1, 2, 3, 4)] + [("avg", (4, [(0, 1, 1)] * 4))] + \
-            [("fac", (rel, -20, 3)) for rel in (1, 2, 4, 5)] + [("fac", (3, 2, 4))] + \
+            [("vec1", (4, 20, a)) for a in (120, -60, 180, 270)] + \
+            [("avg", (4, [(50, 1, 10), (50, -1, 12.5), (25, 1, 6.5), (75, -1, 0.5)]))] + \
+            [("fac", (rel, -20, 3)) for rel in (1, 2, 4, 5)] + [("fac", (3, 2, 4)), ("fac", (2, -4.9, 2))] + \
             [("ramp", (0.4,)), ("pdiff", (2.1, -1.95)), ("pdiff", (-2.1, 1.95)), ("perr", (-9.6, -9.8)),
-             ("perr", (9.6, 9.8)), ("yd2m", (50,)), ("m2yd", (100,)), ("kmh", (90,)), ("mph", (60,))]
+             ("perr", (9.6, 9.8)), ("yd2m", (50,)), ("m2yd", (100,)), ("kmh", (90,)), ("mph", (60,)),
+             ("pdiff", (2.10, 1.95)), ("kmh", (-1e9,)), ("mph", (1e9,))]
     for kind, args in cases:
         keys, rr, path = script_for(kind, *args)
         res, shots = drive(keys, wide=True)
@@ -740,6 +886,8 @@ def t_fuzz_lab():
 
 def t_coverage():
     """After all the runs above, every statement of ZTOOLS has been executed at least once."""
+    if os.environ.get("TISIM_SINGLE"):
+        return   # per-module coverage needs the separate module build
     prog = sim().programs["ZTOOLS"]
     missing = [st for i, st in enumerate(prog.stmts) if ("ZTOOLS", i) not in sim().coverage and st.kind != "Lbl"]
     assert not missing, "never executed: " + "; ".join(f"L{st.line} {st.text}" for st in missing[:20])
@@ -750,19 +898,25 @@ c.check("static layout: info rows + prompts <= 10, prompts <= 18, menus, message
 c.check("H required: 20 at 30 deg, 10 at 120 deg (up-left)", t_vec_required_examples)
 c.check("H mag+angle -> X,Y hand cases (axes, all quadrants, 360, -90)", t_vec_mag_angle_hand)
 c.check("H unit menu: M, M/S, M/S², none", t_vec_units)
+c.check("H no unit: one space before the direction word (ZT-8)", t_vec_no_unit_words)
 c.check("H X,Y -> mag+angle: 4 quadrants + 4 axes, reference angle, clockwise form, words", t_vec_xy_quadrants)
 c.check("H round trip mag/angle -> X,Y -> mag/angle", t_vec_round_trip)
 c.check("H impossible inputs: negative magnitude, angle out of range, too large, zero vector", t_vec_messages)
+c.check("H negative-magnitude advice never leads to the angle message (ZT-4)", t_vec_opposite_advice)
 c.check("H boundary inputs", t_vec_edges)
 c.check("I required: 100 m + 10 s, 50 m - 5 s -> 10.0 and 3.33 m/s", t_avg_required_example)
 c.check("I hand cases: round trip, 1/3/4 legs, zero-time leg, zero distance", t_avg_hand_cases)
+c.check("I 4 legs: each sum line fits one row (ZT-3)", t_avg_four_legs_one_row)
 c.check("I impossible inputs: N=0/5/2.5, direction 2/0, negatives, zero total time, too large", t_avg_messages)
 c.check("I boundary inputs", t_avg_edges)
 c.check("J required: 20 m with speed x3 -> 180 m; 2.0 s with height x4 -> 4.00 s", t_fac_required_examples)
 c.check("J hand cases for all five relationships", t_fac_hand_cases)
+c.check("J1/J2 negative old S with the (-) hint (ZT-1)", t_fac_negative_old_s)
+c.check("every prompt accepting negatives has the (-) hint on screen (ZT-1/ZT-7)", t_negative_hint_on_screen)
 c.check("J impossible inputs: negative K (all), too large, negative fall time", t_fac_messages)
 c.check("J boundary inputs", t_fac_edges)
 c.check("K required: slope 0.40 -> 0.800 M/S²; 2.10 & 1.95 -> 7.41 %", t_lab_required_cases)
+c.check("K percent difference: the shown numbers give the shown result (ZT-5)", t_pdiff_shown_numbers)
 c.check("K conversions: 50 yd, 100 m, 90 km/h, 60 mph and more", t_lab_conversions)
 c.check("K more hand cases: negative slope, % diff, % error", t_lab_more_hand)
 c.check("K impossible inputs: A+B=0, accepted 0, too large", t_lab_messages)

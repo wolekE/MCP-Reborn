@@ -5,6 +5,8 @@ Then
 Else
 int(log(abs(Z)))→W
 round(abs(Z)/₁₀^(W),2)→U
+If U≥10 and W≥99
+9.99→U
 If U≥10
 Then
 U/10→U

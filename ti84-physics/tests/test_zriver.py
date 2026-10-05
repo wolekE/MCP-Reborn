@@ -140,6 +140,24 @@ def expect_values(got, want, ctx):
 
 S1 = "SUMMARY 1/2 (AIMED ACROSS)"
 S2 = "SUMMARY 2/2 (LAND ACROSS)"
+VAR_END = re.compile(r"(VR|VB|TD|D0|V1|ANGLE)$")
+
+
+def dash_reads_as_minus(screens):
+    """Rows ending in '-' (used as a colon) where the dash reads as a minus sign: the text before it
+    is a formula ('THE BANK IT IS 90-ANGLE-'), or a variable directly above a formula row ('=' with
+    no spaces), e.g. 'MUST CANCEL VR-' / 'VB SIN(ANGLE)=VR'."""
+    bad = []
+    for scr in screens:
+        rows = rows_of(scr) + [""]
+        for a, b in zip(rows, rows[1:]):
+            if not a.endswith("-"):
+                continue
+            last = a[:-1].split(" ")[-1]
+            formula_below = "=" in b and " = " not in b
+            if re.search(r"[0-9=+*/-]", last) or (VAR_END.search(last) and formula_below):
+                bad.append((a, b))
+    return bad
 
 
 # ------------------------------------------------------------------------------ setup
@@ -204,6 +222,33 @@ def t_required_6_3_120():
         assert row in rows2, (row, rows2)
 
 
+def t_land_across_heading_vs_path():
+    """Aimed upstream: the summary says the path is straight across (not along the heading) and that
+    V ACROSS is the speed seen from shore (the usual 'speed relative to shore' follow-up)."""
+    res, rr, scr = one_calc(6, 3, 120)
+    rows2 = rows_of(by_title(scr, S2))
+    assert rows2 == ["SUMMARY 2/2 (LAND ACROSS)", "HEADING (UPSTREAM)-", "FROM ACROSS = 30.0°",
+                     "FROM BANK = 60.0°", "PATH- STRAIGHT ACROSS,", "NOT ALONG THE HEADING.",
+                     "V ACROSS = 5.20 M/S", "(SPEED SEEN FROM SHORE)", "T = 23.1 S", "DRIFT = 0 M"], rows2
+    # the speed seen from shore when aimed upstream: sqrt(VB^2 - VR^2), the resultant of the
+    # heading velocity and the current
+    vx, vy = 6 * math.cos(math.radians(30)), -6 * math.sin(math.radians(30)) + 3
+    assert abs(vy) < 1e-12 and fmt3(math.hypot(vx, vy)) == "5.20"
+    # the aimed-across summary keeps its own heading-vs-path rows
+    rows1 = rows_of(by_title(scr, S1))
+    assert rows1[-2:] == ["HEADING- STRAIGHT ACROSS,", "NOT ALONG THE PATH."], rows1
+
+
+def t_dash_not_read_as_minus():
+    """RC-3: no row ends with a formula/variable and a '-' right above a formula row."""
+    for inp in [(6, 3, 120), (5, 0, 100), (4, 4, 50), (3, 5, 90)]:
+        res, rr, scr = one_calc(*inp)
+        assert dash_reads_as_minus(scr) == [], (inp, dash_reads_as_minus(scr))
+    res, rr, scr = one_calc(6, 3, 120)
+    assert "MUST CANCEL VR, SO" in rows_of(by_title(scr, "STEP 5  HEADING UPSTREAM"))
+    assert "THE BANK IT IS 90-ANGLE." in rows_of(by_title(scr, "STEP 4  PATH ANGLE"))
+
+
 def t_required_steps_show_work():
     """Each step names its equation and shows the numbers substituted."""
     res, rr, scr = one_calc(6, 3, 120)
@@ -215,8 +260,10 @@ def t_required_steps_show_work():
         "STEP 2  DRIFT": ["DRIFT=VR*T", "DRIFT=(3.00)(20.0)", "DRIFT = 60.0 M"],
         "STEP 3  RESULTANT SPEED": ["V=√(VB²+VR²)", "V=√(6.00²+3.00²)", "V RESULT = 6.71 M/S"],
         "STEP 4  PATH ANGLE": ["TAN(ANGLE)=VR/VB", "ANGLE=TAN⁻1(3.00/6.00)", "FROM ACROSS = 26.6°",
-                               "FROM BANK = 63.4°", "HEADING IS STRAIGHT ACROSS"],
-        "STEP 5  HEADING UPSTREAM": ["VB SIN(ANGLE)=VR", "ANGLE=SIN⁻1(3.00/6.00)", "FROM ACROSS = 30.0°",
+                               "(TOWARD DOWNSTREAM). FROM", "FROM BANK = 63.4°", "HEADING IS STRAIGHT ACROSS",
+                               "BUT THE PATH IS SLANTED."],
+        "STEP 5  HEADING UPSTREAM": ["MUST CANCEL VR, SO", "VB SIN(ANGLE)=VR", "ANGLE=SIN⁻1(3.00/6.00)",
+                                     "FROM ACROSS = 30.0°",
                                      "FROM BANK = 60.0°", "(AIM UPSTREAM)"],
         "STEP 6  NEW CROSSING TIME": ["V ACROSS=VB COS(ANGLE)", "=√(VB²-VR²)", "=√(6.00²-3.00²)",
                                       "V ACROSS = 5.20 M/S", "T=W/V ACROSS", "T=120/5.20", "T = 23.1 S"],
@@ -248,6 +295,38 @@ def t_still_water_vr0():
                                                    "V ACROSS": "5.00", "T": "20.0"}, "VR=0 s2")
     assert "(NO CURRENT- AIM ACROSS)" in rows_of(by_title(scr, "STEP 5  HEADING UPSTREAM"))
     assert "(AIM UPSTREAM)" not in rows_of(by_title(scr, "STEP 5  HEADING UPSTREAM"))
+
+
+def t_still_water_wording():
+    """RIV-1: with VR = 0 the path is straight across, along the heading. No row may call the path
+    slanted/downstream, say the heading is not along the path, or call a 0 degree heading upstream."""
+    res, rr, scr = one_calc(5, 0, 100)
+    st4 = rows_of(by_title(scr, "STEP 4  PATH ANGLE"))
+    assert st4[3:] == ["FROM ACROSS = 0°", "(STRAIGHT ACROSS). FROM", "THE BANK IT IS 90-ANGLE.",
+                       "FROM BANK = 90.0°", "HEADING IS STRAIGHT ACROSS", "NO CURRENT- SO IS THE PATH"], st4
+    rows1 = rows_of(by_title(scr, S1))
+    assert rows1 == ["SUMMARY 1/2 (AIMED ACROSS)", "T = 20.0 S", "DRIFT = 0 M", "V RESULT = 5.00 M/S",
+                     "PATH ANGLE (NO CURRENT)-", "FROM ACROSS = 0°", "FROM BANK = 90.0°",
+                     "HEADING- STRAIGHT ACROSS,", "SAME AS THE PATH."], rows1
+    rows2 = rows_of(by_title(scr, S2))
+    assert rows2 == ["SUMMARY 2/2 (LAND ACROSS)", "HEADING (NO CURRENT)-", "FROM ACROSS = 0°",
+                     "FROM BANK = 90.0°", "PATH- STRAIGHT ACROSS,", "SAME AS THE HEADING.",
+                     "V ACROSS = 5.00 M/S", "(SPEED SEEN FROM SHORE)", "T = 20.0 S", "DRIFT = 0 M"], rows2
+    for title in ("STEP 4  PATH ANGLE", S1, S2):
+        text = " ".join(rows_of(by_title(scr, title)))
+        for phrase in ("SLANTED", "DOWNSTREAM", "UPSTREAM", "NOT ALONG"):
+            assert phrase not in text, (title, phrase, text)
+    # any current at all (even tiny) keeps the slanted/upstream wording
+    for vr in (3, 0.001):
+        res, rr, scr = one_calc(6, vr, 120)
+        assert "BUT THE PATH IS SLANTED." in rows_of(by_title(scr, "STEP 4  PATH ANGLE"))
+        assert "(TOWARD DOWNSTREAM). FROM" in rows_of(by_title(scr, "STEP 4  PATH ANGLE"))
+        assert "NOT ALONG THE PATH." in rows_of(by_title(scr, S1))
+        assert "HEADING (UPSTREAM)-" in rows_of(by_title(scr, S2))
+        assert "NOT ALONG THE HEADING." in rows_of(by_title(scr, S2))
+    # VR >= VB (cannot land across): the aimed-across summary still says the path is slanted
+    res, rr, scr = one_calc(3, 5, 90)
+    assert "NOT ALONG THE PATH." in rows_of(by_title(scr, S1))
 
 
 def t_vr_equals_vb():
@@ -350,7 +429,8 @@ def t_boundaries():
 
 def t_wide_values():
     """Worst-case 9-character numbers everywhere: nothing truncated, nothing scrolls."""
-    for inp in [(6, 3, 120), (4, 4, 50), (3, 5, 90), (5, 0, 100)]:
+    for inp in [(6, 3, 120), (4, 4, 50), (3, 5, 90), (5, 0, 100), (6, 0.001, 120), (0, 3, 120), (6, -3, 120),
+                (6, 3, 0), (2e9, 1, 1), (1e-10, 0, 1)]:
         res = run(script(*inp), wide=True)
         assert_clean(res, context=f"wide {inp}")
 

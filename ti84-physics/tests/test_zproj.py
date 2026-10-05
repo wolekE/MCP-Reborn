@@ -214,7 +214,7 @@ def t_angled_level_25_50():
     # vx = 25cos50 = 16.0697, v0y = 25sin50 = 19.1511, T = 2(19.1511)/9.8 = 3.9084,
     # R = 16.0697(3.9084) = 62.807, hmax = 19.1511^2/19.6 = 18.712, t_top = 1.9542
     expect(s, {"VX": "16.1", "V0Y": "19.2", "T TOP": "1.95", "MAX H": "18.7", "T FLIGHT": "3.91",
-               "RANGE": "62.8", "SPEED": "25.0", "ANGLE": "50.0"}, "25 m/s at 50 deg")
+               "RANGE": "62.8", "HIT SPEED": "25.0", "ANGLE": "50.0"}, "25 m/s at 50 deg")
     assert "V0Y = 19.2 M/S (UP)" in scr[-1] and "ANGLE = 50.0° BELOW" in scr[-1], scr[-1]
     assert abs(rr.summary["VX"] - 16.07) < 0.005 and abs(rr.summary["V0Y"] - 19.15) < 0.005
     q = screen_with(scr, "SOLVE QUADRATIC FOR T")
@@ -229,14 +229,14 @@ def t_angled_from_1m():
     s = summary(scr)
     # vx = 4.3301, v0y = 2.5; 4.9T^2 - 2.5T - 1 = 0 -> T = (2.5 + sqrt(25.85))/9.8 = 0.77391;
     # x = 4.3301(0.77391) = 3.3511; rise = 6.25/19.6 = 0.31888; above landing 1.31888
-    expect(s, {"VX": "4.33", "V0Y": "2.50", "T TOP": "0.255", "MAX H (LAUNCH)": "0.319",
-               "MAX H (LAND)": "1.32", "T FLIGHT": "0.774", "RANGE": "3.35"}, "5.0 m/s at 30 from 1.0 m")
+    expect(s, {"VX": "4.33", "V0Y": "2.50", "T TOP": "0.255", "RISE": "0.319",
+               "MAX H": "1.32", "T FLIGHT": "0.774", "RANGE": "3.35"}, "5.0 m/s at 30 from 1.0 m")
     q = screen_with(scr, "SOLVE QUADRATIC FOR T")
     # roots (2.5 -/+ 5.08429)/9.8 = -0.26370, 0.77391
     expect(values_of(q), {"T1": "-0.264", "T2": "0.774", "T FLIGHT": "0.774"}, "from 1 m quadratic")
     assert "4.90T²-2.50T-1.00=0" in q and "T1<0 IS BEFORE THE LAUNCH," in q, q
     # impact: vfy = 2.5 - 9.8(0.77391) = -5.0843; speed sqrt(18.75+25.85) = 6.6783; angle 49.58
-    expect(s, {"SPEED": "6.68", "ANGLE": "49.6"}, "from 1 m impact")
+    expect(s, {"HIT SPEED": "6.68", "ANGLE": "49.6"}, "from 1 m impact")
 
 
 def t_angled_from_085m():
@@ -297,7 +297,7 @@ def t_horizontal_given_speed():
     # speed = sqrt(225 + 392) = sqrt(617) = 24.839 (the task text said 24.9; 24.839 rounds to 24.8);
     # angle = atan(19.799/15) = 52.85 deg below
     expect(s, {"H": "20.0", "T FLIGHT": "2.02", "VX": "15.0", "RANGE": "30.3", "VFX": "15.0",
-               "VFY": "-19.8", "SPEED": "24.8", "ANGLE": "52.9"}, "H=20 v=15")
+               "VFY": "-19.8", "HIT SPEED": "24.8", "ANGLE": "52.9"}, "H=20 v=15")
     assert "VFY = -19.8 M/S (DOWN)" in scr[-1] and "ANGLE = 52.9° BELOW" in scr[-1], scr[-1]
     s1 = scr[0]
     assert "-20.0=0+(1/2)(-9.8)T²" in s1 and "T=√(2(20.0)/9.8)" in s1, s1
@@ -307,7 +307,7 @@ def t_horizontal_given_range():
     res, rr, scr = calc(1, 2, 20, 30.3)
     s = summary(scr)
     # vx = 30.3/2.0203 = 14.998 -> 15.0; speed sqrt(224.94 + 392) = 24.838; angle atan(19.799/14.998) = 52.86
-    expect(s, {"T FLIGHT": "2.02", "VX": "15.0", "RANGE": "30.3", "VFY": "-19.8", "SPEED": "24.8",
+    expect(s, {"T FLIGHT": "2.02", "VX": "15.0", "RANGE": "30.3", "VFY": "-19.8", "HIT SPEED": "24.8",
                "ANGLE": "52.9"}, "H=20 R=30.3")
     assert "VX=30.3/2.02" in scr[1], scr[1]
 
@@ -316,14 +316,14 @@ def t_horizontal_more():
     # dropped (v = 0): falls straight down, angle 90
     res, rr, scr = calc(1, 1, 45, 0)
     # t = sqrt(90/9.8) = 3.0305; vy = -29.698
-    expect(summary(scr), {"T FLIGHT": "3.03", "RANGE": "0", "VFY": "-29.7", "SPEED": "29.7", "ANGLE": "90.0"},
+    expect(summary(scr), {"T FLIGHT": "3.03", "RANGE": "0", "VFY": "-29.7", "HIT SPEED": "29.7", "ANGLE": "90.0"},
            "dropped 45 m")
     assert "VFX IS 0, SO IT FALLS" in scr[3], scr[3]
     res, rr, scr = calc(1, 2, 45, 0)
     expect(summary(scr), {"VX": "0", "ANGLE": "90.0"}, "range 0")
     # 1.25 m table, 2 m/s: t = 0.50508, R = 1.0102, vy = -4.9497, speed 5.3385, angle 68.00
     res, rr, scr = calc(1, 1, 1.25, 2)
-    expect(summary(scr), {"T FLIGHT": "0.505", "RANGE": "1.01", "VFY": "-4.95", "SPEED": "5.34",
+    expect(summary(scr), {"T FLIGHT": "0.505", "RANGE": "1.01", "VFY": "-4.95", "HIT SPEED": "5.34",
                           "ANGLE": "68.0"}, "table")
 
 
@@ -334,8 +334,8 @@ def t_landing_higher():
     # vx = 10, v0y = 17.3205; 4.9T^2 - 17.3205T + 5 = 0: disc = 300 - 98 = 202,
     # T = (17.3205 -/+ 14.2127)/9.8 = 0.31712, 3.21762 -> later one; R = 32.176;
     # vfy = 17.3205 - 31.5327 = -14.2127; speed sqrt(100 + 202) = 17.378; angle atan(1.42127) = 54.87
-    expect(s, {"VX": "10.0", "V0Y": "17.3", "T TOP": "1.77", "MAX H (LAUNCH)": "15.3", "MAX H (LAND)": "10.3",
-               "T FLIGHT": "3.22", "RANGE": "32.2", "SPEED": "17.4", "ANGLE": "54.9"}, "landing higher")
+    expect(s, {"VX": "10.0", "V0Y": "17.3", "T TOP": "1.77", "RISE": "15.3", "MAX H": "10.3",
+               "T FLIGHT": "3.22", "RANGE": "32.2", "HIT SPEED": "17.4", "ANGLE": "54.9"}, "landing higher")
     q = screen_with(scr, "SOLVE QUADRATIC FOR T")
     expect(values_of(q), {"T1": "0.317", "T2": "3.22", "B²-4AC": "202", "T FLIGHT": "3.22"}, "both roots > 0")
     assert "T1 PASSES THAT LEVEL GOING" in q and "UP, T2 LANDS COMING DOWN-" in q, q
@@ -353,22 +353,22 @@ def t_unreachable():
     assert q[-3:] == list(ref.MESSAGES["D5"]), q
     assert not any(s[0].startswith("SUMMARY") for s in scr)
     # the max-height step already shows the top is 9.68 m below the landing point
-    expect(values_of(scr[1]), {"MAX H (LAUNCH)": "0.319", "MAX H (LAND)": "-9.68"}, "unreachable top")
+    expect(values_of(scr[1]), {"RISE": "0.319", "MAX H": "-9.68"}, "unreachable top")
 
 
 def t_theta_90():
     res, rr, scr = calc(2, 10, 90, 0)
     # straight up, level: T = 2(10)/9.8 = 2.0408, top 100/19.6 = 5.102, lands at -10 m/s, angle 90
     expect(summary(scr), {"VX": "0", "V0Y": "10.0", "T TOP": "1.02", "MAX H": "5.10", "T FLIGHT": "2.04",
-                          "RANGE": "0", "SPEED": "10.0", "ANGLE": "90.0"}, "theta 90")
+                          "RANGE": "0", "HIT SPEED": "10.0", "ANGLE": "90.0"}, "theta 90")
     assert "VFX IS 0, SO IT IS MOVING" in screen_with(scr, "STEP 6  IMPACT SPEED/ANGLE")
     res, rr, scr = calc(2, 10, 90, 2)
     # 4.9T^2 - 10T - 2 = 0 -> T = (10 + sqrt(139.2))/9.8 = 2.2243; vfy = -sqrt(139.2) = -11.798
-    expect(summary(scr), {"T FLIGHT": "2.22", "SPEED": "11.8", "ANGLE": "90.0", "MAX H (LAND)": "7.10"},
+    expect(summary(scr), {"T FLIGHT": "2.22", "HIT SPEED": "11.8", "ANGLE": "90.0", "MAX H": "7.10"},
            "theta 90 from 2 m")
     res, rr, scr = calc(2, 5, -90, 10)
     # thrown straight down: 4.9T^2 + 5T - 10 = 0 -> T = (-5 + sqrt(221))/9.8 = 1.0067; vfy = -14.866
-    expect(summary(scr), {"VX": "0", "V0Y": "-5.00", "T FLIGHT": "1.01", "SPEED": "14.9", "ANGLE": "90.0"},
+    expect(summary(scr), {"VX": "0", "V0Y": "-5.00", "T FLIGHT": "1.01", "HIT SPEED": "14.9", "ANGLE": "90.0"},
            "theta -90")
 
 
@@ -376,15 +376,15 @@ def t_theta_0_and_negative():
     res, rr, scr = calc(2, 10, 0, 5)
     # horizontal from 5 m: T = sqrt(10/9.8) = 1.0102, R = 10.102, vfy = -9.8995,
     # speed sqrt(100 + 98) = 14.071, angle atan(0.98995) = 44.71
-    expect(summary(scr), {"VX": "10.0", "V0Y": "0", "T TOP": "0", "MAX H (LAUNCH)": "0", "MAX H (LAND)": "5.00",
-                          "T FLIGHT": "1.01", "RANGE": "10.1", "SPEED": "14.1", "ANGLE": "44.7"}, "theta 0")
+    expect(summary(scr), {"VX": "10.0", "V0Y": "0", "T TOP": "0", "RISE": "0", "MAX H": "5.00",
+                          "T FLIGHT": "1.01", "RANGE": "10.1", "HIT SPEED": "14.1", "ANGLE": "44.7"}, "theta 0")
     assert "T TOP = 0 S (AT LAUNCH)" in scr[-1], scr[-1]
     assert "V0Y IS NOT UPWARD, SO IT" in scr[1], scr[1]
     res, rr, scr = calc(2, 10, -30, 20)
     # vx = 8.6603, v0y = -5: 4.9T^2 + 5T - 20 = 0 -> T = (-5 + sqrt(417))/9.8 = 1.5735;
     # R = 13.627; vfy = -sqrt(417) = -20.421; speed sqrt(75 + 417) = 22.181; angle atan(20.421/8.6603) = 67.02
-    expect(summary(scr), {"VX": "8.66", "V0Y": "-5.00", "T FLIGHT": "1.57", "RANGE": "13.6", "SPEED": "22.2",
-                          "ANGLE": "67.0", "MAX H (LAND)": "20.0"}, "theta -30")
+    expect(summary(scr), {"VX": "8.66", "V0Y": "-5.00", "T FLIGHT": "1.57", "RANGE": "13.6", "HIT SPEED": "22.2",
+                          "ANGLE": "67.0", "MAX H": "20.0"}, "theta -30")
     assert "V0Y = -5.00 M/S (DOWN)" in scr[-1], scr[-1]
     q = screen_with(scr, "SOLVE QUADRATIC FOR T")
     assert "4.90T²+5.00T-20.0=0" in q, q
@@ -393,7 +393,7 @@ def t_theta_0_and_negative():
 def t_v0_zero():
     res, rr, scr = calc(2, 0, 40, 5)
     # dropped from 5 m: T = 1.0102, vfy = -9.8995, straight down
-    expect(summary(scr), {"VX": "0", "V0Y": "0", "T FLIGHT": "1.01", "RANGE": "0", "SPEED": "9.90",
+    expect(summary(scr), {"VX": "0", "V0Y": "0", "T FLIGHT": "1.01", "RANGE": "0", "HIT SPEED": "9.90",
                           "ANGLE": "90.0"}, "v0 = 0")
     res, rr, scr = calc(2, 0, 40, 0)
     assert rr.message == "M5" and message_shown(scr, "M5") and len(scr) == 1, scr
@@ -405,12 +405,12 @@ def t_lands_at_top():
     # 9.8 m/s straight up onto a ledge 4.9 m higher: B^2-4AC = 96.04 - 96.04 = 0, T = 1.00 s,
     # it arrives with speed 0 -> no impact angle (must not error)
     res, rr, scr = calc(2, 9.8, 90, -4.9)
-    expect(summary(scr), {"T FLIGHT": "1.00", "SPEED": "0", "RANGE": "0"}, "touches at the top")
+    expect(summary(scr), {"T FLIGHT": "1.00", "HIT SPEED": "0", "RANGE": "0"}, "touches at the top")
     assert "ANGLE- NONE (SPEED IS 0)" in scr[-1], scr[-1]
     assert "IT LANDS RIGHT AT THE TOP" in screen_with(scr, "STEP 6  IMPACT SPEED/ANGLE")
     # same with sideways speed: 19.6 m/s at 30 deg onto a 4.9 m ledge -> lands level, angle 0
     res, rr, scr = calc(2, 19.6, 30, -4.9)
-    expect(summary(scr), {"T FLIGHT": "1.00", "SPEED": "17.0", "ANGLE": "0"}, "touches at the top, vx>0")
+    expect(summary(scr), {"T FLIGHT": "1.00", "HIT SPEED": "17.0", "ANGLE": "0"}, "touches at the top, vx>0")
 
 
 def t_d_matches_c_for_theta_0():
@@ -419,7 +419,7 @@ def t_d_matches_c_for_theta_0():
         _, _, sc = calc(1, 1, h, v)
         _, _, sd = calc(2, v, 0, h)
         a, b = summary(sc), summary(sd)
-        for name in ("T FLIGHT", "RANGE", "SPEED", "ANGLE", "VX"):
+        for name in ("T FLIGHT", "RANGE", "HIT SPEED", "ANGLE", "VX"):
             assert a[name] == b[name], (h, v, name, a[name], b[name])
 
 
@@ -618,27 +618,173 @@ def t_reference_physics():
         s = rr.summary
         assert math.isclose(s["T FLIGHT"], 2 * v * math.sin(math.radians(th)) / g, rel_tol=1e-9)
         assert math.isclose(s["RANGE"], v * v * math.sin(math.radians(2 * th)) / g, rel_tol=1e-9)
-        assert math.isclose(s["SPEED"], v, rel_tol=1e-9) and math.isclose(s["ANGLE"], th, rel_tol=1e-9)
+        assert math.isclose(s["HIT SPEED"], v, rel_tol=1e-9) and math.isclose(s["ANGLE"], th, rel_tol=1e-9)
         h = rng.uniform(0.01, 50)
         s = ref.run(2, v, th, h).summary
         t = s["T FLIGHT"]
         vy0 = v * math.sin(math.radians(th))
         assert math.isclose(vy0 * t - 0.5 * g * t * t, -h, abs_tol=1e-9)
-        assert math.isclose(s["SPEED"], math.sqrt(v * v + 2 * g * h), rel_tol=1e-9)   # energy
+        assert math.isclose(s["HIT SPEED"], math.sqrt(v * v + 2 * g * h), rel_tol=1e-9)   # energy
         hh = rng.uniform(0.1, 100)
         vx = rng.uniform(0, 40)
         s = ref.run(1, 1, hh, vx).summary
         assert math.isclose(s["T FLIGHT"], math.sqrt(2 * hh / g)) and math.isclose(s["RANGE"], vx * s["T FLIGHT"])
-        assert math.isclose(s["SPEED"], math.sqrt(vx * vx + 2 * g * hh), rel_tol=1e-9)
+        assert math.isclose(s["HIT SPEED"], math.sqrt(vx * vx + 2 * g * hh), rel_tol=1e-9)
         # throw lab inverts the angled launch: launch, then work backward from (H, t, range)
         s2 = ref.run(2, v, th, h).summary
         back = ref.run(3, 1, h, s2["T FLIGHT"], s2["RANGE"]).summary
         assert math.isclose(back["V0"], v, rel_tol=1e-7) and math.isclose(back["ANGLE"], th, rel_tol=1e-7)
 
 
+# ------------------------------------------------------------------------------ review fixes
+def drive(keys, **kw):
+    """Run PHYSOLVE with `keys`, also recording the rows on screen at each Input prompt.
+    Returns (result, [(prompt, rows shown above it)])."""
+    from tisim import ScriptEnd
+    s = setup_sim()
+    keys = list(keys)
+    shots = []
+
+    def responder(kind, info):
+        if kind == "input":
+            shots.append((info, [r.rstrip() for r in s.screen if r.strip()]))
+        if not keys:
+            raise ScriptEnd()
+        return keys.pop(0)
+
+    res = run([], responder=responder, **kw)
+    return res, shots
+
+
+def t_input_screens():
+    """ZPROJ-1: every input screen is exactly the reference's; the ones that take a negative
+    (angled launch: angle and H; throw lab: H) show the (-) key hint; rows + prompts <= 10."""
+    cases = [((3, 1, 20, 15, 7), ref.INPUT_C1, False), ((3, 2, 20, 30.3, 7), ref.INPUT_C2, False),
+             ((4, 25, 50, 0, 7), ref.INPUT_D, True), ((5, 1, 2, 2.4, 50, 7), ref.INPUT_E[1], True),
+             ((5, 2, 2, 2.4, 50, 7), ref.INPUT_E[2], True)]
+    for wide in (False, True):
+        for keys, (rows, prompts), neg in cases:
+            ctx = f"{keys} wide={wide}"
+            res, shots = drive(keys, wide=wide)
+            assert_clean(res, context=ctx)
+            assert [p for p, _ in shots] == list(prompts), (ctx, shots)
+            first = shots[0][1]
+            assert first == list(rows), f"{ctx}: input screen {first}, reference {rows}"
+            assert len(rows) + len(prompts) <= 10, ctx
+            assert all(len(r) <= 26 for r in rows) and all(len(p) + 9 <= 26 for p in prompts), ctx
+            assert (ref.NEG_HINT in first) == neg, f"{ctx}: (-) hint shown={ref.NEG_HINT in first}"
+            # the last prompt (row 10 at most) is answered on the same screen: nothing scrolled away
+            assert shots[-1][1][:len(rows)] == list(rows), (ctx, shots[-1])
+    rr = ref.run(2, 25, 50, 0)
+    assert rr.inputs == ref.INPUT_D and ref.run(3, 2, 2, 2.4, 50).inputs == ref.INPUT_E[2]
+
+
+def t_negative_key():
+    """ZPROJ-1: negatives typed with the (-) key (strings starting with '⁻') work on both input
+    screens that take them, and give the same screens as numeric negatives."""
+    for typed, num in [((4, 20, 60, "⁻5", 7), (4, 20, 60, -5, 7)), ((4, 10, "⁻30", 20, 7), (4, 10, -30, 20, 7)),
+                       ((5, 1, "⁻2", 2, 10, 7), (5, 1, -2, 2, 10, 7)), ((4, 9.8, 90, "⁻4.9", 7), (4, 9.8, 90, -4.9, 7))]:
+        a, b = run(list(typed)), run(list(num))
+        assert_clean(a, context=str(typed))
+        assert a.screens == b.screens, typed
+
+
+WIDE_PATHS = [
+    (3, 1, 20, 15), (3, 2, 20, 30.3), (3, 1, 45, 0), (3, 2, 45, 0), (3, 1, 1.25, 2),
+    (4, 25, 50, 0), (4, 5, 30, 1), (4, 4.9, 20, 0.85), (4, 20, 60, -5), (4, 10, 0, 5), (4, 10, -30, 20),
+    (4, 10, 90, 2), (4, 10, 90, 0), (4, 5, -90, 10), (4, 0, 40, 5), (4, 9.8, 90, -4.9), (4, 19.6, 30, -4.9),
+    (4, 5, 30, -10),
+    (5, 1, 2, 2.4, 50), (5, 2, 2, 2.4, 50), (5, 1, 10, 1, 5), (5, 1, 0, 2, 0), (5, 1, 4.9, 1, 0),
+    (5, 1, -2, 2, 10), (5, 1, 0, 2, 20), (3, 3), (5, 3),
+]
+
+
+def t_wide_values():
+    """ZPROJ-7: every path, every message (M1-M9, D5) and BACK with worst-case 9-character values
+    (-8.88E-88) and 9-character inputs: nothing truncated, nothing scrolls, back to PHYSOLVE."""
+    seen = set()
+    for keys in WIDE_PATHS + [(ITEM[k], *kk) for k, kk, _ in EDGE]:
+        res = run([*keys, 7], wide=True)
+        assert_clean(res, context=f"wide {keys}")
+        k = {3: 1, 4: 2, 5: 3}[keys[0]]
+        if ref.run(k, *keys[1:]).message:
+            seen.add(ref.run(k, *keys[1:]).message)
+    assert seen == set(ref.MESSAGES), f"wide mode does not reach {set(ref.MESSAGES) - seen}"
+    # several in one session, wide
+    res = run([3, 1, 20, 15, 4, 5, 30, 1, 5, 2, 2, 2.4, 50, 4, 20, 60, -5, 7], wide=True)
+    assert_clean(res, context="wide session")
+
+
+def t_heights_step2():
+    """ZPROJ-2/3: RISE (above the launch point), H+RISE, MAX H (above the landing point, like H)."""
+    _, _, scr = calc(2, 20, 60, -5)
+    s2 = screen_with(scr, "STEP 2  TIME TO TOP, MAX H")
+    assert s2[-3:] == ["RISE = 15.3 M", "H+RISE=-5.00+15.3", "MAX H = 10.3 M"], s2
+    assert "RISE ABOVE THE LAUNCH-" in s2 and "USE VF²=V0²+2AS" in s2, s2
+    assert not any("H-" in row and "MAX" in row for row in s2), s2
+    _, _, scr = calc(2, 5.0, 30, 1.0)       # required case: the cliff max height is 1.32 m
+    assert summary(scr)["MAX H"] == "1.32" and summary(scr)["RISE"] == "0.319"
+    _, _, scr = calc(2, 25, 50, 0)          # level ground: RISE = MAX H, the summary shows MAX H only
+    s2 = screen_with(scr, "STEP 2  TIME TO TOP, MAX H")
+    assert s2[-3:] == ["RISE = 18.7 M", "H+RISE=0+18.7", "MAX H = 18.7 M"], s2
+    assert "RISE" not in summary(scr) and summary(scr)["MAX H"] == "18.7", scr[-1]
+    _, _, scr = calc(2, 10, -30, 20)        # not launched upward: RISE 0, top is the launch point
+    s2 = screen_with(scr, "STEP 2  TIME TO TOP, MAX H")
+    assert s2[-4:] == ["T TOP = 0 S (AT LAUNCH)", "RISE = 0 M", "H+RISE=20.0+0", "MAX H = 20.0 M"], s2
+    # ZPROJ-5: the summary's T TOP row for a launch that is not upward is the fixed text
+    assert "T TOP = 0 S (AT LAUNCH)" in scr[-1], scr[-1]
+    for row in scr[-1][1:]:
+        assert len(row) <= 26 and VAL_RE.match(row), row
+
+
+def t_range_line_and_note():
+    """ZPROJ-4/6: the RANGE substitution goes through ZLINE; a note says the calculator keeps all
+    digits (so redoing the math from the rounded numbers on screen can differ in the last digit)."""
+    _, _, scr = calc(2, 25, 50, 0)
+    assert scr[0][-1] == ref.KEEPS, scr[0]
+    s4 = screen_with(scr, "STEP 4  RANGE (HORIZONTAL)")
+    assert "RANGE=(16.1)(3.91)" in s4 and "RANGE = 62.8 M" in s4, s4
+    _, _, scr = calc(1, 1, 20, 15)
+    assert scr[1][-1] == ref.KEEPS and "RANGE=(15.0)(2.02)" in scr[1], scr[1]
+    _, _, scr = calc(1, 2, 20, 30.3)
+    assert scr[1][-1] == ref.KEEPS, scr[1]
+    for k in (1, 2):
+        _, _, scr = calc(3, k, 2.0, 2.4, 50)
+        assert scr[0][-1] == ref.KEEPS and len(scr[0]) <= 10, scr[0]
+    assert len(ref.KEEPS) <= 26 and not VAL_RE.match(ref.KEEPS)
+
+
+def t_m2_angled_hint():
+    """ZPROJ-8: a negative speed in the angled launch says to use a negative angle instead;
+    the horizontal launch's M2 does not (it has no angle)."""
+    _, rr, scr = calc(2, -5, 30, 10)
+    assert scr[-1] == list(ref.MESSAGES["M2"] + ref.M2_ANGLED), scr[-1]
+    _, rr, scr = calc(1, 1, 10, -1)
+    assert scr[-1] == list(ref.MESSAGES["M2"]), scr[-1]
+    for row in ref.M2_ANGLED:
+        assert len(row) <= 26 and " = " not in row
+
+
+def t_labels():
+    """ZPROJ-9/10: the throw-lab angle heading fits up and down; the impact speed is HIT SPEED
+    (not the launch speed); D step 4 shows VX (the summary's name), not VFX."""
+    _, _, scr = calc(3, 1, 10, 1, 5)
+    s3 = screen_with(scr, "STEP 3  LAUNCH SPEED/ANGLE")
+    assert "ANGLE FROM HORIZONTAL-" in s3 and "ANGLE = -45.6° (BELOW)" in s3, s3
+    assert not any("ABOVE HORIZONTAL" in r for r in s3), s3
+    _, _, scr = calc(2, 25, 50, 0)
+    assert "HIT SPEED = 25.0 M/S" in scr[-1] and not any(r.startswith("SPEED = ") for r in scr[-1]), scr[-1]
+    s4 = screen_with(scr, "STEP 4  RANGE (HORIZONTAL)")
+    assert "VX = 16.1 M/S" in s4 and not any(r.startswith("VFX = ") for r in s4), s4
+    _, _, scr = calc(1, 1, 20, 15)
+    assert "HIT SPEED = 24.8 M/S" in scr[-1] and "HIT SPEED = 24.8 M/S" in scr[3], scr
+
+
 def t_every_statement_runs():
     """Coverage: every ZPROJ statement was executed by the tests above (so every branch, message
     and menu path has been run at least once)."""
+    if os.environ.get("TISIM_SINGLE"):
+        return   # per-module coverage needs the separate module build
     s = setup_sim()
     prog = s.programs["ZPROJ"]
     missing = [st for i, st in enumerate(prog.stmts) if ("ZPROJ", i) not in s.coverage and st.kind not in ("Lbl", "Then")]
@@ -673,6 +819,13 @@ c.check("largest/smallest accepted sizes: no overflow or error", t_boundaries)
 c.check("fuzz (realistic numbers): every screen = reference", t_fuzz_realistic)
 c.check("fuzz (any numbers): clean, back to PHYSOLVE, = reference", t_fuzz_wide)
 c.check("reference agrees with closed-form projectile physics", t_reference_physics)
+c.check("input screens = reference; (-) key hint where a negative is allowed", t_input_screens)
+c.check("negatives typed with the (-) key work on every input screen", t_negative_key)
+c.check("wide mode (9-char values/inputs): every path, message and BACK fits", t_wide_values)
+c.check("step 2 / summary heights: RISE, H+RISE, MAX H; T TOP at launch", t_heights_step2)
+c.check("RANGE substitution via ZLINE; 'calc keeps all digits' note", t_range_line_and_note)
+c.check("M2 from the angled launch says to use a negative angle", t_m2_angled_hint)
+c.check("labels: ANGLE FROM HORIZONTAL, HIT SPEED, VX in D step 4", t_labels)
 c.check("every ZPROJ statement executed", t_every_statement_runs)
 if TOLERANT_USED:
     print(f"  note: {len(TOLERANT_USED)} screen(s) matched only within 1e-9 relative (rounding ties), e.g. "

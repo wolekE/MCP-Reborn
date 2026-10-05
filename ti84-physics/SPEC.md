@@ -9,7 +9,7 @@ The student has an AP Physics 1 Unit 1 (kinematics) test tomorrow and will run t
 | Path | What |
 |---|---|
 | `src/NAME.txt` | TI-Basic source, one program per file, UTF-8, `\n` line endings, ends with exactly one `\n`. The file name is the program name (≤ 8 chars, A–Z/0–9, all caps). This file is also what the student types by hand if the transfer fails. |
-| `8xp/NAME.8xp` | Built by `python3 tools/build.py` (tivars_lib_py tokenizer). Never hand-edit. |
+| `build/modules/NAME.8xp`, `PHYSICS.8xp` | Built by `python3 tools/build.py` (tivars_lib_py tokenizer): each module on its own for testing, and all modules merged by `tools/merge.py` into the one program the student sends, `PHYSICS.8xp`. Never hand-edit. |
 | `tools/build.py` | Tokenize + lint + build + round-trip diff. `python3 tools/build.py --check --only ZVOVF` lints one program without writing files (use this while developing; other agents are editing other files at the same time). |
 | `tools/tisim.py` | TI-Basic simulator that runs the token stream. `python3 tools/tisim.py --src PHYSOLVE 1 8 999 120 999 1.5 7` runs PHYSOLVE with scripted keys (menu choice numbers / typed values) and prints every Pause screen. |
 | `reference/NAME.py` | Python reference implementation of a solver that mirrors the TI-Basic logic **line for line** (same branches, same equations, same order, same messages), returning the values shown on screen. Use `reference/common.py` (`G = 9.8`, `UNKNOWN = 999`, `fmt3()`). |

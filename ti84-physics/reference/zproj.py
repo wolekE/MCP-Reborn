@@ -11,11 +11,11 @@ TI variables (the same letters are used below):
   C  horizontal:  P = mode (1 given V, 2 given range)  Q = H   V = vx   E = range
                   S = -H   D = t   F = vy at impact     B = impact speed   C = impact angle
   D  angled:      V = v0   E = angle (deg)   Q = h (launch height above the landing point)
-                  B = vx   C = v0y   P = time to top   S = max height above launch
-                  A = max height above the landing point (Q+S)
+                  B = vx   C = v0y   P = time to top   S = RISE (top above the launch point)
+                  A = MAX H (top above the landing point, = Q+S)
                   L, M, N -> prgmZQUAD (4.9, -v0y, -h); J, H, I, G <- prgmZQUAD
                   D = flight time (= I, the later root)   L = range   F = vy at impact
-                  M = impact speed   N = impact angle below horizontal (-1 = none, speed 0)
+                  M = impact speed (HIT SPEED)   N = impact angle below horizontal (-1 = none)
   E  throw lab:   P = units (1 m, 2 yd)   Q = H   D = t   N = range as typed   E = range (m)
                   B = vx   C = v0y   V = launch speed   A = launch angle (+ above horizontal)
 
@@ -26,6 +26,7 @@ option numbers and typed numbers, in order) and returns a Result:
             Screen.rows() renders the 26-column rows exactly like the calculator.
   .menus    [(title, option chosen)] for ZPROJ's own menus
   .message  label of the message screen shown (M1..M9 or "D5"), or None
+  .inputs   (rows shown above the prompts, prompts) of the input screen ZPROJ showed, or None
   .summary  {name: number} from the SUMMARY screen ("NAME = {} UNIT" lines)
   .quad     (J, H, I, G) from the prgmZQUAD call (angled launch), or None
 """
@@ -40,6 +41,48 @@ COLS = 26
 
 MENU_C = ("HORIZONTAL LAUNCH", ("GIVEN H AND SPEED V", "GIVEN H AND RANGE", "BACK"))
 MENU_E = ("THROW LAB (BACKWARD)", ("RANGE IN METERS", "RANGE IN YARDS", "BACK"))
+
+NEG_HINT = "NEGATIVE = (-) KEY"           # SPEC 7b: on every input screen that takes a negative
+KEEPS = "(CALC KEEPS ALL DIGITS)"        # the substituted numbers are rounded; the math is not
+
+# Input screens: (rows Disp'ed after ClrHome, Input prompts). The prompts follow on the next rows.
+INPUT_C1 = (("HORIZONTAL LAUNCH",            # Lbl C1 (H and V are never negative: no hint)
+             "LAUNCHED LEVEL (ANGLE 0)",
+             "FROM HEIGHT H ABOVE THE",
+             "LANDING POINT. UP IS +.",
+             "ENTER H AS A POSITIVE",
+             "NUMBER AND THE LAUNCH",
+             "SPEED V."),
+            ("HEIGHT H (M)=", "SPEED V (M/S)="))
+INPUT_C2 = (("HORIZONTAL LAUNCH",            # Lbl C2
+             "LAUNCHED LEVEL (ANGLE 0)",
+             "FROM HEIGHT H ABOVE THE",
+             "LANDING POINT. UP IS +.",
+             "ENTER H AS A POSITIVE",
+             "NUMBER AND THE RANGE (HOW",
+             "FAR IT WENT SIDEWAYS)."),
+            ("HEIGHT H (M)=", "RANGE (M)="))
+INPUT_D = (("ANGLED LAUNCH (UP IS +)",       # Lbl D0 (angle and H may be negative)
+            "ANGLE- DEGREES ABOVE THE",
+            "HORIZONTAL, - IF DOWNWARD.",
+            "H- LAUNCH HEIGHT ABOVE THE",
+            "LANDING POINT (0 IF LEVEL,",
+            "- IF IT LANDS HIGHER).",
+            NEG_HINT),
+           ("SPEED V0 (M/S)=", "ANGLE (DEG)=", "HEIGHT H (M)="))
+INPUT_E_ROWS = ("THROW LAB- WORK BACKWARD",    # Lbl E3 (H may be negative)
+                "H- LAUNCH HEIGHT ABOVE THE",
+                "LANDING POINT (0 IF LEVEL,",
+                "- IF IT LANDS HIGHER).",
+                "T- TIME IN THE AIR.",
+                "RANGE- HOW FAR SIDEWAYS.",
+                NEG_HINT)
+INPUT_E = {1: (INPUT_E_ROWS, ("HEIGHT H (M)=", "TIME T (S)=", "RANGE (M)=")),
+           2: (INPUT_E_ROWS, ("HEIGHT H (M)=", "TIME T (S)=", "RANGE (YD)="))}
+
+# Extra M2 rows when M2 comes from the angled launch (If K=2): the direction is in the angle.
+M2_ANGLED = ("FOR A DOWNWARD THROW, USE",
+             "A NEGATIVE ANGLE.")
 
 # Message screens (label -> rows). D5 is shown under prgmZQUAD's rows (no ClrHome).
 MESSAGES = {
@@ -129,6 +172,7 @@ class Result:
         self.menus = []
         self.message = None
         self.quad = None
+        self.inputs = None
 
     def new_screen(self):                # ClrHome
         s = Screen()
@@ -158,10 +202,10 @@ def _size_bad(x, zero_ok=True):
     return abs(x) > HI or ((x != 0 or not zero_ok) and abs(x) < LO)
 
 
-def _msg(r, label, scr=None):
+def _msg(r, label, scr=None, extra=()):
     """Message screen: ClrHome (unless shown under ZQUAD's rows), rows, Pause, Return."""
     scr = scr if scr is not None else r.new_screen()
-    for row in MESSAGES[label]:
+    for row in MESSAGES[label] + tuple(extra):
         scr.disp(row)
     r.message = label
     return r
@@ -174,7 +218,7 @@ def _dir(x, up=" (UP)", down=" (DOWN)"):
 def zquad(scr, l, m, n):
     """Mirror of prgmZQUAD for L*T^2 + M*T + N = 0 (L is never 0 here). Returns (J, H, I, G)."""
     scr.disp("SOLVE QUADRATIC FOR T")
-    scr.zline("{}T²" + ("+" if m >= 0 else "") + "{}T" + ("+" if n >= 0 else "") + "{}=0", l, m, n)
+    scr.zline("{}T²" + ("+" if (m >= 0 or abs(m) < 1e-9) else "") + "{}T" + ("+" if (n >= 0 or abs(n) < 1e-9) else "") + "{}=0", l, m, n)
     g = m * m - 4 * l * n
     if abs(g) < 1e-10 * (m * m + abs(4 * l * n)):
         g = 0.0
@@ -229,11 +273,13 @@ def _horizontal(r, key):
         return r
     if choice == 1:                                   # Lbl C1
         p = 1
+        r.inputs = INPUT_C1
         q = key()                                     # Input "HEIGHT H (M)=",Q
         v = key()                                     # Input "SPEED V (M/S)=",V
         e = None
     else:                                             # Lbl C2
         p = 2
+        r.inputs = INPUT_C2
         q = key()                                     # Input "HEIGHT H (M)=",Q
         e = key()                                     # Input "RANGE (M)=",E
         v = None
@@ -274,8 +320,9 @@ def _horizontal(r, key):
         scr.disp("STAYS V THE WHOLE TIME.")
         scr.disp("X AND Y SHARE THE SAME T.")
         scr.disp("RANGE=VX*T")
-        scr.disp("RANGE=({})({})", v, d)
+        scr.zline("RANGE=({})({})", v, d)
         scr.disp("RANGE = {} M", e)
+        scr.disp(KEEPS)
     else:                                             # Lbl C6
         v = e / d
         scr = r.new_screen()
@@ -286,6 +333,7 @@ def _horizontal(r, key):
         scr.disp("RANGE=VX*T, SO VX=RANGE/T")
         scr.disp("VX={}/{}", e, d)
         scr.disp("VX = {} M/S", v)
+        scr.disp(KEEPS)
     # Lbl C7
     f = -GRAV * d
     scr = r.new_screen()
@@ -302,7 +350,7 @@ def _horizontal(r, key):
     scr.disp("STEP 4  IMPACT SPEED/ANGLE")
     scr.disp("SPEED=√(VFX²+VFY²)")
     scr.zline("SPEED=√({}²+{}²)", v, abs(f))
-    scr.disp("SPEED = {} M/S", b)
+    scr.disp("HIT SPEED = {} M/S", b)
     scr.disp("ANGLE BELOW HORIZONTAL-")
     if v != 0:
         scr.disp("ANGLE=TAN⁻1(|VFY|/VFX)")
@@ -320,7 +368,7 @@ def _horizontal(r, key):
     scr.disp("RANGE = {} M", e)
     scr.disp("VFX = {} M/S", v)
     scr.disp("VFY = {} M/S (DOWN)", f)
-    scr.disp("SPEED = {} M/S", b)
+    scr.disp("HIT SPEED = {} M/S", b)
     scr.disp("ANGLE = {}° BELOW", c)
     return r                                          # Return
 
@@ -328,11 +376,12 @@ def _horizontal(r, key):
 # ----------------------------------------------------------------------------- D: angled
 def _angled(r, key):
     # Lbl D0: instructions, then the three inputs
+    r.inputs = INPUT_D
     v = key()                                         # Input "SPEED V0 (M/S)=",V
     e = key()                                         # Input "ANGLE (DEG)=",E
     q = key()                                         # Input "HEIGHT H (M)=",Q
     if v < 0:
-        return _msg(r, "M2")
+        return _msg(r, "M2", extra=M2_ANGLED)             # If K=2 rows of Lbl M2
     if v > HI or (v > 0 and v < LO):
         return _msg(r, "M9")
     if abs(e) > 90:
@@ -357,6 +406,7 @@ def _angled(r, key):
     scr.disp("V0Y=V0SIN(ANGLE)")
     scr.zline("V0Y=({})SIN({}°)", v, e)
     scr.disp("V0Y = {} M/S" + _dir(c), c)
+    scr.disp(KEEPS)
     p = 0.0
     s = 0.0
     if c > 0:
@@ -372,20 +422,16 @@ def _angled(r, key):
         scr.disp("IS THE LAUNCH POINT-")
         scr.disp("T TOP = 0 S (AT LAUNCH)")
     else:                                             # Lbl D2
-        scr.disp("AT THE TOP VY IS 0.")
-        scr.disp("USE VF=V0+AT (VERTICAL)")
+        scr.disp("AT TOP VY IS 0- VF=V0+AT")
         scr.disp("0={}+(-9.8)T", c)
         scr.disp("T TOP = {} S", p)
+        scr.disp("RISE ABOVE THE LAUNCH-")
         scr.disp("USE VF²=V0²+2AS")
         scr.disp("0=({})²+2(-9.8)S", c)
-    # Lbl D3
-    if q == 0:
-        scr.disp("MAX H = {} M", s)
-    else:
-        scr.disp("MAX H (LAUNCH) = {} M", s)
-        scr.disp("H+MAX H- {}+{}", q, s)
-        scr.disp("MAX H (LAND) = {} M", a)
-    # Lbl D4
+    # Lbl D3: RISE is above the launch point, MAX H above the landing point (like H)
+    scr.disp("RISE = {} M", s)
+    scr.disp("H+RISE={}+{}", q, s)
+    scr.disp("MAX H = {} M", a)
     scr = r.new_screen()
     scr.disp("STEP 3  FLIGHT TIME")
     scr.disp("VERTICAL- IT LANDS H BELOW")
@@ -420,10 +466,10 @@ def _angled(r, key):
     scr = r.new_screen()
     scr.disp("STEP 4  RANGE (HORIZONTAL)")
     scr.disp("HORIZONTAL- A IS 0, SO VX")
-    scr.disp("NEVER CHANGES-")
-    scr.disp("VFX = {} M/S", b)
+    scr.disp("NEVER CHANGES (VFX IS VX).")
+    scr.disp("VX = {} M/S", b)
     scr.disp("RANGE=VX*T")
-    scr.disp("RANGE=({})({})", b, d)
+    scr.zline("RANGE=({})({})", b, d)
     scr.disp("RANGE = {} M", rng)
     if q == 0:
         scr.disp("LEVEL GROUND- T=2V0Y/9.8")
@@ -447,7 +493,7 @@ def _angled(r, key):
     scr.disp("STEP 6  IMPACT SPEED/ANGLE")
     scr.disp("SPEED=√(VFX²+VFY²)")
     scr.zline("SPEED=√({}²+{}²)", b, abs(f))
-    scr.disp("SPEED = {} M/S", m)
+    scr.disp("HIT SPEED = {} M/S", m)
     if n < 0:                                         # Lbl D6
         scr.disp("IT LANDS RIGHT AT THE TOP")
         scr.disp("WITH SPEED 0, SO THERE IS")
@@ -467,15 +513,16 @@ def _angled(r, key):
     scr.disp("SUMMARY (ANGLED LAUNCH)")
     scr.disp("VX = {} M/S", b)
     scr.disp("V0Y = {} M/S" + _dir(c), c)
-    scr.disp("T TOP = {} S" + (" (AT LAUNCH)" if c <= 0 else ""), p)
-    if q == 0:
-        scr.disp("MAX H = {} M", s)
+    if c <= 0:
+        scr.disp("T TOP = 0 S (AT LAUNCH)")
+    if c > 0:
+        scr.disp("T TOP = {} S", p)
     if q != 0:
-        scr.disp("MAX H (LAUNCH) = {} M", s)
-        scr.disp("MAX H (LAND) = {} M", a)
+        scr.disp("RISE = {} M", s)
+    scr.disp("MAX H = {} M", a)
     scr.disp("T FLIGHT = {} S", d)
     scr.disp("RANGE = {} M", rng)
-    scr.disp("SPEED = {} M/S", m)
+    scr.disp("HIT SPEED = {} M/S", m)
     if n >= 0:
         scr.disp("ANGLE = {}° BELOW", n)
     else:
@@ -491,6 +538,7 @@ def _throw_lab(r, key):
         return r
     p = 1 if choice == 1 else 2                       # Lbl E1 / Lbl E2
     # Lbl E3: instructions, then the inputs
+    r.inputs = INPUT_E[p]
     q = key()                                         # Input "HEIGHT H (M)=",Q
     d = key()                                         # Input "TIME T (S)=",D
     n = key()                                         # Input "RANGE (M)=",N  or "RANGE (YD)=",N
@@ -525,6 +573,7 @@ def _throw_lab(r, key):
     scr.disp("VX=RANGE/T")
     scr.disp("VX={}/{}", e, d)
     scr.disp("VX = {} M/S", b)
+    scr.disp(KEEPS)
     scr = r.new_screen()
     scr.disp("STEP 2  V0Y (VERTICAL)")
     scr.disp("IT ENDS H BELOW THE START,")
@@ -541,7 +590,7 @@ def _throw_lab(r, key):
     scr.zline("V0=√({}²+{}²)", b, abs(c))
     scr.disp("V0 = {} M/S", v)
     if v != 0:
-        scr.disp("ANGLE ABOVE HORIZONTAL-")
+        scr.disp("ANGLE FROM HORIZONTAL-")
         scr.disp("ANGLE=TAN⁻1(V0Y/VX)")
         if b != 0:
             scr.zline("ANGLE=TAN⁻1({}/{})", c, b)

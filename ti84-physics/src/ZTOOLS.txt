@@ -13,6 +13,7 @@ Goto HU
 Lbl H2
 2→J
 Lbl HU
+0→E
 Menu("WHAT KIND OF VECTOR?","DISPLACEMENT (M)",U1,"VELOCITY (M/S)",U2,"ACCELERATION (M/S²)",U3,"OTHER (NO UNIT)",U4,"BACK",H0)
 Lbl U1
 " M"→Str4
@@ -25,6 +26,7 @@ Lbl U3
 Goto HV
 Lbl U4
 " "→Str4
+1→E
 Lbl HV
 If J=2
 Goto H5
@@ -40,6 +42,8 @@ Input "MAGNITUDE=",M
 Input "ANGLE (DEG)=",N
 If M<0
 Goto H6
+If M>1ᴇ9
+Goto HA
 If abs(N)>360
 Goto H7
 M→Z
@@ -52,6 +56,8 @@ M*cos(N)→P
 M*sin(N)→Q
 ClrHome
 Disp "STEP 1  X COMPONENT"
+Disp "ANGLE IS FROM +X, SO X IS"
+Disp "THE ADJACENT SIDE (COS)-"
 Disp "X=MAGNITUDE*COS(ANGLE)"
 "X=("+Str1+")COS("+Str2+"°)"→Str0
 prgmZLINE
@@ -59,14 +65,16 @@ P→Z
 prgmZFMT
 "X = "+Str9+Str4→Str3
 If P≥1ᴇ⁻9
-Str3+" (RIGHT)"→Str3
+Str3+sub(" (RIGHT)",1+E,8-E)→Str3
 If P≤⁻1ᴇ⁻9
-Str3+" (LEFT)"→Str3
+Str3+sub(" (LEFT)",1+E,7-E)→Str3
 Disp Str3
 Disp "(+X IS RIGHT, -X IS LEFT)"
 Pause 
 ClrHome
 Disp "STEP 2  Y COMPONENT"
+Disp "ANGLE IS FROM +X, SO Y IS"
+Disp "THE OPPOSITE SIDE (SIN)-"
 Disp "Y=MAGNITUDE*SIN(ANGLE)"
 "Y=("+Str1+")SIN("+Str2+"°)"→Str0
 prgmZLINE
@@ -74,9 +82,9 @@ Q→Z
 prgmZFMT
 "Y = "+Str9+Str4→Str0
 If Q≥1ᴇ⁻9
-Str0+" (UP)"→Str0
+Str0+sub(" (UP)",1+E,5-E)→Str0
 If Q≤⁻1ᴇ⁻9
-Str0+" (DOWN)"→Str0
+Str0+sub(" (DOWN)",1+E,7-E)→Str0
 Disp Str0
 Disp "(+Y IS UP, -Y IS DOWN)"
 Pause 
@@ -249,8 +257,9 @@ Disp "MAGNITUDE CANNOT BE"
 Disp "NEGATIVE (IT IS A LENGTH)."
 Disp "FOR THE OPPOSITE"
 Disp "DIRECTION, ADD 180 TO THE"
-Disp "ANGLE AND USE A POSITIVE"
-Disp "MAGNITUDE."
+Disp "ANGLE (OR SUBTRACT 180 IF"
+Disp "IT IS ABOVE 180) AND USE A"
+Disp "POSITIVE MAGNITUDE."
 Pause 
 Goto H0
 Lbl H7
@@ -265,6 +274,13 @@ ClrHome
 Disp "THAT NUMBER IS TOO LARGE."
 Disp "KEEP X AND Y BETWEEN"
 Disp "-1E9 AND 1E9."
+Pause 
+Goto H0
+Lbl HA
+ClrHome
+Disp "THAT NUMBER IS TOO LARGE."
+Disp "KEEP THE MAGNITUDE AT OR"
+Disp "BELOW 1E9."
 Pause 
 Goto H0
 Lbl H9
@@ -347,7 +363,7 @@ Disp "STEP 1  TOTAL DISTANCE"
 Disp "ADD EVERY LEG AS POSITIVE"
 Disp "(DIRECTION DOES NOT"
 Disp "MATTER FOR DISTANCE)-"
-"DISTANCE="+Str1→Str0
+"="+Str1→Str0
 prgmZLINE
 P→Z
 prgmZFMT
@@ -372,7 +388,7 @@ Pause
 ClrHome
 Disp "STEP 3  TOTAL TIME"
 Disp "ADD THE TIMES OF ALL LEGS-"
-"TIME="+Str3→Str0
+"="+Str3→Str0
 prgmZLINE
 D→Z
 prgmZFMT
@@ -491,10 +507,11 @@ ClrHome
 Disp "S PROP TO V² (STOPPING)"
 Disp "STOPPING (VF=0) WITH THE"
 Disp "SAME A- VF²=V0²+2AS GIVES"
-Disp "S=-V0²/(2A), SO S PROP V²."
+Disp "S=-V0²/(2A), S PROP TO V²."
 Disp "2X V GIVES 4X S."
 Disp "(ALSO MAX HEIGHT VS V0)"
 Disp "(K IS 3 IF V TRIPLES)"
+Disp "NEGATIVE = (-) KEY"
 Input "OLD S (M)=",L
 Input "V FACTOR K=",M
 "S"→Str1
@@ -510,6 +527,8 @@ Disp "S=V0T+(1/2)AT²=(1/2)AT²,"
 Disp "SO S PROP TO T²."
 Disp "2X T GIVES 4X S."
 Disp "(K IS 2 IF T DOUBLES)"
+Disp "(A DROP HAS S<0, UP IS +)"
+Disp "NEGATIVE = (-) KEY"
 Input "OLD S (M)=",L
 Input "T FACTOR K=",M
 "S"→Str1
@@ -739,17 +758,18 @@ C→Z
 prgmZFMT
 Disp "AVG = "+Str9
 Pause 
-abs(C)→Z
+abs(A+B)→Z
 prgmZFMT
 Str9→Str3
 ClrHome
 Disp "STEP 2  PERCENT DIFFERENCE"
 Disp "%DIFF=|A-B|/|AVG|*100"
-"=|"+Str1+"-"+Str2+"|/"+Str3+"*100"→Str0
+Disp "=|A-B|/(|A+B|/2)*100"
+"=|"+Str1+"-"+Str2+"|/("+Str3+"/2)*100"→Str0
 prgmZLINE
 D→Z
 prgmZFMT
-"="+Str9+"/"+Str3+"*100"→Str0
+"="+Str9+"/("+Str3+"/2)*100"→Str0
 prgmZLINE
 E→Z
 prgmZFMT
@@ -893,6 +913,8 @@ Disp "1000/3600 OR 1/3.6 M/S-"
 Disp "M/S=(KM/H)/3.6"
 Disp "NEGATIVE = (-) KEY"
 Input "KM/H=",A
+If abs(A)>1ᴇ9
+Goto K6
 A/3.6→B
 A→Z
 prgmZFMT
@@ -921,6 +943,8 @@ Disp "IS 0.44704 M/S-"
 Disp "M/S=MPH*0.44704"
 Disp "NEGATIVE = (-) KEY"
 Input "MPH=",A
+If abs(A)>1ᴇ9
+Goto K6
 0.44704*A→B
 A→Z
 prgmZFMT

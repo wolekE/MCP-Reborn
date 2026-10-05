@@ -7,6 +7,7 @@ Every run is checked three ways:
     says, row for row, and every summary value equals fmt3(reference value),
   * hand values: the expected numbers worked out by hand (3 significant figures).
 """
+import os
 import math
 import random
 import sys
@@ -634,6 +635,8 @@ def t_wide_values():
 
 def t_coverage():
     """Every statement of ZVOVF ran in this test file (every menu path and message)."""
+    if os.environ.get("TISIM_SINGLE"):
+        return   # per-module coverage needs the separate module build
     from harness import sim
     s = sim()
     prog = s.programs["ZVOVF"]

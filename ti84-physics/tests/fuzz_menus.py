@@ -55,7 +55,7 @@ def main():
     bad = []
     kinds = Counter()
     for i in range(walks):
-        program = "PHYSREF" if (i % 10 == 9 and "PHYSREF" in s.programs) else "PHYSOLVE"
+        program = "PHYSREF" if (i % 10 == 9 and ("PHYSREF" in s.programs or os.environ.get("TISIM_SINGLE"))) else "PHYSOLVE"
         res, keys = walk(s, program, rng, rng.choice([8, 15, 30, 60]))
         issues = []
         if res.error is not None:

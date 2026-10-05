@@ -18,6 +18,8 @@ def fmt3(x):
     # round the mantissa half-up to 2 decimals, like TI's round(
     e = a.adjusted()
     m = (a.scaleb(-e)).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+    if m >= 10 and e >= 99:            # 1.00E100 does not exist on the calculator
+        m = Decimal("9.99")
     if m >= 10:
         m = m / 10
         e += 1

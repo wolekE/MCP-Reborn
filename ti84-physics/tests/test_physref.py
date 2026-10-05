@@ -72,14 +72,31 @@ def text_of(screens):
 _CACHE = {}
 
 
-def topic_text(menu_text):
-    """All rows (joined with newlines) of one topic, run through the real menus."""
+def topic_screen_list(menu_text):
+    """The screens (lists of 10 rows) of one topic, run through the real menus."""
     if menu_text not in _CACHE:
         page, opt = next((p, o) for p, o, t, n, h in TOPICS if t == menu_text)
         res = run(topic_script(page, opt), program="PHYSREF")
         assert_clean(res, context=menu_text)
-        _CACHE[menu_text] = text_of(topic_screens(res, page, opt))
+        _CACHE[menu_text] = topic_screens(res, page, opt)
     return _CACHE[menu_text]
+
+
+def topic_text(menu_text):
+    """All rows (joined with newlines) of one topic, run through the real menus."""
+    return text_of(topic_screen_list(menu_text))
+
+
+def all_rows():
+    """Every row of every topic."""
+    return [r for p, o, t, n, h in TOPICS for r in topic_text(t).split("\n")]
+
+
+def screen_with(menu_text, phrase):
+    """The one screen of a topic that contains phrase (as a list of rows)."""
+    scrs = [s for s in topic_screen_list(menu_text) if phrase in "\n".join(s)]
+    assert len(scrs) == 1, f"{menu_text}: {len(scrs)} screens contain {phrase!r}"
+    return scrs[0]
 
 
 def has(menu_text, *phrases):
@@ -160,6 +177,8 @@ def t_strings_charset():
             assert "..." not in s and ":" not in s, f"line {k}: {s!r}"
             for m in re.finditer("⁻", s):
                 assert s[m.start():m.start() + 3] == "⁻1(", f"line {k}: '⁻' only as inverse trig ⁻1(: {s!r}"
+            # tivars reads '|E' '|F' '|L' '|N' '|-' as one token each (ᴇ 𝙵 ʟ 𝗡 ⁻), not as '|' + char
+            assert not re.search(r"\|[EFLN-]", s), f"line {k}: '|' before E/F/L/N/- tokenizes wrongly: {s!r}"
 
 
 # ------------------------------------------------------------------------- menu paths
@@ -221,7 +240,8 @@ def t_no_variables_touched():
         assert res.vars == init, "PHYSREF changed a variable"
         assert res.strs == {} and res.lists == {}, (res.strs, res.lists)
         assert res.angle == "Degree", "PHYSREF must set Degree mode"
-        assert res.calls == ["PHYSREF"], res.calls
+        # in the one-program build the reference is a section of PHYSICS that it calls itself
+        assert res.calls in (["PHYSREF"], ["PHYSREF", "PHYSREF"]), res.calls
 
 
 def t_menus_fit():
@@ -230,7 +250,7 @@ def t_menus_fit():
         if e[0] == "menu":
             assert len(e[1]) <= 24 and len(e[2]) <= 7, e
             assert all(len(t) <= 22 for t in e[2]), e
-            assert e[2][-1] in ("QUIT", "BACK") and ("BACK" in e[2] or "QUIT" in e[2]), e
+            assert e[2][-1] in ("QUIT", "BACK", "QUIT TO MAIN MENU") and ("BACK" in e[2] or "QUIT" in e[2] or "QUIT TO MAIN MENU" in e[2]), e
 
 
 # ------------------------------------------------------------------------- required content
@@ -244,7 +264,15 @@ def t_scalars_vectors():
         "SPEEDING UP WHEN V AND A\n HAVE THE SAME SIGN",
         "SLOWING DOWN WHEN V AND A\n HAVE OPPOSITE SIGNS")
     # worked examples: 5 m right then 2 m left; 400 m lap in 80 s
-    has(T, "DISTANCE 7 M, S = +3 M", f"= {fmt3(400 / 80)} M/S", "AVG VELOCITY = 0 (S = 0)")
+    has(T, "DISTANCE 7 M, S = +3 M", f"= {fmt3(400 / 80)} M/S", "AVG VEL = 0 M/S (S = 0 M)")
+    # PR-7 regression: the lap example's two results both carry units
+    lap = screen_with(T, "400 M LAP")
+    n_results = 0
+    for r in lap:
+        for m in re.finditer(r"= ([0-9][0-9.]*)(?![0-9./(])", r):     # a number that ends a result
+            assert r[m.end():].startswith((" M/S", " M")), f"result without a unit: {r!r}"
+            n_results += 1
+    assert n_results == 3, lap          # 5.00 M/S, 0 M/S, S = 0 M
     row_has(T, "V = -5", "A = -2")      # same signs -> speeding up
     has(T, "SAME SIGNS, SPEEDING UP")
 
@@ -257,7 +285,15 @@ def t_five_equations():
     row_has(T, "VF²=V0²+2AS", "(NO T)")
     row_has(T, "S=(1/2)(V0+VF)T", "(NO A)")
     has(T, "CONSTANT", "V0 VF S T A", "3 KNOWNS", "1 UNKNOWN", "PICK AN EQUATION",
-        "FROM REST       V0 = 0", "COMES TO A STOP VF = 0", "FREE FALL       A = -9.8", "UP IS +")
+        "FROM REST       V0 = 0", "COMES TO A STOP VF = 0", "FREE FALL       A = -9.8", "UP IS +",
+        "CONST VELOCITY  A = 0")
+    # PR-5 regression: A = 0 needs constant VELOCITY (constant speed can still turn, A not 0)
+    bad = [r for r in all_rows() if "SPEED" in r and re.search(r"\bA = 0\b", r)]
+    assert not bad, f"constant speed does not mean A = 0: {bad}"
+    # hidden-knowns table: every value starts in column 16
+    hk = screen_with(T, "HIDDEN KNOWNS")
+    table = [r for r in hk if " = " in r and not r.startswith("UP IS")]
+    assert len(table) == 7 and all(r[16] != " " and r[15] == " " and r[16:].split()[1] == "=" for r in table), table
     # worked example: 20 m/s, brakes at 4 m/s^2 to a stop: 0 = 20^2 + 2(-4)S
     v0, a = 20, -4
     has(T, f"0 = {v0 * v0} - {2 * -a}S", f"S = {fmt3(-v0 * v0 / (2 * a))} M")
@@ -265,11 +301,19 @@ def t_five_equations():
 
 def t_free_fall():
     T = "FREE FALL"
-    has(T, "A = -9.8 M/S²", "AT THE TOP V = 0", "A IS STILL -9.8", "SYMMETRY",
-        "TIME UP = TIME DOWN", "SAME\n SPEED AT SAME HEIGHT", "1,3,5", "1,4,9",
-        "SUCCESSIVE EQUAL TIMES", "S = -4.9T²")
     g = 9.8
+    has(T, "A = -9.8 M/S²", "AT THE TOP V = 0", "A IS STILL -9.8", "SYMMETRY",
+        "IF LANDING AT START HEIGHT\n T UP = T DOWN, SAME SPEED", "1,3,5", "1,4,9",
+        "SUCCESSIVE EQUAL TIMES", "S = -4.9T²")
+    # PR-4 regression: the symmetry rule is never stated without its landing-height condition
     rows = topic_text(T).split("\n")
+    for k, r in enumerate(rows):
+        if re.search(r"(TIME|T) UP = (TIME|T) DOWN", r):
+            assert "START HEIGHT" in r or "START HEIGHT" in rows[k - 1], f"unconditional symmetry rule: {r!r}"
+    # ... because it fails off a roof (LABS 6/6: up at 10 m/s from 15 m): up 1.02 s, down 2.03 s
+    up = 10 / g
+    total = (10 + math.sqrt(10 * 10 + 4 * 4.9 * 15)) / (2 * 4.9)
+    assert (fmt3(up), fmt3(total - up)) == ("1.02", "2.03")
     # ratio row: in-that-second distances go 1,3,5 and totals 1,4,9 (k^2)
     ratio = next(r for r in rows if r.startswith("RATIO")).split()
     that = [round((k * k - (k - 1) ** 2)) for k in (1, 2, 3)]
@@ -307,7 +351,20 @@ def t_graphs():
         # a-t shapes
         "A-T SHAPES", "FLAT = CONSTANT A", "A IS 0", "AT -9.8 M/S²",
         # one-motion table
-        "AT REST FLAT     AT 0 AT 0", "CONST V LINE     FLAT AT 0", "CONST A PARABOLA LINE FLAT")
+        "       | X-T  | V-T | A-T", "AT REST| FLAT | AT 0| AT 0", "CONST V| LINE | FLAT| AT 0",
+        "CONST A| CURVE| LINE| FLAT", "CURVE (PARABOLA)")
+    # PR-6 regression: the table cells are separated by '|' in the same columns on every row,
+    # so no two neighbouring cells read as one phrase ('FLAT AT 0')
+    scr = screen_with(T, "ONE MOTION")
+    table = [r for r in scr if "|" in r]
+    assert len(table) == 4, table
+    cols = {tuple(i for i, ch in enumerate(r) if ch == "|") for r in table}
+    assert len(cols) == 1 and len(next(iter(cols))) == 3, table
+    cells = [[c.strip() for c in r.split("|")] for r in table]
+    assert cells[0] == ["", "X-T", "V-T", "A-T"], cells[0]
+    want = {"AT REST": ["FLAT", "AT 0", "AT 0"], "CONST V": ["LINE", "FLAT", "AT 0"],
+            "CONST A": ["CURVE", "LINE", "FLAT"]}
+    assert {c[0]: c[1:] for c in cells[1:]} == want, cells
     has(T, f"S = {fmt3(0.5 * 4 * 8)} M")
 
 
@@ -354,6 +411,10 @@ def t_angled():
     has(T, "VX = V0COS(ANGLE)", "V0Y = V0SIN(ANGLE)", "THE Y MOTION DECIDES T", "RANGE = VX*T",
         "MAX RANGE AT 45°", "COMPLEMENTARY ANGLES", "GIVE EQUAL", "RANGES, EX 30° AND 60°",
         "LEVEL GROUND", "AT THE TOP VY = 0")
+    # PR-3 regression: the components are given for an angle measured from the HORIZONTAL
+    comp = screen_with(T, "VX = V0COS(ANGLE)")
+    assert "ANGLE ABOVE THE HORIZONTAL" in comp, comp
+    assert comp.index("ANGLE ABOVE THE HORIZONTAL") < comp.index(" VX = V0COS(ANGLE)"), comp
     g, v0, th = 9.8, 20, math.radians(30)
     vx, vy = v0 * math.cos(th), v0 * math.sin(th)
     t = 2 * vy / g
@@ -375,8 +436,21 @@ def t_river():
         f"= {fmt3(math.hypot(vb, vr))} M/S", f"= {fmt3(math.degrees(math.atan(vr / vb)))}° DOWNSTREAM")
     vb = 5
     across = math.sqrt(vb * vb - vr * vr)
-    has(T, f"= {fmt3(math.degrees(math.asin(vr / vb)))}° UPSTREAM", f"= {fmt3(across)} M/S",
-        f"T = 100/4 = {fmt3(w / across)} S", "DRIFT = 0 M")
+    has(T, f"= {fmt3(math.degrees(math.asin(vr / vb)))}° UPSTREAM\n  FROM STRAIGHT ACROSS",
+        f"= {fmt3(across)} M/S", f"T = 100/4 = {fmt3(w / across)} S", "DRIFT = 0 M")
+    # PR-1 regression: DRIFT = VR*T only when aimed straight across (aimed upstream, drift is
+    # (VR - VB*SIN(HEADING))*T, which is 0 in the 5/5 example, not 3*25 = 75 M)
+    for scr in topic_screen_list(T):
+        for r in scr:
+            if "DRIFT = VR*T" in r:
+                assert "AIMED ACROSS" in r or "AIMED STRAIGHT ACROSS" in scr, f"unqualified drift rule {r!r}"
+    heading = math.asin(vr / vb)
+    assert abs((vr - vb * math.sin(heading)) * (w / across)) < 1e-9
+    # PR-2 regression: every worked angle says what it is measured from
+    rows = topic_text(T).split("\n")
+    for k, r in enumerate(rows):
+        if "°" in r:
+            assert rows[k + 1] == "  FROM STRAIGHT ACROSS", f"angle without a reference: {r!r}"
 
 
 def t_labs():
@@ -386,6 +460,11 @@ def t_labs():
         "% DIFF = |A - B|", "/ AVERAGE * 100", "AVERAGE = (A + B)/2",
         "1 M = 1.0936 YD", "LAUNCH FROM H", "-H = V0Y*T - (1/2)GT²", "QUADRATIC FORMULA",
         "POSITIVE ROOT")
+    # PR-8 regression: the screen that uses G defines it (and 4.9 = (1/2)G follows from it)
+    scr = screen_with(T, "(1/2)GT²")
+    assert "G = 9.8 M/S², REWRITE AS" in scr, scr
+    assert scr.index("G = 9.8 M/S², REWRITE AS") < scr.index(" 4.9T² - V0Y*T - H = 0")
+    assert 0.5 * 9.8 == 4.9
     has(T, f"A = 2(0.75) = {fmt3(2 * 0.75)} M/S²",
         f"V = 10/1.6\n = {fmt3(10 / 1.6)} M/S AT T = {fmt3((2.0 + 3.6) / 2)} S",
         f"0.2/9.7 * 100 = {fmt3(abs(9.6 - 9.8) / ((9.6 + 9.8) / 2) * 100)} %",
