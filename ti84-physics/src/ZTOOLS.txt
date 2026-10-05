@@ -1,4 +1,967 @@
 Degree
+If K=2
+Goto I0
+If K=3
+Goto J0
+If K=4
+Goto K0
+Lbl H0
+Menu("VECTOR COMPONENTS","MAG+ANGLE TO X,Y",H1,"X,Y TO MAG+ANGLE",H2,"BACK",ZZ)
+Lbl H1
+1→J
+Goto HU
+Lbl H2
+2→J
+Lbl HU
+Menu("WHAT KIND OF VECTOR?","DISPLACEMENT (M)",U1,"VELOCITY (M/S)",U2,"ACCELERATION (M/S²)",U3,"OTHER (NO UNIT)",U4,"BACK",H0)
+Lbl U1
+" M"→Str4
+Goto HV
+Lbl U2
+" M/S"→Str4
+Goto HV
+Lbl U3
+" M/S²"→Str4
+Goto HV
+Lbl U4
+" "→Str4
+Lbl HV
+If J=2
+Goto H5
 ClrHome
-Disp "NOT WRITTEN YET"
+Disp "MAG+ANGLE TO X,Y"
+Disp "ANGLE- COUNTERCLOCKWISE"
+Disp "FROM +X. 0 RIGHT, 90 UP,"
+Disp "180 LEFT, 270 OR -90 DOWN."
+Disp "120 POINTS UP AND LEFT."
+Disp "30° BELOW +X IS -30 OR 330"
+Disp "NEGATIVE = (-) KEY"
+Input "MAGNITUDE=",M
+Input "ANGLE (DEG)=",N
+If M<0
+Goto H6
+If abs(N)>360
+Goto H7
+M→Z
+prgmZFMT
+Str9→Str1
+N→Z
+prgmZFMT
+Str9→Str2
+M*cos(N)→P
+M*sin(N)→Q
+ClrHome
+Disp "STEP 1  X COMPONENT"
+Disp "X=MAGNITUDE*COS(ANGLE)"
+"X=("+Str1+")COS("+Str2+"°)"→Str0
+prgmZLINE
+P→Z
+prgmZFMT
+"X = "+Str9+Str4→Str3
+If P≥1ᴇ⁻9
+Str3+" (RIGHT)"→Str3
+If P≤⁻1ᴇ⁻9
+Str3+" (LEFT)"→Str3
+Disp Str3
+Disp "(+X IS RIGHT, -X IS LEFT)"
 Pause 
+ClrHome
+Disp "STEP 2  Y COMPONENT"
+Disp "Y=MAGNITUDE*SIN(ANGLE)"
+"Y=("+Str1+")SIN("+Str2+"°)"→Str0
+prgmZLINE
+Q→Z
+prgmZFMT
+"Y = "+Str9+Str4→Str0
+If Q≥1ᴇ⁻9
+Str0+" (UP)"→Str0
+If Q≤⁻1ᴇ⁻9
+Str0+" (DOWN)"→Str0
+Disp Str0
+Disp "(+Y IS UP, -Y IS DOWN)"
+Pause 
+ClrHome
+Disp "SUMMARY  MAG,ANGLE TO X,Y"
+Disp "MAGNITUDE = "+Str1+Str4
+Disp "ANGLE = "+Str2+"°"
+Disp "(COUNTERCLOCKWISE FROM +X)"
+Disp Str3
+Disp Str0
+Pause 
+Goto H0
+Lbl H5
+ClrHome
+Disp "X,Y TO MAG+ANGLE"
+Disp "X IS + RIGHT, - LEFT."
+Disp "Y IS + UP, - DOWN."
+Disp "NEGATIVE = (-) KEY"
+Input "X COMPONENT=",P
+Input "Y COMPONENT=",Q
+If max(abs(P),abs(Q))>1ᴇ9
+Goto H8
+If P=0 and Q=0
+Goto H9
+P→Z
+prgmZFMT
+Str9→Str1
+Q→Z
+prgmZFMT
+Str9→Str2
+√(P²+Q²)→M
+ClrHome
+Disp "STEP 1  MAGNITUDE"
+Disp "X AND Y ARE PERPENDICULAR,"
+Disp "SO USE PYTHAGORAS-"
+Disp "MAGNITUDE=√(X²+Y²)"
+"=√(("+Str1+")²+("+Str2+")²)"→Str0
+prgmZLINE
+M→Z
+prgmZFMT
+Str9→Str3
+Disp "MAGNITUDE = "+Str9+Str4
+Pause 
+R►Pθ(abs(P),abs(Q))→B
+R►Pθ(P,Q)→A
+If A<0
+A+360→A
+ClrHome
+Disp "STEP 2  REFERENCE ANGLE"
+Disp "ANGLE BETWEEN THE VECTOR"
+Disp "AND THE X AXIS (0 TO 90)-"
+Disp "REF=TAN⁻1(|Y|/|X|)"
+abs(Q)→Z
+prgmZFMT
+"=TAN⁻1("+Str9+"/"→Str0
+abs(P)→Z
+prgmZFMT
+Str0+Str9+")"→Str0
+If P=0
+"X IS 0, SO REF IS 90°"→Str0
+prgmZLINE
+B→Z
+prgmZFMT
+Disp "REF ANGLE = "+Str9+"°"
+Pause 
+If P>0 and Q>0
+1→C
+If P<0 and Q>0
+2→C
+If P<0 and Q<0
+3→C
+If P>0 and Q<0
+4→C
+If P>0 and Q=0
+5→C
+If P<0 and Q=0
+6→C
+If P=0 and Q>0
+7→C
+If P=0 and Q<0
+8→C
+B→Z
+prgmZFMT
+If C=1
+Str9+"° ABOVE +X"→Str2
+If C=2
+Str9+"° ABOVE -X"→Str2
+If C=3
+Str9+"° BELOW -X"→Str2
+If C=4
+Str9+"° BELOW +X"→Str2
+If C=5
+"ALONG +X (RIGHT)"→Str2
+If C=6
+"ALONG -X (LEFT)"→Str2
+If C=7
+"STRAIGHT UP (ALONG +Y)"→Str2
+If C=8
+"STRAIGHT DOWN (ALONG -Y)"→Str2
+If C=1
+"QUADRANT I (X>0, Y>0)"→Str1
+If C=2
+"QUADRANT II (X<0, Y>0)"→Str1
+If C=3
+"QUADRANT III (X<0, Y<0)"→Str1
+If C=4
+"QUADRANT IV (X>0, Y<0)"→Str1
+If C=5
+"ON THE +X AXIS (Y IS 0)"→Str1
+If C=6
+"ON THE -X AXIS (Y IS 0)"→Str1
+If C=7
+"ON THE +Y AXIS (X IS 0)"→Str1
+If C=8
+"ON THE -Y AXIS (X IS 0)"→Str1
+If C=1
+"ANGLE=REF="+Str9→Str0
+If C=2
+"ANGLE=180-REF=180-"+Str9→Str0
+If C=3
+"ANGLE=180+REF=180+"+Str9→Str0
+If C=4
+"ANGLE=360-REF=360-"+Str9→Str0
+If C=5
+"+X IS 0°"→Str0
+If C=6
+"-X IS 180°"→Str0
+If C=7
+"+Y IS 90°"→Str0
+If C=8
+"-Y IS 270°"→Str0
+ClrHome
+Disp "STEP 3  ANGLE FROM +X"
+Disp "MEASURED COUNTERCLOCKWISE"
+Disp "FROM +X (0 TO 360)-"
+Disp Str1
+prgmZLINE
+A→Z
+prgmZFMT
+Disp "ANGLE = "+Str9+"°"
+A-360→Z
+prgmZFMT
+If A>180
+Disp "OR "+Str9+"° (CLOCKWISE)"
+Disp Str2
+Pause 
+ClrHome
+Disp "SUMMARY  X,Y TO MAG,ANGLE"
+P→Z
+prgmZFMT
+Disp "X = "+Str9+Str4
+Q→Z
+prgmZFMT
+Disp "Y = "+Str9+Str4
+Disp "MAGNITUDE = "+Str3+Str4
+A→Z
+prgmZFMT
+Disp "ANGLE = "+Str9+"°"
+Disp "(CCW FROM +X, 0 TO 360)"
+A-360→Z
+prgmZFMT
+If A>180
+Disp "OR "+Str9+"° (CLOCKWISE)"
+Disp Str2
+Pause 
+Goto H0
+Lbl H6
+ClrHome
+Disp "MAGNITUDE CANNOT BE"
+Disp "NEGATIVE (IT IS A LENGTH)."
+Disp "FOR THE OPPOSITE"
+Disp "DIRECTION, ADD 180 TO THE"
+Disp "ANGLE AND USE A POSITIVE"
+Disp "MAGNITUDE."
+Pause 
+Goto H0
+Lbl H7
+ClrHome
+Disp "THE ANGLE MUST BE FROM"
+Disp "-360 TO 360 DEGREES,"
+Disp "COUNTERCLOCKWISE FROM +X."
+Pause 
+Goto H0
+Lbl H8
+ClrHome
+Disp "THAT NUMBER IS TOO LARGE."
+Disp "KEEP X AND Y BETWEEN"
+Disp "-1E9 AND 1E9."
+Pause 
+Goto H0
+Lbl H9
+ClrHome
+Disp "ZERO VECTOR"
+Disp "X AND Y ARE BOTH 0, SO"
+Disp "MAGNITUDE = 0"+Str4
+Disp "A ZERO VECTOR POINTS NO"
+Disp "WAY, SO ITS ANGLE IS"
+Disp "UNDEFINED."
+Pause 
+Goto H0
+Lbl I0
+ClrHome
+Disp "AVG SPEED AND VELOCITY"
+Disp "A TRIP OF 1 TO 4 LEGS."
+Disp "EACH LEG HAS A DISTANCE"
+Disp "(M), A DIRECTION (+ OR -)"
+Disp "AND A TIME (S)."
+Disp "AVG SPEED=DISTANCE/TIME"
+Disp "AVG VEL=DISPLACEMENT/TIME"
+Input "NUMBER OF LEGS=",N
+If N<1 or N>4 or fPart(N)≠0
+Goto I2
+0→P
+0→Q
+0→D
+1→I
+Lbl I1
+ClrHome
+Disp "LEG "+sub("1234",I,1)+" OF "+sub("1234",N,1)
+Disp "DISTANCE IN M (0 OR MORE)"
+Disp "DIRECTION- 1 FOR THE +"
+Disp "WAY, -1 FOR THE - WAY"
+Disp "TIME IN S (0 OR MORE)"
+Disp "NEGATIVE = (-) KEY"
+Input "DISTANCE (M)=",A
+Input "DIRECTION (1/-1)=",B
+Input "TIME (S)=",C
+If A<0
+Goto I3
+If B≠1 and B≠⁻1
+Goto I4
+If C<0
+Goto I5
+If A>1ᴇ9 or C>1ᴇ9
+Goto I6
+P+A→P
+Q+B*A→Q
+D+C→D
+A→Z
+prgmZFMT
+If I=1
+Str9→Str1
+If I>1
+Str1+"+"+Str9→Str1
+If B=1 and I>1
+"+"+Str9→Str9
+If B=⁻1
+"-"+Str9→Str9
+If I=1
+Str9→Str2
+If I>1
+Str2+Str9→Str2
+C→Z
+prgmZFMT
+If I=1
+Str9→Str3
+If I>1
+Str3+"+"+Str9→Str3
+I+1→I
+If I≤N
+Goto I1
+If D<1ᴇ⁻9
+Goto I7
+P/D→E
+Q/D→F
+ClrHome
+Disp "STEP 1  TOTAL DISTANCE"
+Disp "ADD EVERY LEG AS POSITIVE"
+Disp "(DIRECTION DOES NOT"
+Disp "MATTER FOR DISTANCE)-"
+"DISTANCE="+Str1→Str0
+prgmZLINE
+P→Z
+prgmZFMT
+Disp "DISTANCE = "+Str9+" M"
+Pause 
+ClrHome
+Disp "STEP 2  DISPLACEMENT"
+Disp "ADD THE LEGS WITH THEIR"
+Disp "SIGNS (- LEGS SUBTRACT)-"
+"S="+Str2→Str0
+prgmZLINE
+Q→Z
+prgmZFMT
+Disp "DISPLACEMENT = "+Str9+" M"
+If Q≥1ᴇ⁻9
+Disp "(IN THE + DIRECTION)"
+If Q≤⁻1ᴇ⁻9
+Disp "(IN THE - DIRECTION)"
+If abs(Q)<1ᴇ⁻9
+Disp "(ENDS WHERE IT STARTED)"
+Pause 
+ClrHome
+Disp "STEP 3  TOTAL TIME"
+Disp "ADD THE TIMES OF ALL LEGS-"
+"TIME="+Str3→Str0
+prgmZLINE
+D→Z
+prgmZFMT
+Disp "TOTAL TIME = "+Str9+" S"
+Pause 
+ClrHome
+Disp "STEP 4  AVERAGE SPEED"
+Disp "AVG SPEED=DISTANCE/TIME"
+P→Z
+prgmZFMT
+"="+Str9+"/"→Str0
+D→Z
+prgmZFMT
+Str0+Str9→Str0
+Disp Str0
+E→Z
+prgmZFMT
+Disp "AVG SPEED = "+Str9+" M/S"
+Disp "(SPEED HAS NO DIRECTION,"
+Disp "SO IT IS NEVER NEGATIVE)"
+Pause 
+ClrHome
+Disp "STEP 5  AVERAGE VELOCITY"
+Disp "AVG VEL=DISPLACEMENT/TIME"
+Q→Z
+prgmZFMT
+"="+Str9+"/"→Str0
+D→Z
+prgmZFMT
+Str0+Str9→Str0
+Disp Str0
+F→Z
+prgmZFMT
+Disp "AVG VEL = "+Str9+" M/S"
+If Q≥1ᴇ⁻9
+Disp "(IN THE + DIRECTION)"
+If Q≤⁻1ᴇ⁻9
+Disp "(IN THE - DIRECTION)"
+If abs(Q)<1ᴇ⁻9
+Disp "(ENDS WHERE IT STARTED)"
+Pause 
+ClrHome
+Disp "SUMMARY  AVERAGES"
+P→Z
+prgmZFMT
+Disp "DISTANCE = "+Str9+" M"
+Q→Z
+prgmZFMT
+Disp "DISPLACEMENT = "+Str9+" M"
+D→Z
+prgmZFMT
+Disp "TOTAL TIME = "+Str9+" S"
+E→Z
+prgmZFMT
+Disp "AVG SPEED = "+Str9+" M/S"
+F→Z
+prgmZFMT
+Disp "AVG VEL = "+Str9+" M/S"
+If Q≥1ᴇ⁻9
+Disp "(IN THE + DIRECTION)"
+If Q≤⁻1ᴇ⁻9
+Disp "(IN THE - DIRECTION)"
+If abs(Q)<1ᴇ⁻9
+Disp "(ENDS WHERE IT STARTED)"
+Pause 
+Return
+Lbl I2
+ClrHome
+Disp "THE NUMBER OF LEGS MUST"
+Disp "BE 1, 2, 3 OR 4 (A WHOLE"
+Disp "NUMBER)."
+Pause 
+Return
+Lbl I3
+ClrHome
+Disp "DISTANCE CANNOT BE"
+Disp "NEGATIVE. ENTER HOW FAR"
+Disp "(0 OR MORE) AND SHOW THE"
+Disp "WAY WITH DIRECTION -1."
+Pause 
+Return
+Lbl I4
+ClrHome
+Disp "DIRECTION MUST BE 1 OR -1."
+Disp "USE 1 FOR THE + WAY AND"
+Disp "-1 FOR THE OPPOSITE WAY"
+Disp "(PRESS (-) THEN 1)."
+Pause 
+Return
+Lbl I5
+ClrHome
+Disp "TIME CANNOT BE NEGATIVE."
+Disp "ENTER HOW LONG THE LEG"
+Disp "TOOK (0 OR MORE SECONDS)."
+Pause 
+Return
+Lbl I6
+ClrHome
+Disp "THAT NUMBER IS TOO LARGE."
+Disp "KEEP DISTANCES AND TIMES"
+Disp "AT OR BELOW 1E9."
+Pause 
+Return
+Lbl I7
+ClrHome
+Disp "TOTAL TIME IS 0 (OR BELOW"
+Disp "1E-9 S). THE AVERAGES"
+Disp "DIVIDE BY THE TOTAL TIME,"
+Disp "SO THEY CANNOT BE FOUND."
+Pause 
+Return
+Lbl J0
+Menu("FACTOR OF CHANGE","S PROP TO V² (STOP)",J1,"S PROP TO T² (REST)",J2,"T PROP TO √(H) (FALL)",J3,"V PROP TO √(H) (DROP)",J4,"V PROP TO T (REST)",J5,"BACK",ZZ)
+Lbl J1
+ClrHome
+Disp "S PROP TO V² (STOPPING)"
+Disp "STOPPING (VF=0) WITH THE"
+Disp "SAME A- VF²=V0²+2AS GIVES"
+Disp "S=-V0²/(2A), SO S PROP V²."
+Disp "2X V GIVES 4X S."
+Disp "(ALSO MAX HEIGHT VS V0)"
+Disp "(K IS 3 IF V TRIPLES)"
+Input "OLD S (M)=",L
+Input "V FACTOR K=",M
+"S"→Str1
+" M"→Str2
+"V"→Str3
+2→F
+Goto J9
+Lbl J2
+ClrHome
+Disp "S PROP TO T² (FROM REST)"
+Disp "FROM REST (V0=0), SAME A-"
+Disp "S=V0T+(1/2)AT²=(1/2)AT²,"
+Disp "SO S PROP TO T²."
+Disp "2X T GIVES 4X S."
+Disp "(K IS 2 IF T DOUBLES)"
+Input "OLD S (M)=",L
+Input "T FACTOR K=",M
+"S"→Str1
+" M"→Str2
+"T"→Str3
+2→F
+Goto J9
+Lbl J3
+ClrHome
+Disp "T PROP TO √(H) (FALL TIME)"
+Disp "DROPPED FROM REST FROM A"
+Disp "HEIGHT H- H=(1/2)(9.8)T²,"
+Disp "SO T=√(2H/9.8) AND"
+Disp "T PROP TO √(H)."
+Disp "4X H GIVES 2X T."
+Disp "(K IS 2 IF H DOUBLES)"
+Input "OLD T (S)=",L
+Input "H FACTOR K=",M
+If L<0
+Goto J8
+"T"→Str1
+" S"→Str2
+"H"→Str3
+0.5→F
+Goto J9
+Lbl J4
+ClrHome
+Disp "V PROP TO √(H) (IMPACT)"
+Disp "DROPPED FROM REST FROM A"
+Disp "HEIGHT H- VF²=V0²+2AS"
+Disp "GIVES V²=2(9.8)H, SO"
+Disp "V PROP TO √(H)."
+Disp "4X H GIVES 2X V."
+Disp "(K IS 2 IF H DOUBLES)"
+Disp "NEGATIVE = (-) KEY"
+Input "OLD V (M/S)=",L
+Input "H FACTOR K=",M
+"V"→Str1
+" M/S"→Str2
+"H"→Str3
+0.5→F
+Goto J9
+Lbl J5
+ClrHome
+Disp "V PROP TO T (FROM REST)"
+Disp "FROM REST (V0=0), SAME A-"
+Disp "VF=V0+AT=AT, SO"
+Disp "V PROP TO T."
+Disp "2X T GIVES 2X V."
+Disp "(K IS 2 IF T DOUBLES)"
+Disp "NEGATIVE = (-) KEY"
+Input "OLD V (M/S)=",L
+Input "T FACTOR K=",M
+"V"→Str1
+" M/S"→Str2
+"T"→Str3
+1→F
+Lbl J9
+If M<0
+Goto J6
+If abs(L)>1ᴇ9 or M>1ᴇ9
+Goto J7
+If F=2
+M²→G
+If F=1
+M→G
+If F<1
+√(M)→G
+L*G→H
+If F=2
+"K²"→Str4
+If F=1
+"K"→Str4
+If F<1
+"√(K)"→Str4
+M→Z
+prgmZFMT
+If F=2
+"=("+Str9+")²"→Str0
+If F=1
+"="+Str9→Str0
+If F<1
+"=√("+Str9+")"→Str0
+ClrHome
+Disp "STEP 1  MULTIPLIER"
+Disp Str3+" IS MULTIPLIED BY K, SO"
+Disp Str1+" IS MULTIPLIED BY "+Str4
+Disp "MULTIPLIER="+Str4
+Disp Str0
+G→Z
+prgmZFMT
+Disp "MULTIPLIER = "+Str9
+Pause 
+ClrHome
+Disp "STEP 2  NEW "+Str1
+Disp "NEW "+Str1+"=OLD "+Str1+"*"+Str4
+L→Z
+prgmZFMT
+"NEW "+Str1+"=("+Str9+")("→Str0
+G→Z
+prgmZFMT
+Str0+Str9+")"→Str0
+prgmZLINE
+H→Z
+prgmZFMT
+Disp "NEW "+Str1+" = "+Str9+Str2
+Pause 
+ClrHome
+Disp "SUMMARY  FACTOR OF CHANGE"
+Str1+" PROP TO "→Str0
+If F=2
+Str0+Str3+"²"→Str0
+If F=1
+Str0+Str3→Str0
+If F<1
+Str0+"√("+Str3+")"→Str0
+Disp Str0
+L→Z
+prgmZFMT
+Disp "OLD "+Str1+" = "+Str9+Str2
+M→Z
+prgmZFMT
+Disp Str3+" FACTOR K = "+Str9
+Str9+"X "+Str3+" GIVES "→Str0
+G→Z
+prgmZFMT
+Disp "MULTIPLIER = "+Str9
+Str0+Str9+"X "+Str1→Str0
+H→Z
+prgmZFMT
+Disp "NEW "+Str1+" = "+Str9+Str2
+prgmZLINE
+Pause 
+Goto J0
+Lbl J6
+ClrHome
+Disp "THE FACTOR K CANNOT BE"
+Disp "NEGATIVE. K TELLS HOW MANY"
+Disp "TIMES BIGGER OR SMALLER"
+Disp "THE QUANTITY GETS- 3 FOR"
+Disp "TRIPLED, 0.5 FOR HALVED."
+Pause 
+Goto J0
+Lbl J7
+ClrHome
+Disp "THAT NUMBER IS TOO LARGE."
+Disp "KEEP THE OLD VALUE AND K"
+Disp "BETWEEN -1E9 AND 1E9."
+Pause 
+Goto J0
+Lbl J8
+ClrHome
+Disp "TIME CANNOT BE NEGATIVE."
+Disp "ENTER THE OLD FALL TIME"
+Disp "(0 OR MORE SECONDS)."
+Pause 
+Goto J0
+Lbl K0
+Menu("LAB TOOLS","RAMP A FROM SLOPE",K1,"PERCENT DIFFERENCE",K2,"PERCENT ERROR",K3,"YARDS AND METERS",K4,"KM/H OR MPH TO M/S",K5,"BACK",ZZ)
+Lbl K1
+ClrHome
+Disp "RAMP A FROM SLOPE"
+Disp "FROM REST, S=(1/2)AT²."
+Disp "PLOT S ON THE Y AXIS AND"
+Disp "T² ON THE X AXIS- A LINE"
+Disp "THROUGH 0 WITH SLOPE=A/2,"
+Disp "SO A=2*SLOPE."
+Disp "NEGATIVE = (-) KEY"
+Input "SLOPE (M/S²)=",M
+If abs(M)>1ᴇ9
+Goto K6
+2*M→A
+M→Z
+prgmZFMT
+Str9→Str1
+A→Z
+prgmZFMT
+Str9→Str2
+ClrHome
+Disp "STEP 1  ACCELERATION"
+Disp "S=(1/2)AT² IS A LINE"
+Disp "Y=(SLOPE)X WITH Y=S AND"
+Disp "X=T², SO SLOPE=A/2 AND"
+Disp "A=2*SLOPE"
+Disp "A=2("+Str1+")"
+Disp "A = "+Str2+" M/S²"
+Pause 
+ClrHome
+Disp "SUMMARY  RAMP"
+Disp "SLOPE = "+Str1+" M/S²"
+Disp "A = "+Str2+" M/S²"
+Disp "(ALONG THE RAMP)"
+Pause 
+Goto K0
+Lbl K2
+ClrHome
+Disp "PERCENT DIFFERENCE"
+Disp "COMPARES TWO MEASURED"
+Disp "VALUES (NEITHER IS THE"
+Disp "ACCEPTED VALUE)-"
+Disp "%DIFF=|A-B|/|AVG|*100"
+Disp "AVG=(A+B)/2"
+Disp "NEGATIVE = (-) KEY"
+Input "VALUE A=",A
+Input "VALUE B=",B
+If max(abs(A),abs(B))>1ᴇ9
+Goto K6
+(A+B)/2→C
+If C=0
+Goto K7
+abs(A-B)→D
+100*D/abs(C)→E
+A→Z
+prgmZFMT
+Str9→Str1
+B→Z
+prgmZFMT
+Str9→Str2
+If B<0
+"("+Str9+")"→Str2
+ClrHome
+Disp "STEP 1  AVERAGE"
+Disp "AVG=(A+B)/2"
+"AVG=("+Str1+"+"+Str2+")/2"→Str0
+prgmZLINE
+C→Z
+prgmZFMT
+Disp "AVG = "+Str9
+Pause 
+abs(C)→Z
+prgmZFMT
+Str9→Str3
+ClrHome
+Disp "STEP 2  PERCENT DIFFERENCE"
+Disp "%DIFF=|A-B|/|AVG|*100"
+"=|"+Str1+"-"+Str2+"|/"+Str3+"*100"→Str0
+prgmZLINE
+D→Z
+prgmZFMT
+"="+Str9+"/"+Str3+"*100"→Str0
+prgmZLINE
+E→Z
+prgmZFMT
+Str9→Str4
+Disp "PERCENT DIFF = "+Str9+" %"
+Disp "(UNROUNDED VALUES USED)"
+Pause 
+ClrHome
+Disp "SUMMARY  PERCENT DIFF"
+Disp "VALUE A = "+Str1
+B→Z
+prgmZFMT
+Disp "VALUE B = "+Str9
+C→Z
+prgmZFMT
+Disp "AVG = "+Str9
+Disp "PERCENT DIFF = "+Str4+" %"
+Pause 
+Goto K0
+Lbl K3
+ClrHome
+Disp "PERCENT ERROR"
+Disp "COMPARES YOUR MEASURED"
+Disp "(EXPERIMENTAL) VALUE WITH"
+Disp "THE ACCEPTED (TRUE) VALUE-"
+Disp "%ERROR=|ACC-EXP|/|ACC|*100"
+Disp "NEGATIVE = (-) KEY"
+Input "EXPERIMENTAL=",A
+Input "ACCEPTED=",B
+If max(abs(A),abs(B))>1ᴇ9
+Goto K6
+If B=0
+Goto K8
+If abs(A-B)>1ᴇ80*abs(B)
+Goto K8
+abs(A-B)→D
+100*D/abs(B)→E
+A→Z
+prgmZFMT
+Str9→Str1
+If A<0
+"("+Str9+")"→Str9
+Str9→Str2
+abs(B)→Z
+prgmZFMT
+Str9→Str3
+B→Z
+prgmZFMT
+ClrHome
+Disp "STEP 1  PERCENT ERROR"
+Disp "%ERROR=|ACC-EXP|/|ACC|*100"
+"=|"+Str9+"-"+Str2+"|/"+Str3+"*100"→Str0
+prgmZLINE
+D→Z
+prgmZFMT
+"="+Str9+"/"+Str3+"*100"→Str0
+prgmZLINE
+E→Z
+prgmZFMT
+Str9→Str4
+"PERCENT ERROR = "+Str9+" %"→Str0
+prgmZLINE
+Disp "(UNROUNDED VALUES USED)"
+Pause 
+ClrHome
+Disp "SUMMARY  PERCENT ERROR"
+Disp "EXPERIMENTAL = "+Str1
+B→Z
+prgmZFMT
+Disp "ACCEPTED = "+Str9
+"PERCENT ERROR = "+Str4+" %"→Str0
+prgmZLINE
+Pause 
+Goto K0
+Lbl K4
+Menu("YARDS AND METERS","YARDS TO METERS",KA,"METERS TO YARDS",KB,"BACK",K0)
+Lbl KA
+ClrHome
+Disp "YARDS TO METERS"
+Disp "1 M IS 1.0936 YD, SO"
+Disp "METERS=YARDS/1.0936"
+Disp "NEGATIVE = (-) KEY"
+Input "YARDS=",A
+If abs(A)>1ᴇ9
+Goto K6
+A/1.0936→B
+A→Z
+prgmZFMT
+Str9→Str1
+B→Z
+prgmZFMT
+Str9→Str2
+ClrHome
+Disp "STEP 1  YARDS TO METERS"
+Disp "METERS=YARDS/1.0936"
+Disp "METERS="+Str1+"/1.0936"
+Disp "METERS = "+Str2+" M"
+Pause 
+ClrHome
+Disp "SUMMARY  YD TO M"
+Disp "YARDS = "+Str1+" YD"
+Disp "METERS = "+Str2+" M"
+Pause 
+Goto K0
+Lbl KB
+ClrHome
+Disp "METERS TO YARDS"
+Disp "1 M IS 1.0936 YD, SO"
+Disp "YARDS=METERS*1.0936"
+Disp "NEGATIVE = (-) KEY"
+Input "METERS=",A
+If abs(A)>1ᴇ9
+Goto K6
+1.0936*A→B
+A→Z
+prgmZFMT
+Str9→Str1
+B→Z
+prgmZFMT
+Str9→Str2
+ClrHome
+Disp "STEP 1  METERS TO YARDS"
+Disp "YARDS=METERS*1.0936"
+Disp "YARDS="+Str1+"*1.0936"
+Disp "YARDS = "+Str2+" YD"
+Pause 
+ClrHome
+Disp "SUMMARY  M TO YD"
+Disp "METERS = "+Str1+" M"
+Disp "YARDS = "+Str2+" YD"
+Pause 
+Goto K0
+Lbl K5
+Menu("SPEED TO M/S","KM/H TO M/S",KC,"MPH TO M/S",KD,"BACK",K0)
+Lbl KC
+ClrHome
+Disp "KM/H TO M/S"
+Disp "1 KM IS 1000 M AND 1 H IS"
+Disp "3600 S, SO 1 KM/H IS"
+Disp "1000/3600 OR 1/3.6 M/S-"
+Disp "M/S=(KM/H)/3.6"
+Disp "NEGATIVE = (-) KEY"
+Input "KM/H=",A
+A/3.6→B
+A→Z
+prgmZFMT
+Str9→Str1
+B→Z
+prgmZFMT
+Str9→Str2
+ClrHome
+Disp "STEP 1  KM/H TO M/S"
+Disp "M/S=(KM/H)/3.6"
+Disp "M/S="+Str1+"/3.6"
+Disp "SPEED = "+Str2+" M/S"
+Pause 
+ClrHome
+Disp "SUMMARY  KM/H TO M/S"
+Disp "SPEED = "+Str1+" KM/H"
+Disp "SPEED = "+Str2+" M/S"
+Pause 
+Goto K0
+Lbl KD
+ClrHome
+Disp "MPH TO M/S"
+Disp "1 MILE IS 1609.344 M AND"
+Disp "1 H IS 3600 S, SO 1 MPH"
+Disp "IS 0.44704 M/S-"
+Disp "M/S=MPH*0.44704"
+Disp "NEGATIVE = (-) KEY"
+Input "MPH=",A
+0.44704*A→B
+A→Z
+prgmZFMT
+Str9→Str1
+B→Z
+prgmZFMT
+Str9→Str2
+ClrHome
+Disp "STEP 1  MPH TO M/S"
+Disp "M/S=MPH*0.44704"
+Disp "M/S="+Str1+"*0.44704"
+Disp "SPEED = "+Str2+" M/S"
+Pause 
+ClrHome
+Disp "SUMMARY  MPH TO M/S"
+Disp "SPEED = "+Str1+" MPH"
+Disp "SPEED = "+Str2+" M/S"
+Pause 
+Goto K0
+Lbl K6
+ClrHome
+Disp "THAT NUMBER IS TOO LARGE."
+Disp "KEEP EACH NUMBER BETWEEN"
+Disp "-1E9 AND 1E9."
+Pause 
+Goto K0
+Lbl K7
+ClrHome
+Disp "THE AVERAGE (A+B)/2 IS 0,"
+Disp "SO THE PERCENT DIFFERENCE"
+Disp "WOULD DIVIDE BY 0. IT"
+Disp "CANNOT BE FOUND."
+Pause 
+Goto K0
+Lbl K8
+ClrHome
+Disp "THE ACCEPTED VALUE IS 0"
+Disp "(OR TOO CLOSE TO 0)."
+Disp "PERCENT ERROR DIVIDES BY"
+Disp "IT, SO IT CANNOT BE FOUND."
+Pause 
+Goto K0
+Lbl ZZ
+Return

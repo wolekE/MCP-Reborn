@@ -44,8 +44,18 @@ Then
 Disp "B²-4AC<0 SO NO REAL ROOT"
 Else
 2→J
-(⁻M-√(G))/(2L)→H
-(⁻M+√(G))/(2L)→I
+If M≥0
+(⁻M-√(G))/2→Z
+If M<0
+(⁻M+√(G))/2→Z
+If Z=0
+Then
+0→H
+0→I
+Else
+Z/L→H
+N/Z→I
+End
 If H>I
 Then
 H→Z

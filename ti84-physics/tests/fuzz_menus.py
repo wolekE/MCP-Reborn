@@ -4,7 +4,9 @@ inputs (0, negatives, 999, huge/tiny values, angles, ...) and reports any calcul
 memory leak, scrolling, truncation or infinite loop, with the key sequence to reproduce it.
 Also reports which statements were never executed (coverage).
 
-    python3 tests/fuzz_menus.py [walks=4000] [seed=1]
+    python3 tests/fuzz_menus.py [walks=4000] [seed=1] [--wide]
+
+--wide shows every ZFMT result as a 9-character value and pads typed inputs to 9 characters.
 """
 import os
 import random
@@ -16,6 +18,7 @@ from tisim import ScriptEnd
 
 POOL = [0, 1, -1, 2, 3, 4, 5, 10, 20, 45, 90, 120, 999, -999, 0.5, 0.001, 1e-5, 1e5, 1e9, -9.8, 9.8,
         30, 60, -30, 180, 270, 360, 1.0936, 2.4, 6, 3, 25, 0.85, 19.6, -45, -0.5, 7, 100, 2.5, 1e-12]
+WIDE = "--wide" in sys.argv
 WEIGHTED = POOL + [999] * 6 + [0] * 3 + [10, 20, 5, 2, 1, -1, 3, 45, 30] * 2
 
 
@@ -39,13 +42,14 @@ def walk(s, program, rng, max_interactions):
         keys.append(v)
         return v
 
-    res = s.run(program, responder=responder, seed=rng.randint(0, 10 ** 9), max_steps=300000)
+    res = s.run(program, responder=responder, seed=rng.randint(0, 10 ** 9), max_steps=300000, wide=WIDE)
     return res, keys
 
 
 def main():
-    walks = int(sys.argv[1]) if len(sys.argv) > 1 else 4000
-    seed = int(sys.argv[2]) if len(sys.argv) > 2 else 1
+    args = [a for a in sys.argv[1:] if a != "--wide"]
+    walks = int(args[0]) if args else 4000
+    seed = int(args[1]) if len(args) > 1 else 1
     s = sim()
     rng = random.Random(seed)
     bad = []
@@ -77,7 +81,7 @@ def main():
         if name not in [c[0] for c in s.coverage]:
             uncovered.append(f"{name}: never run")
             continue
-        missing = [st for i, st in enumerate(prog.stmts) if (name, i) not in s.coverage and st.kind not in ("Lbl",)]
+        missing = [st for i, st in enumerate(prog.stmts) if (name, i) not in s.coverage and st.kind not in ("Lbl", "Then")]
         if missing:
             uncovered.append(f"{name}: {len(missing)}/{len(prog.stmts)} statements never executed, e.g. "
                              + "; ".join(f"L{st.line} {st.text[:40]}" for st in missing[:6]))

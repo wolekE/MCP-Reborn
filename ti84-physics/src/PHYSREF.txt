@@ -1,0 +1,516 @@
+Degree
+Lbl M1
+Menu("PHYSREF 1/2  FORMULAS","SCALARS VS VECTORS",A,"THE 5 EQUATIONS",B,"FREE FALL",C,"GRAPHS X-T V-T A-T",D,"FACTOR OF CHANGE",E,"MORE >",M2,"QUIT",Q)
+Lbl M2
+Menu("PHYSREF 2/2  FORMULAS","CHASE PROBLEMS",F,"HORIZONTAL LAUNCH",G,"ANGLED LAUNCH",H,"RIVER CROSSING",I,"LABS",J,"BACK",M1,"QUIT",Q)
+Lbl A
+ClrHome
+Disp "SCALARS VS VECTORS 1/3"
+Disp "SCALAR = SIZE ONLY"
+Disp "VECTOR = SIZE + DIRECTION"
+Disp " (SIGN + OR - = DIRECTION)"
+Disp "DISTANCE (SCALAR)"
+Disp " TOTAL PATH LENGTH, ≥ 0"
+Disp "DISPLACEMENT S (VECTOR)"
+Disp " S = XF - X0 (CHANGE IN X)"
+Disp "EX 5 M RIGHT THEN 2 M LEFT"
+Disp " DISTANCE 7 M, S = +3 M"
+Pause 
+ClrHome
+Disp "SCALARS VS VECTORS 2/3"
+Disp "SPEED (SCALAR) = SIZE OF V"
+Disp "VELOCITY (VECTOR) HAS SIGN"
+Disp "AVG SPEED = DISTANCE / T"
+Disp "AVG VELOCITY = S / T"
+Disp " (DISPLACEMENT / TIME)"
+Disp "EX RUN A 400 M LAP IN 80 S"
+Disp " AVG SPEED = 400/80"
+Disp "  = 5.00 M/S"
+Disp " AVG VELOCITY = 0 (S = 0)"
+Pause 
+ClrHome
+Disp "SCALARS VS VECTORS 3/3"
+Disp "ACCELERATION A (VECTOR)"
+Disp " A = (VF - V0)/T  IN M/S²"
+Disp "SPEEDING UP WHEN V AND A"
+Disp " HAVE THE SAME SIGN"
+Disp "SLOWING DOWN WHEN V AND A"
+Disp " HAVE OPPOSITE SIGNS"
+Disp "EX V = -5 M/S, A = -2 M/S²"
+Disp " SAME SIGNS, SPEEDING UP"
+Disp "NEGATIVE A ≠ SLOWING DOWN"
+Pause 
+Goto M1
+Lbl B
+ClrHome
+Disp "THE 5 EQUATIONS 1/4"
+Disp "ONLY WHEN A IS CONSTANT"
+Disp "VF=V0+AT        (NO S)"
+Disp "S=V0T+(1/2)AT²  (NO VF)"
+Disp "S=VFT-(1/2)AT²  (NO V0)"
+Disp "VF²=V0²+2AS     (NO T)"
+Disp "S=(1/2)(V0+VF)T (NO A)"
+Disp "V0 START V    VF FINAL V"
+Disp "S DISPLACEMENT  T TIME"
+Disp "A ACCELERATION"
+Pause 
+ClrHome
+Disp "THE 5 EQUATIONS 2/4"
+Disp "HOW TO PICK AN EQUATION"
+Disp "1 LIST V0 VF S T A"
+Disp "2 FIND THE 3 KNOWNS AND"
+Disp "  THE 1 UNKNOWN YOU WANT"
+Disp "3 THE 5TH VARIABLE IS NOT"
+Disp "  GIVEN AND NOT ASKED FOR"
+Disp "4 USE THE EQUATION THAT"
+Disp "  DOES NOT HAVE IT"
+Disp "5 PUT IN SIGNS, UP IS +"
+Pause 
+ClrHome
+Disp "THE 5 EQUATIONS 3/4"
+Disp "HIDDEN KNOWNS"
+Disp "FROM REST       V0 = 0"
+Disp "DROPPED         V0 = 0"
+Disp "COMES TO A STOP VF = 0"
+Disp "TOP OF A THROW  VY = 0"
+Disp "FREE FALL       A = -9.8"
+Disp "CONSTANT SPEED  A = 0"
+Disp "LANDS H BELOW   S = -H"
+Disp "UP IS +, DOWN IS -"
+Pause 
+ClrHome
+Disp "THE 5 EQUATIONS 4/4"
+Disp "EX CAR AT 20 M/S BRAKES AT"
+Disp " 4 M/S² TO A STOP. FIND S"
+Disp "V0 = 20, VF = 0, A = -4"
+Disp " (A IS - BECAUSE IT SLOWS"
+Disp " WHILE MOVING +)"
+Disp "NO T, SO VF²=V0²+2AS"
+Disp "0 = 20² + 2(-4)S"
+Disp "0 = 400 - 8S"
+Disp "S = 50.0 M"
+Pause 
+Goto M1
+Lbl C
+ClrHome
+Disp "FREE FALL 1/4"
+Disp "ONLY GRAVITY, NO AIR"
+Disp "A = -9.8 M/S² THE WHOLE"
+Disp " TIME, GOING UP, AT THE"
+Disp " TOP, AND COMING DOWN"
+Disp "AT THE TOP V = 0, BUT"
+Disp " A IS STILL -9.8 M/S²"
+Disp "DROPPED      V0 = 0"
+Disp "THROWN UP    V0 IS +"
+Disp "THROWN DOWN  V0 IS -"
+Pause 
+ClrHome
+Disp "FREE FALL 2/4  SYMMETRY"
+Disp "TIME UP = TIME DOWN, SAME"
+Disp " SPEED AT SAME HEIGHT"
+Disp "EX V0 = 14.7 M/S UP"
+Disp "VF=V0+AT  0 = 14.7 - 9.8T"
+Disp " T = 1.50 S (TOP, VF = 0)"
+Disp "VF²=V0²+2AS  (NO T)"
+Disp " 0 = 14.7² + 2(-9.8)S"
+Disp " S = 11.0 M (MAX HEIGHT)"
+Disp "BACK AT 3.00 S, -14.7 M/S"
+Pause 
+ClrHome
+Disp "FREE FALL 3/4  DROPPED"
+Disp "DISTANCE FALLEN FROM REST"
+Disp "       EACH SEC     TOTAL"
+Disp "1ST SEC   4.9 M     4.9 M"
+Disp "2ND SEC  14.7 M    19.6 M"
+Disp "3RD SEC  24.5 M    44.1 M"
+Disp "RATIO     1,3,5     1,4,9"
+Disp "SUCCESSIVE EQUAL TIMES"
+Disp " 1,3,5  TOTALS 1,4,9 (T²)"
+Disp "AS DISPLACEMENT S = -4.9T²"
+Pause 
+ClrHome
+Disp "FREE FALL 4/4  DROP FROM H"
+Disp "V0 = 0, A = -9.8, S = -H"
+Disp "S = V0T + (1/2)AT² GIVES"
+Disp " -H = -(1/2)(9.8)T²"
+Disp " T = √(2H/9.8)"
+Disp "VF² = V0² + 2AS GIVES"
+Disp " VF = -√(2(9.8)H)  (DOWN)"
+Disp "EX H = 20 M"
+Disp " T = √(40/9.8) = 2.02 S"
+Disp " VF = -√(392) = -19.8 M/S"
+Pause 
+Goto M1
+Lbl D
+ClrHome
+Disp "GRAPHS 1/6  THE STACK"
+Disp "TOP     X-T  POSITION"
+Disp "MIDDLE  V-T  VELOCITY"
+Disp "BOTTOM  A-T  ACCELERATION"
+Disp "SLOPE GOES DOWN THE STACK"
+Disp " SLOPE OF X-T = V"
+Disp " SLOPE OF V-T = A"
+Disp "AREA GOES UP THE STACK"
+Disp " AREA UNDER V-T = S"
+Disp " AREA UNDER A-T = VF - V0"
+Pause 
+ClrHome
+Disp "GRAPHS 2/6  AREA"
+Disp "AREA UNDER V-T = S"
+Disp " = CHANGE IN X (XF - X0)"
+Disp "AREA UNDER A-T"
+Disp " = CHANGE IN V (VF - V0)"
+Disp "AREA BELOW THE T AXIS"
+Disp " COUNTS AS NEGATIVE"
+Disp "EX V-T 0 TO 8 M/S IN 4 S"
+Disp " TRIANGLE (1/2)(4)(8)"
+Disp " S = 16.0 M"
+Pause 
+ClrHome
+Disp "GRAPHS 3/6  X-T SHAPES"
+Disp "SLOPE OF X-T = VELOCITY"
+Disp "FLAT = AT REST (V = 0)"
+Disp "STRAIGHT LINE = CONSTANT V"
+Disp " (A = 0) STEEPER = FASTER"
+Disp " SLOPING UP V +, DOWN V -"
+Disp "CURVE (PARABOLA) ="
+Disp " ACCELERATING, CONSTANT A"
+Disp " CUP (OPENS UP) A IS +"
+Disp " CAP (OPENS DOWN) A IS -"
+Pause 
+ClrHome
+Disp "GRAPHS 4/6  V-T SHAPES"
+Disp "SLOPE OF V-T = A"
+Disp "FLAT = CONSTANT V (A = 0)"
+Disp "SLOPED LINE = CONSTANT A"
+Disp "ON THE T AXIS = AT REST"
+Disp "ABOVE AXIS = MOVING +"
+Disp "BELOW AXIS = MOVING -"
+Disp "CROSSES AXIS = REVERSES"
+Disp "AWAY FROM AXIS SPEEDS UP"
+Disp "TOWARD AXIS SLOWS DOWN"
+Pause 
+ClrHome
+Disp "GRAPHS 5/6  A-T SHAPES"
+Disp "FLAT = CONSTANT A"
+Disp " (THE 5 EQUATIONS WORK)"
+Disp "ON THE T AXIS = A IS 0"
+Disp " (CONSTANT V OR AT REST)"
+Disp "ABOVE AXIS = A IS +"
+Disp "BELOW AXIS = A IS -"
+Disp "AREA = CHANGE IN V"
+Disp "FREE FALL A-T IS FLAT"
+Disp " AT -9.8 M/S²"
+Pause 
+ClrHome
+Disp "GRAPHS 6/6  ONE MOTION"
+Disp "        X-T      V-T  A-T"
+Disp "AT REST FLAT     AT 0 AT 0"
+Disp "CONST V LINE     FLAT AT 0"
+Disp "CONST A PARABOLA LINE FLAT"
+Disp "FLAT  HORIZONTAL LINE"
+Disp "LINE  STRAIGHT, SLOPED"
+Disp "AT 0  ON THE T AXIS"
+Disp "EACH GRAPH IS THE SLOPE OF"
+Disp " THE ONE ABOVE IT"
+Pause 
+Goto M1
+Lbl E
+ClrHome
+Disp "FACTOR OF CHANGE 1/3"
+Disp "STOPPING (SAME A)"
+Disp " VF=0 IN VF²=V0²+2AS"
+Disp " S = -V0²/(2A), A IS -"
+Disp " S PROP TO V0²"
+Disp " 2X SPEED GIVES 4X S"
+Disp " 3X SPEED GIVES 9X S"
+Disp " S2/S1 = (V2/V1)²"
+Disp "EX 20 M/S STOPS IN 30 M,"
+Disp " 40 M/S STOPS IN 120 M"
+Pause 
+ClrHome
+Disp "FACTOR OF CHANGE 2/3"
+Disp "FROM REST (SAME A)"
+Disp " S = (1/2)AT²"
+Disp " S PROP TO T²"
+Disp " 2X TIME GIVES 4X S"
+Disp " 3X TIME GIVES 9X S"
+Disp " VF = AT, VF PROP TO T"
+Disp " S2/S1 = (T2/T1)²"
+Disp "EX 5 M IN THE FIRST 1 S,"
+Disp " 20 M IN 2 S, 45 M IN 3 S"
+Pause 
+ClrHome
+Disp "FACTOR OF CHANGE 3/3"
+Disp "DROPPED FROM HEIGHT H"
+Disp " T = √(2H/9.8)"
+Disp " T PROP TO √(H)"
+Disp " T2/T1 = √(H2/H1)"
+Disp " 4X HEIGHT GIVES 2X TIME"
+Disp " 9X HEIGHT GIVES 3X TIME"
+Disp " 2X HEIGHT GIVES 1.41X T"
+Disp "EX 4.9 M TAKES 1.00 S,"
+Disp " 19.6 M TAKES 2.00 S"
+Pause 
+Goto M1
+Lbl F
+ClrHome
+Disp "CHASE PROBLEMS 1/3"
+Disp "POSITION OF EACH OBJECT"
+Disp " X = X0 + V0T + (1/2)AT²"
+Disp " (SAME ORIGIN, SAME CLOCK)"
+Disp " CONSTANT V  X = X0 + VT"
+Disp " FROM REST   X = (1/2)AT²"
+Disp "CATCHES UP WHEN BOTH"
+Disp " POSITIONS ARE EQUAL"
+Disp " SET X1 = X2, SOLVE FOR T"
+Disp "HEAD START D  USE X0 = D"
+Pause 
+ClrHome
+Disp "CHASE PROBLEMS 2/3"
+Disp "CAR PASSES AT CONSTANT V,"
+Disp " COP STARTS FROM REST"
+Disp " AT ACCEL A, SAME MOMENT"
+Disp "SET POSITIONS EQUAL"
+Disp " (1/2)AT² = VT"
+Disp " T = 2V/A (T = 0 IS START)"
+Disp " COP VF = A(2V/A) = 2V"
+Disp "CATCHES UP AT TWICE THE"
+Disp " CAR SPEED, FOR ANY A, V"
+Pause 
+ClrHome
+Disp "CHASE PROBLEMS 3/3"
+Disp "EX CAR 15 M/S, COP FROM"
+Disp " REST AT 3 M/S²"
+Disp " (1/2)(3)T² = 15T"
+Disp " T = 2(15)/3 = 10.0 S"
+Disp " X = 15(10) = 150 M"
+Disp " COP VF = 3(10) = 30.0 M/S"
+Disp "  = TWICE 15 M/S"
+Disp "GAP IS BIGGEST WHEN THE"
+Disp " SPEEDS ARE EQUAL"
+Pause 
+Goto M2
+Lbl G
+ClrHome
+Disp "HORIZONTAL LAUNCH 1/3"
+Disp "X (SIDEWAYS) CONSTANT V"
+Disp " VX = V0, AX = 0"
+Disp " RANGE = VX*T"
+Disp "Y (UP/DOWN) FREE FALL"
+Disp " V0Y = 0, AY = -9.8 M/S²"
+Disp " SY = -H (LANDS H BELOW)"
+Disp "SAME T IN BOTH DIRECTIONS"
+Disp " -H = -(1/2)(9.8)T²"
+Disp " T = √(2H/G), G = 9.8"
+Pause 
+ClrHome
+Disp "HORIZONTAL LAUNCH 2/3"
+Disp "EX BALL LEAVES A 20 M"
+Disp " CLIFF AT 5 M/S SIDEWAYS"
+Disp "Y  -20 = -(1/2)(9.8)T²"
+Disp " T = √(2(20)/9.8)"
+Disp " T = 2.02 S"
+Disp "X  RANGE = VX*T = 5(2.02)"
+Disp " RANGE = 10.1 M"
+Disp "VY AT LANDING = -9.8(2.02)"
+Disp " VY = -19.8 M/S (DOWN)"
+Pause 
+ClrHome
+Disp "HORIZONTAL LAUNCH 3/3"
+Disp "LANDING VELOCITY"
+Disp " VX = V0 (NEVER CHANGES)"
+Disp " VY = -9.8T"
+Disp " SPEED = √(VX² + VY²)"
+Disp " ANGLE = TAN⁻1(|VY|/VX)"
+Disp "EX SPEED = √(5² + 19.8²)"
+Disp " = 20.4 M/S"
+Disp " ANGLE = TAN⁻1(19.8/5)"
+Disp " = 75.8° BELOW HORIZONTAL"
+Pause 
+Goto M2
+Lbl H
+ClrHome
+Disp "ANGLED LAUNCH 1/4"
+Disp "SPLIT V0 INTO COMPONENTS"
+Disp " VX = V0COS(ANGLE)"
+Disp " V0Y = V0SIN(ANGLE)"
+Disp "X  CONSTANT V, AX = 0"
+Disp "Y  FREE FALL, AY = -9.8"
+Disp "THE Y MOTION DECIDES T"
+Disp "RANGE = VX*T"
+Disp "AT THE TOP VY = 0 BUT"
+Disp " VX STAYS THE SAME"
+Pause 
+ClrHome
+Disp "ANGLED LAUNCH 2/4"
+Disp "LEVEL GROUND (SAME HEIGHT)"
+Disp " TIME TO TOP = V0Y/9.8"
+Disp " TOTAL T = 2V0Y/9.8"
+Disp " MAX H = V0Y²/(2*9.8)"
+Disp " RANGE = VX*T"
+Disp "LANDS HIGHER OR LOWER"
+Disp " S = V0Y*T - (1/2)(9.8)T²"
+Disp " (S IS - IF LANDING LOWER)"
+Disp " SOLVE THE QUADRATIC FOR T"
+Pause 
+ClrHome
+Disp "ANGLED LAUNCH 3/4"
+Disp "EX 20 M/S AT 30°, LEVEL"
+Disp "VX = 20COS(30) = 17.3 M/S"
+Disp "V0Y = 20SIN(30) = 10.0 M/S"
+Disp "TOTAL T = 2(10.0)/9.8"
+Disp " T = 2.04 S"
+Disp "RANGE = 17.3(2.04)"
+Disp " = 35.3 M"
+Disp "MAX H = 10.0²/19.6"
+Disp " = 5.10 M"
+Pause 
+ClrHome
+Disp "ANGLED LAUNCH 4/4"
+Disp "LEVEL GROUND ONLY"
+Disp " RANGE = V0²SIN(2*ANGLE)/G"
+Disp " MAX RANGE AT 45°"
+Disp " COMPLEMENTARY ANGLES"
+Disp " (ADD TO 90°) GIVE EQUAL"
+Disp " RANGES, EX 30° AND 60°"
+Disp " 20 M/S AT 60° ALSO 35.3 M"
+Disp " (HIGHER ANGLE = LONGER"
+Disp "  TIME, HIGHER PEAK)"
+Pause 
+Goto M2
+Lbl I
+ClrHome
+Disp "RIVER CROSSING 1/5"
+Disp "VB  BOAT SPEED IN WATER"
+Disp "VR  RIVER CURRENT SPEED"
+Disp "W   RIVER WIDTH"
+Disp "ACROSS AND DOWNSTREAM"
+Disp " MOTIONS ARE INDEPENDENT"
+Disp "CROSSING TIME"
+Disp " T = W / BOAT SPEED ACROSS"
+Disp "DRIFT = VR*T (DOWNSTREAM)"
+Disp "CURRENT DOES NOT CHANGE T"
+Pause 
+ClrHome
+Disp "RIVER CROSSING 2/5"
+Disp "AIMED STRAIGHT ACROSS"
+Disp " T = W/VB"
+Disp " DRIFT = VR*T"
+Disp " RESULTANT SPEED"
+Disp "  = √(VB² + VR²)"
+Disp " PATH ANGLE FROM ACROSS"
+Disp "  = TAN⁻1(VR/VB)"
+Disp "HEADING (WHERE IT POINTS)"
+Disp " IS DIFFERENT FROM PATH"
+Pause 
+ClrHome
+Disp "RIVER CROSSING 3/5"
+Disp "EX VB = 4, VR = 3 M/S,"
+Disp " W = 100 M, AIM ACROSS"
+Disp " T = 100/4 = 25.0 S"
+Disp " DRIFT = 3(25) = 75.0 M"
+Disp " SPEED = √(4² + 3²)"
+Disp "  = 5.00 M/S"
+Disp " ANGLE = TAN⁻1(3/4)"
+Disp "  = 36.9° DOWNSTREAM"
+Disp "  FROM STRAIGHT ACROSS"
+Pause 
+ClrHome
+Disp "RIVER CROSSING 4/5"
+Disp "TO LAND DIRECTLY ACROSS"
+Disp " AIM UPSTREAM AT"
+Disp " ANGLE = SIN⁻1(VR/VB)"
+Disp "  FROM STRAIGHT ACROSS"
+Disp " UPSTREAM PART CANCELS VR"
+Disp " SPEED ACROSS"
+Disp "  = √(VB² - VR²)"
+Disp " T = W/√(VB² - VR²)"
+Disp "ONLY POSSIBLE IF VB > VR"
+Pause 
+ClrHome
+Disp "RIVER CROSSING 5/5"
+Disp "EX VB = 5, VR = 3 M/S,"
+Disp " W = 100 M, LAND ACROSS"
+Disp " ANGLE = SIN⁻1(3/5)"
+Disp "  = 36.9° UPSTREAM"
+Disp " SPEED ACROSS"
+Disp "  = √(5² - 3²) = 4.00 M/S"
+Disp " T = 100/4 = 25.0 S"
+Disp " DRIFT = 0 M"
+Pause 
+Goto M2
+Lbl J
+ClrHome
+Disp "LABS 1/6  RAMP"
+Disp "CART FROM REST DOWN RAMP"
+Disp " S = (1/2)AT²"
+Disp "GRAPH S (Y AXIS) VS T²"
+Disp " (X AXIS), NOT VS T"
+Disp " IT IS A STRAIGHT LINE"
+Disp "SLOPE = A/2"
+Disp "SO A = 2*SLOPE"
+Disp "EX SLOPE 0.75 M/S²"
+Disp " A = 2(0.75) = 1.50 M/S²"
+Pause 
+ClrHome
+Disp "LABS 2/6  100 M DASH"
+Disp "TIMES AT EACH 10 M MARK"
+Disp "AVG VELOCITY PER INTERVAL"
+Disp " = (X2 - X1)/(T2 - T1)"
+Disp "PLOT IT AT THE MIDDLE TIME"
+Disp " OF THE INTERVAL (T1+T2)/2"
+Disp "EX 10 M AT 2.0 S AND"
+Disp " 20 M AT 3.6 S, V = 10/1.6"
+Disp " = 6.25 M/S AT T = 2.80 S"
+Disp "SLOPE OF THIS V-T = A"
+Pause 
+ClrHome
+Disp "LABS 3/6  PERCENT DIFF"
+Disp "% DIFF = |A - B|"
+Disp "  / AVERAGE * 100"
+Disp "AVERAGE = (A + B)/2"
+Disp "(A, B ARE THE TWO VALUES)"
+Disp "EX 9.6 AND 9.8"
+Disp " |9.6 - 9.8| = 0.2"
+Disp " AVERAGE = 9.7"
+Disp " 0.2/9.7 * 100 = 2.06 %"
+Pause 
+ClrHome
+Disp "LABS 4/6  UNITS"
+Disp "1 M = 1.0936 YD"
+Disp "1 YD = 0.9144 M"
+Disp "YD TO M  DIVIDE BY 1.0936"
+Disp "M TO YD  TIMES 1.0936"
+Disp "EX 100 YD = 100/1.0936"
+Disp " = 91.4 M"
+Disp "EX 100 M = 100(1.0936)"
+Disp " = 109 YD"
+Pause 
+ClrHome
+Disp "LABS 5/6  LAUNCH FROM H"
+Disp "BALL LEAVES A TABLE OF"
+Disp " HEIGHT H, LANDS ON FLOOR"
+Disp " Y DISPLACEMENT IS -H"
+Disp "-H = V0Y*T - (1/2)GT²"
+Disp "REWRITE AS"
+Disp " 4.9T² - V0Y*T - H = 0"
+Disp "QUADRATIC FORMULA, KEEP"
+Disp " THE POSITIVE ROOT"
+Disp "THEN RANGE = VX*T"
+Pause 
+ClrHome
+Disp "LABS 6/6  EXAMPLE"
+Disp "THROWN UP 10 M/S FROM 15 M"
+Disp "-15 = 10T - 4.9T²"
+Disp "4.9T² - 10T - 15 = 0"
+Disp "A = 4.9, B = -10, C = -15"
+Disp "T=(-B+/-√(B²-4AC))/(2A)"
+Disp "B²-4AC = 100 + 294 = 394"
+Disp "T = (10 + √(394))/9.8"
+Disp "T = 3.05 S (OTHER ROOT"
+Disp " -1.01 S IS BEFORE LAUNCH)"
+Pause 
+Goto M2
+Lbl Q
+ClrHome

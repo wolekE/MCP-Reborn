@@ -22,11 +22,13 @@ Disp "UNITS M/S, M, S, M/S²"
 Else
 Disp "UP IS +, DOWN IS -"
 Disp "DROPPED MEANS V0 IS 0."
+Disp "S IS -45 IF IT FALLS 45 M."
 Disp "UNITS M/S, M, S"
 End
 Pause 
 ClrHome
 Disp "999 MEANS UNKNOWN"
+Disp "NEGATIVE = (-) KEY"
 If Q=2
 Disp "A IS -9.8 M/S² (AUTO)"
 Input "V0 (M/S)=",V
@@ -167,7 +169,7 @@ A→Z
 prgmZFMT
 "A = "+Str9+" M/S²"→Str0
 If Q=2
-Str0+" (GRAVITY)"→Str0
+Str0+" (AUTO)"→Str0
 Disp Str0
 End
 Disp "UNKNOWNS ARE "+Str1+" AND "+Str3
@@ -534,11 +536,14 @@ Str0+Str9+")T²"→Str0
 prgmZLINE
 Disp "T IS SQUARED, SO WRITE"
 If C=2
-Disp "(1/2)AT²+V0T-S=0"
+Disp "(1/2)AT²+V0T-S=0 AND USE"
 If C=5
-Disp "-(1/2)AT²+VFT-S=0"
-Disp "AND USE THE QUADRATIC"
-Disp "FORMULA (NEXT SCREEN)."
+Disp "-(1/2)AT²+VFT-S=0 AND USE"
+Disp "THE QUADRATIC FORMULA WITH"
+If C=2
+Disp "A,B,C AS (1/2)A, V0, -S"
+If C=5
+Disp "A,B,C AS -(1/2)A, VF, -S"
 Pause 
 A/2→L
 V→M
@@ -549,10 +554,10 @@ F→M
 End
 ⁻S→N
 prgmZQUAD
-If S=0 and abs(H)<abs(I)
-0→H
-If S=0 and abs(I)≤abs(H)
-0→I
+If J=2 and abs(H)<abs(I)
+N/(LI)→H
+If J=2 and abs(I)<abs(H)
+N/(LH)→I
 0→E
 If J=1 and H>0
 Then
@@ -748,7 +753,11 @@ Lbl E1
 ClrHome
 Disp "WRONG NUMBER OF UNKNOWNS"
 Disp "YOU ENTERED 999 (UNKNOWN)"
-Disp "FOR "+sub("012345",J+1,1)+" OF THEM."
+"FOR "+sub("012345",J+1,1)+" OF THE "→Str0
+If Q=1
+Disp Str0+"5 VALUES."
+If Q=2
+Disp Str0+"4 VALUES."
 If Q=1
 Then
 Disp "ENTER EXACTLY 3 KNOWNS"
@@ -795,6 +804,7 @@ Disp "(EX. A BALL CANNOT BE AT"
 Disp "ITS TOP BELOW ITS START.)"
 End
 Disp "CHECK S AND THE SIGNS."
+Disp "(DOWN/BACKWARD IS -.)"
 Pause 
 Return
 Lbl E6
@@ -818,9 +828,10 @@ Lbl E7
 ClrHome
 Disp "NOT ENOUGH INFORMATION"
 Disp "A IS 0 AND VF IS THE SAME"
-Disp "AS V0 (STEADY VELOCITY),"
-Disp "SO S AND T COULD BE ANY"
-Disp "PAIR WITH S IS V0 TIMES T."
+Disp "AS V0 (STEADY VELOCITY)."
+Disp "S IS V0 TIMES T, BUT BOTH"
+Disp "ARE UNKNOWN, SO THEY"
+Disp "CANNOT BE FOUND."
 Disp "USE S OR T AS A KNOWN"
 Disp "INSTEAD OF VF."
 Pause 
@@ -905,9 +916,12 @@ If C=5
 Disp "A IS 0 AND VF IS 0, SO"
 Disp "IT NEVER MOVES."
 If S=0
-Disp "S IS 0 FOR ANY T."
-If S≠0
-Disp "IT CANNOT MOVE S."
+Then
+Disp "S IS 0 FOR ANY T, SO T"
+Disp "CANNOT BE FOUND."
+Else
+Disp "IT CAN NEVER GET TO S."
+End
 Disp "CHECK YOUR VALUES."
 Pause 
 Return

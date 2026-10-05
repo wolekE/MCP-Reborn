@@ -112,8 +112,13 @@ def zquad(l, m, n):
     vals = [("B²-4AC", g, "")]
     if g < 0:
         return 0, None, None, g, vals
-    h = (-m - math.sqrt(g)) / (2 * l)
-    i = (-m + math.sqrt(g)) / (2 * l)
+    # stable form (no cancellation): q = -(M + sign(M)*sqrt(G))/2, roots q/L and N/q
+    q = (-m - math.sqrt(g)) / 2 if m >= 0 else (-m + math.sqrt(g)) / 2
+    if q == 0:
+        h = i = 0.0
+    else:
+        h = q / l
+        i = n / q
     if h > i:
         h, i = i, h
     vals += [("T1", h, "S"), ("T2", i, "S")]

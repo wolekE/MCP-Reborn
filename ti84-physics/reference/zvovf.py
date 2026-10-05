@@ -91,8 +91,15 @@ def zquad(L, M, N):
         G_ = Decimal(0)
     if G_ < 0:
         return 0, None, None, G_                 # "B²-4AC<0 SO NO REAL ROOT"
-    H = div(sub(neg(M), sqrt(G_)), mul(2, L))    # (⁻M-√(G))/(2L)→H
-    I = div(add(neg(M), sqrt(G_)), mul(2, L))    # (⁻M+√(G))/(2L)→I
+    if M >= 0:                                   # If M≥0
+        Z = div(sub(neg(M), sqrt(G_)), 2)        # (⁻M-√(G))/2→Z
+    else:                                        # If M<0
+        Z = div(add(neg(M), sqrt(G_)), 2)        # (⁻M+√(G))/2→Z
+    if Z == 0:                                   # If Z=0
+        H = I = Decimal(0)                       # 0→H, 0→I
+    else:
+        H = div(Z, L)                            # Z/L→H
+        I = div(N, Z)                            # N/Z→I
     if H > I:
         H, I = I, H
     return 2, H, I, G_
@@ -122,7 +129,7 @@ def message_lines(code, J=None, Q=1, C=None, S=None):
     """The rows of each message screen, exactly as ZVOVF displays them."""
     if code == "E1":
         rows = ["WRONG NUMBER OF UNKNOWNS", "YOU ENTERED 999 (UNKNOWN)",
-                "FOR " + "012345"[J] + " OF THEM."]
+                "FOR " + "012345"[J] + " OF THE " + ("5" if Q == 1 else "4") + " VALUES."]
         if Q == 1:
             rows += ["ENTER EXACTLY 3 KNOWNS"]
         else:
@@ -143,7 +150,7 @@ def message_lines(code, J=None, Q=1, C=None, S=None):
         else:
             rows += ["NO START VELOCITY CAN END", "AT THIS VF AFTER THIS S.",
                      "(EX. A BALL CANNOT BE AT", "ITS TOP BELOW ITS START.)"]
-        return rows + ["CHECK S AND THE SIGNS."]
+        return rows + ["CHECK S AND THE SIGNS.", "(DOWN/BACKWARD IS -.)"]
     if code == "E6":       # quadratic/linear: no root T > 0
         rows = ["NO PHYSICAL SOLUTION"]
         if S == 0:
@@ -154,9 +161,9 @@ def message_lines(code, J=None, Q=1, C=None, S=None):
                      "BEFORE THE START, SO IT", "NEVER GETS THERE."]
         return rows + ["CHECK S AND THE SIGNS."]
     if code == "E7":
-        return ["NOT ENOUGH INFORMATION", "A IS 0 AND VF IS THE SAME", "AS V0 (STEADY VELOCITY),",
-                "SO S AND T COULD BE ANY", "PAIR WITH S IS V0 TIMES T.", "USE S OR T AS A KNOWN",
-                "INSTEAD OF VF."]
+        return ["NOT ENOUGH INFORMATION", "A IS 0 AND VF IS THE SAME", "AS V0 (STEADY VELOCITY).",
+                "S IS V0 TIMES T, BUT BOTH", "ARE UNKNOWN, SO THEY", "CANNOT BE FOUND.",
+                "USE S OR T AS A KNOWN", "INSTEAD OF VF."]
     if code == "E8":
         return ["IMPOSSIBLE", "A IS 0, SO THE VELOCITY", "CANNOT CHANGE, BUT VF IS",
                 "NOT THE SAME AS V0.", "CHECK A, V0 AND VF."]
@@ -183,7 +190,7 @@ def message_lines(code, J=None, Q=1, C=None, S=None):
         rows = ["NOT ENOUGH INFORMATION" if S == 0 else "IMPOSSIBLE"]
         rows += ["A IS 0 AND V0 IS 0, SO" if C == 2 else "A IS 0 AND VF IS 0, SO"]
         rows += ["IT NEVER MOVES."]
-        rows += ["S IS 0 FOR ANY T." if S == 0 else "IT CANNOT MOVE S."]
+        rows += ["S IS 0 FOR ANY T, SO T", "CANNOT BE FOUND."] if S == 0 else ["IT CAN NEVER GET TO S."]
         return rows + ["CHECK YOUR VALUES."]
     raise KeyError(code)
 
@@ -271,10 +278,11 @@ def solve(v0, vf, s, t, a=None, k=1):
             M = F                                # F→M
         N = neg(S)                               # ⁻S→N
         J, H, I, G_ = zquad(L, M, N)
-        if S == 0 and H is not None and abs(H) < abs(I):
-            H = Decimal(0)                       # S=0: the root at the start is exactly 0
-        if S == 0 and I is not None and abs(I) <= abs(H):
-            I = Decimal(0)
+        # The smaller root from T1*T2 = N/L (no cancellation; exactly 0 when S=0).
+        if J == 2 and abs(H) < abs(I):
+            H = div(N, mul(L, I))                # N/(LI)→H
+        if J == 2 and abs(I) < abs(H):
+            I = div(N, mul(L, H))                # N/(LH)→I
         out["quad"] = {"J": J, "H": H, "I": I, "G": G_}
         E = 0
         if J == 1 and H > 0:                     # linear (A=0): one root, and T>0

@@ -25,14 +25,14 @@ VARS = ["V0", "VF", "S", "T", "A"]
 
 
 # ------------------------------------------------------------------ running
-def run_a(v0, vf, s, t, a):
+def run_a(v0, vf, s, t, a, **kw):
     """Section A through the real menus: PHYSOLVE 1 VOVFSTA SOLVER, 5 inputs, 7 QUIT."""
-    return run([1, v0, vf, s, t, a, 7])
+    return run([1, v0, vf, s, t, a, 7], **kw)
 
 
-def run_b(v0, vf, s, t):
+def run_b(v0, vf, s, t, **kw):
     """Section B: ZVOVF called the way ZFREE calls it (2→K), inputs V0, VF, S, T only."""
-    return run([v0, vf, s, t], program="ZVOVF", init_vars={"K": 2})
+    return run([v0, vf, s, t], program="ZVOVF", init_vars={"K": 2}, **kw)
 
 
 def rows(screen):
@@ -92,13 +92,13 @@ def solutions(r):
     return out
 
 
-def solve_check(inputs, mode="A", context=""):
+def solve_check(inputs, mode="A", context="", **kw):
     """Run (mode A through PHYSOLVE, or B with K=2), compare with the reference, return both."""
     if mode == "A":
-        res = run_a(*inputs)
+        res = run_a(*inputs, **kw)
         r = ref.solve(*inputs, k=1)
     else:
-        res = run_b(*inputs)
+        res = run_b(*inputs, **kw)
         r = ref.free_fall(*inputs)
     check_run(res, r, context=f"{mode} {inputs} {context}")
     if r["kind"] == "summary":
@@ -130,8 +130,9 @@ def t_required_case():
                      "1) T FROM S=V0T+(1/2)AT²", "   (IT HAS NO VF)", "2) VF FROM VF=V0+AT",
                      "   (NOW T IS KNOWN)"], given
     s1 = rows(find_screen(res, "STEP 1 - FIND T"))
-    assert s1[:5] == ["STEP 1 - FIND T", "USE S=V0T+(1/2)AT²", "(IT HAS NO VF)", "(120)=(8.00)T",
-                      "  +(1/2)(1.50)T²"], s1
+    assert s1 == ["STEP 1 - FIND T", "USE S=V0T+(1/2)AT²", "(IT HAS NO VF)", "(120)=(8.00)T",
+                  "  +(1/2)(1.50)T²", "T IS SQUARED, SO WRITE", "(1/2)AT²+V0T-S=0 AND USE",
+                  "THE QUADRATIC FORMULA WITH", "A,B,C AS (1/2)A, V0, -S"], s1
     s2 = rows(find_screen(res, "STEP 2 - FIND VF"))
     assert s2 == ["STEP 2 - FIND VF", "USE VF=V0+AT", "(NOW T IS KNOWN)", "VF=(8.00)+(1.50)(8.39)",
                   "VF = 20.6 M/S"], s2
@@ -277,7 +278,7 @@ def t_wrong_count():
     for n in (0, 1, 3, 4, 5):
         inputs = [U if i < n else x for i, x in enumerate(full)]
         res, r = solve_check(inputs, context=f"{n} unknowns")
-        assert r["code"] == "E1" and rows(res.screens[-1])[2] == f"FOR {n} OF THEM.", rows(res.screens[-1])
+        assert r["code"] == "E1" and rows(res.screens[-1])[2] == f"FOR {n} OF THE 5 VALUES.", rows(res.screens[-1])
     fb = [0, -29.7, -45, 3.03]
     for n in (0, 1, 3, 4):
         inputs = [U if i < n else x for i, x in enumerate(fb)]
@@ -299,8 +300,16 @@ def t_out_of_range():
                    [U, 6, -1.5e9, U, 2]):
         res, r = solve_check(inputs)
         assert r["code"] == "E2"
-    res, r = solve_check([1e9, U, 1e-9, U, 1e9])     # the limits themselves are allowed
+    res, r = solve_check([1e9, U, U, 1e-9, -1e9])    # the limits themselves are allowed
     assert r["kind"] == "summary"
+    # extreme ratio: 0.05T² + 1E5 T - 1E-4 = 0. The plain quadratic formula loses the small root
+    # (B²-4AC = 1E10+2E-5 rounds to 1E10, so T2 comes out as 0); ZVOVF recomputes it from
+    # T1*T2 = C/A as N/(L*T1) = -1E-4/(0.05(-2E6)) = 1.00E-9 s.
+    res, r = solve_check([1e5, U, 1e-4, U, 0.1])
+    expect(summary(res)["T"], "1.00E-9", "T")
+    expect(summary(res)["VF"], "100000", "VF")
+    q = find_screen(res, "SOLVE QUADRATIC FOR T")
+    assert "SO T = 1.00E-9 S" in q, q
 
 
 def t_a_zero():
@@ -363,7 +372,7 @@ def t_free_fall():
     last = rows(res.screens[-1])
     assert last[0] == "SUMMARY (FREE FALL)" and "VF = -29.7 M/S (DOWN)" in last and "S = -45.0 M (DOWN)" in last
     given = rows(find_screen(res, "GIVEN"))
-    assert "A = -9.80 M/S² (GRAVITY)" in given, given
+    assert "A = -9.80 M/S² (AUTO)" in given, given
     assert res.vars["K"] == 2 and res.angle == "Degree"
     # thrown up at 19.6 m/s to the top (VF=0): T = 19.6/9.8 = 2.00 s, S = 19.6²/19.6 = 19.6 m
     res, r = solve_check([19.6, 0, U, U], "B")
@@ -378,6 +387,12 @@ def t_free_fall():
         inputs = with_unknowns(fm, pair)[:4]
         res, r = solve_check(inputs, "B", context=str(pair))
         sv = summary(res)
+        if pair == ("V0", "T"):
+            # V0² = VF²-2AS = 213.16-188.16 = 25, so V0 = -5 (thrown down, T = 9.6/9.8 = 0.980 s)
+            # or V0 = +5 (thrown up, T = 2.00 s): both are physical.
+            for name, want in (("T1", "0.980"), ("V0(T1)", "-5.00"), ("T2", "2.00"), ("V0(T2)", "5.00")):
+                expect(sv[name], want, f"free fall {pair} {name}")
+            continue
         for name in VARS:
             expect(sv[name], float(fm[name]), f"free fall {pair} {name}")
 
@@ -451,7 +466,41 @@ def t_fuzz_robust():
         idx = rng.sample(range(n), min(k, n))
         for j in idx:
             vals[j] = U
-        solve_check(vals, mode, context=f"robust #{i}")
+        solve_check(vals, mode, context=f"robust #{i}", seed=1000 + i)   # different start-up garbage
+
+
+# Scripts that together reach every screen of ZVOVF (used for the wide-value run).
+WIDE_SCRIPTS = [("A", [8, U, 120, U, 1.5])] + \
+    [("A", with_unknowns(m, p)) for m in (M1, M2) for p in PAIRS.values()] + \
+    [("A", x) for x in ([10, U, 10, U, -9.8], [U, 0, -5, U, -9.8], [10, U, 0, U, -9.8],
+                        [-10, U, 0, U, -9.8], [20, U, -5, U, 9.8], [5, U, 20, U, 0], [U, 5, 20, U, 0],
+                        [0, U, 20, U, 0], [U, 0, 0, U, 0], [5, 5, U, U, 0], [5, 8, U, U, 0],
+                        [10, 20, U, U, -9.8], [10, 10, U, U, -9.8], [10, -10, 0, U, U],
+                        [10, -10, 5, U, U], [10, 5, 0, U, U], [10, 5, -5, U, U], [U, U, U, U, U],
+                        [1e10, U, 5, U, 1], [5, U, U, 0, 2], [5, U, -20, U, 0])] + \
+    [("B", x) for x in ([0, U, -45, U], [19.6, 0, U, U], [10, U, 4, U], [U, -4.65, -1, U],
+                        [19.6, U, 19.6, U], [U, -19.6, -19.6, U], [10, U, 10, U], [U, U, U, U],
+                        [5, U, U, 2], [U, U, -9.6, 2])]
+
+
+def t_wide_values():
+    """Every screen still fits 26x10 when every number is shown 9 characters wide (-8.88E-88)."""
+    for mode, inputs in WIDE_SCRIPTS:
+        if mode == "A":
+            res = run([1] + list(inputs) + [7], wide=True)
+        else:
+            res = run(inputs, program="ZVOVF", init_vars={"K": 2}, wide=True)
+        assert_clean(res, context=f"wide {mode} {inputs}")
+
+
+def t_coverage():
+    """Every statement of ZVOVF ran in this test file (every menu path and message)."""
+    from harness import sim
+    s = sim()
+    prog = s.programs["ZVOVF"]
+    missing = [(st.line, st.text) for i, st in enumerate(prog.stmts)
+               if ("ZVOVF", i) not in s.coverage and st.kind not in ("Lbl", "Then")]
+    assert not missing, f"{len(missing)} statements never executed: {missing[:20]}"
 
 
 c.check("required case v0=8, a=1.5, s=120 -> VF=20.6, T=8.39 (both roots shown)", t_required_case)
@@ -471,4 +520,6 @@ c.check("free fall through PHYSOLVE > FREE FALL > VOVFSTA (ZFREE)", t_free_fall_
 c.check("K not 1 or 2 behaves as K=1 and K is not changed", t_k_not_1_or_2)
 c.check("fuzz: random motions, solver recovers the hidden values", t_fuzz_consistency)
 c.check("fuzz: random inputs never error and match the reference", t_fuzz_robust)
+c.check("every screen fits with 9-character values (wide mode)", t_wide_values)
+c.check("statement coverage of ZVOVF is 100%", t_coverage)
 sys.exit(c.done())
