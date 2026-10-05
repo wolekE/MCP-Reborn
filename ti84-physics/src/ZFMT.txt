@@ -1,0 +1,39 @@
+Degree
+""→Str9
+If Z<0
+"-"→Str9
+If abs(Z)<1ᴇ⁻9
+Then
+"0"→Str9
+Else
+int(log(abs(Z)))→W
+round(abs(Z)/₁₀^(W),2)→U
+If U≥10
+Then
+U/10→U
+W+1→W
+End
+round(100U,0)→U
+sub("0123456789",int(U/100)+1,1)+sub("0123456789",int(U/10)-10int(U/100)+1,1)+sub("0123456789",U-10int(U/10)+1,1)→Str8
+If W≥6 or W≤⁻4
+Then
+Str9+sub(Str8,1,1)+"."+sub(Str8,2,2)+"E"→Str9
+If W<0
+Str9+"-"→Str9
+abs(W)→U
+If U≥10
+Str9+sub("0123456789",int(U/10)+1,1)→Str9
+Str9+sub("0123456789",U-10int(U/10)+1,1)→Str9
+Else
+If W≥2
+Str9+Str8→Str9
+If W≥3
+Str9+sub("000",1,W-2)→Str9
+If W=1
+Str9+sub(Str8,1,2)+"."+sub(Str8,3,1)→Str9
+If W=0
+Str9+sub(Str8,1,1)+"."+sub(Str8,2,2)→Str9
+If W<0
+Str9+sub("0.000",1,1-W)+Str8→Str9
+End
+End
