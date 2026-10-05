@@ -1,0 +1,275 @@
+Degree
+ClrHome
+Disp "CHASE PROBLEM"
+Disp "CAR 1- CONSTANT SPEED V1."
+Disp "CAR 2- STARTS FROM REST"
+Disp "WITH ACCELERATION A."
+Disp "TIME 0- CAR 1 IS D0 AHEAD"
+Disp "OF CAR 2 (D0 IS 0 IF THEY"
+Disp "ARE SIDE BY SIDE)."
+Disp "CAR 2 WAITS TD SECONDS"
+Disp "AFTER TIME 0 (0 IF NONE)."
+Disp "BOTH GO THE SAME WAY."
+Pause 
+ClrHome
+Disp "CHASE- ENTER EACH VALUE"
+Disp "V1- CAR 1 SPEED"
+Disp "D0- CAR 1 LEAD AT TIME 0"
+Disp "A- CAR 2 ACCELERATION"
+Disp "TD- CAR 2 WAIT (DELAY)"
+Input "V1 (M/S)=",V
+Input "D0 (M)=",B
+Input "A (M/S²)=",A
+Input "TD (S)=",C
+If V<0
+Goto E1
+If B<0
+Goto E2
+If C<0
+Goto E3
+If max(max(V,B),max(A,C))>1ᴇ9
+Goto E4
+If V=0 and B=0
+Goto E6
+If A≤0
+Goto E7
+If (V>0 and V<1ᴇ⁻6) or (B>0 and B<1ᴇ⁻6) or (C>0 and C<1ᴇ⁻6) or A<1ᴇ⁻6
+Goto E5
+B+VC→Q
+V²+2AQ→G
+(V+√(G))/A→D
+If (Q>0 and Q<1ᴇ⁻9) or G<1ᴇ⁻9 or D<1ᴇ⁻9 or AD²/2<1ᴇ⁻9 or (Q>0 and 2Q/(AD)<1ᴇ⁻9) or (B>0 and V>0 and V(D+C)<1ᴇ⁻9)
+Goto E8
+A/2→L
+⁻V→M
+⁻Q→N
+ClrHome
+Disp "STEP 1  SET X1=X2"
+Disp "T FROM TIME 0, X FROM THE"
+Disp "START POINT OF CAR 2."
+Disp "CAR 1- X1=D0+V1*T"
+Disp "CAR 2- X2=(1/2)A(T-TD)²"
+Disp "LET U=T-TD (TIME SINCE"
+Disp "CAR 2 STARTED), T=U+TD."
+Disp "X1=X2 GIVES"
+Disp "D0+V1(U+TD)=(1/2)AU²"
+Disp "(1/2)AU²-V1*U-(D0+V1*TD)=0"
+Pause 
+V→Z
+prgmZFMT
+Str9→Str1
+B→Z
+prgmZFMT
+Str9→Str2
+C→Z
+prgmZFMT
+Str9→Str3
+A→Z
+prgmZFMT
+Str9→Str4
+ClrHome
+Disp "STEP 2  PUT IN NUMBERS"
+Disp "LEAD OF CAR 1 WHEN CAR 2"
+Disp "STARTS IS D0+V1*TD."
+"LEAD="+Str2+"+("+Str1+")("+Str3+")"→Str0
+prgmZLINE
+Q→Z
+prgmZFMT
+Disp "LEAD = "+Str9+" M"
+"-"+Str1+"U-"+Str9+"=0"→Str0
+If 9+length(Str4)+length(Str0)>26
+Then
+Disp "(1/2)("+Str4+")U²"
+Else
+"(1/2)("+Str4+")U²"+Str0→Str0
+End
+Disp Str0
+Disp "ON THE NEXT SCREEN T IS U"
+Disp "(TIME AFTER CAR 2 STARTS)."
+Pause 
+prgmZQUAD
+I→D
+D→Z
+prgmZFMT
+Str9→Str2
+If B=0 and C=0
+Then
+Disp "T1 IS 0, THE START (SIDE"
+Disp "BY SIDE), NOT A CATCH-UP."
+Else
+Disp "T1<0 IS BEFORE CAR 2"
+Disp "STARTS- NOT PHYSICAL."
+End
+Disp "SO U = "+Str2+" S"
+Pause 
+D+C→E
+ClrHome
+Disp "STEP 3  CATCH-UP TIME"
+If C>0
+Then
+Disp "AFTER CAR 2 STARTS-"
+Disp "U = "+Str2+" S"
+Disp "AFTER TIME 0 (CAR 2"
+Disp "WAITED TD)- T=U+TD"
+Disp "T="+Str2+"+"+Str3
+E→Z
+prgmZFMT
+Disp "T = "+Str9+" S"
+Else
+Disp "TD IS 0, SO CAR 2 STARTS"
+Disp "AT TIME 0 AND T=U."
+Disp "T = "+Str2+" S"
+End
+Pause 
+AD²/2→S
+ClrHome
+Disp "STEP 4  DISTANCE"
+Disp "CAR 2 SPEEDS UP FROM REST"
+Disp "FOR U SECONDS-"
+Disp "S=(1/2)AU²"
+"S=(1/2)("+Str4+")("+Str2+")²"→Str0
+prgmZLINE
+S→Z
+prgmZFMT
+Disp "S = "+Str9+" M"
+Disp "(FROM CAR 2 START POINT)"
+Disp "CHECK- CAR 1 X1=D0+V1*T"
+B+VE→Z
+prgmZFMT
+Disp "X1 = "+Str9+" M"
+Pause 
+AD→F
+ClrHome
+Disp "STEP 5  CAR 2 SPEED"
+Disp "VF=V0+AT WITH V0 IS 0,"
+Disp "SO V2=AU"
+F→Z
+prgmZFMT
+Disp "V2=("+Str4+")("+Str2+")"
+Disp "V2 = "+Str9+" M/S"
+If V>0
+Then
+F/V→P
+Disp "V2/V1="+Str9+"/"+Str1
+P→Z
+prgmZFMT
+Disp "V2/V1 = "+Str9
+If B=0 and C=0
+Then
+Disp "RULE- FROM REST, SIDE BY"
+Disp "SIDE, IT CATCHES UP AT 2X"
+Disp "THE SPEED OF CAR 1."
+Else
+Disp "THE 2X RULE IS ONLY FOR A"
+Disp "SIDE BY SIDE START. WITH A"
+Disp "LEAD IT IS MORE THAN 2X."
+End
+Else
+Disp "CAR 1 IS PARKED (V1 IS 0)"
+Disp "SO THERE IS NO SPEED"
+Disp "RATIO."
+End
+Pause 
+ClrHome
+Disp "SUMMARY (CHASE)"
+D→Z
+prgmZFMT
+If C>0
+Then
+Disp "U = "+Str9+" S"
+Disp "(AFTER CAR 2 STARTS)"
+E→Z
+prgmZFMT
+Disp "T = "+Str9+" S"
+Disp "(AFTER TIME 0)"
+Else
+Disp "T = "+Str9+" S"
+Disp "(CATCH-UP TIME)"
+End
+S→Z
+prgmZFMT
+Disp "S = "+Str9+" M"
+Disp "(FROM CAR 2 START POINT)"
+If B>0 and V>0
+Then
+VE→Z
+prgmZFMT
+Disp "CAR 1 MOVED = "+Str9+" M"
+End
+F→Z
+prgmZFMT
+Disp "V2 = "+Str9+" M/S"
+If V>0
+Then
+P→Z
+prgmZFMT
+Disp "V2/V1 = "+Str9
+End
+Pause 
+Return
+Lbl E1
+ClrHome
+Disp "V1 CANNOT BE NEGATIVE."
+Disp "ENTER CAR 1 SPEED AS A"
+Disp "POSITIVE NUMBER (0 IF IT"
+Disp "IS PARKED). BOTH CARS GO"
+Disp "THE SAME WAY."
+Pause 
+Return
+Lbl E2
+ClrHome
+Disp "D0 CANNOT BE NEGATIVE."
+Disp "D0 IS HOW FAR CAR 1 IS"
+Disp "AHEAD OF CAR 2 AT TIME 0"
+Disp "(0 IF IT JUST PASSES)."
+Pause 
+Return
+Lbl E3
+ClrHome
+Disp "TD CANNOT BE NEGATIVE."
+Disp "TD IS HOW LONG CAR 2 WAITS"
+Disp "AFTER TIME 0 BEFORE IT"
+Disp "STARTS (0 IF NO DELAY)."
+Pause 
+Return
+Lbl E4
+ClrHome
+Disp "THAT NUMBER IS TOO LARGE."
+Disp "KEEP EVERY NUMBER AT OR"
+Disp "BELOW 1E9 (1 BILLION)."
+Pause 
+Return
+Lbl E5
+ClrHome
+Disp "A NUMBER IS TOO SMALL."
+Disp "USE 0 OR AT LEAST 1E-6 FOR"
+Disp "V1, D0 AND TD, AND AT"
+Disp "LEAST 1E-6 FOR A."
+Pause 
+Return
+Lbl E6
+ClrHome
+Disp "CAR 1 IS PARKED (V1 IS 0)"
+Disp "RIGHT AT CAR 2 START (D0"
+Disp "IS 0), SO THEY ARE ALREADY"
+Disp "TOGETHER AT TIME 0- THE"
+Disp "CATCH-UP TIME IS 0 S."
+Pause 
+Return
+Lbl E7
+ClrHome
+Disp "A MUST BE MORE THAN 0."
+Disp "CAR 2 STARTS FROM REST, SO"
+Disp "WITH A OF 0 OR LESS IT"
+Disp "NEVER MOVES FORWARD AND"
+Disp "NEVER CATCHES CAR 1."
+Pause 
+Return
+Lbl E8
+ClrHome
+Disp "THESE NUMBERS GIVE A"
+Disp "RESULT (LEAD, B²-4AC, TIME"
+Disp "OR DISTANCE) BELOW 1E-9,"
+Disp "WHICH WOULD SHOW AS 0."
+Disp "USE REALISTIC VALUES."
+Pause 
