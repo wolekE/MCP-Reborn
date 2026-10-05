@@ -7,7 +7,7 @@ or tokenized from src/*.txt with the same tokenizer as build.py), so a trace run
 what the calculator would run. It models:
 
   * the 26 x 10 home screen of the TI-84 Plus CE (Disp, Output(, Input, Prompt, Pause,
-    ClrHome, scrolling) and Menu( (up to 9 options)
+    ClrHome, scrolling) and Menu( (limited to 7 options, the TI-84 Plus limit)
   * 14-significant-digit decimal arithmetic (like the calculator's BCD floats)
   * TI order of operations, implied multiplication, negation vs. subtraction
   * the calculator's runtime errors: DIVIDE BY 0, NONREAL ANS, DOMAIN, OVERFLOW, SYNTAX,
@@ -30,7 +30,7 @@ Pause screens continue automatically.
 import math
 import random
 import sys
-from decimal import Decimal, Context, ROUND_HALF_UP, ROUND_FLOOR, ROUND_DOWN, localcontext
+from decimal import Decimal, Context, InvalidOperation, ROUND_HALF_UP, ROUND_FLOOR, ROUND_DOWN, localcontext
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -493,10 +493,13 @@ class Program:
         self.labels = {}
         self.syntax_errors = []
         cur, line = [], 1
-        for tok in tokens + ["\n"]:
+        toks = tokens + ["\n"]
+        for pos, tok in enumerate(toks):
             if tok in ("\n", ":"):
                 text = "".join(cur)
-                if cur:
+                if not cur and pos < len(toks) - 1:
+                    self.stmts.append(Stmt("Nop", line, ""))
+                elif cur:
                     try:
                         st = parse_statement(cur, line, text, f"{name}:{line}")
                     except TIError as e:
@@ -590,7 +593,7 @@ class TISim:
     # ------------------------------------------------------------------ run
     def run(self, name, script=(), *, init_vars=None, init_strs=None, angle="Radian",
             disp_mode=("Float", None), max_steps=400000, random_init=True, seed=None,
-            strict=True, responder=None):
+            strict=True, responder=None, wide=False):
         """Run program `name` with scripted input. Returns a Result.
 
         responder: optional function(kind, info) used instead of `script`; kind is "menu"
@@ -599,6 +602,7 @@ class TISim:
         self.res = res = Result()
         self.script = list(script)
         self.responder = responder
+        self.wide = wide        # worst-case widths: every ZFMT result shown as 9 chars, inputs typed as 9 chars
         self.angle = angle
         self.mode = disp_mode
         self.vars = {}
@@ -629,7 +633,18 @@ class TISim:
                 if res.steps > max_steps:
                     raise StepLimit()
                 try:
-                    self.exec(st, fr, stack)
+                    try:
+                        self.exec(st, fr, stack)
+                    except (ScriptEnd, StepLimit, TIError):
+                        raise
+                    except InvalidOperation as e:
+                        raise TIError("DOMAIN", f"invalid operation {e!r}")
+                    except OverflowError:
+                        raise TIError("OVERFLOW")
+                    except ZeroDivisionError:
+                        raise TIError("DIVIDE BY 0")
+                    except Exception as e:
+                        raise TIError("SIMBUG", repr(e))
                 except TIError as e:
                     res.error = e
                     res.error_at = (fr.prog.name, st.line, st.text)
@@ -652,6 +667,8 @@ class TISim:
 
     def _return(self, stack, implicit=False):
         fr = stack.pop()
+        if self.wide and fr.prog.name == "ZFMT" and "Str9" in self.strs:
+            self.strs["Str9"] = "-8.88E-88"
         if fr.blocks and self.strict:
             st = fr.prog.stmts[min(fr.pc, len(fr.prog.stmts) - 1)]
             self.problem(f"LEAK: program {'ended' if implicit else 'returned'} inside an open "
@@ -703,8 +720,11 @@ class TISim:
             return str(raw)
         if isinstance(raw, (int, float, Decimal)):
             return norm(Decimal(str(raw)))
-        # a TI expression typed by the user, e.g. "50/1.0936" or "⁻9.8"
-        txt = str(raw).replace("-", "⁻") if str(raw).startswith("-") else str(raw)
+        # a TI expression typed by the user, e.g. "50/1.0936" or "⁻9.8" (a string starting with the
+        # subtraction sign '-' is what pressing [-] instead of [(-)] gives: ERR:SYNTAX)
+        txt = str(raw)
+        if txt.startswith("-"):
+            raise TIError("SYNTAX", "typed the subtraction key '-' instead of the negative key '(-)'")
         lex = []
         i = 0
         multi = sorted(FUNCS1 | FUNCSN | {"⁻¹", "π"}, key=len, reverse=True)
@@ -752,6 +772,9 @@ class TISim:
         k = st.kind
         if k == "BadSyntax":
             raise st.err
+        if k == "Nop":
+            fr.pc += 1
+            return
         if k == "Expr":
             v = self.eval(st.e)
             self.ans = v
@@ -808,6 +831,8 @@ class TISim:
             val = self.parse_input_value(raw, st.target)
             shown = val if isinstance(val, str) else (str(raw) if not isinstance(raw, (int, float, Decimal))
                                                        else fmt_num(val))
+            if self.wide:
+                shown = shown.ljust(9, "_")
             self._write_wrapped(prompt + shown)
             self.res.events.append(("input", prompt, shown))
             self.store(st.target, val)
@@ -982,6 +1007,8 @@ class TISim:
         elif kind == "strvar":
             if not isinstance(v, str):
                 raise TIError("DATA TYPE", f"storing a number to {target[1]}")
+            if v == "":
+                self.res.problems.append(f"EMPTY STRING stored to {target[1]} (may not work on the calculator)")
             self.strs[target[1]] = v
         elif kind == "lvar":
             if isinstance(v, Decimal):
@@ -1192,6 +1219,8 @@ class TISim:
                     raise TIError("DIVIDE BY 0")
                 return norm(CTX.divide(a, b))
             if op == "^":
+                if a == 0 and b == 0:
+                    raise TIError("DOMAIN", "0^0")
                 if a == 0 and b < 0:
                     raise TIError("DIVIDE BY 0")
                 if b == b.to_integral_value() and abs(b) <= 400:

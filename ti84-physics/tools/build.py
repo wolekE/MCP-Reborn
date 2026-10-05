@@ -186,6 +186,8 @@ def lint(name, text, per_line, all_names):
             # "Pause " legitimately ends in a space (that is the token's name)
             if not re.search(r"(Pause |Disp |Input |Prompt |Lbl |Goto |If |While |Repeat |DelVar |Fix ) *$", line):
                 warns.append(f"{at}: trailing space")
+        if line.strip() == "":
+            errs.append(f"{at}: blank line (on the calculator it is an empty statement that a false If skips)")
         if ":" in line:
             errs.append(f"{at}: ':' is not allowed (one statement per line; no colons in strings)")
         if "\t" in line:
@@ -246,6 +248,8 @@ def lint(name, text, per_line, all_names):
             errs.append(f"{at}: Stop is not allowed in a subprogram (use Return)")
         # screen widths
         lits = list(string_literals(lt))
+        if "" in lits and line != 'Disp ""':
+            errs.append(f"{at}: empty string literal (only 'Disp \"\"' for a blank row is allowed)")
         if line.startswith("Disp "):
             for s in lits:
                 if len(s) > SCREEN_W:

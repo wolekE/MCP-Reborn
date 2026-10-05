@@ -166,13 +166,32 @@ All variables are global. Do not rely on any variable's value at program start o
   Goto E1
   ```
   The simulator reports a jump/Return from inside an open block as `LEAK` (on the calculator this
-  slowly eats memory and ends in ERR:MEMORY).
+  slowly eats memory and ends in ERR:MEMORY). The single-line `If … / Goto …` form is only safe
+  when that `If` is itself at top level (not inside another open block).
 * A subprogram finishes by reaching its last line or a top-level `Return`. Never call PHYSOLVE or
   PHYSREF from a subprogram (recursion). A subprogram with its own menu loops with `Goto` to its
   menu label and leaves through `BACK` → a label whose code is `Return` (top level).
 * Compare computed values with a tolerance, not `=` (e.g. `If abs(G)<1ᴇ⁻9`). Comparing typed
   inputs with the sentinel (`If V=999`) is fine.
 * Use `round(` only with 0–9 decimal places.
+
+### 7b. Real-calculator safety rules (from the simulator audit)
+
+* **No empty strings.** Never store `""` or build a string by appending to an empty one (some OS
+  versions reject it). Start every string from real text (`"T = "+Str9→Str1`). The only allowed
+  empty literal is `Disp ""` for a blank row. Linter + simulator (`EMPTY STRING`) enforce this.
+* **No blank lines** in a program (a blank line is an empty statement; a false single-line `If`
+  would skip it instead of the next real line). The linter rejects them.
+* **Negative inputs:** the student must type negatives with the `(-)` key; the subtraction key
+  gives ERR:SYNTAX and kills the program. Every input screen where a negative value is possible
+  shows a line such as `NEGATIVE = (-) KEY`. In tests, type negatives as numbers (`-9.8`) or as
+  strings starting with `⁻`; a string starting with ASCII `-` simulates the wrong key (ERR:SYNTAX).
+* **Width budget:** a ZFMT value can be up to 9 characters (`-1.23E-10`). Any line holding a value
+  should fit 26 characters with a 9-character value; otherwise build it in Str0 and use ZLINE.
+  `harness.run(..., wide=True)` replaces every ZFMT result by `-8.88E-88` to check this.
+* Handle the zero vector before `R►Pθ(` (and any angle of a zero-length vector): show a message
+  or define the angle explicitly.
+* The calculator stays in Degree mode after the programs end (expected).
 
 ## 8. Testing (required before you report done)
 
