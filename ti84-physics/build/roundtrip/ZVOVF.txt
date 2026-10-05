@@ -1,0 +1,964 @@
+Degree
+1→Q
+If K=2
+2→Q
+ClrHome
+If Q=1
+Then
+Disp "VOVFSTA SOLVER"
+Disp "KNOW 3 OF V0,VF,S,T,A."
+Else
+Disp "FREE FALL (VOVFSTA)"
+Disp "A IS -9.8 M/S² (GRAVITY)."
+Disp "KNOW 2 OF V0,VF,S,T."
+End
+Disp "IT FINDS THE OTHER 2."
+Disp "ENTER 999 IF UNKNOWN."
+If Q=1
+Then
+Disp "UP/FORWARD IS +"
+Disp "DOWN/BACKWARD IS -"
+Disp "FROM REST MEANS V0 IS 0."
+Disp "STOPS/AT TOP MEANS VF IS 0"
+Disp "UNITS M/S, M, S, M/S²"
+Else
+Disp "UP IS +, DOWN IS -"
+Disp "DROPPED MEANS V0 IS 0."
+Disp "AT THE TOP, VF IS 0."
+Disp "S IS -45 IF IT FALLS 45 M."
+Disp "UNITS M/S, M, S"
+End
+Pause 
+ClrHome
+Disp "999 MEANS UNKNOWN"
+Disp "NEGATIVE = (-) KEY"
+If Q=2
+Disp "A IS -9.8 M/S² (AUTO)"
+Input "V0 (M/S)=",V
+Input "VF (M/S)=",F
+Input "S (M)=",S
+Input "T (S)=",D
+If Q=1
+Input "A (M/S²)=",A
+If Q=2
+⁻9.8→A
+(V=999)+(F=999)+(S=999)+(D=999)+(A=999)→J
+If J≠2
+Goto E1
+0→E
+If abs(V)>1ᴇ9 or (V≠0 and abs(V)<1ᴇ⁻9)
+1→E
+If abs(F)>1ᴇ9 or (F≠0 and abs(F)<1ᴇ⁻9)
+1→E
+If abs(S)>1ᴇ9 or (S≠0 and abs(S)<1ᴇ⁻9)
+1→E
+If abs(D)>1ᴇ9 or (D≠0 and abs(D)<1ᴇ⁻9)
+1→E
+If abs(A)>1ᴇ9 or (A≠0 and abs(A)<1ᴇ⁻9)
+1→E
+If E=1
+Goto E2
+If D≠999 and D≤0
+Goto E3
+If F=999 and S=999
+Then
+1→C
+"VF"→Str1
+"VF=V0+AT"→Str2
+"S"→Str3
+"S=V0T+(1/2)AT²"→Str4
+End
+If F=999 and D=999
+Then
+2→C
+"T"→Str1
+"S=V0T+(1/2)AT²"→Str2
+"VF"→Str3
+"VF=V0+AT"→Str4
+End
+If F=999 and A=999
+Then
+3→C
+"VF"→Str1
+"S=(1/2)(V0+VF)T"→Str2
+"A"→Str3
+"VF=V0+AT"→Str4
+End
+If V=999 and S=999
+Then
+4→C
+"V0"→Str1
+"VF=V0+AT"→Str2
+"S"→Str3
+"S=VFT-(1/2)AT²"→Str4
+End
+If V=999 and D=999
+Then
+5→C
+"T"→Str1
+"S=VFT-(1/2)AT²"→Str2
+"V0"→Str3
+"VF=V0+AT"→Str4
+End
+If V=999 and A=999
+Then
+6→C
+"V0"→Str1
+"S=(1/2)(V0+VF)T"→Str2
+"A"→Str3
+"VF=V0+AT"→Str4
+End
+If S=999 and D=999
+Then
+7→C
+"S"→Str1
+"VF²=V0²+2AS"→Str2
+"T"→Str3
+"VF=V0+AT"→Str4
+End
+If S=999 and A=999
+Then
+8→C
+"S"→Str1
+"S=(1/2)(V0+VF)T"→Str2
+"A"→Str3
+"VF=V0+AT"→Str4
+End
+If D=999 and A=999
+Then
+9→C
+"T"→Str1
+"S=(1/2)(V0+VF)T"→Str2
+"A"→Str3
+"VF²=V0²+2AS"→Str4
+End
+If V=999 and F=999
+Then
+10→C
+"V0"→Str1
+"S=V0T+(1/2)AT²"→Str2
+"VF"→Str3
+"S=VFT-(1/2)AT²"→Str4
+End
+ClrHome
+Disp "GIVEN"
+If V≠999
+Then
+V→Z
+prgmZFMT
+Disp "V0 = "+Str9+" M/S"
+End
+If F≠999
+Then
+F→Z
+prgmZFMT
+Disp "VF = "+Str9+" M/S"
+End
+If S≠999
+Then
+S→Z
+prgmZFMT
+Disp "S = "+Str9+" M"
+End
+If D≠999
+Then
+D→Z
+prgmZFMT
+Disp "T = "+Str9+" S"
+End
+If A≠999
+Then
+A→Z
+prgmZFMT
+"A = "+Str9+" M/S²"→Str0
+If Q=2
+Str0+" (AUTO)"→Str0
+Disp Str0
+End
+Disp "UNKNOWNS ARE "+Str1+" AND "+Str3
+Disp "1) "+Str1+" FROM "+Str2
+Disp "   (IT HAS NO "+Str3+")"
+Disp "2) "+Str3+" FROM "+Str4
+If C=2 or C=3 or C=5 or C=6
+Disp "   (NOW "+Str1+" IS KNOWN)"
+If C≠2 and C≠3 and C≠5 and C≠6
+Disp "   (IT HAS NO "+Str1+")"
+Pause 
+If C=7 and A=0 and F=V
+Goto E7
+If C=7 and A=0
+Goto E8
+If C=7 and F=V
+Goto E9
+If C=7 and (F-V)A<0
+Goto EA
+If C=9 and abs(V+F)≤1ᴇ⁻12(abs(V)+abs(F)) and S=0
+Goto EB
+If C=9 and abs(V+F)≤1ᴇ⁻12(abs(V)+abs(F))
+Goto EC
+If C=9 and S=0
+Goto ED
+If C=9 and S(V+F)<0
+Goto EE
+If C=2 and A=0 and V=0
+Goto EF
+If C=5 and A=0 and F=0
+Goto EF
+1→E
+If C=2 or C=5
+Goto Q1
+ClrHome
+Disp "STEP 1 - FIND "+Str1
+Disp "USE "+Str2
+Disp "(IT HAS NO "+Str3+")"
+If C=1
+Goto 11
+If C=3
+Goto 13
+If C=4
+Goto 14
+If C=6
+Goto 16
+If C=7
+Goto 17
+If C=8
+Goto 18
+If C=9
+Goto 19
+Goto 10
+Lbl 11
+V+AD→F
+V→Z
+prgmZFMT
+"VF=("+Str9+")+("→Str0
+A→Z
+prgmZFMT
+Str0+Str9+")("→Str0
+D→Z
+prgmZFMT
+Str0+Str9+")"→Str0
+prgmZLINE
+F→Z
+prgmZFMT
+Disp "VF = "+Str9+" M/S"
+Pause 
+Goto S2
+Lbl 13
+Disp "SO VF=2S/T-V0"
+2S/D-V→F
+S→Z
+prgmZFMT
+"VF=2("+Str9+")/("→Str0
+D→Z
+prgmZFMT
+Str0+Str9+")-("→Str0
+V→Z
+prgmZFMT
+Str0+Str9+")"→Str0
+prgmZLINE
+F→Z
+prgmZFMT
+Disp "VF = "+Str9+" M/S"
+Pause 
+Goto S2
+Lbl 14
+Disp "SO V0=VF-AT"
+F-AD→V
+F→Z
+prgmZFMT
+"V0=("+Str9+")-("→Str0
+A→Z
+prgmZFMT
+Str0+Str9+")("→Str0
+D→Z
+prgmZFMT
+Str0+Str9+")"→Str0
+prgmZLINE
+V→Z
+prgmZFMT
+Disp "V0 = "+Str9+" M/S"
+Pause 
+Goto S2
+Lbl 16
+Disp "SO V0=2S/T-VF"
+2S/D-F→V
+S→Z
+prgmZFMT
+"V0=2("+Str9+")/("→Str0
+D→Z
+prgmZFMT
+Str0+Str9+")-("→Str0
+F→Z
+prgmZFMT
+Str0+Str9+")"→Str0
+prgmZLINE
+V→Z
+prgmZFMT
+Disp "V0 = "+Str9+" M/S"
+Pause 
+Goto S2
+Lbl 17
+Disp "SO S=(VF²-V0²)/(2A)"
+(F²-V²)/(2A)→S
+F→Z
+prgmZFMT
+"S=(("+Str9+")²-("→Str0
+V→Z
+prgmZFMT
+Str0+Str9+")²)"→Str0
+prgmZLINE
+A→Z
+prgmZFMT
+"  /(2("+Str9+"))"→Str0
+prgmZLINE
+S→Z
+prgmZFMT
+Disp "S = "+Str9+" M"
+Pause 
+Goto S2
+Lbl 18
+(V+F)D/2→S
+V→Z
+prgmZFMT
+"S=(1/2)(("+Str9+")+("→Str0
+F→Z
+prgmZFMT
+Str0+Str9+"))"→Str0
+prgmZLINE
+D→Z
+prgmZFMT
+"  *("+Str9+")"→Str0
+prgmZLINE
+S→Z
+prgmZFMT
+Disp "S = "+Str9+" M"
+Pause 
+Goto S2
+Lbl 19
+Disp "SO T=2S/(V0+VF)"
+2S/(V+F)→D
+S→Z
+prgmZFMT
+"T=2("+Str9+")"→Str0
+prgmZLINE
+V→Z
+prgmZFMT
+"  /(("+Str9+")+("→Str0
+F→Z
+prgmZFMT
+Str0+Str9+"))"→Str0
+prgmZLINE
+D→Z
+prgmZFMT
+Disp "T = "+Str9+" S"
+Pause 
+Goto S2
+Lbl 10
+Disp "SO V0=(S-(1/2)AT²)/T"
+(S-AD²/2)/D→V
+S→Z
+prgmZFMT
+"V0=(("+Str9+")"→Str0
+prgmZLINE
+A→Z
+prgmZFMT
+"  -(1/2)("+Str9+")("→Str0
+D→Z
+prgmZFMT
+Str0+Str9+")²)"→Str0
+prgmZLINE
+"  /("+Str9+")"→Str0
+prgmZLINE
+V→Z
+prgmZFMT
+Disp "V0 = "+Str9+" M/S"
+Pause 
+Lbl S2
+ClrHome
+Disp "STEP 2 - FIND "+Str3
+Disp "USE "+Str4
+If C=3 or C=6
+Disp "(NOW "+Str1+" IS KNOWN)"
+If C≠3 and C≠6
+Disp "(IT HAS NO "+Str1+")"
+If C=1
+Goto 21
+If C=4
+Goto 24
+If C=7
+Goto 27
+If C=9
+Goto 29
+If C=10
+Goto 20
+Lbl 23
+Disp "SO A=(VF-V0)/T"
+(F-V)/D→A
+F→Z
+prgmZFMT
+"A=(("+Str9+")-("→Str0
+V→Z
+prgmZFMT
+Str0+Str9+"))"→Str0
+prgmZLINE
+D→Z
+prgmZFMT
+"  /("+Str9+")"→Str0
+prgmZLINE
+A→Z
+prgmZFMT
+Disp "A = "+Str9+" M/S²"
+Pause 
+Goto SM
+Lbl 21
+VD+AD²/2→S
+V→Z
+prgmZFMT
+"S=("+Str9+")("→Str0
+D→Z
+prgmZFMT
+Str0+Str9+")"→Str0
+prgmZLINE
+A→Z
+prgmZFMT
+"  +(1/2)("+Str9+")("→Str0
+D→Z
+prgmZFMT
+Str0+Str9+")²"→Str0
+prgmZLINE
+S→Z
+prgmZFMT
+Disp "S = "+Str9+" M"
+Pause 
+Goto SM
+Lbl 24
+FD-AD²/2→S
+F→Z
+prgmZFMT
+"S=("+Str9+")("→Str0
+D→Z
+prgmZFMT
+Str0+Str9+")"→Str0
+prgmZLINE
+A→Z
+prgmZFMT
+"  -(1/2)("+Str9+")("→Str0
+D→Z
+prgmZFMT
+Str0+Str9+")²"→Str0
+prgmZLINE
+S→Z
+prgmZFMT
+Disp "S = "+Str9+" M"
+Pause 
+Goto SM
+Lbl 27
+Disp "SO T=(VF-V0)/A"
+(F-V)/A→D
+F→Z
+prgmZFMT
+"T=(("+Str9+")-("→Str0
+V→Z
+prgmZFMT
+Str0+Str9+"))"→Str0
+prgmZLINE
+A→Z
+prgmZFMT
+"  /("+Str9+")"→Str0
+prgmZLINE
+D→Z
+prgmZFMT
+Disp "T = "+Str9+" S"
+Pause 
+Goto SM
+Lbl 29
+Disp "SO A=(VF²-V0²)/(2S)"
+(F²-V²)/(2S)→A
+F→Z
+prgmZFMT
+"A=(("+Str9+")²-("→Str0
+V→Z
+prgmZFMT
+Str0+Str9+")²)"→Str0
+prgmZLINE
+S→Z
+prgmZFMT
+"  /(2("+Str9+"))"→Str0
+prgmZLINE
+A→Z
+prgmZFMT
+Disp "A = "+Str9+" M/S²"
+Pause 
+Goto SM
+Lbl 20
+Disp "SO VF=(S+(1/2)AT²)/T"
+(S+AD²/2)/D→F
+S→Z
+prgmZFMT
+"VF=(("+Str9+")"→Str0
+prgmZLINE
+A→Z
+prgmZFMT
+"  +(1/2)("+Str9+")("→Str0
+D→Z
+prgmZFMT
+Str0+Str9+")²)"→Str0
+prgmZLINE
+"  /("+Str9+")"→Str0
+prgmZLINE
+F→Z
+prgmZFMT
+Disp "VF = "+Str9+" M/S"
+Pause 
+Goto SM
+Lbl Q1
+ClrHome
+Disp "STEP 1 - FIND T"
+Disp "USE "+Str2
+Disp "(IT HAS NO "+Str3+")"
+S→Z
+prgmZFMT
+"("+Str9+")=("→Str0
+If C=2
+Then
+V→Z
+prgmZFMT
+Str0+Str9+")T"→Str0
+prgmZLINE
+"  +(1/2)("→Str0
+Else
+F→Z
+prgmZFMT
+Str0+Str9+")T"→Str0
+prgmZLINE
+"  -(1/2)("→Str0
+End
+A→Z
+prgmZFMT
+Str0+Str9+")T²"→Str0
+prgmZLINE
+If A≠0
+Then
+Disp "T IS SQUARED, SO WRITE"
+If C=2
+Disp "(1/2)AT²+V0T-S=0 AND USE"
+If C=5
+Disp "-(1/2)AT²+VFT-S=0 AND USE"
+Disp "THE QUADRATIC FORMULA WITH"
+If C=2
+Disp "A,B,C AS (1/2)A, V0, -S"
+If C=5
+Disp "A,B,C AS -(1/2)A, VF, -S"
+Else
+Disp "A IS 0, SO NO T² TERM."
+Disp "SOLVE THE LINEAR EQUATION."
+End
+Pause 
+A/2→L
+V→M
+If C=5
+Then
+⁻A/2→L
+F→M
+End
+⁻S→N
+prgmZQUAD
+If J=2 and abs(H)<abs(I)
+N/(LI)→H
+If J=2 and abs(I)<abs(H)
+N/(LH)→I
+0→E
+If J=1 and H>0
+Then
+1→E
+H→D
+Disp "T>0, SO IT IS PHYSICAL."
+End
+If J=2 and H≤0 and I>0
+Then
+1→E
+I→D
+If S≠0
+Disp "T1<0 IS BEFORE THE START,"
+If S=0
+Disp "T1 IS 0 (THE START),"
+I→Z
+prgmZFMT
+Disp "SO T = "+Str9+" S"
+End
+If J=2 and H>0 and G=0
+Then
+1→E
+H→D
+Disp "ONE ROOT (B²-4AC IS 0)."
+If C=2
+Disp "IT JUST REACHES S, VF IS 0"
+If C=5
+Disp "IT STARTED AT REST."
+H→Z
+prgmZFMT
+Disp "SO T = "+Str9+" S"
+End
+If J=2 and H>0 and G≠0
+Then
+2→E
+H→D
+I→P
+Disp "T1 AND T2 ARE BOTH > 0,"
+If C=2
+Then
+Disp "SO BOTH WORK. IT PASSES S"
+Disp "TWICE (EX. UP, THEN DOWN)."
+Else
+Disp "SO BOTH WORK. THERE ARE"
+Disp "2 POSSIBLE STARTS (V0)."
+End
+End
+If E=0
+Disp "NO PHYSICAL T. SEE NEXT."
+Pause 
+If J=0
+Goto E5
+If E=0
+Goto E6
+ClrHome
+Disp "STEP 2 - FIND "+Str3
+Disp "USE VF=V0+AT"
+Disp "(NOW T IS KNOWN)"
+If C=5
+Disp "SO V0=VF-AT"
+For(L,1,E)
+D→N
+If L=2
+P→N
+If C=2
+Then
+V+AN→M
+V→Z
+prgmZFMT
+"VF=("+Str9+")+("→Str0
+Else
+F-AN→M
+F→Z
+prgmZFMT
+"V0=("+Str9+")-("→Str0
+End
+A→Z
+prgmZFMT
+Str0+Str9+")("→Str0
+N→Z
+prgmZFMT
+Str0+Str9+")"→Str0
+prgmZLINE
+M→Z
+prgmZFMT
+Str3+" = "→Str0
+If E=2
+Str3+"(T"+sub("12",L,1)+") = "→Str0
+Disp Str0+Str9+" M/S"
+If L=2
+M→B
+If L=1 and C=2
+M→F
+If L=1 and C=5
+M→V
+End
+Pause 
+Lbl SM
+ClrHome
+If E=2
+Goto SN
+If Q=1
+Disp "SUMMARY"
+If Q=2
+Disp "SUMMARY (FREE FALL)"
+V→Z
+prgmZFMT
+"V0 = "+Str9+" M/S"→Str0
+If Q=2 and V≥1ᴇ⁻9
+Str0+" (UP)"→Str0
+If Q=2 and V≤⁻1ᴇ⁻9
+Str0+" (DOWN)"→Str0
+Disp Str0
+F→Z
+prgmZFMT
+"VF = "+Str9+" M/S"→Str0
+If Q=2 and F≥1ᴇ⁻9
+Str0+" (UP)"→Str0
+If Q=2 and F≤⁻1ᴇ⁻9
+Str0+" (DOWN)"→Str0
+Disp Str0
+S→Z
+prgmZFMT
+"S = "+Str9+" M"→Str0
+If Q=2 and S≥1ᴇ⁻9
+Str0+" (UP)"→Str0
+If Q=2 and S≤⁻1ᴇ⁻9
+Str0+" (DOWN)"→Str0
+Disp Str0
+D→Z
+prgmZFMT
+Disp "T = "+Str9+" S"
+A→Z
+prgmZFMT
+Disp "A = "+Str9+" M/S²"
+Disp Str1+" FROM "+Str2
+Disp Str3+" FROM "+Str4
+Pause 
+Return
+Lbl SN
+Disp "SUMMARY (2 ANSWERS)"
+If C=2
+Then
+V→M
+V→Z
+prgmZFMT
+"V0 = "+Str9+" M/S"→Str0
+Else
+F→M
+F→Z
+prgmZFMT
+"VF = "+Str9+" M/S"→Str0
+End
+If Q=2 and M≥1ᴇ⁻9
+Str0+" (UP)"→Str0
+If Q=2 and M≤⁻1ᴇ⁻9
+Str0+" (DOWN)"→Str0
+Disp Str0
+S→Z
+prgmZFMT
+"S = "+Str9+" M"→Str0
+If Q=2 and S≥1ᴇ⁻9
+Str0+" (UP)"→Str0
+If Q=2 and S≤⁻1ᴇ⁻9
+Str0+" (DOWN)"→Str0
+Disp Str0
+A→Z
+prgmZFMT
+Disp "A = "+Str9+" M/S²"
+For(N,1,2)
+D→M
+If N=2
+P→M
+M→Z
+prgmZFMT
+Disp "T"+sub("12",N,1)+" = "+Str9+" S"
+F→M
+If C=5
+V→M
+If N=2
+B→M
+M→Z
+prgmZFMT
+Str3+"(T"+sub("12",N,1)+") = "+Str9+" M/S"→Str0
+If Q=2 and M≥1ᴇ⁻9 and length(Str0)≤21
+Str0+" (UP)"→Str0
+If Q=2 and M≤⁻1ᴇ⁻9 and length(Str0)≤19
+Str0+" (DOWN)"→Str0
+Disp Str0
+End
+Disp Str1+" FROM "+Str2
+Disp Str3+" FROM "+Str4
+Pause 
+Return
+Lbl E1
+ClrHome
+Disp "WRONG NUMBER OF UNKNOWNS"
+Disp "YOU ENTERED 999 (UNKNOWN)"
+"FOR "+sub("012345",J+1,1)+" OF THE "→Str0
+If Q=1
+Disp Str0+"5 VALUES."
+If Q=2
+Disp Str0+"4 VALUES."
+If Q=1
+Then
+Disp "ENTER EXACTLY 3 KNOWNS"
+Else
+Disp "A IS -9.8 (AUTO), SO ENTER"
+Disp "EXACTLY 2 OF V0,VF,S,T"
+End
+Disp "AND 999 FOR THE OTHER 2."
+Pause 
+Return
+Lbl E2
+ClrHome
+Disp "NUMBER OUT OF RANGE"
+Disp "EACH KNOWN MUST BE 0, OR"
+Disp "FROM 1E-9 TO 1E9 IN SIZE"
+Disp "(+ OR -)."
+Disp "999 MEANS UNKNOWN."
+Pause 
+Return
+Lbl E3
+ClrHome
+Disp "CHECK T"
+Disp "T MUST BE MORE THAN 0."
+Disp "T IS THE TIME FROM THE"
+Disp "START TO THE END, SO IT"
+Disp "CANNOT BE 0 OR NEGATIVE."
+Pause 
+Return
+Lbl E5
+ClrHome
+Disp "IMPOSSIBLE"
+Disp "B²-4AC<0, SO THERE IS NO"
+Disp "REAL T (A NEGATIVE NUMBER"
+Disp "UNDER THE √)."
+If C=2
+Then
+Disp "IT NEVER GETS TO THAT S."
+⁻V²/(2A)→Z
+prgmZFMT
+Disp "FARTHEST S IS "+Str9+" M"
+If ⁻G<0.01V²
+Then
+Disp "IF S WAS ROUNDED, ENTER"
+Disp "VF AS 0 AND 999 FOR S."
+Else
+Disp "(EX. A BALL THROWN UP AT"
+Disp "10 M/S NEVER RISES 10 M.)"
+End
+Else
+Disp "NO START VELOCITY CAN END"
+Disp "AT THIS VF AFTER THIS S."
+Disp "(EX. A BALL CANNOT BE AT"
+Disp "ITS TOP BELOW ITS START.)"
+End
+Disp "CHECK S AND THE SIGNS."
+Disp "(DOWN/BACKWARD IS -.)"
+Pause 
+Return
+Lbl E6
+ClrHome
+Disp "NO PHYSICAL SOLUTION"
+If S=0
+Then
+If C=5 and A≠0
+Then
+Disp "TO END BACK AT THE START,"
+Disp "VF AND A MUST HAVE THE"
+Disp "SAME SIGN. (A BALL CAUGHT"
+Disp "AT THE SAME HEIGHT IS"
+Disp "MOVING DOWN, SO VF<0.)"
+Else
+Disp "S IS 0 ONLY AT THE START"
+Disp "(T IS 0). IT NEVER COMES"
+Disp "BACK TO ITS START."
+End
+Else
+Disp "NO ROOT IS AFTER THE START"
+Disp "(T>0). IT WAS AT S ONLY"
+Disp "BEFORE THE START, SO IT"
+Disp "NEVER GETS THERE."
+End
+Disp "CHECK S AND THE SIGNS."
+Pause 
+Return
+Lbl E7
+ClrHome
+Disp "NOT ENOUGH INFORMATION"
+Disp "A IS 0 AND VF IS THE SAME"
+Disp "AS V0 (STEADY VELOCITY)."
+Disp "S IS V0 TIMES T, BUT BOTH"
+Disp "ARE UNKNOWN, SO THEY"
+Disp "CANNOT BE FOUND."
+Disp "USE S OR T AS A KNOWN"
+Disp "INSTEAD OF VF."
+Pause 
+Return
+Lbl E8
+ClrHome
+Disp "IMPOSSIBLE"
+Disp "A IS 0, SO THE VELOCITY"
+Disp "CANNOT CHANGE, BUT VF IS"
+Disp "NOT THE SAME AS V0."
+Disp "CHECK A, V0 AND VF."
+Pause 
+Return
+Lbl E9
+ClrHome
+Disp "NO MOTION TO SOLVE"
+Disp "VF IS THE SAME AS V0 AND"
+Disp "A IS NOT 0, SO T IS 0 AND"
+Disp "S IS 0 (STILL AT THE"
+Disp "START). CHECK V0 AND VF."
+Pause 
+Return
+Lbl EA
+ClrHome
+Disp "NO PHYSICAL SOLUTION"
+Disp "THE SIGNS DO NOT FIT."
+Disp "T IS (VF-V0)/A, WHICH IS"
+Disp "NEGATIVE HERE. VF-V0 AND A"
+Disp "MUST HAVE THE SAME SIGN."
+If Q=1
+Disp "(UP/FORWARD IS +.)"
+If Q=2
+Then
+Disp "A IS -9.8, SO VF MUST BE"
+Disp "LESS THAN V0."
+Disp "(UP IS +, FALLING IS -.)"
+End
+Disp "CHECK THE SIGNS."
+Pause 
+Return
+Lbl EB
+ClrHome
+Disp "NOT ENOUGH INFORMATION"
+Disp "V0+VF IS 0 AND S IS 0."
+Disp "MANY T AND A FIT THIS"
+Disp "(EX. THROWN UP, CAUGHT AT"
+Disp "THE SAME HEIGHT)."
+Disp "USE T OR A AS A KNOWN."
+Pause 
+Return
+Lbl EC
+ClrHome
+Disp "IMPOSSIBLE"
+Disp "S IS (1/2)(V0+VF)T, AND"
+Disp "V0+VF IS 0, SO S IS 0 FOR"
+Disp "ANY T. BUT S IS NOT 0."
+Disp "CHECK V0, VF AND S."
+Pause 
+Return
+Lbl ED
+ClrHome
+Disp "NO MOTION TO SOLVE"
+Disp "S IS 0 BUT V0+VF IS NOT,"
+Disp "SO T IS 2S/(V0+VF), WHICH"
+Disp "IS 0 (THE START). THEN A"
+Disp "CANNOT BE FOUND."
+Disp "CHECK V0, VF AND S."
+Pause 
+Return
+Lbl EE
+ClrHome
+Disp "NO PHYSICAL SOLUTION"
+Disp "T IS 2S/(V0+VF), WHICH IS"
+Disp "NEGATIVE HERE. S AND V0+VF"
+Disp "MUST HAVE THE SAME SIGN."
+Disp "(UP/FORWARD IS +.)"
+Disp "CHECK THE SIGNS."
+Pause 
+Return
+Lbl EF
+ClrHome
+If S=0
+Disp "NOT ENOUGH INFORMATION"
+If S≠0
+Disp "IMPOSSIBLE"
+If C=2
+Disp "A IS 0 AND V0 IS 0, SO"
+If C=5
+Disp "A IS 0 AND VF IS 0, SO"
+Disp "IT NEVER MOVES."
+If S=0
+Then
+Disp "S IS 0 FOR ANY T, SO T"
+Disp "CANNOT BE FOUND."
+Else
+Disp "IT CAN NEVER GET TO S."
+End
+Disp "CHECK YOUR VALUES."
+Pause 
+Return

@@ -1,0 +1,439 @@
+Degree
+Lbl M
+Menu("FREE FALL (A=-9.8)","DROPPED (HEIGHT H)",D1,"THROWN UP (SAME LEVEL)",U1,"THROWN DOWN (HEIGHT H)",N1,"THROWN UP (HEIGHT H)",H1,"VOVFSTA (A=-9.8)",V5,"BACK",Q)
+Lbl D1
+ClrHome
+Disp "DROPPED FROM HEIGHT H"
+Disp "STARTS AT REST (V0 IS 0)."
+Disp "UP IS +, SO A IS -9.8 M/S²"
+Disp "ENTER H, THE HEIGHT ABOVE"
+Disp "THE GROUND, AS A POSITIVE"
+Disp "NUMBER."
+Input "HEIGHT H (M)=",Q
+If Q<0
+Goto E1
+If Q>1ᴇ9
+Goto E9
+If Q=0
+Goto E2
+Lbl D2
+1→P
+0→V
+⁻9.8→A
+⁻Q→S
+√(2S/A)→D
+ClrHome
+Disp "STEP 1  TIME TO GROUND"
+Disp "IT ENDS H BELOW THE START,"
+S→Z
+prgmZFMT
+Str9→Str1
+Disp "S = "+Str1+" M"
+Disp "VF NOT KNOWN, SO USE"
+Disp "S=V0T+(1/2)AT² (V0 IS 0)"
+Disp Str1+"=0+(1/2)(-9.8)T²"
+Disp "T=√(2S/A)"
+"T=√(2("+Str1+")/(-9.8))"→Str0
+prgmZLINE
+D→Z
+prgmZFMT
+Disp "T = "+Str9+" S"
+Pause 
+Goto F1
+Lbl U1
+ClrHome
+Disp "THROWN UP, LANDS BACK AT"
+Disp "THE SAME LEVEL IT LEFT."
+Disp "UP IS +, SO A IS -9.8 M/S²"
+Disp "ENTER V0 (THE SPEED UP)"
+Disp "AS A POSITIVE NUMBER."
+Input "V0 UP (M/S)=",V
+Lbl U2
+If V<0
+Goto E4
+If V>1ᴇ9
+Goto E9
+If V=0
+Goto E5
+2→P
+Lbl U3
+⁻9.8→A
+⁻V/A→B
+⁻V²/(2A)→C
+ClrHome
+Disp "STEP 1  TIME TO THE TOP"
+Disp "AT THE TOP VF IS 0."
+Disp "USE VF=V0+AT (NO S)"
+V→Z
+prgmZFMT
+Str9→Str1
+Disp "0="+Str1+"+(-9.8)T"
+Disp "T=V0/9.8"
+Disp "T="+Str1+"/9.8"
+B→Z
+prgmZFMT
+Disp "T TO TOP = "+Str9+" S"
+Pause 
+ClrHome
+Disp "STEP 2  MAX HEIGHT"
+Disp "AT THE TOP VF IS 0."
+Disp "USE VF²=V0²+2AS (NO T)"
+Disp "0=("+Str1+")²+2(-9.8)S"
+Disp "S=V0²/(2(9.8))"
+Disp "S=("+Str1+")²/(2(9.8))"
+C→Z
+prgmZFMT
+If P=2
+Then
+Disp "MAX HEIGHT = "+Str9+" M"
+Disp "(ABOVE THE LAUNCH POINT)"
+Else
+Q+C→E
+Disp "ABOVE LAUNCH = "+Str9+" M"
+Disp "ABOVE GROUND IS H+S"
+E→Z
+prgmZFMT
+Disp "ABOVE GROUND = "+Str9+" M"
+End
+Pause 
+If P=4
+Goto Q1
+2B→D
+⁻V→F
+ClrHome
+Disp "STEP 3  TOTAL TIME"
+Disp "IT LANDS AT LAUNCH HEIGHT,"
+Disp "SO S IS 0. USE"
+Disp "S=V0T+(1/2)AT²"
+"0=("+Str1+")T+(1/2)(-9.8)T²"→Str0
+prgmZLINE
+Disp "T IS 0 (THE LAUNCH) OR"
+Disp "T=2V0/9.8 (2X T TO TOP)"
+Disp "T=2("+Str1+")/9.8"
+D→Z
+prgmZFMT
+Disp "T TOTAL = "+Str9+" S"
+Pause 
+ClrHome
+Disp "STEP 4  IMPACT VELOCITY"
+Disp "USE VF=V0+AT (NO S)"
+Disp "WITH T=2V0/9.8 (STEP 3)"
+Disp "VF=V0+(-9.8)(2V0/9.8)"
+Disp "VF=V0-2V0=-V0"
+Disp "VF=-("+Str1+")"
+F→Z
+prgmZFMT
+Disp "VF = "+Str9+" M/S (DOWN)"
+Disp "SAME SPEED AS THE THROW,"
+Disp "NOW DOWNWARD."
+Pause 
+ClrHome
+Disp "SUMMARY (UP, SAME LEVEL)"
+Disp "V0 = "+Str1+" M/S (UP)"
+B→Z
+prgmZFMT
+Disp "T TO TOP = "+Str9+" S"
+C→Z
+prgmZFMT
+Disp "MAX HEIGHT = "+Str9+" M"
+Disp "(ABOVE THE LAUNCH POINT)"
+D→Z
+prgmZFMT
+Disp "T TOTAL = "+Str9+" S"
+F→Z
+prgmZFMT
+Disp "VF = "+Str9+" M/S (DOWN)"
+Pause 
+Goto M
+Lbl N1
+ClrHome
+Disp "THROWN DOWN FROM HEIGHT H"
+Disp "UP IS +, SO A IS -9.8 M/S²"
+Disp "ENTER H (ABOVE GROUND) AND"
+Disp "THE THROW SPEED, BOTH AS"
+Disp "POSITIVE NUMBERS. V0 WILL"
+Disp "BE MADE NEGATIVE (DOWN)."
+Input "HEIGHT H (M)=",Q
+Input "SPEED DOWN (M/S)=",V
+If Q<0
+Goto E1
+If Q>1ᴇ9
+Goto E9
+If V<0
+Goto E3
+If V>1ᴇ9
+Goto E9
+If Q=0
+Goto E2
+If V=0
+Goto E6
+3→P
+⁻V→V
+⁻9.8→A
+ClrHome
+Disp "STEP 1  SIGN OF V0"
+Disp "UP IS +, SO A THROW DOWN"
+Disp "HAS A NEGATIVE V0."
+V→Z
+prgmZFMT
+Disp "V0 = "+Str9+" M/S"
+Disp "A = -9.8 M/S² (GRAVITY)"
+Disp "NO TIME TO TOP- IT IS"
+Disp "ALREADY MOVING DOWN, SO"
+Disp "ITS HIGHEST POINT IS THE"
+Disp "START, H ABOVE THE GROUND."
+Pause 
+Goto Q1
+Lbl H1
+ClrHome
+Disp "THROWN UP FROM HEIGHT H"
+Disp "(ROOF/CLIFF), LANDS ON THE"
+Disp "GROUND BELOW. UP IS +,"
+Disp "SO A IS -9.8 M/S²."
+Disp "ENTER H AND V0 AS"
+Disp "POSITIVE NUMBERS."
+Input "HEIGHT H (M)=",Q
+Input "V0 UP (M/S)=",V
+If Q<0
+Goto E1
+If Q>1ᴇ9
+Goto E9
+If V<0
+Goto E4
+If V>1ᴇ9
+Goto E9
+If Q=0
+Goto E7
+If V=0
+Goto E6
+4→P
+Goto U3
+Lbl Q1
+⁻9.8→A
+⁻Q→S
+ClrHome
+"STEP 2"→Str1
+If P=4
+"STEP 3"→Str1
+Disp Str1+"  TIME TO GROUND"
+Disp "IT ENDS H BELOW THE START,"
+S→Z
+prgmZFMT
+Str9→Str1
+Disp "S = "+Str1+" M"
+Disp "VF NOT KNOWN, SO USE"
+Disp "S=V0T+(1/2)AT²"
+V→Z
+prgmZFMT
+Str1+"=("+Str9+")T-4.9T²"→Str0
+prgmZLINE
+Disp "((1/2)(-9.8) IS -4.9)"
+Disp "REARRANGE TO 4.9T²-V0T+S=0"
+Pause 
+4.9→L
+⁻V→M
+S→N
+0→I
+prgmZQUAD
+If J<2 or I≤0
+Goto E8
+I→D
+Disp "T1<0 IS BEFORE THE THROW,"
+Disp "SO USE T2 (WHEN IT LANDS)."
+D→Z
+prgmZFMT
+Disp "T TOTAL = "+Str9+" S"
+Pause 
+If P=3
+Goto F1
+√(2E/9.8)→G
+ClrHome
+Disp "STEP 4  TOP TO GROUND"
+Disp "AT THE TOP V IS 0, THEN IT"
+Disp "FALLS THE WHOLE MAX HEIGHT"
+E→Z
+prgmZFMT
+Disp "ABOVE GROUND = "+Str9+" M"
+Disp "S=(1/2)AT², SO T=√(2S/A)"
+"T=√(2(-"+Str9+")/(-9.8))"→Str0
+prgmZLINE
+Disp "(USES UNROUNDED HEIGHT)"
+G→Z
+prgmZFMT
+Disp "T FROM TOP = "+Str9+" S"
+Disp "CHECK- T TO TOP PLUS THIS"
+Disp "IS ABOUT T TOTAL (ROUNDED)"
+Pause 
+Lbl F1
+V²+2AS→N
+⁻√(N)→F
+ClrHome
+"STEP 2"→Str1
+If P=3
+"STEP 3"→Str1
+If P=4
+"STEP 5"→Str1
+Disp Str1+"  IMPACT VELOCITY"
+Disp "USE VF²=V0²+2AS (NO T)"
+V→Z
+prgmZFMT
+Disp "VF²=("+Str9+")²"
+S→Z
+prgmZFMT
+Disp "   +2(-9.8)("+Str9+")"
+N→Z
+prgmZFMT
+Str9→Str1
+Disp "VF² IS "+Str1
+Disp "IT MOVES DOWN, SO VF IS"
+Disp "THE NEGATIVE ROOT."
+Disp "VF=-√("+Str1+")"
+Disp "(USES UNROUNDED VF²)"
+F→Z
+prgmZFMT
+Disp "VF = "+Str9+" M/S (DOWN)"
+Pause 
+If P=1
+Goto S1
+If P=3
+Goto S3
+ClrHome
+Disp "SUMMARY (UP FROM HEIGHT)"
+V→Z
+prgmZFMT
+Disp "V0 = "+Str9+" M/S (UP)"
+B→Z
+prgmZFMT
+Disp "T TO TOP = "+Str9+" S"
+Disp "MAX HEIGHT REACHED-"
+C→Z
+prgmZFMT
+Disp "ABOVE LAUNCH = "+Str9+" M"
+E→Z
+prgmZFMT
+Disp "ABOVE GROUND = "+Str9+" M"
+G→Z
+prgmZFMT
+Disp "T FROM TOP = "+Str9+" S"
+D→Z
+prgmZFMT
+Disp "T TOTAL = "+Str9+" S"
+F→Z
+prgmZFMT
+Disp "VF = "+Str9+" M/S (DOWN)"
+Pause 
+Goto M
+Lbl S1
+ClrHome
+Disp "SUMMARY (DROPPED)"
+Disp "V0 = 0 M/S"
+Disp "T TO TOP = 0 S"
+Disp "(IT STARTS AT THE TOP)"
+Q→Z
+prgmZFMT
+Disp "MAX HEIGHT = "+Str9+" M"
+D→Z
+prgmZFMT
+Disp "T TOTAL = "+Str9+" S"
+F→Z
+prgmZFMT
+Disp "VF = "+Str9+" M/S (DOWN)"
+Pause 
+Goto M
+Lbl S3
+ClrHome
+Disp "SUMMARY (THROWN DOWN)"
+V→Z
+prgmZFMT
+Disp "V0 = "+Str9+" M/S (DOWN)"
+Disp "T TO TOP- NONE (ALREADY"
+Disp "MOVING DOWN)"
+Q→Z
+prgmZFMT
+Disp "MAX HEIGHT = "+Str9+" M"
+Disp "(THE START IS THE TOP)"
+D→Z
+prgmZFMT
+Disp "T TOTAL = "+Str9+" S"
+F→Z
+prgmZFMT
+Disp "VF = "+Str9+" M/S (DOWN)"
+Pause 
+Goto M
+Lbl V5
+ClrHome
+2→K
+prgmZVOVF
+Goto M
+Lbl E1
+ClrHome
+Disp "H CANNOT BE NEGATIVE."
+Disp "ENTER H AS A POSITIVE"
+Disp "NUMBER- THE HEIGHT OF THE"
+Disp "START ABOVE THE GROUND."
+Disp "THE PROGRAM MAKES S"
+Disp "NEGATIVE FOR YOU."
+Pause 
+Goto M
+Lbl E2
+ClrHome
+Disp "H IS 0, SO IT STARTS ON"
+Disp "THE GROUND AND HAS NO"
+Disp "ROOM TO FALL. ENTER A"
+Disp "HEIGHT ABOVE 0."
+Pause 
+Goto M
+Lbl E3
+ClrHome
+Disp "ENTER THE SPEED AS A"
+Disp "POSITIVE NUMBER. THE"
+Disp "PROGRAM MAKES V0 NEGATIVE"
+Disp "FOR YOU (DOWN IS -)."
+Pause 
+Goto M
+Lbl E4
+ClrHome
+Disp "ENTER V0 AS A POSITIVE"
+Disp "NUMBER (THE SPEED UP)."
+Disp "FOR A THROW DOWNWARD USE"
+Disp "THROWN DOWN (OPTION 3)."
+Pause 
+Goto M
+Lbl E5
+ClrHome
+Disp "V0 IS 0, SO IT NEVER"
+Disp "LEAVES THE HAND- NOTHING"
+Disp "TO SOLVE. TO DROP FROM A"
+Disp "HEIGHT USE OPTION 1."
+Pause 
+Goto M
+Lbl E6
+ClrHome
+Disp "THE SPEED IS 0, SO IT IS"
+Disp "JUST DROPPED FROM REST."
+Disp "SOLVING IT AS DROPPED."
+Pause 
+Goto D2
+Lbl E7
+ClrHome
+Disp "H IS 0, SO IT LANDS BACK"
+Disp "AT LAUNCH LEVEL. SOLVING"
+Disp "IT AS THROWN UP (SAME"
+Disp "LEVEL)."
+Pause 
+Goto U2
+Lbl E8
+Disp "NO POSITIVE TIME FOUND."
+Disp "CHECK H AND THE SPEED."
+Pause 
+Goto M
+Lbl E9
+ClrHome
+Disp "THAT NUMBER IS TOO LARGE."
+Disp "KEEP H AND SPEEDS AT OR"
+Disp "BELOW 1E9 (1 BILLION)."
+Pause 
+Goto M
+Lbl Q
+ClrHome
+Return

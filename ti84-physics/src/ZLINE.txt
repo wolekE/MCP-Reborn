@@ -1,0 +1,6 @@
+Degree
+1→W
+While W≤length(Str0)
+Disp sub(Str0,W,min(26,length(Str0)-W+1))
+W+26→W
+End

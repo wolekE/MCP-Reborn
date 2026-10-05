@@ -1,0 +1,72 @@
+Degree
+ClrHome
+Disp "SOLVE QUADRATIC FOR T"
+L→Z
+prgmZFMT
+Str9+"T²"→Str0
+M→Z
+prgmZFMT
+If M≥0 or abs(M)<1ᴇ⁻9
+"+"+Str9→Str9
+Str0+Str9+"T"→Str0
+N→Z
+prgmZFMT
+If N≥0 or abs(N)<1ᴇ⁻9
+"+"+Str9→Str9
+Str0+Str9+"=0"→Str0
+prgmZLINE
+If L=0
+Then
+Disp "NO T² TERM, SO LINEAR"
+If M=0
+Then
+0→J
+Disp "NO SOLUTION FOR T"
+Else
+1→J
+⁻N/M→H
+H→I
+H→Z
+prgmZFMT
+Disp "T = "+Str9+" S"
+End
+Else
+M²-4LN→G
+If abs(G)<1ᴇ⁻10(M²+abs(4LN))
+0→G
+G→Z
+prgmZFMT
+Disp "T=(-B+/-√(B²-4AC))/(2A)"
+Disp "B²-4AC = "+Str9
+If G<0
+Then
+0→J
+Disp "B²-4AC<0 SO NO REAL ROOT"
+Else
+2→J
+If M≥0
+(⁻M-√(G))/2→Z
+If M<0
+(⁻M+√(G))/2→Z
+If Z=0
+Then
+0→H
+0→I
+Else
+Z/L→H
+N/Z→I
+End
+If H>I
+Then
+H→Z
+I→H
+Z→I
+End
+H→Z
+prgmZFMT
+Disp "T1 = "+Str9+" S"
+I→Z
+prgmZFMT
+Disp "T2 = "+Str9+" S"
+End
+End

@@ -1,0 +1,4 @@
+__pycache__/
+*.pyc
+# the repo root ignores build/; keep this project's reports and module builds
+!build/

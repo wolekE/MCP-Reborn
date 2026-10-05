@@ -1,0 +1,250 @@
+Degree
+ClrHome
+Disp "RIVER CROSSING"
+Disp "BOAT AIMED STRAIGHT ACROSS"
+Disp "VB IS THE BOAT SPEED IN"
+Disp "STILL WATER."
+Disp "VR IS THE RIVER SPEED."
+Disp "W IS THE RIVER WIDTH."
+Disp "ALL POSITIVE (VR CAN BE 0)"
+Input "VB (M/S)=",B
+Input "VR (M/S)=",C
+Input "W (M)=",E
+If B≤0
+Goto E1
+If C<0
+Goto E2
+If E≤0
+Goto E3
+If max(B,max(C,E))>1ᴇ9
+Goto E4
+If B<1ᴇ⁻9
+Goto E5
+B→Z
+prgmZFMT
+Str9→Str1
+C→Z
+prgmZFMT
+Str9→Str2
+E→Z
+prgmZFMT
+Str9→Str3
+E/B→D
+D→Z
+prgmZFMT
+Str9→Str4
+ClrHome
+Disp "STEP 1  CROSSING TIME"
+Disp "ACROSS AND DOWNSTREAM"
+Disp "MOTIONS ARE INDEPENDENT."
+Disp "THE BOAT IS AIMED ACROSS,"
+Disp "SO ONLY VB TAKES IT ACROSS"
+Disp "T=W/VB"
+Disp "T="+Str3+"/"+Str1
+Disp "T = "+Str4+" S"
+Pause 
+CD→S
+ClrHome
+Disp "STEP 2  DRIFT"
+Disp "MEANWHILE THE RIVER"
+Disp "CARRIES THE BOAT"
+Disp "DOWNSTREAM AT VR."
+Disp "DRIFT=VR*T"
+"DRIFT=("+Str2+")("+Str4+")"→Str0
+prgmZLINE
+S→Z
+prgmZFMT
+Disp "DRIFT = "+Str9+" M"
+Disp "(DOWNSTREAM OF THE POINT"
+Disp "STRAIGHT ACROSS)"
+Pause 
+√(B²+C²)→V
+ClrHome
+Disp "STEP 3  RESULTANT SPEED"
+Disp "VB IS ACROSS AND VR IS"
+Disp "DOWNSTREAM- THEY ARE"
+Disp "PERPENDICULAR, SO USE"
+Disp "PYTHAGORAS."
+Disp "V=√(VB²+VR²)"
+Disp "V=√("+Str1+"²+"+Str2+"²)"
+V→Z
+prgmZFMT
+Disp "V RESULT = "+Str9+" M/S"
+Disp "(SPEED SEEN FROM SHORE)"
+Pause 
+tan⁻¹(C/B)→A
+90-A→P
+ClrHome
+Disp "STEP 4  PATH ANGLE"
+Disp "TAN(ANGLE)=VR/VB"
+"ANGLE=TAN⁻1("+Str2+"/"+Str1+")"→Str0
+prgmZLINE
+A→Z
+prgmZFMT
+Disp "FROM ACROSS = "+Str9+"°"
+If C>0
+Disp "(TOWARD DOWNSTREAM). FROM"
+If C=0
+Disp "(STRAIGHT ACROSS). FROM"
+Disp "THE BANK IT IS 90-ANGLE."
+P→Z
+prgmZFMT
+Disp "FROM BANK = "+Str9+"°"
+Disp "HEADING IS STRAIGHT ACROSS"
+If C>0
+Disp "BUT THE PATH IS SLANTED."
+If C=0
+Disp "NO CURRENT- SO IS THE PATH"
+Pause 
+If C≥B
+Goto N1
+sin⁻¹(C/B)→F
+√((B-C)(B+C))→Q
+E/Q→G
+ClrHome
+Disp "STEP 5  HEADING UPSTREAM"
+Disp "TO LAND DIRECTLY ACROSS,"
+Disp "THE UPSTREAM PART OF VB"
+Disp "MUST CANCEL VR, SO"
+Disp "VB SIN(ANGLE)=VR"
+"ANGLE=SIN⁻1("+Str2+"/"+Str1+")"→Str0
+prgmZLINE
+F→Z
+prgmZFMT
+Disp "FROM ACROSS = "+Str9+"°"
+90-F→Z
+prgmZFMT
+Disp "FROM BANK = "+Str9+"°"
+If C=0
+Disp "(NO CURRENT- AIM ACROSS)"
+If C>0
+Disp "(AIM UPSTREAM)"
+Pause 
+ClrHome
+Disp "STEP 6  NEW CROSSING TIME"
+Disp "ONLY THE ACROSS PART OF"
+Disp "VB MOVES THE BOAT ACROSS-"
+Disp "V ACROSS=VB COS(ANGLE)"
+Disp "=√(VB²-VR²)"
+Disp "=√("+Str1+"²-"+Str2+"²)"
+Q→Z
+prgmZFMT
+Disp "V ACROSS = "+Str9+" M/S"
+Disp "T=W/V ACROSS"
+Disp "T="+Str3+"/"+Str9
+G→Z
+prgmZFMT
+Disp "T = "+Str9+" S"
+Pause 
+Goto S1
+Lbl N1
+ClrHome
+Disp "TO LAND DIRECTLY ACROSS"
+Disp "THE UPSTREAM PART OF VB"
+Disp "MUST CANCEL VR. BUT VR IS"
+Disp "AS FAST AS OR FASTER THAN"
+Disp "THE BOAT (VR ≥ VB), SO IT"
+Disp "IS IMPOSSIBLE. THE BOAT"
+Disp "ALWAYS DRIFTS DOWNSTREAM."
+Pause 
+Lbl S1
+ClrHome
+Disp "SUMMARY 1/2 (AIMED ACROSS)"
+Disp "T = "+Str4+" S"
+S→Z
+prgmZFMT
+Disp "DRIFT = "+Str9+" M"
+V→Z
+prgmZFMT
+Disp "V RESULT = "+Str9+" M/S"
+If C>0
+Disp "PATH ANGLE (DOWNSTREAM)-"
+If C=0
+Disp "PATH ANGLE (NO CURRENT)-"
+A→Z
+prgmZFMT
+Disp "FROM ACROSS = "+Str9+"°"
+P→Z
+prgmZFMT
+Disp "FROM BANK = "+Str9+"°"
+Disp "HEADING- STRAIGHT ACROSS,"
+If C>0
+Disp "NOT ALONG THE PATH."
+If C=0
+Disp "SAME AS THE PATH."
+Pause 
+ClrHome
+Disp "SUMMARY 2/2 (LAND ACROSS)"
+If C<B
+Then
+If C>0
+Disp "HEADING (UPSTREAM)-"
+If C=0
+Disp "HEADING (NO CURRENT)-"
+F→Z
+prgmZFMT
+Disp "FROM ACROSS = "+Str9+"°"
+90-F→Z
+prgmZFMT
+Disp "FROM BANK = "+Str9+"°"
+Disp "PATH- STRAIGHT ACROSS,"
+If C>0
+Disp "NOT ALONG THE HEADING."
+If C=0
+Disp "SAME AS THE HEADING."
+Q→Z
+prgmZFMT
+Disp "V ACROSS = "+Str9+" M/S"
+Disp "(SPEED SEEN FROM SHORE)"
+G→Z
+prgmZFMT
+Disp "T = "+Str9+" S"
+Disp "DRIFT = 0 M"
+Else
+Disp "IMPOSSIBLE- THE RIVER IS"
+Disp "AS FAST AS OR FASTER THAN"
+Disp "THE BOAT (VR ≥ VB), SO IT"
+Disp "ALWAYS DRIFTS DOWNSTREAM."
+End
+Pause 
+Return
+Lbl E1
+ClrHome
+Disp "VB MUST BE MORE THAN 0."
+Disp "ENTER THE BOAT SPEED (IN"
+Disp "STILL WATER) AS A POSITIVE"
+Disp "NUMBER. A BOAT THAT DOES"
+Disp "NOT MOVE NEVER CROSSES."
+Pause 
+Return
+Lbl E2
+ClrHome
+Disp "VR CANNOT BE NEGATIVE."
+Disp "ENTER THE RIVER SPEED AS A"
+Disp "POSITIVE NUMBER (0 FOR"
+Disp "STILL WATER). ITS"
+Disp "DIRECTION IS CALLED"
+Disp "DOWNSTREAM."
+Pause 
+Return
+Lbl E3
+ClrHome
+Disp "W MUST BE MORE THAN 0."
+Disp "ENTER THE RIVER WIDTH AS"
+Disp "A POSITIVE NUMBER (M)."
+Pause 
+Return
+Lbl E4
+ClrHome
+Disp "THAT NUMBER IS TOO LARGE."
+Disp "KEEP EVERY NUMBER AT OR"
+Disp "BELOW 1E9 (1 BILLION)."
+Pause 
+Return
+Lbl E5
+ClrHome
+Disp "VB IS TOO SMALL (BELOW"
+Disp "1E-9 M/S). THE CROSSING"
+Disp "WOULD TAKE FOREVER. USE A"
+Disp "LARGER BOAT SPEED."
+Pause 

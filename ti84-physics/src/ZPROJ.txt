@@ -1,0 +1,657 @@
+Degree
+If K=2
+Goto D0
+If K=3
+Goto E0
+Lbl C0
+Menu("HORIZONTAL LAUNCH","GIVEN H AND SPEED V",C1,"GIVEN H AND RANGE",C2,"BACK",Q0)
+Lbl C1
+ClrHome
+1→P
+Disp "HORIZONTAL LAUNCH"
+Disp "LAUNCHED LEVEL (ANGLE 0)"
+Disp "FROM HEIGHT H ABOVE THE"
+Disp "LANDING POINT. UP IS +."
+Disp "ENTER H AS A POSITIVE"
+Disp "NUMBER AND THE LAUNCH"
+Disp "SPEED V."
+Input "HEIGHT H (M)=",Q
+Input "SPEED V (M/S)=",V
+Goto C3
+Lbl C2
+ClrHome
+2→P
+Disp "HORIZONTAL LAUNCH"
+Disp "LAUNCHED LEVEL (ANGLE 0)"
+Disp "FROM HEIGHT H ABOVE THE"
+Disp "LANDING POINT. UP IS +."
+Disp "ENTER H AS A POSITIVE"
+Disp "NUMBER AND THE RANGE (HOW"
+Disp "FAR IT WENT SIDEWAYS)."
+Input "HEIGHT H (M)=",Q
+Input "RANGE (M)=",E
+Lbl C3
+If Q≤0
+Goto M1
+If Q<1ᴇ⁻6 or Q>1ᴇ6
+Goto M9
+If P=2
+Goto C4
+If V<0
+Goto M2
+If V>1ᴇ6 or (V>0 and V<1ᴇ⁻6)
+Goto M9
+Goto C5
+Lbl C4
+If E<0
+Goto M3
+If E>1ᴇ6 or (E>0 and E<1ᴇ⁻6)
+Goto M9
+Lbl C5
+⁻Q→S
+√(2Q/9.8)→D
+ClrHome
+Disp "STEP 1  TIME TO FALL"
+Disp "VERTICAL- V0Y IS 0 AND A"
+Disp "IS -9.8 M/S². IT ENDS H"
+Disp "BELOW THE START, SO"
+S→Z
+prgmZFMT
+Str9→Str1
+Disp "S = "+Str1+" M"
+Disp "USE S=V0YT+(1/2)AT²"
+Disp Str1+"=0+(1/2)(-9.8)T²"
+Disp "T=√(2H/9.8)"
+Q→Z
+prgmZFMT
+Disp "T=√(2("+Str9+")/9.8)"
+D→Z
+prgmZFMT
+Str9→Str2
+Disp "T FLIGHT = "+Str2+" S"
+Pause 
+If P=2
+Goto C6
+VD→E
+V→Z
+prgmZFMT
+Str9→Str3
+ClrHome
+Disp "STEP 2  RANGE"
+Disp "HORIZONTAL- A IS 0, SO VX"
+Disp "STAYS V THE WHOLE TIME."
+Disp "X AND Y SHARE THE SAME T."
+Disp "RANGE=VX*T"
+"RANGE=("+Str3+")("+Str2+")"→Str0
+prgmZLINE
+E→Z
+prgmZFMT
+Disp "RANGE = "+Str9+" M"
+Disp "(CALC KEEPS ALL DIGITS)"
+Pause 
+Goto C7
+Lbl C6
+E/D→V
+ClrHome
+Disp "STEP 2  LAUNCH SPEED"
+Disp "HORIZONTAL- A IS 0, SO VX"
+Disp "STAYS THE SAME THE WHOLE"
+Disp "TIME. X AND Y SHARE T."
+Disp "RANGE=VX*T, SO VX=RANGE/T"
+E→Z
+prgmZFMT
+Disp "VX="+Str9+"/"+Str2
+V→Z
+prgmZFMT
+Str9→Str3
+Disp "VX = "+Str3+" M/S"
+Disp "(CALC KEEPS ALL DIGITS)"
+Pause 
+Lbl C7
+⁻9.8D→F
+ClrHome
+Disp "STEP 3  FINAL VX AND VY"
+Disp "HORIZONTAL- VX NEVER"
+Disp "CHANGES (A IS 0), SO"
+Disp "VFX = "+Str3+" M/S"
+Disp "VERTICAL- USE VF=V0+AT"
+Disp "VFY=0+(-9.8)("+Str2+")"
+F→Z
+prgmZFMT
+Str9→Str1
+Disp "VFY = "+Str1+" M/S (DOWN)"
+Pause 
+√(V²+F²)→B
+R►Pθ(V,abs(F))→C
+ClrHome
+Disp "STEP 4  IMPACT SPEED/ANGLE"
+Disp "SPEED=√(VFX²+VFY²)"
+abs(F)→Z
+prgmZFMT
+Str9→Str4
+"SPEED=√("+Str3+"²+"+Str4+"²)"→Str0
+prgmZLINE
+B→Z
+prgmZFMT
+Disp "HIT SPEED = "+Str9+" M/S"
+Disp "ANGLE BELOW HORIZONTAL-"
+If V=0
+Goto C8
+Disp "ANGLE=TAN⁻1(|VFY|/VFX)"
+"ANGLE=TAN⁻1("+Str4+"/"+Str3+")"→Str0
+prgmZLINE
+Goto C9
+Lbl C8
+Disp "VFX IS 0, SO IT FALLS"
+Disp "STRAIGHT DOWN-"
+Lbl C9
+C→Z
+prgmZFMT
+Disp "ANGLE = "+Str9+"° BELOW"
+Pause 
+ClrHome
+Disp "SUMMARY (HORIZONTAL)"
+Q→Z
+prgmZFMT
+Disp "H = "+Str9+" M"
+Disp "T FLIGHT = "+Str2+" S"
+Disp "VX = "+Str3+" M/S"
+E→Z
+prgmZFMT
+Disp "RANGE = "+Str9+" M"
+Disp "VFX = "+Str3+" M/S"
+Disp "VFY = "+Str1+" M/S (DOWN)"
+B→Z
+prgmZFMT
+Disp "HIT SPEED = "+Str9+" M/S"
+C→Z
+prgmZFMT
+Disp "ANGLE = "+Str9+"° BELOW"
+Pause 
+Return
+Lbl D0
+ClrHome
+Disp "ANGLED LAUNCH (UP IS +)"
+Disp "ANGLE- DEGREES ABOVE THE"
+Disp "HORIZONTAL, - IF DOWNWARD."
+Disp "H- LAUNCH HEIGHT ABOVE THE"
+Disp "LANDING POINT (0 IF LEVEL,"
+Disp "- IF IT LANDS HIGHER)."
+Disp "NEGATIVE = (-) KEY"
+Input "SPEED V0 (M/S)=",V
+Input "ANGLE (DEG)=",E
+Input "HEIGHT H (M)=",Q
+If V<0
+Goto M2
+If V>1ᴇ6 or (V>0 and V<1ᴇ⁻6)
+Goto M9
+If abs(E)>90
+Goto M4
+If abs(Q)>1ᴇ6 or (Q≠0 and abs(Q)<1ᴇ⁻6)
+Goto M9
+Vcos(E)→B
+Vsin(E)→C
+If abs(B)<1ᴇ⁻12*V
+0→B
+If abs(C)<1ᴇ⁻12*V
+0→C
+If Q=0 and C≤0
+Goto M5
+If Q<0 and C≤0
+Goto M6
+ClrHome
+Disp "STEP 1  COMPONENTS OF V0"
+Disp "VX=V0COS(ANGLE)"
+V→Z
+prgmZFMT
+Str9→Str1
+E→Z
+prgmZFMT
+Str9→Str2
+"VX=("+Str1+")COS("+Str2+"°)"→Str0
+prgmZLINE
+B→Z
+prgmZFMT
+Str9→Str3
+Disp "VX = "+Str3+" M/S"
+Disp "V0Y=V0SIN(ANGLE)"
+"V0Y=("+Str1+")SIN("+Str2+"°)"→Str0
+prgmZLINE
+C→Z
+prgmZFMT
+Str9→Str4
+"V0Y = "+Str4+" M/S"→Str0
+If C>0
+Str0+" (UP)"→Str0
+If C<0
+Str0+" (DOWN)"→Str0
+Disp Str0
+Disp "(CALC KEEPS ALL DIGITS)"
+Pause 
+0→P
+0→S
+If C>0
+Then
+C/9.8→P
+C²/19.6→S
+End
+Q+S→A
+ClrHome
+Disp "STEP 2  TIME TO TOP, MAX H"
+If C>0
+Goto D2
+Disp "V0Y IS NOT UPWARD, SO IT"
+Disp "STARTS GOING DOWN (OR"
+Disp "LEVEL). ITS HIGHEST POINT"
+Disp "IS THE LAUNCH POINT-"
+Disp "T TOP = 0 S (AT LAUNCH)"
+Goto D3
+Lbl D2
+Disp "AT TOP VY IS 0- VF=V0+AT"
+Disp "0="+Str4+"+(-9.8)T"
+P→Z
+prgmZFMT
+Disp "T TOP = "+Str9+" S"
+Disp "RISE ABOVE THE LAUNCH-"
+Disp "USE VF²=V0²+2AS"
+Disp "0=("+Str4+")²+2(-9.8)S"
+Lbl D3
+S→Z
+prgmZFMT
+Str9→Str2
+Disp "RISE = "+Str2+" M"
+Q→Z
+prgmZFMT
+Disp "H+RISE="+Str9+"+"+Str2
+A→Z
+prgmZFMT
+Disp "MAX H = "+Str9+" M"
+Pause 
+ClrHome
+Disp "STEP 3  FLIGHT TIME"
+Disp "VERTICAL- IT LANDS H BELOW"
+Disp "THE LAUNCH, SO S IS -H-"
+⁻Q→Z
+prgmZFMT
+Str9→Str2
+Disp "S = "+Str2+" M"
+Disp "USE S=V0YT+(1/2)AT²"
+Disp "(1/2)A IS -4.9, SO"
+Str2+"="+Str4+"T-4.9T²"→Str0
+prgmZLINE
+Disp "4.9T²-V0YT-H=0 (QUADRATIC)"
+Disp "SOLVE IT FOR T (NEXT)."
+Pause 
+4.9→L
+⁻C→M
+⁻Q→N
+prgmZQUAD
+If J=0
+Goto D5
+I→D
+If Q>0
+Disp "T1<0 IS BEFORE THE LAUNCH,"
+If Q>0
+Disp "SO IT LANDS AT T2-"
+If Q=0
+Disp "T1 IS 0 (THE LAUNCH), SO"
+If Q=0
+Disp "IT LANDS AT T2-"
+If Q<0 and G>0
+Disp "T1 PASSES THAT LEVEL GOING"
+If Q<0 and G>0
+Disp "UP, T2 LANDS COMING DOWN-"
+If Q<0 and G=0
+Disp "ONE ROOT- IT JUST REACHES"
+If Q<0 and G=0
+Disp "THAT LEVEL AT ITS TOP-"
+D→Z
+prgmZFMT
+Str9→Str2
+Disp "T FLIGHT = "+Str2+" S"
+Pause 
+BD→L
+ClrHome
+Disp "STEP 4  RANGE (HORIZONTAL)"
+Disp "HORIZONTAL- A IS 0, SO VX"
+Disp "NEVER CHANGES (VFX IS VX)."
+Disp "VX = "+Str3+" M/S"
+Disp "RANGE=VX*T"
+"RANGE=("+Str3+")("+Str2+")"→Str0
+prgmZLINE
+L→Z
+prgmZFMT
+Disp "RANGE = "+Str9+" M"
+If Q=0
+Disp "LEVEL GROUND- T=2V0Y/9.8"
+If Q=0
+Disp "AND MAX RANGE IS AT 45°."
+Pause 
+C-9.8D→F
+If abs(F)<1ᴇ⁻10*abs(C)
+0→F
+ClrHome
+Disp "STEP 5  VFY AT IMPACT"
+Disp "VERTICAL- USE VF=V0+AT"
+"VFY="+Str4+"+(-9.8)("+Str2+")"→Str0
+prgmZLINE
+F→Z
+prgmZFMT
+Str9→Str1
+"VFY = "+Str1+" M/S"→Str0
+If F<0
+Str0+" (DOWN)"→Str0
+Disp Str0
+If F<0
+Disp "(- MEANS MOVING DOWNWARD)"
+Pause 
+√(B²+F²)→M
+If B=0 and F=0
+⁻1→N
+If B≠0 or F≠0
+R►Pθ(B,abs(F))→N
+ClrHome
+Disp "STEP 6  IMPACT SPEED/ANGLE"
+Disp "SPEED=√(VFX²+VFY²)"
+abs(F)→Z
+prgmZFMT
+Str9→Str1
+"SPEED=√("+Str3+"²+"+Str1+"²)"→Str0
+prgmZLINE
+M→Z
+prgmZFMT
+Disp "HIT SPEED = "+Str9+" M/S"
+If N<0
+Goto D6
+Disp "ANGLE BELOW HORIZONTAL-"
+If B=0
+Goto D7
+Disp "ANGLE=TAN⁻1(|VFY|/VFX)"
+"ANGLE=TAN⁻1("+Str1+"/"+Str3+")"→Str0
+prgmZLINE
+Goto D8
+Lbl D7
+Disp "VFX IS 0, SO IT IS MOVING"
+Disp "STRAIGHT DOWN-"
+Lbl D8
+N→Z
+prgmZFMT
+Disp "ANGLE = "+Str9+"° BELOW"
+Goto D9
+Lbl D6
+Disp "IT LANDS RIGHT AT THE TOP"
+Disp "WITH SPEED 0, SO THERE IS"
+Disp "NO IMPACT ANGLE."
+Lbl D9
+Pause 
+ClrHome
+Disp "SUMMARY (ANGLED LAUNCH)"
+Disp "VX = "+Str3+" M/S"
+"V0Y = "+Str4+" M/S"→Str0
+If C>0
+Str0+" (UP)"→Str0
+If C<0
+Str0+" (DOWN)"→Str0
+Disp Str0
+P→Z
+prgmZFMT
+If C≤0
+Disp "T TOP = 0 S (AT LAUNCH)"
+If C>0
+Disp "T TOP = "+Str9+" S"
+S→Z
+prgmZFMT
+If Q≠0
+Disp "RISE = "+Str9+" M"
+A→Z
+prgmZFMT
+Disp "MAX H = "+Str9+" M"
+Disp "T FLIGHT = "+Str2+" S"
+L→Z
+prgmZFMT
+Disp "RANGE = "+Str9+" M"
+M→Z
+prgmZFMT
+Disp "HIT SPEED = "+Str9+" M/S"
+N→Z
+prgmZFMT
+If N≥0
+Disp "ANGLE = "+Str9+"° BELOW"
+If N<0
+Disp "ANGLE- NONE (SPEED IS 0)"
+Pause 
+Return
+Lbl D5
+Disp "IT NEVER GETS AS HIGH AS"
+Disp "THE LANDING POINT. CHECK"
+Disp "V0, THE ANGLE AND H."
+Goto Q1
+Lbl E0
+Menu("THROW LAB (BACKWARD)","RANGE IN METERS",E1,"RANGE IN YARDS",E2,"BACK",Q0)
+Lbl E1
+ClrHome
+1→P
+Goto E3
+Lbl E2
+ClrHome
+2→P
+Lbl E3
+Disp "THROW LAB- WORK BACKWARD"
+Disp "H- LAUNCH HEIGHT ABOVE THE"
+Disp "LANDING POINT (0 IF LEVEL,"
+Disp "- IF IT LANDS HIGHER)."
+Disp "T- TIME IN THE AIR."
+Disp "RANGE- HOW FAR SIDEWAYS."
+Disp "NEGATIVE = (-) KEY"
+Input "HEIGHT H (M)=",Q
+Input "TIME T (S)=",D
+If P=1
+Input "RANGE (M)=",N
+If P=2
+Input "RANGE (YD)=",N
+If abs(Q)>1ᴇ6 or (Q≠0 and abs(Q)<1ᴇ⁻6)
+Goto M9
+If D≤0
+Goto M7
+If D>1ᴇ6 or D<1ᴇ⁻6
+Goto M9
+If N<0
+Goto M3
+If N>1ᴇ6 or (N>0 and N<1ᴇ⁻6)
+Goto M9
+N→E
+If P=2
+N/1.0936→E
+E/D→B
+(4.9D²-Q)/D→C
+√(B²+C²)→V
+0→A
+If V≠0
+R►Pθ(B,C)→A
+ClrHome
+Disp "STEP 1  VX (HORIZONTAL)"
+If P=1
+Goto E4
+Disp "YARDS TO METERS- DIVIDE"
+Disp "BY 1.0936 (1 M=1.0936 YD)"
+N→Z
+prgmZFMT
+Disp "RANGE="+Str9+"/1.0936"
+Lbl E4
+E→Z
+prgmZFMT
+Str9→Str1
+Disp "RANGE = "+Str1+" M"
+Disp "HORIZONTAL- A IS 0, SO"
+Disp "VX=RANGE/T"
+D→Z
+prgmZFMT
+Str9→Str2
+Disp "VX="+Str1+"/"+Str2
+B→Z
+prgmZFMT
+Str9→Str3
+Disp "VX = "+Str3+" M/S"
+Disp "(CALC KEEPS ALL DIGITS)"
+Pause 
+ClrHome
+Disp "STEP 2  V0Y (VERTICAL)"
+Disp "IT ENDS H BELOW THE START,"
+Disp "SO S IS -H. A IS -9.8."
+⁻Q→Z
+prgmZFMT
+Str9→Str4
+Disp "S = "+Str4+" M"
+Disp "USE S=V0YT+(1/2)AT²"
+Disp "(1/2)A IS -4.9, SO"
+Disp "V0Y=(S+4.9T²)/T"
+"=("+Str4+"+4.9("+Str2+")²)/"+Str2→Str0
+prgmZLINE
+C→Z
+prgmZFMT
+Str9→Str4
+"V0Y = "+Str4+" M/S"→Str0
+If C>0
+Str0+" (UP)"→Str0
+If C<0
+Str0+" (DOWN)"→Str0
+Disp Str0
+Pause 
+ClrHome
+Disp "STEP 3  LAUNCH SPEED/ANGLE"
+Disp "V0=√(VX²+V0Y²)"
+abs(C)→Z
+prgmZFMT
+"V0=√("+Str3+"²+"+Str9+"²)"→Str0
+prgmZLINE
+V→Z
+prgmZFMT
+Disp "V0 = "+Str9+" M/S"
+If V=0
+Goto E5
+Disp "ANGLE FROM HORIZONTAL-"
+Disp "ANGLE=TAN⁻1(V0Y/VX)"
+If B=0
+Goto E6
+"ANGLE=TAN⁻1("+Str4+"/"+Str3+")"→Str0
+prgmZLINE
+Goto E7
+Lbl E6
+Disp "VX IS 0, SO IT IS THROWN"
+Disp "STRAIGHT UP OR DOWN-"
+Lbl E7
+A→Z
+prgmZFMT
+"ANGLE = "+Str9+"°"→Str0
+If A>0
+Str0+" (ABOVE)"→Str0
+If A<0
+Str0+" (BELOW)"→Str0
+Disp Str0
+Goto E8
+Lbl E5
+Disp "V0 IS 0- IT WAS DROPPED"
+Disp "FROM REST, SO THERE IS NO"
+Disp "LAUNCH ANGLE."
+Lbl E8
+Pause 
+ClrHome
+Disp "SUMMARY (THROW LAB)"
+Q→Z
+prgmZFMT
+Disp "H = "+Str9+" M"
+Disp "T FLIGHT = "+Str2+" S"
+Disp "RANGE = "+Str1+" M"
+N→Z
+prgmZFMT
+If P=2
+Disp "(FROM "+Str9+" YD)"
+Disp "VX = "+Str3+" M/S"
+"V0Y = "+Str4+" M/S"→Str0
+If C>0
+Str0+" (UP)"→Str0
+If C<0
+Str0+" (DOWN)"→Str0
+Disp Str0
+V→Z
+prgmZFMT
+Disp "V0 = "+Str9+" M/S"
+A→Z
+prgmZFMT
+"ANGLE = "+Str9+"°"→Str0
+If A>0
+Str0+" (ABOVE)"→Str0
+If A<0
+Str0+" (BELOW)"→Str0
+If V=0
+"ANGLE- NONE (V0 IS 0)"→Str0
+Disp Str0
+Pause 
+Return
+Lbl M1
+ClrHome
+Disp "H MUST BE MORE THAN 0."
+Disp "H IS THE HEIGHT OF THE"
+Disp "LAUNCH ABOVE THE LANDING"
+Disp "POINT. WITH H AT 0 IT IS"
+Disp "ALREADY ON THE GROUND."
+Goto Q1
+Lbl M2
+ClrHome
+Disp "THE SPEED CANNOT BE"
+Disp "NEGATIVE. ENTER IT AS A"
+Disp "POSITIVE NUMBER (OR 0)."
+Disp "(SPEED HAS NO DIRECTION-"
+Disp "THE PROGRAM HANDLES THE"
+Disp "SIGNS FOR YOU.)"
+If K=2
+Disp "FOR A DOWNWARD THROW, USE"
+If K=2
+Disp "A NEGATIVE ANGLE."
+Goto Q1
+Lbl M3
+ClrHome
+Disp "THE RANGE CANNOT BE"
+Disp "NEGATIVE. ENTER HOW FAR IT"
+Disp "WENT SIDEWAYS AS A"
+Disp "POSITIVE NUMBER (OR 0)."
+Goto Q1
+Lbl M4
+ClrHome
+Disp "THE ANGLE MUST BE FROM"
+Disp "-90 TO 90 DEGREES"
+Disp "(+ IS ABOVE HORIZONTAL,"
+Disp "- IS BELOW HORIZONTAL)."
+Goto Q1
+Lbl M5
+ClrHome
+Disp "H IS 0 AND V0Y IS NOT"
+Disp "UPWARD (ANGLE ≤ 0 OR V0"
+Disp "IS 0), SO IT IS ON THE"
+Disp "GROUND RIGHT AWAY- THERE"
+Disp "IS NO FLIGHT TO SOLVE."
+Goto Q1
+Lbl M6
+ClrHome
+Disp "THE LANDING POINT IS"
+Disp "HIGHER (H<0), BUT V0Y IS"
+Disp "NOT UPWARD (ANGLE ≤ 0 OR"
+Disp "V0 IS 0), SO IT CAN NEVER"
+Disp "GET UP THERE."
+Goto Q1
+Lbl M7
+ClrHome
+Disp "THE TIME T MUST BE MORE"
+Disp "THAN 0 (HOW LONG IT WAS"
+Disp "IN THE AIR)."
+Goto Q1
+Lbl M9
+ClrHome
+Disp "THAT NUMBER IS TOO LARGE"
+Disp "OR TOO SMALL. KEEP SIZES"
+Disp "FROM 1E-6 TO 1E6 (0 IS OK"
+Disp "WHERE IT IS ALLOWED)."
+Lbl Q1
+Pause 
+Lbl Q0
+Return
