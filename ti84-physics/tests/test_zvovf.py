@@ -58,6 +58,15 @@ def check_run(res, r, context=""):
     else:
         # message screens must not contain anything that parses as NAME = VALUE
         assert screen_values(res.screens[-1]) == [], f"{context} message looks like a value line"
+    # cases 2/5: the STEP 1 explanation rows and the root explanation under ZQUAD's output
+    if r.get("step1_rows") is not None:
+        s1 = rows(find_screen(res, "STEP 1 - FIND T"))
+        n = len(r["step1_rows"])
+        assert s1[-n:] == r["step1_rows"], f"{context} step 1 rows: {s1} vs ref {r['step1_rows']}"
+    if r.get("quad_rows") is not None:
+        q = rows(find_screen(res, "SOLVE QUADRATIC FOR T"))
+        n = len(r["quad_rows"])
+        assert q[-n:] == r["quad_rows"], f"{context} quadratic rows: {q} vs ref {r['quad_rows']}"
     return res
 
 
@@ -262,14 +271,18 @@ def t_quadratic_edges():
     res, r = solve_check([20, U, -5, U, 9.8])
     assert r["code"] == "E6" and "NO ROOT IS AFTER THE START" in rows(res.screens[-1])
     # double root (B²-4AC = 0): thrown up at 19.6 just reaches 19.6 m
-    res, r = solve_check([19.6, U, 19.6, U], "B")
-    expect(summary(res)["T"], "2.00", "T")
-    expect(summary(res)["VF"], "0", "VF")
-    assert "ONE ROOT (B²-4AC IS 0)." in find_screen(res, "SOLVE QUADRATIC FOR T")
+    # (regression ZVOVF-7: the double-root branch also says which T it uses)
+    for mode, inputs in (("B", [19.6, U, 19.6, U]), ("A", [19.6, U, 19.6, U, -9.8])):
+        res, r = solve_check(inputs, mode)
+        expect(summary(res)["T"], "2.00", "T")
+        expect(summary(res)["VF"], "0", "VF")
+        q = rows(find_screen(res, "SOLVE QUADRATIC FOR T"))
+        assert q[-3:] == ["ONE ROOT (B²-4AC IS 0).", "IT JUST REACHES S, VF IS 0", "SO T = 2.00 S"], q
     res, r = solve_check([U, -19.6, -19.6, U], "B")      # case 5 double root: started at rest
     expect(summary(res)["T"], "2.00", "T")
     expect(summary(res)["V0"], "0", "V0")
-    assert "IT STARTED AT REST." in find_screen(res, "SOLVE QUADRATIC FOR T")
+    q = rows(find_screen(res, "SOLVE QUADRATIC FOR T"))
+    assert q[-3:] == ["ONE ROOT (B²-4AC IS 0).", "IT STARTED AT REST.", "SO T = 2.00 S"], q
 
 
 # ------------------------------------------------------------------ bad inputs
@@ -321,9 +334,15 @@ def t_a_zero():
     expect(summary(res)["VF"], "5.00", "VF")
     q = find_screen(res, "SOLVE QUADRATIC FOR T")
     assert "NO T² TERM, SO LINEAR" in q and "T = 4.00 S" in q, q
+    # (regression ZVOVF-6: step 1 must not promise the quadratic formula when A is 0)
+    s1 = rows(find_screen(res, "STEP 1 - FIND T"))
+    assert s1[-2:] == ["A IS 0, SO NO T² TERM.", "SOLVE THE LINEAR EQUATION."], s1
+    assert not any("QUADRATIC FORMULA" in x or "T IS SQUARED" in x for x in s1), s1
     res, r = solve_check([U, 5, 20, U, 0])            # case 5 linear
     expect(summary(res)["T"], "4.00", "T")
     expect(summary(res)["V0"], "5.00", "V0")
+    s1 = rows(find_screen(res, "STEP 1 - FIND T"))
+    assert s1[-2:] == ["A IS 0, SO NO T² TERM.", "SOLVE THE LINEAR EQUATION."], s1
     res, r = solve_check([U, 5, U, 3, 0])             # case 4
     expect(summary(res)["V0"], "5.00", "V0")
     expect(summary(res)["S"], "15.0", "S")
@@ -407,6 +426,123 @@ def t_free_fall_through_zfree():
     check_run(res, r, "PHYSOLVE > FREE FALL > VOVFSTA")
     expect(summary(res)["T"], "3.03", "T")
     expect(summary(res)["VF"], "-29.7", "VF")
+    # (regression ZVOVF-5) thrown up at 19.6 m/s, time to the top and max height, VF = 0:
+    # T = 19.6/9.8 = 2.00 s, S = 19.6²/(2(9.8)) = 19.6 m
+    res = run([2, "VOVFSTA", 19.6, 0, U, U, "BACK", 7])
+    r = ref.free_fall(19.6, 0, U, U)
+    check_run(res, r, "PHYSOLVE > FREE FALL > VOVFSTA thrown up")
+    sv = summary(res)
+    expect(sv["T"], "2.00", "T")
+    expect(sv["S"], "19.6", "S")
+    expect(sv["V0"], "19.6", "V0")
+    expect(sv["VF"], "0", "VF")
+    assert "S = 19.6 M (UP)" in rows(res.screens[-1]), rows(res.screens[-1])
+    # (regression ZVOVF-1/5) dropped ball with VF typed +29.7: the free-fall EA screen blames
+    # the signs (VF must be less than V0), not A (which is the automatic -9.8)
+    res = run([2, "VOVFSTA", 0, 29.7, U, U, "BACK", 7])
+    r = ref.free_fall(0, 29.7, U, U)
+    check_run(res, r, "PHYSOLVE > FREE FALL > VOVFSTA dropped, VF +29.7")
+    last = rows(res.screens[-1])
+    assert r["code"] == "EA", r["code"]
+    assert "A = -9.80 M/S² (AUTO)" in rows(find_screen(res, "GIVEN"))
+    assert not any("A HAS THE WRONG SIGN" in x for x in last), last
+    assert last[1] == "THE SIGNS DO NOT FIT." and "A IS -9.8, SO VF MUST BE" in last, last
+    assert "LESS THAN V0." in last and "(UP IS +, FALLING IS -.)" in last, last
+    assert "(UP/FORWARD IS +.)" not in last, last
+    # the corrected input (VF = -29.7) solves: T = 29.7/9.8 = 3.03 s, S = -29.7²/19.6 = -45.0 m
+    res = run([2, "VOVFSTA", 0, -29.7, U, U, "BACK", 7])
+    check_run(res, ref.free_fall(0, -29.7, U, U), "dropped, VF -29.7")
+    expect(summary(res)["T"], "3.03", "T")
+    expect(summary(res)["S"], "-45.0", "S")
+
+
+def t_ea_wording():
+    """(regression ZVOVF-1) EA never says A has the wrong sign; it may be VF that is wrong."""
+    # mode A: V0=0, VF=29.7, A=-9.8 - A is right here, VF has the wrong sign
+    res, r = solve_check([0, 29.7, U, U, -9.8])
+    last = rows(res.screens[-1])
+    assert r["code"] == "EA" and last == ["NO PHYSICAL SOLUTION", "THE SIGNS DO NOT FIT.",
+                                          "T IS (VF-V0)/A, WHICH IS", "NEGATIVE HERE. VF-V0 AND A",
+                                          "MUST HAVE THE SAME SIGN.", "(UP/FORWARD IS +.)",
+                                          "CHECK THE SIGNS."], last
+    # free fall (K=2): the extra row says VF must be less than V0
+    res, r = solve_check([0, 29.7, U, U], "B")
+    last = rows(res.screens[-1])
+    assert r["code"] == "EA" and "A IS -9.8, SO VF MUST BE" in last, last
+    assert not any("WRONG SIGN" in x for x in last), last
+    res, r = solve_check([-5, 10, U, U], "B")          # thrown down at 5, VF typed as +10
+    assert r["code"] == "EA" and "LESS THAN V0." in rows(res.screens[-1])
+
+
+def t_e5_farthest():
+    """(regression ZVOVF-2) the case-2 'never gets there' screen shows the turning point."""
+    # thrown up at 10 m/s: farthest S = 10²/(2(9.8)) = 5.10 m (the example on the screen)
+    for mode, inputs in (("A", [10, U, 10, U, -9.8]), ("B", [10, U, 10, U])):
+        res, r = solve_check(inputs, mode)
+        last = rows(res.screens[-1])
+        assert r["code"] == "E5" and "FARTHEST S IS 5.10 M" in last, last
+        assert "(EX. A BALL THROWN UP AT" in last and "IF S WAS ROUNDED, ENTER" not in last, last
+    # backward: V0 = -10, A = +2 turns round at S = -100/4 = -25.0 m, so S = -30 is never reached
+    res, r = solve_check([-10, U, -30, U, 2])
+    assert r["code"] == "E5" and "FARTHEST S IS -25.0 M" in rows(res.screens[-1])
+    # the program's own rounded max height: V0=15 to the top gives S = 225/19.6 = 11.48 -> 11.5
+    res = run([2, "VOVFSTA", 15, 0, U, U, "BACK", 7])
+    check_run(res, ref.free_fall(15, 0, U, U), "V0=15 to the top")
+    expect(summary(res)["S"], "11.5", "S")
+    expect(summary(res)["T"], "1.53", "T")
+    # typing that 11.5 back: B²-4AC = 225-4(4.9)(11.5) = -0.4 < 0 (just past the top) -> hint
+    res = run([2, "VOVFSTA", 15, U, 11.5, U, "BACK", 7])
+    r = ref.free_fall(15, U, 11.5, U)
+    check_run(res, r, "V0=15, S=11.5 (rounded top)")
+    last = rows(res.screens[-1])
+    assert r["code"] == "E5" and last[4:8] == ["IT NEVER GETS TO THAT S.", "FARTHEST S IS 11.5 M",
+                                               "IF S WAS ROUNDED, ENTER",
+                                               "VF AS 0 AND 999 FOR S."], last
+    assert "B²-4AC = -0.400" in find_screen(res, "SOLVE QUADRATIC FOR T")
+    res, r = solve_check([15, U, 11.5, U, -9.8])      # same in mode A
+    assert "IF S WAS ROUNDED, ENTER" in rows(res.screens[-1])
+    # the case-5 E5 screen is unchanged (no farthest-S row: it has no room and no V0)
+    res, r = solve_check([U, 0, -5, U], "B")
+    assert not any("FARTHEST" in x for x in rows(res.screens[-1]))
+
+
+def t_e6_case5_wording():
+    """(regression ZVOVF-3) case 5 with S=0: back at the start needs VF and A of the same sign."""
+    res = run([2, "VOVFSTA", U, 10, 0, U, "BACK", 7])     # caught at the same height, VF typed +10
+    r = ref.free_fall(U, 10, 0, U)
+    check_run(res, r, "case 5 S=0 VF=+10")
+    last = rows(res.screens[-1])
+    assert r["code"] == "E6" and last[1:6] == ["TO END BACK AT THE START,", "VF AND A MUST HAVE THE",
+                                               "SAME SIGN. (A BALL CAUGHT", "AT THE SAME HEIGHT IS",
+                                               "MOVING DOWN, SO VF<0.)"], last
+    assert not any("NEVER COMES" in x for x in last), last
+    # with VF = -10 it solves: T = 2(10)/9.8 = 2.04 s, V0 = -10+9.8(2.04) = +10.0 m/s (up)
+    res = run([2, "VOVFSTA", U, -10, 0, U, "BACK", 7])
+    check_run(res, ref.free_fall(U, -10, 0, U), "case 5 S=0 VF=-10")
+    expect(summary(res)["T"], "2.04", "T")
+    expect(summary(res)["V0"], "10.0", "V0")
+    assert "V0 = 10.0 M/S (UP)" in rows(res.screens[-1])
+    # case 5, S=0, VF=0 (A not 0): same new wording
+    res, r = solve_check([U, 0, 0, U, -9.8])
+    assert r["code"] == "E6" and "TO END BACK AT THE START," in rows(res.screens[-1])
+    # case 5 with A=0 (steady velocity) and case 2 keep the 'never comes back' wording
+    for inputs in ([U, 5, 0, U, 0], [-10, U, 0, U, -9.8]):
+        res, r = solve_check(inputs)
+        assert r["code"] == "E6" and "S IS 0 ONLY AT THE START" in rows(res.screens[-1]), inputs
+
+
+def t_intro_hints():
+    """(regression ZVOVF-4) the intro says how to enter 'at the top' (VF = 0)."""
+    res = run([2, "VOVFSTA", 19.6, U, U, U, "BACK", 7])   # only V0 known: E1
+    assert_clean(res)
+    intro = rows(find_screen(res, "FREE FALL (VOVFSTA)"))
+    assert "AT THE TOP, VF IS 0." in intro and "DROPPED MEANS V0 IS 0." in intro, intro
+    assert len(intro) == 10, intro
+    assert rows(res.screens[-1])[0] == "WRONG NUMBER OF UNKNOWNS"
+    res = run_a(U, U, U, U, U)
+    assert_clean(res)
+    intro = rows(find_screen(res, "VOVFSTA SOLVER"))
+    assert "FROM REST MEANS V0 IS 0." in intro and "STOPS/AT TOP MEANS VF IS 0" in intro, intro
 
 
 def t_k_not_1_or_2():
@@ -477,10 +613,13 @@ WIDE_SCRIPTS = [("A", [8, U, 120, U, 1.5])] + \
                         [0, U, 20, U, 0], [U, 0, 0, U, 0], [5, 5, U, U, 0], [5, 8, U, U, 0],
                         [10, 20, U, U, -9.8], [10, 10, U, U, -9.8], [10, -10, 0, U, U],
                         [10, -10, 5, U, U], [10, 5, 0, U, U], [10, 5, -5, U, U], [U, U, U, U, U],
-                        [1e10, U, 5, U, 1], [5, U, U, 0, 2], [5, U, -20, U, 0])] + \
+                        [1e10, U, 5, U, 1], [5, U, U, 0, 2], [5, U, -20, U, 0],
+                        [15, U, 11.5, U, -9.8], [-10, U, -30, U, 2], [U, 10, 0, U, -9.8],
+                        [U, 5, 0, U, 0], [0, 29.7, U, U, -9.8], [19.6, U, 19.6, U, -9.8])] + \
     [("B", x) for x in ([0, U, -45, U], [19.6, 0, U, U], [10, U, 4, U], [U, -4.65, -1, U],
                         [19.6, U, 19.6, U], [U, -19.6, -19.6, U], [10, U, 10, U], [U, U, U, U],
-                        [5, U, U, 2], [U, U, -9.6, 2])]
+                        [5, U, U, 2], [U, U, -9.6, 2], [0, 29.7, U, U], [15, U, 11.5, U],
+                        [U, 10, 0, U], [U, 0, -5, U])]
 
 
 def t_wide_values():
@@ -517,6 +656,10 @@ c.check("A = 0 in every case it can appear", t_a_zero)
 c.check("case 7 / case 9 guards (wrong sign, V0+VF=0, S=0)", t_case7_and_case9_guards)
 c.check("free fall K=2: dropped s=-45 -> T=3.03, VF=-29.7; thrown up 19.6 -> T=2.00, S=19.6", t_free_fall)
 c.check("free fall through PHYSOLVE > FREE FALL > VOVFSTA (ZFREE)", t_free_fall_through_zfree)
+c.check("EA wording: signs do not fit; free fall says VF must be < V0 (ZVOVF-1)", t_ea_wording)
+c.check("E5 case 2 shows the farthest S and the rounding hint (ZVOVF-2)", t_e5_farthest)
+c.check("E6 case 5 with S=0 explains VF and A signs (ZVOVF-3)", t_e6_case5_wording)
+c.check("intro hints: V0 is 0 from rest, VF is 0 at the top (ZVOVF-4)", t_intro_hints)
 c.check("K not 1 or 2 behaves as K=1 and K is not changed", t_k_not_1_or_2)
 c.check("fuzz: random motions, solver recovers the hidden values", t_fuzz_consistency)
 c.check("fuzz: random inputs never error and match the reference", t_fuzz_robust)

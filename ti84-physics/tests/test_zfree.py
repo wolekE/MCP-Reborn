@@ -163,7 +163,7 @@ def t_thrown_up_roof():
     # 4.9T^2 - 10T - 15 = 0 -> T = (10 + sqrt(394))/9.8 = 3.0459; VF = -sqrt(394) = -19.849;
     # top -> ground sqrt(2*20.102/9.8) = 2.0255
     expect_values(s, {"V0": "10.0", "T TO TOP": "1.02", "ABOVE LAUNCH": "5.10", "ABOVE GROUND": "20.1",
-                      "T TOP TO GND": "2.03", "T TOTAL": "3.05", "VF": "-19.8"}, "up from roof")
+                      "T FROM TOP": "2.03", "T TOTAL": "3.05", "VF": "-19.8"}, "up from roof")
     quad = [scr for scr in res.screens if rows_of(scr)[0] == "SOLVE QUADRATIC FOR T"][0]
     q = {n: v for n, v, u in values_of(quad)}
     # roots of 4.9T^2 - 10T - 15 = 0: (10 -/+ sqrt(394))/9.8 = -1.0050, 3.0459
@@ -200,7 +200,7 @@ def t_more_hand_values():
     # total (20+sqrt(988))/9.8 = 5.2482, VF=-sqrt(988)=-31.432, top->ground sqrt(2*50.408/9.8)=3.2074
     res, _ = one_calc(4, 30, 20)
     expect_values(summary(res), {"T TO TOP": "2.04", "ABOVE LAUNCH": "20.4", "ABOVE GROUND": "50.4",
-                                 "T TOTAL": "5.25", "VF": "-31.4", "T TOP TO GND": "3.21"}, "up 20 from 30")
+                                 "T TOTAL": "5.25", "VF": "-31.4", "T FROM TOP": "3.21"}, "up 20 from 30")
 
 
 # ------------------------------------------------------------------------------ menu paths
@@ -321,7 +321,7 @@ EDGE = [
     (2, (-3,), ["E4"]), (2, (0,), ["E5"]), (2, (1.5e9,), ["E9"]), (2, (-1e99,), ["E4"]),
     (3, (-1, 5), ["E1"]), (3, (0, 5), ["E2"]), (3, (20, -5), ["E3"]), (3, (20, 0), ["E6"]),
     (3, (1e10, 5), ["E9"]), (3, (20, 1e10), ["E9"]), (3, (0, 0), ["E2"]), (3, (-1, -1), ["E1"]),
-    (3, (0, -5), ["E3"]), (3, (1e-6, 1e6), []),
+    (3, (0, -5), ["E3"]), (3, (1e-6, 1e6), []), (3, (1e-99, 1e9), ["E8"]),
     (4, (-1, 5), ["E1"]), (4, (15, -10), ["E4"]), (4, (0, 19.6), ["E7"]), (4, (0, 0), ["E7", "E5"]),
     (4, (20, 0), ["E6"]), (4, (1e10, 1), ["E9"]), (4, (1, 1e10), ["E9"]), (4, (0, -2), ["E4"]),
 ]
@@ -385,8 +385,8 @@ def t_fuzz_realistic():
 
 def t_fuzz_wide():
     """Any numbers (negative, zero, tiny, huge): never an error/leak/scroll/truncation, always back to the
-    ZFREE menu, the same screens (titles) as the reference, and values equal to the reference whenever
-    the problem is not numerically ill-conditioned."""
+    ZFREE menu, and every screen (titles, values, messages) equal to the reference. ZQUAD uses the
+    cancellation-free root form, so even v^2/H >= 1E8 needs no exemption."""
     rng = random.Random(77)
     for k in range(220):
         opt = rng.choice([1, 2, 3, 4])
@@ -404,19 +404,15 @@ def t_fuzz_wide():
         assert_clean(res, context=ctx)
         segs = segments(res)
         assert [s[0] for s in segs] == [opt, 6], f"{ctx}: {[(s[0]) for s in segs]}"
-        rr = ref.run(opt, *inp)
-        screens = segs[0][1]
-        ill = (opt in (3, 4) and 0 < inp[0] <= 1e9 and 0 < inp[1] <= 1e9
-               and inp[1] ** 2 / inp[0] >= 1e8)           # cancellation in a quadratic root
-        if not ill:
-            compare_with_ref(screens, rr, ctx)
-        else:
-            # TI's 14-digit decimals and Python floats may differ in the cancelling root: compare the
-            # screens before the quadratic; afterwards it must end in a summary or the E8 message.
-            k = [s.title for s in rr.screens].index("SOLVE QUADRATIC FOR T")
-            compare_screens(screens[:k], rr.screens[:k], ctx)
-            assert rows_of(screens[-1])[0] in (
-                "SUMMARY (THROWN DOWN)", "SUMMARY (UP FROM HEIGHT)", "SOLVE QUADRATIC FOR T"), ctx
+        compare_with_ref(segs[0][1], ref.run(opt, *inp), ctx)
+
+
+def t_ill_conditioned():
+    """Quadratics with v^2/H far above 1E8 (where the old (-B+/-sqrt)/2A form cancelled): the small
+    root must still equal the reference on every screen."""
+    for inp in [(1e-6, 1e6), (1e-3, 1e5), (0.01, 1e6), (1e-9, 1e9), (2e-5, 3e4), (1e-4, 9.9e4)]:
+        for opt in (3, 4):
+            one_calc(opt, *inp)
 
 
 def t_reference_physics():
@@ -439,21 +435,145 @@ def t_reference_physics():
         t = up["T TOTAL"]
         assert t > 0 and math.isclose(v * t - 0.5 * g * t * t, -h, rel_tol=1e-9, abs_tol=1e-9)
         assert math.isclose(up["VF"], v - g * t, rel_tol=1e-9)
-        assert math.isclose(up["T TO TOP"] + up["T TOP TO GND"], t, rel_tol=1e-9)
+        assert math.isclose(up["T TO TOP"] + up["T FROM TOP"], t, rel_tol=1e-9)
         assert math.isclose(up["ABOVE GROUND"], h + v * v / (2 * g))
 
 
 def t_screens_fit():
-    """Every screen of the required cases: <= 10 rows, <= 26 columns, no 'X = word' prose rows."""
+    """Every screen of the required cases: <= 26 columns, no 'X = word' prose rows. (More than 10
+    rows shows up as SCROLL in assert_clean; t_wide checks the worst-case widths.)"""
     for opt, inp in [(1, (45,)), (2, (19.6,)), (3, (20, 5)), (4, (15, 10)), (3, (1e-4, 9.9e-5)),
                      (4, (1.23e-4, 1.23e-4)), (3, (987654321, 987654321)), (4, (987654321, 987654321))]:
         res = run(script(opt, *inp))
         assert_clean(res, context=str((opt, inp)))
         for scr in res.screens:
-            assert len(scr) <= 10 and all(len(r) <= 26 for r in scr)
+            assert len(scr) == 10 and all(len(r) <= 26 for r in scr)
             for row in rows_of(scr):
                 if " = " in row:
                     assert VAL_RE.match(row), f"row {row!r} has ' = ' but is not NAME = VALUE UNIT"
+
+
+# ------------------------------------------------------------------------------ worst-case widths (SPEC 7b)
+WIDE_CASES = [
+    # (option, inputs, message labels the path shows)
+    (1, (45,), []), (2, (19.6,), []), (3, (20, 5), []), (4, (15, 10), []),
+    (3, (20, 0), ["E6"]), (4, (20, 0), ["E6"]), (4, (0, 19.6), ["E7"]), (4, (0, 0), ["E7", "E5"]),
+    (1, (-5,), ["E1"]), (1, (0,), ["E2"]), (3, (20, -5), ["E3"]), (2, (-3,), ["E4"]), (2, (0,), ["E5"]),
+    (3, (1e-99, 1e9), ["E8"]), (1, (2e9,), ["E9"]), (3, (0, 5), ["E2"]), (4, (-1, 5), ["E1"]),
+    (4, (15, -10), ["E4"]), (3, (1e10, 5), ["E9"]),
+]
+
+
+def t_wide():
+    """harness wide mode: every ZFMT value is the 9-character '-8.88E-88' and every typed input is
+    shown 9 characters wide. Every path and message screen must still fit 26x10 (no TRUNCATED/SCROLL)."""
+    seen = set()
+    for opt, inp, msgs in WIDE_CASES:
+        ctx = f"wide option {opt} inputs {inp}"
+        res = run(script(opt, *inp), wide=True)
+        assert_clean(res, context=ctx)
+        segs = segments(res)
+        assert [s[0] for s in segs] == [opt, 6], f"{ctx}: {[s[0] for s in segs]}"
+        rr = ref.run(opt, *inp)
+        assert rr.messages == msgs, f"{ctx}: reference messages {rr.messages}, expected {msgs}"
+        titles = [rows_of(s)[0] for s in segs[0][1]]
+        assert titles == [s.title for s in rr.screens], f"{ctx}: titles {titles}"
+        shown_rows = [r for scr in res.screens for r in rows_of(scr)]
+        for m in msgs:
+            assert all(r in shown_rows for r in ref.MESSAGES[m]), f"{ctx}: message {m} not shown in full"
+        seen.update(msgs)
+    assert seen == set(ref.MESSAGES), f"wide mode does not cover messages {set(ref.MESSAGES) - seen}"
+    # several calculations in one session, wide
+    res = run([2, 1, 45, 2, 19.6, 3, 20, 5, 4, 15, 10, 6, 7], wide=True)
+    assert_clean(res, context="wide session")
+
+
+# ------------------------------------------------------------------------------ readability regressions
+def screen_titled(res, title):
+    hits = [scr for scr in res.screens if rows_of(scr) and rows_of(scr)[0] == title]
+    assert hits, f"no screen titled {title!r}\n{res.text()}"
+    return rows_of(hits[0])
+
+
+def t_check_row_is_approximate():
+    """ZFREE-1: T TO TOP + T FROM TOP, each rounded to 3 s.f., need not add up to the rounded T TOTAL
+    (2 m roof, 12 m/s: 1.22 + 1.38 = 2.60, T TOTAL 2.61), so the check row must not claim equality."""
+    res, _ = one_calc(4, 2, 12)
+    s = summary(res)
+    assert (s["T TO TOP"], s["T FROM TOP"], s["T TOTAL"]) == ("1.22", "1.38", "2.61"), s
+    rows = screen_titled(res, "STEP 4  TOP TO GROUND")
+    assert "GIVES T TOTAL." not in rows, rows
+    i = rows.index("CHECK- T TO TOP PLUS THIS")
+    assert rows[i + 1] == "IS ABOUT T TOTAL (ROUNDED)", rows
+
+
+def t_unrounded_intermediates():
+    """ZFREE-2: a rounded intermediate shown in a substitution is flagged as rounded, or not used."""
+    # dropped from 6 m: VF^2 = 117.6 shows as 118, and -sqrt(118) = -10.86 would round to -10.9;
+    # the answer -10.8 (from 117.6) is right and the screen says the unrounded VF^2 is used
+    res, _ = one_calc(1, 6)
+    rows = screen_titled(res, "STEP 2  IMPACT VELOCITY")
+    assert "VF² IS 118" in rows and "VF = -10.8 M/S (DOWN)" in rows, rows
+    i = rows.index("VF=-√(118)")
+    assert rows[i + 1] == "(USES UNROUNDED VF²)", rows
+    # every impact-velocity screen (options 1, 3, 4) has the note right after the root
+    for opt, inp, title in [(3, (20, 5), "STEP 3  IMPACT VELOCITY"), (4, (15, 10), "STEP 5  IMPACT VELOCITY")]:
+        rows = screen_titled(one_calc(opt, *inp)[0], title)
+        i = [k for k, r in enumerate(rows) if r.startswith("VF=-√(")][0]
+        assert rows[i + 1] == "(USES UNROUNDED VF²)", rows
+    # option 4 step 4 substitutes the rounded height above ground: also flagged
+    rows = screen_titled(one_calc(4, 15, 10)[0], "STEP 4  TOP TO GROUND")
+    i = [k for k, r in enumerate(rows) if r.startswith("T=√(2(-")][0]
+    assert rows[i + 1] == "(USES UNROUNDED HEIGHT)", rows
+    # option 2 step 4: VF from the exact T=2V0/9.8 (no rounded T substituted); the one number row
+    # 'VF=-(V0)' agrees with the VF shown for every half-integer speed (V0=6 used to show
+    # 'VF=6.00+(-9.8)(1.22)', which is -5.96, above 'VF = -6.00')
+    keys = [2]
+    speeds = [k / 2 for k in range(1, 100)]
+    for v0 in speeds:
+        keys += [2, v0]
+    res = run(keys + [6, 7])
+    assert_clean(res, context="option 2 speeds")
+    steps = [rows_of(scr) for scr in res.screens if rows_of(scr)[0] == "STEP 4  IMPACT VELOCITY"]
+    assert len(steps) == len(speeds)
+    for v0, rows in zip(speeds, steps):
+        assert "VF=V0+(-9.8)(2V0/9.8)" in rows and "VF=V0-2V0=-V0" in rows, rows
+        assert not any(r.startswith("VF=") and "+(-9.8)(" in r and "V0" not in r for r in rows), rows
+        sub = [r for r in rows if r.startswith("VF=-(")]
+        assert sub == [f"VF=-({fmt3(v0)})"], (v0, rows)
+        vf = [v for n, v, u in values_of(rows) if n == "VF"]
+        assert vf == [fmt3(-float(fmt3(v0)))] == [fmt3(-v0)], (v0, rows)
+
+
+def t_fall_time_label():
+    """ZFREE-5: in option 4 the fall from the top is 'T FROM TOP' (no GND/GROUND in a time row, so
+    T TOTAL is the only candidate for the time to reach the ground); the quadratic screen says T2 is
+    when it lands."""
+    res, _ = one_calc(4, 15, 10)
+    for scr in res.screens:
+        for n, v, u in values_of(scr):
+            if u == "S":
+                assert "GND" not in n and "GROUND" not in n, (n, rows_of(scr))
+    s = summary(res)
+    assert s["T FROM TOP"] == "2.03" and s["T TOTAL"] == "3.05", s
+    assert "SO USE T2 (WHEN IT LANDS)." in screen_titled(res, "SOLVE QUADRATIC FOR T")
+
+
+def t_no_dash_before_negative():
+    """ZFREE-6: a row ending in '-' (used as a colon) must not be followed by a row with a negative
+    number or '-√(', where the '-' could be read as a minus sign."""
+    neg = re.compile(r"-[0-9√(]")
+    plan = [(1, 45), (1, 6), (2, 19.6), (3, 20, 5), (3, 50, 10), (4, 15, 10), (4, 2, 12), (4, 20, 0),
+            (4, 0, 19.6)]
+    for opt, *inp in plan:
+        res, _ = one_calc(opt, *inp)
+        for scr in res.screens:
+            rows = rows_of(scr)
+            for a, b in zip(rows, rows[1:]):
+                if a.endswith("-"):
+                    assert not neg.search(b), f"option {opt} {inp}: {a!r} then {b!r}"
+    rows = rows_of(one_calc(3, 20, 5)[0].screens[0])
+    assert rows[2] == "HAS A NEGATIVE V0." and rows[3] == "V0 = -5.00 M/S", rows
 
 
 c.check("ZFREE and its helpers have no syntax errors", t_syntax)
@@ -474,4 +594,10 @@ c.check("fuzz (realistic numbers): every screen value = reference", t_fuzz_reali
 c.check("fuzz (any numbers): clean, back to menu, matches reference", t_fuzz_wide)
 c.check("reference agrees with closed-form kinematics", t_reference_physics)
 c.check("screens fit 26x10, value rows parseable", t_screens_fit)
+c.check("ill-conditioned quadratics (v^2/H >= 1E8) match the reference", t_ill_conditioned)
+c.check("wide mode (9-char values/inputs): every path and message fits", t_wide)
+c.check("ZFREE-1: top-to-ground check row is approximate", t_check_row_is_approximate)
+c.check("ZFREE-2: rounded intermediates flagged or not substituted", t_unrounded_intermediates)
+c.check("ZFREE-5: fall from the top is T FROM TOP; T2 is when it lands", t_fall_time_label)
+c.check("ZFREE-6: no '-' colon right before a negative number", t_no_dash_before_negative)
 sys.exit(c.done())

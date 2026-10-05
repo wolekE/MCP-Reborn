@@ -116,17 +116,16 @@ Disp "T TOTAL = "+Str9+" S"
 Pause 
 ClrHome
 Disp "STEP 4  IMPACT VELOCITY"
-Disp "USE VF=V0+AT"
-"VF="+Str1+"+(-9.8)("→Str0
-D→Z
-prgmZFMT
-Str0+Str9+")"→Str0
-prgmZLINE
+Disp "USE VF=V0+AT (NO S)"
+Disp "WITH T=2V0/9.8 (STEP 3)"
+Disp "VF=V0+(-9.8)(2V0/9.8)"
+Disp "VF=V0-2V0=-V0"
+Disp "VF=-("+Str1+")"
 F→Z
 prgmZFMT
 Disp "VF = "+Str9+" M/S (DOWN)"
 Disp "SAME SPEED AS THE THROW,"
-Disp "NOW DOWNWARD (VF IS -V0)."
+Disp "NOW DOWNWARD."
 Pause 
 ClrHome
 Disp "SUMMARY (UP, SAME LEVEL)"
@@ -174,7 +173,7 @@ Goto E6
 ClrHome
 Disp "STEP 1  SIGN OF V0"
 Disp "UP IS +, SO A THROW DOWN"
-Disp "HAS A NEGATIVE V0-"
+Disp "HAS A NEGATIVE V0."
 V→Z
 prgmZFMT
 Disp "V0 = "+Str9+" M/S"
@@ -240,7 +239,7 @@ If J<2 or I≤0
 Goto E8
 I→D
 Disp "T1<0 IS BEFORE THE THROW,"
-Disp "SO USE T2-"
+Disp "SO USE T2 (WHEN IT LANDS)."
 D→Z
 prgmZFMT
 Disp "T TOTAL = "+Str9+" S"
@@ -258,11 +257,12 @@ Disp "ABOVE GROUND = "+Str9+" M"
 Disp "S=(1/2)AT², SO T=√(2S/A)"
 "T=√(2(-"+Str9+")/(-9.8))"→Str0
 prgmZLINE
+Disp "(USES UNROUNDED HEIGHT)"
 G→Z
 prgmZFMT
-Disp "T TOP TO GND = "+Str9+" S"
+Disp "T FROM TOP = "+Str9+" S"
 Disp "CHECK- T TO TOP PLUS THIS"
-Disp "GIVES T TOTAL."
+Disp "IS ABOUT T TOTAL (ROUNDED)"
 Pause 
 Lbl F1
 V²+2AS→N
@@ -286,8 +286,9 @@ prgmZFMT
 Str9→Str1
 Disp "VF² IS "+Str1
 Disp "IT MOVES DOWN, SO VF IS"
-Disp "THE NEGATIVE ROOT-"
+Disp "THE NEGATIVE ROOT."
 Disp "VF=-√("+Str1+")"
+Disp "(USES UNROUNDED VF²)"
 F→Z
 prgmZFMT
 Disp "VF = "+Str9+" M/S (DOWN)"
@@ -313,7 +314,7 @@ prgmZFMT
 Disp "ABOVE GROUND = "+Str9+" M"
 G→Z
 prgmZFMT
-Disp "T TOP TO GND = "+Str9+" S"
+Disp "T FROM TOP = "+Str9+" S"
 D→Z
 prgmZFMT
 Disp "T TOTAL = "+Str9+" S"

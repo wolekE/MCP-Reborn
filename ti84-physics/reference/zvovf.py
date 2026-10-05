@@ -20,6 +20,8 @@ Pass UNKNOWN (999) for each unknown. The result is a dict:
     summary   {name: (value, unit_text)} for every NAME = VALUE UNIT summary row
     steps     [(name, value), ...] results shown on the step screens, in order
     quad      {'J','H','I','G'} from the quadratic (cases 2 and 5), after root clean-up
+    step1_rows  cases 2/5: the explanation rows under the equation on the STEP 1 screen
+    quad_rows   cases 2/5: the rows ZVOVF adds under ZQUAD's output (which root is physical)
     answers   1 or 2 (two physical answers: both quadratic roots are > 0)
 """
 from decimal import Decimal, Context, ROUND_HALF_UP
@@ -125,7 +127,7 @@ CASE_UNKNOWNS = [(1, "FS"), (2, "FD"), (3, "FA"), (4, "VS"), (5, "VD"), (6, "VA"
 
 
 # ---------------------------------------------------------------- message screens
-def message_lines(code, J=None, Q=1, C=None, S=None):
+def message_lines(code, J=None, Q=1, C=None, S=None, A=None, far=None, near=None):
     """The rows of each message screen, exactly as ZVOVF displays them."""
     if code == "E1":
         rows = ["WRONG NUMBER OF UNKNOWNS", "YOU ENTERED 999 (UNKNOWN)",
@@ -145,8 +147,12 @@ def message_lines(code, J=None, Q=1, C=None, S=None):
         rows = ["IMPOSSIBLE", "B²-4AC<0, SO THERE IS NO", "REAL T (A NEGATIVE NUMBER",
                 "UNDER THE √)."]
         if C == 2:
-            rows += ["IT NEVER GETS TO THAT S.", "(EX. A BALL THROWN UP AT",
-                     "10 M/S NEVER RISES 10 M.)"]
+            rows += ["IT NEVER GETS TO THAT S.",
+                     "FARTHEST S IS " + fmt3(far) + " M"]      # ⁻V²/(2A): where VF is 0
+            if near:                                           # If ⁻G<0.01V²: S just past it
+                rows += ["IF S WAS ROUNDED, ENTER", "VF AS 0 AND 999 FOR S."]
+            else:
+                rows += ["(EX. A BALL THROWN UP AT", "10 M/S NEVER RISES 10 M.)"]
         else:
             rows += ["NO START VELOCITY CAN END", "AT THIS VF AFTER THIS S.",
                      "(EX. A BALL CANNOT BE AT", "ITS TOP BELOW ITS START.)"]
@@ -154,8 +160,13 @@ def message_lines(code, J=None, Q=1, C=None, S=None):
     if code == "E6":       # quadratic/linear: no root T > 0
         rows = ["NO PHYSICAL SOLUTION"]
         if S == 0:
-            rows += ["S IS 0 ONLY AT THE START", "(T IS 0). IT NEVER COMES",
-                     "BACK TO ITS START."]
+            if C == 5 and A != 0:                      # T = 2VF/A must be > 0
+                rows += ["TO END BACK AT THE START,", "VF AND A MUST HAVE THE",
+                         "SAME SIGN. (A BALL CAUGHT", "AT THE SAME HEIGHT IS",
+                         "MOVING DOWN, SO VF<0.)"]
+            else:
+                rows += ["S IS 0 ONLY AT THE START", "(T IS 0). IT NEVER COMES",
+                         "BACK TO ITS START."]
         else:
             rows += ["NO ROOT IS AFTER THE START", "(T>0). IT WAS AT S ONLY",
                      "BEFORE THE START, SO IT", "NEVER GETS THERE."]
@@ -171,9 +182,13 @@ def message_lines(code, J=None, Q=1, C=None, S=None):
         return ["NO MOTION TO SOLVE", "VF IS THE SAME AS V0 AND", "A IS NOT 0, SO T IS 0 AND",
                 "S IS 0 (STILL AT THE", "START). CHECK V0 AND VF."]
     if code == "EA":
-        return ["NO PHYSICAL SOLUTION", "A HAS THE WRONG SIGN.", "T IS (VF-V0)/A, WHICH IS",
-                "NEGATIVE HERE. VF-V0 AND A", "MUST HAVE THE SAME SIGN.", "(UP/FORWARD IS +.)",
-                "CHECK THE SIGNS."]
+        rows = ["NO PHYSICAL SOLUTION", "THE SIGNS DO NOT FIT.", "T IS (VF-V0)/A, WHICH IS",
+                "NEGATIVE HERE. VF-V0 AND A", "MUST HAVE THE SAME SIGN."]
+        if Q == 1:
+            rows += ["(UP/FORWARD IS +.)"]
+        if Q == 2:                                     # A is the automatic -9.8: VF is the slip
+            rows += ["A IS -9.8, SO VF MUST BE", "LESS THAN V0.", "(UP IS +, FALLING IS -.)"]
+        return rows + ["CHECK THE SIGNS."]
     if code == "EB":
         return ["NOT ENOUGH INFORMATION", "V0+VF IS 0 AND S IS 0.", "MANY T AND A FIT THIS",
                 "(EX. THROWN UP, CAUGHT AT", "THE SAME HEIGHT).", "USE T OR A AS A KNOWN."]
@@ -212,7 +227,8 @@ def _row(name, x, unit):
 def solve(v0, vf, s, t, a=None, k=1):
     Q = 2 if k == 2 else 1                       # 1→Q / If K=2 / 2→Q
     out = {"kind": None, "code": None, "lines": [], "case": None, "eqs": None,
-           "summary": {}, "steps": [], "quad": None, "answers": 1, "mode": Q}
+           "summary": {}, "steps": [], "quad": None, "answers": 1, "mode": Q,
+           "step1_rows": None, "quad_rows": None}
 
     def message(code, **kw):
         out.update(kind="message", code=code, lines=message_lines(code, Q=Q, **kw))
@@ -271,6 +287,14 @@ def solve(v0, vf, s, t, a=None, k=1):
     steps = out["steps"]
     if C in (2, 5):
         # STEP 1: S=V0T+(1/2)AT² (case 2) or S=VFT-(1/2)AT² (case 5) is a quadratic in T
+        if A != 0:                               # If A≠0 / Then
+            out["step1_rows"] = [
+                "T IS SQUARED, SO WRITE",
+                "(1/2)AT²+V0T-S=0 AND USE" if C == 2 else "-(1/2)AT²+VFT-S=0 AND USE",
+                "THE QUADRATIC FORMULA WITH",
+                "A,B,C AS (1/2)A, V0, -S" if C == 2 else "A,B,C AS -(1/2)A, VF, -S"]
+        else:                                    # Else: A=0, ZQUAD solves it as linear
+            out["step1_rows"] = ["A IS 0, SO NO T² TERM.", "SOLVE THE LINEAR EQUATION."]
         L = div(A, 2)                            # A/2→L
         M = V                                    # V→M
         if C == 5:
@@ -285,18 +309,34 @@ def solve(v0, vf, s, t, a=None, k=1):
             I = div(N, mul(L, H))                # N/(LH)→I
         out["quad"] = {"J": J, "H": H, "I": I, "G": G_}
         E = 0
+        qrows = out["quad_rows"] = []            # rows added under ZQUAD's output
         if J == 1 and H > 0:                     # linear (A=0): one root, and T>0
             E, D = 1, H
+            qrows += ["T>0, SO IT IS PHYSICAL."]
         if J == 2 and H <= 0 and I > 0:          # "T1<0 IS BEFORE THE START, SO T = T2"
             E, D = 1, I
+            qrows += ["T1<0 IS BEFORE THE START," if S != 0 else "T1 IS 0 (THE START),",
+                      f"SO T = {fmt3(I)} S"]
         if J == 2 and H > 0 and G_ == 0:         # double root: "ONE ROOT (B²-4AC IS 0)"
             E, D = 1, H
+            qrows += ["ONE ROOT (B²-4AC IS 0).",
+                      "IT JUST REACHES S, VF IS 0" if C == 2 else "IT STARTED AT REST.",
+                      f"SO T = {fmt3(H)} S"]
         if J == 2 and H > 0 and G_ != 0:         # both roots > 0: two physical answers
             E, D, P = 2, H, I
-        if J == 0:
-            return message("E5", C=C)            # negative under the square root
+            qrows += ["T1 AND T2 ARE BOTH > 0,"]
+            qrows += (["SO BOTH WORK. IT PASSES S", "TWICE (EX. UP, THEN DOWN)."] if C == 2
+                      else ["SO BOTH WORK. THERE ARE", "2 POSSIBLE STARTS (V0)."])
         if E == 0:
-            return message("E6", S=S)            # no root after the start
+            qrows += ["NO PHYSICAL T. SEE NEXT."]
+        if J == 0:                               # negative under the square root
+            far = near = None
+            if C == 2:                           # A≠0 here (A=0 is linear or EF)
+                far = div(neg(sq(V)), mul(2, A))                    # ⁻V²/(2A)→Z
+                near = neg(G_) < mul(Decimal("0.01"), sq(V))       # If ⁻G<0.01V²
+            return message("E5", C=C, far=far, near=near)
+        if E == 0:
+            return message("E6", C=C, S=S, A=A)  # no root after the start
         # STEP 2: VF=V0+AT (case 2) or V0=VF-AT (case 5) for each physical T
         for Lk in range(1, E + 1):
             Nk = D if Lk == 1 else P

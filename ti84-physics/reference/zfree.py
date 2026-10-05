@@ -10,6 +10,7 @@ TI variables used by ZFREE (the same letters are used below):
     B = time to top             C = rise above launch (max height above launch)
     E = max height above ground D = total time                       F = vf (impact)
     S = displacement            N = VF^2                             G = time from top to ground
+                                                                         (shown as "T FROM TOP")
     L, M, N -> prgmZQUAD inputs; J, H, I, G <- prgmZQUAD outputs
 
 run(option, *inputs) returns a Result whose .screens list has one entry per Pause screen:
@@ -99,6 +100,13 @@ class Vars:
             setattr(self, k, None)
 
 
+def _ti(x):
+    """The calculator's number range: a result smaller than 1E-99 in size becomes 0 (underflow).
+    Python floats go down to 1E-308, so without this the reference would keep a root such as
+    1E-108 (H=1E-99, thrown down at 1E9 M/S) that the TI shows as 0 (and then shows E8)."""
+    return 0.0 if abs(x) < 1e-99 else x
+
+
 def zquad(l, m, n):
     """Mirror of prgmZQUAD for L*T^2 + M*T + N = 0. Returns (J, H, I, G, values-on-screen)."""
     if l == 0:
@@ -117,8 +125,8 @@ def zquad(l, m, n):
     if q == 0:
         h = i = 0.0
     else:
-        h = q / l
-        i = n / q
+        h = _ti(q / l)
+        i = _ti(n / q)
     if h > i:
         h, i = i, h
     vals += [("T1", h, "S"), ("T2", i, "S")]
@@ -206,6 +214,8 @@ def _u3(r, v):                                 # shared by paths 2 and 4
     v.D = 2 * v.B                              # S = 0 at the end: T = 0 or T = 2V0/9.8
     v.F = -v.V                                 # VF = V0 + A(2V0/9.8) = -V0
     r.add("STEP 3  TOTAL TIME", [("T TOTAL", v.D, "S")])
+    # step 4 substitutes T symbolically (T=2V0/9.8, so VF=V0-2V0=-V0, then "VF=-(V0)"), never the
+    # rounded T, so every number on the screen agrees with the answer
     r.add("STEP 4  IMPACT VELOCITY", [("VF", v.F, "M/S (DOWN)")])
     r.add("SUMMARY (UP, SAME LEVEL)", [("V0", v.V, "M/S (UP)"), ("T TO TOP", v.B, "S"),
                                        ("MAX HEIGHT", v.C, "M"), ("T TOTAL", v.D, "S"),
@@ -275,19 +285,21 @@ def _q1(r, v):                                 # paths 3 and 4
         r.messages.append("E8")
         r.add("SOLVE QUADRATIC FOR T", qvals, rows=MESSAGES["E8"])
         return r
-    v.D = v.I                                  # T1 < 0 is before the throw: use T2
+    v.D = v.I                                  # T1 < 0 is before the throw: use T2 (when it lands)
     r.add("SOLVE QUADRATIC FOR T", qvals + [("T TOTAL", v.D, "S")])
     if v.P == 3:
         return _f1(r, v)
     v.G = math.sqrt(2 * v.E / 9.8)             # from the top: falls E from rest, T = sqrt(2S/A)
-    r.add("STEP 4  TOP TO GROUND", [("ABOVE GROUND", v.E, "M"), ("T TOP TO GND", v.G, "S")])
+    # (the screen substitutes the rounded E and notes that the unrounded height is used; the check
+    #  row says T TO TOP + T FROM TOP is only ABOUT T TOTAL, since both are rounded to 3 s.f.)
+    r.add("STEP 4  TOP TO GROUND", [("ABOVE GROUND", v.E, "M"), ("T FROM TOP", v.G, "S")])
     return _f1(r, v)
 
 
 # ---------------------------------------------------------------- shared: impact velocity
 def _f1(r, v):                                 # paths 1, 3 and 4
     v.N = v.V ** 2 + 2 * v.A * v.S             # VF^2 = V0^2 + 2AS
-    v.F = -math.sqrt(v.N)                      # moving down: negative root
+    v.F = -math.sqrt(v.N)                      # moving down: negative root (of the unrounded VF^2)
     step = "STEP 2"
     if v.P == 3:
         step = "STEP 3"
@@ -304,7 +316,7 @@ def _f1(r, v):                                 # paths 1, 3 and 4
         return r
     r.add("SUMMARY (UP FROM HEIGHT)", [("V0", v.V, "M/S (UP)"), ("T TO TOP", v.B, "S"),
                                        ("ABOVE LAUNCH", v.C, "M"), ("ABOVE GROUND", v.E, "M"),
-                                       ("T TOP TO GND", v.G, "S"), ("T TOTAL", v.D, "S"),
+                                       ("T FROM TOP", v.G, "S"), ("T TOTAL", v.D, "S"),
                                        ("VF", v.F, "M/S (DOWN)")])
     return r
 
