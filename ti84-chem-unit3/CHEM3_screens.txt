@@ -1,46 +1,59 @@
-===== [A] ALL ANSWERS =====
+CHEM3 - every screen, in order (TI-84 Plus home screen, 16 x 8)
+Main menu: 1:ANSWER SHEET | 2:PART I EXPLAIN | 3:P2 Q1 PCT K | 4:P2 Q2 HYDRATE | 5:III-1 FORMULAS | 6:III-2 NAMES | 7:QUIT
+
+===== MENU 1: ANSWER SHEET =====
 +----------------+
-|PART I (MC)     |
-|1:D  2:B  3:D   |
-|4:C  5:C  6:B   |
-|7:A             |
-|8-10: NOT ON KEY|
-|(MARKED D,A,B)  |
+|ANS 1/7 PART I  |
+|1 D  2 B  3 D   |
+|4 C  5 C  6 B   |
+|7 A             |
+|8-10 NO KEY     |
+|(NOT IN PHOTO)  |
+|MARKED 8D 9A 10B|
 |                |
++----------------+
++----------------+
+|ANS 2/7 PART II |
+|1  56.58 PCT K  |
+|2A 52.12 PCT H2O|
+|2B 59.75 PCT H2O|
+|2C 12.77 PCT ERR|
+|2A=EXPERIMENTAL |
+|2B=TRUE         |
 |                |
-+----------------+   [ENTER]
 +----------------+
-|PART II         |
-|1) %K = 56.58%  |
-|2A) EXP %H2O    |
-|       = 52.12% |
-|2B) TRUE %H2O   |
-|       = 59.75% |
-|2C) % ERROR     |
-|       = 12.77% |
-+----------------+   [ENTER]
 +----------------+
-|III-1 FORMULAS  |
-|A Cu(OH)2       |
-|B SeO2          |
-|C N3Cl2         |
+|CAPS NOTE       |
+|NO LOWERCASE ON |
+|THIS SCREEN. IN |
+|A SYMBOL LIKE CU|
+|CL SN PB ZN MG  |
+|THE 2ND LETTER  |
+|IS LOWERCASE.   |
+|                |
++----------------+
++----------------+
+|ANS 3/7 III-1   |
+|A CU(OH)2       |
+|B SEO2          |
+|C N3CL2         |
 |D NH4CN         |
-|E Zn(NO3)2      |
+|E ZN(NO3)2      |
 |                |
 |                |
-+----------------+   [ENTER]
 +----------------+
-|III-1 (CONT)    |
-|F Sn2(CO3)3     |
-|G Pb3(PO4)4     |
-|H Mg(ClO4)2     |
-|I Ag2S          |
++----------------+
+|ANS 4/7 III-1   |
+|F SN2(CO3)3     |
+|G PB3(PO4)4     |
+|H MG(CLO4)2     |
+|I AG2S          |
 |J NH3           |
 |                |
 |                |
-+----------------+   [ENTER]
 +----------------+
-|III-2 NAMES     |
++----------------+
+|ANS 5/7 III-2   |
 |A ALUMINUM      |
 |  CHLORIDE      |
 |B SODIUM        |
@@ -48,19 +61,19 @@
 |C OXYGEN        |
 |  DICHLORIDE    |
 |                |
-+----------------+   [ENTER]
 +----------------+
-|III-2 (CONT)    |
++----------------+
+|ANS 6/7 III-2   |
 |D CARBON        |
 |  TETRAFLUORIDE |
 |E TITANIUM(I)   |
 |  NITRATE       |
-|  (IF Tl THEN   |
-|  THALLIUM(I))  |
+|  (TL=THALLIUM) |
 |F SULFUROUS ACID|
-+----------------+   [ENTER]
+|                |
 +----------------+
-|III-2 (CONT)    |
++----------------+
+|ANS 7/7 III-2   |
 |G MANGANESE(II) |
 |  FLUORIDE      |
 |H ZINC CARBONATE|
@@ -68,319 +81,855 @@
 |  PENTACHLORIDE |
 |J SULFATE ION   |
 |                |
-+----------------+   [ENTER]
-===== [B] PART I WHY =====
 +----------------+
-|1) D SUBSCRIPT  |
-|THE SUBSCRIPT IS|
-|THE # OF ATOMS  |
-|OF THAT ELEMENT |
-|IN THE FORMULA. |
-|EX: H2O HAS 2 H |
-|                |
-|                |
-+----------------+   [ENTER]
+
+===== MENU 2: PART I EXPLAIN =====
 +----------------+
-|2) B            |
+|PART I Q1       |
+|ANSWER D        |
+|SUBSCRIPT = THE |
+|NUMBER OF ATOMS |
+|OF AN ELEMENT IN|
+|THE COMPOUND.   |
+|H2O HAS 2 H, 1 O|
+|                |
++----------------+
++----------------+
+|PART I Q2 (1/3) |
+|ANSWER B        |
 |HYDROPHOSPHORIC |
 |ACID            |
-|H + NONMETAL    |
-|(NO OXYGEN) IS A|
-|BINARY ACID:    |
-|HYDRO+ROOT+IC   |
-|+ ACID          |
-+----------------+   [ENTER]
+|YOU MARKED D,   |
+|BUT B IS CORRECT|
+|                |
+|                |
 +----------------+
-|3) D ZERO       |
-|+ AND - CHARGES |
-|MUST CANCEL OUT,|
-|SO THE TOTAL    |
-|CHARGE = 0.     |
-|                |
-|                |
-|                |
-+----------------+   [ENTER]
 +----------------+
-|4) C POTASSIUM  |
-|   CHLORIDE KCl |
-|BINARY = ONLY 2 |
-|ELEMENTS.       |
-|A, B, D HAVE    |
+|PART I Q2 (2/3) |
+|WHY             |
+|H3P IS H + ONE  |
+|NONMETAL (P)    |
+|AND NO OXYGEN,  |
+|SO IT IS A      |
+|BINARY ACID.    |
+|                |
++----------------+
++----------------+
+|PART I Q2 (3/3) |
+|BINARY ACID RULE|
+|HYDRO- + ROOT   |
+|+ -IC ACID      |
+|P ROOT=PHOSPHOR |
+|HYDROPHOSPHORIC |
+|ACID            |
+|                |
++----------------+
++----------------+
+|PART I Q3       |
+|ANSWER D        |
+|IN AN IONIC     |
+|FORMULA THE SUM |
+|OF ALL CHARGES  |
+|(CHARGE*NUMBER) |
+|MUST EQUAL ZERO.|
+|                |
++----------------+
++----------------+
+|PART I Q4 (1/2) |
+|ANSWER C        |
+|POTASSIUM       |
+|CHLORIDE = KCL  |
+|BINARY = ONLY   |
+|2 ELEMENTS      |
+|(K AND CL).     |
+|                |
++----------------+
++----------------+
+|PART I Q4 (2/2) |
+|THE OTHERS HAVE |
 |POLYATOMIC IONS |
-|(3+ ELEMENTS).  |
+|LI3PO4  PO4 3-  |
+|AG2SO4  SO4 2-  |
+|NA3PO4  PO4 3-  |
+|SO NOT BINARY.  |
 |                |
-+----------------+   [ENTER]
 +----------------+
-|5) C +2         |
-|X3(PO4)2        |
-|PO4 CHARGE = -3 |
++----------------+
+|PART I Q5 (1/3) |
+|ANSWER C (+2)   |
+|FORMULA X3(PO4)2|
+|FIND CHARGE OF X|
+|PHOSPHATE PO4   |
+|HAS CHARGE 3-   |
+|                |
+|                |
++----------------+
++----------------+
+|PART I Q5 (2/3) |
+|TOTAL CHARGE = 0|
+|3X + 2(-3) = 0  |
+|3X - 6 = 0      |
+|3X = +6         |
+|X = +6 / 3      |
+|X = +2          |
+|                |
++----------------+
++----------------+
+|PART I Q5 (3/3) |
+|CHECK           |
+|3(+2) = +6      |
 |2(-3) = -6      |
-|SO 3X = +6      |
-|X = +6/3 = +2   |
+|+6 + (-6) = 0   |
+|IT WORKS, SO    |
+|ANSWER C  +2    |
 |                |
-|                |
-+----------------+   [ENTER]
 +----------------+
-|6) B 1-         |
++----------------+
+|PART I Q6       |
+|ANSWER B (1-)   |
 |A 3+ ION NEEDS  |
-|3- TOTAL TO     |
-|CANCEL:         |
-|3(1-) = 3-      |
-|EX: AlCl3       |
+|THREE 1- IONS   |
+|+3 + 3(-1) = 0  |
+|EXAMPLE ALCL3   |
+|AL 3+, 3 CL 1-  |
 |                |
-|                |
-+----------------+   [ENTER]
 +----------------+
-|7) A LITHIUM    |
-|Li IS A METAL.  |
-|METAL+NONMETAL  |
-|= IONIC.        |
-|C, P, Br ARE ALL|
-|NONMETALS       |
-|(= COVALENT).   |
-|                |
-+----------------+   [ENTER]
 +----------------+
-|8-10            |
-|QUESTIONS NOT   |
-|VISIBLE IN THE  |
-|PHOTO, SO NO KEY|
-|YOU MARKED:     |
-|8:D  9:A  10:B  |
+|PART I Q7       |
+|ANSWER A LITHIUM|
+|IONIC = METAL + |
+|NONMETAL.       |
+|LI IS A METAL.  |
+|C, P, BR ARE    |
+|ALL NONMETALS.  |
 |                |
-|                |
-+----------------+   [ENTER]
-===== [C] II-1 %K STEPS =====
 +----------------+
-|%K IN K2CO3     |
-|STEP1 MOLAR MASS|
-|K 2(39.10)=78.20|
-|C 1(12.01)=12.01|
-|O 3(16.00)=48.00|
-|TOTAL = 138.21  |
-|                |
-|                |
-+----------------+   [ENTER]
 +----------------+
-|STEP 2          |
-|%=PART/WHOLE*100|
-|=78.20/138.21   |
-| *100           |
-|           56.58|
-|ANS: 56.58% K   |
+|PART I Q8-10    |
+|NOT IN THE      |
+|PHOTO, SO       |
+|NO ANSWER KEY.  |
+|YOU MARKED      |
+|8 D  9 A  10 B  |
+|ASK YOUR TEACHER|
 |                |
-|                |
-+----------------+   [ENTER]
-===== [D] II-2 HYDRATE =====
 +----------------+
+
+===== MENU 3: P2 Q1 PCT K =====
++----------------+
+|P2 Q1 STEP 1/6  |
+|GIVEN           |
+|K2CO3 POTASSIUM |
+|CARBONATE       |
+|K = 39.10 G/MOL |
+|C = 12.01 G/MOL |
+|O = 16.00 G/MOL |
+|                |
++----------------+
++----------------+
+|P2 Q1 STEP 2/6  |
+|FIND PCT K      |
+|FORMULA IN WORDS|
+|PCT K =         |
+|(MASS OF ALL K /|
+|MOLAR MASS)     |
+|* 100           |
+|                |
++----------------+
++----------------+
+|P2 Q1 STEP 3/6  |
+|MOLAR MASS K2CO3|
+|2 K, 1 C, 3 O   |
+|K 2*39.10=78.20 |
+|C 1*12.01=12.01 |
+|O 3*16.00=48.00 |
+|(ALL IN G/MOL)  |
+|                |
++----------------+
++----------------+
+|P2 Q1 STEP 4/6  |
+|ADD THEM UP     |
+|78.20           |
+|+ 12.01         |
+|+ 48.00         |
+|= 138.21 G/MOL  |
+|                |
+|                |
++----------------+
++----------------+
+|P2 Q1 STEP 5/6  |
+|PLUG IN (G/MOL) |
+|MASS K = 78.20  |
+|MOLAR MASS      |
+|= 138.21        |
+|78.20 / 138.21  |
+|= 0.5658        |
+|                |
++----------------+
++----------------+
+|P2 Q1 STEP 6/6  |
+|0.5658 * 100    |
+|= 56.58         |
+|+--------------+|
+|ANSWER          |
+|56.58 PCT K     |
+|+--------------+|
+|                |
++----------------+
+
+===== MENU 4: P2 Q2 HYDRATE =====
+(sub-menu: 1:GIVEN  2:2A EXP PCT H2O  3:2B TRUE PCT  4:2C PCT ERROR  5:MAIN MENU)
++----------------+
+|P2 Q2 GIVEN 1/3 |
 |HYDRATE         |
-|Sn(NO3)2*20H2O  |
-|HYDRATE: 7.31 G |
-|ANHYDRATE:3.50G |
+|SN(NO3)2 . 20H2O|
+|HYDRATE HEATED  |
+|= 7.31 G        |
+|ANHYDRATE MASS  |
+|= 3.50 G        |
 |                |
-|                |
-|                |
-|                |
-+----------------+   [ENTER]
 +----------------+
-|2A) EXP % H2O   |
++----------------+
+|P2 Q2 GIVEN 2/3 |
+|ATOMIC MASSES   |
+|SN = 118.71     |
+|N  = 14.01      |
+|O  = 16.00      |
+|H  = 1.008      |
+|(ALL IN G/MOL)  |
+|                |
++----------------+
++----------------+
+|P2 Q2 GIVEN 3/3 |
+|FIND            |
+|2A EXPERIMENTAL |
+|   PCT WATER    |
+|2B TRUE         |
+|   PCT WATER    |
+|2C PCT ERROR    |
+|                |
++----------------+
++----------------+
+|Q2A STEP 1/5    |
+|GIVEN           |
+|HYDRATE 7.31 G  |
+|ANHYDRATE 3.50 G|
+|FIND            |
+|EXPERIMENTAL    |
+|PCT WATER       |
+|                |
++----------------+
++----------------+
+|Q2A STEP 2/5    |
+|FORMULA IN WORDS|
+|PCT H2O =       |
+|(MASS OF WATER  |
+|LOST / MASS OF  |
+|HYDRATE) * 100  |
+|                |
+|                |
++----------------+
++----------------+
+|Q2A STEP 3/5    |
 |WATER LOST =    |
-|7.31-3.50       |
-|= 3.81 G        |
-|%=3.81/7.31*100 |
-|           52.12|
-|ANS: 52.12%     |
+|HYDRATE MINUS   |
+|ANHYDRATE       |
+|7.31 - 3.50     |
+|= 3.81 G H2O    |
 |                |
-+----------------+   [ENTER]
+|                |
 +----------------+
-|2B) TRUE % H2O  |
-|STEP1:Sn(NO3)2  |
-|NO3=14.01+3(16) |
-|   =62.01       |
-|118.71+2(62.01) |
-|=242.73 G/MOL   |
-|                |
-|                |
-+----------------+   [ENTER]
 +----------------+
-|STEP2: 20 H2O   |
-|H2O=2(1.008)+16 |
-|   =18.016      |
-|20(18.016)      |
-|=360.32 G       |
+|Q2A STEP 4/5    |
+|PLUG IN         |
+|WATER / HYDRATE |
+|3.81 G / 7.31 G |
+|= 0.5212        |
 |                |
 |                |
 |                |
-+----------------+   [ENTER]
 +----------------+
-|STEP3: HYDRATE  |
-|242.73+360.32   |
-|=603.05 G/MOL   |
-|STEP4: %        |
-|360.32/603.05   |
-| *100           |
-|           59.75|
-|ANS: 59.75%     |
-+----------------+   [ENTER]
 +----------------+
-|2C) % ERROR     |
-|ABS(EXP-TRUE)   |
-|/TRUE * 100     |
-|52.12-59.75     |
-|=-7.63, ABS=7.63|
-|7.63/59.75*100  |
-|           12.77|
-|ANS: 12.77%     |
-+----------------+   [ENTER]
-===== [E] III-1 FORMULAS =====
-+----------------+
-|FORMULA RULES   |
-|IONIC: FIND ION |
-|CHARGES, THEN   |
-|BALANCE TO ZERO |
-|(CRISS-CROSS).  |
-|COVALENT: THE   |
-|PREFIX=SUBSCRIPT|
+|Q2A STEP 5/5    |
+|0.5212 * 100    |
+|= 52.12         |
+|+--------------+|
+|2A ANSWER       |
+|52.12 PCT H2O   |
+|+--------------+|
 |                |
-+----------------+   [ENTER]
 +----------------+
-|A COPPER(II)    |
-|  HYDROXIDE     |
-|Cu 2+, OH 1-    |
-|NEED 2 OH       |
-|=Cu(OH)2        |
-|B SELENIUM      |
-|  DIOXIDE       |
-|DI=2 O =SeO2    |
-+----------------+   [ENTER]
 +----------------+
-|C TRINITROGEN   |
-|  DICHLORIDE    |
-|TRI=3 N, DI=2 Cl|
-|=N3Cl2          |
-|D AMMONIUM      |
-|  CYANIDE       |
-|NH4 1+, CN 1-   |
-|1:1 =NH4CN      |
-+----------------+   [ENTER]
-+----------------+
-|E ZINC NITRATE  |
-|Zn 2+, NO3 1-   |
-|NEED 2 NO3      |
-|=Zn(NO3)2       |
+|Q2B STEP 1/10   |
+|FIND            |
+|TRUE PCT WATER  |
+|FROM THE FORMULA|
+|SN(NO3)2 . 20H2O|
 |                |
 |                |
 |                |
-|                |
-+----------------+   [ENTER]
 +----------------+
-|F TIN(III)      |
-|  CARBONATE     |
-|Sn 3+, CO3 2-   |
-|CRISS-CROSS:    |
-|=Sn2(CO3)3      |
-|CHECK:          |
-|2(+3)=+6        |
-|3(-2)=-6  OK    |
-+----------------+   [ENTER]
 +----------------+
-|G LEAD(IV)      |
-|  PHOSPHATE     |
-|Pb 4+, PO4 3-   |
-|CRISS-CROSS:    |
-|=Pb3(PO4)4      |
-|CHECK:          |
-|3(+4)=+12       |
-|4(-3)=-12  OK   |
-+----------------+   [ENTER]
-+----------------+
-|H MAGNESIUM     |
-|  PERCHLORATE   |
-|Mg 2+, ClO4 1-  |
-|=Mg(ClO4)2      |
-|I SILVER SULFIDE|
-|Ag 1+, S 2-     |
-|=Ag2S           |
-|J AMMONIA = NH3 |
-+----------------+   [ENTER]
-===== [F] III-2 NAMES =====
-+----------------+
-|NAMING RULES    |
-|IONIC: CATION + |
-|ANION (-IDE OR  |
-|POLYATOMIC NAME)|
-|TRANSITION METAL|
-|=ROMAN NUMERAL  |
-|COVALENT:PREFIX |
-|                |
-+----------------+   [ENTER]
-+----------------+
-|A AlCl3         |
-|Al IS ALWAYS 3+ |
-|SO NO NUMERAL   |
-|=ALUMINUM       |
-| CHLORIDE       |
+|Q2B STEP 2/10   |
+|FORMULA IN WORDS|
+|PCT H2O =       |
+|(MASS OF 20 H2O |
+|/ MOLAR MASS OF |
+|HYDRATE) * 100  |
 |                |
 |                |
++----------------+
++----------------+
+|Q2B STEP 3/10   |
+|COUNT ATOMS IN  |
+|SN(NO3)2        |
+|SN = 1          |
+|N  = 1*2 = 2    |
+|O  = 3*2 = 6    |
 |                |
-+----------------+   [ENTER]
+|                |
 +----------------+
-|B NaMnO4        |
-|Na 1+, MnO4 1-  |
-|MnO4 =          |
-|PERMANGANATE    |
-|=SODIUM         |
-| PERMANGANATE   |
++----------------+
+|Q2B STEP 4/10   |
+|MASS SN(NO3)2   |
+|SN 1*118.71     |
+|   = 118.71     |
+|N 2*14.01=28.02 |
+|O 6*16.00=96.00 |
+|(ALL IN G/MOL)  |
+|                |
++----------------+
++----------------+
+|Q2B STEP 5/10   |
+|ADD SN(NO3)2    |
+|118.71          |
+|+ 28.02         |
+|+ 96.00         |
+|= 242.73 G/MOL  |
 |                |
 |                |
-+----------------+   [ENTER]
 +----------------+
-|C OCl2          |
-|COVALENT, DI=2  |
-|=OXYGEN         |
-| DICHLORIDE     |
-|D CF4           |
-|COVALENT,TETRA=4|
-|=CARBON         |
-| TETRAFLUORIDE  |
-+----------------+   [ENTER]
 +----------------+
-|E TiNO3         |
-|NO3 IS 1-       |
-|SO Ti IS 1+     |
-|=TITANIUM(I)    |
-| NITRATE        |
-|IF IT IS Tl:    |
-|=THALLIUM(I)    |
-| NITRATE        |
-+----------------+   [ENTER]
+|Q2B STEP 6/10   |
+|MASS OF 1 H2O   |
+|H 2*1.008=2.016 |
+|O 1*16.00=16.00 |
+|2.016 + 16.00   |
+|= 18.016 G/MOL  |
+|                |
+|                |
 +----------------+
-|F H2SO3         |
-|SO3 2- =SULFITE |
-|ACID: -ITE=-OUS |
-|=SULFUROUS ACID |
-|G MnF2          |
-|F IS 1-,SO Mn=2+|
-|=MANGANESE(II)  |
-| FLUORIDE       |
-+----------------+   [ENTER]
 +----------------+
-|H ZnCO3         |
-|Zn IS ALWAYS 2+ |
-|SO NO NUMERAL   |
-|=ZINC CARBONATE |
+|Q2B STEP 7/10   |
+|MASS OF 20 H2O  |
+|20 * 18.016     |
+|= 360.32 G/MOL  |
 |                |
 |                |
 |                |
 |                |
-+----------------+   [ENTER]
 +----------------+
-|I S2Cl5         |
-|COVALENT:       |
-|DI=2, PENTA=5   |
-|=DISULFUR       |
-| PENTACHLORIDE  |
-|J SO4 2-        |
++----------------+
+|Q2B STEP 8/10   |
+|MOLAR MASS OF   |
+|WHOLE HYDRATE   |
+|242.73          |
+|+ 360.32        |
+|= 603.05 G/MOL  |
+|                |
+|                |
++----------------+
++----------------+
+|Q2B STEP 9/10   |
+|PLUG IN         |
+|20 H2O / HYDRATE|
+|360.32 / 603.05 |
+|= 0.5975        |
+|                |
+|                |
+|                |
++----------------+
++----------------+
+|Q2B STEP 10/10  |
+|0.5975 * 100    |
+|= 59.75         |
+|+--------------+|
+|2B ANSWER       |
+|59.75 PCT H2O   |
+|+--------------+|
+|                |
++----------------+
++----------------+
+|Q2C STEP 1/5    |
+|FIND PCT ERROR  |
+|EXPERIMENTAL    |
+|= 52.12 (2A)    |
+|TRUE            |
+|= 59.75 (2B)    |
+|                |
+|                |
++----------------+
++----------------+
+|Q2C STEP 2/5    |
+|FORMULA IN WORDS|
+|PCT ERROR =     |
+|ABS(EXP - TRUE) |
+|/ TRUE * 100    |
+|ABS MEANS DROP  |
+|THE MINUS SIGN  |
+|                |
++----------------+
++----------------+
+|Q2C STEP 3/5    |
+|SUBTRACT        |
+|52.12 - 59.75   |
+|= -7.63         |
+|ABS(-7.63)      |
+|= 7.63          |
+|                |
+|                |
++----------------+
++----------------+
+|Q2C STEP 4/5    |
+|DIVIDE BY TRUE  |
+|7.63 / 59.75    |
+|= 0.1277        |
+|                |
+|                |
+|                |
+|                |
++----------------+
++----------------+
+|Q2C STEP 5/5    |
+|0.1277 * 100    |
+|= 12.77         |
+|+--------------+|
+|2C ANSWER       |
+|12.77 PCT ERROR |
+|+--------------+|
+|                |
++----------------+
+
+===== MENU 5: III-1 FORMULAS =====
++----------------+
+|III-1 A (1/2)   |
+|COPPER(II)      |
+|HYDROXIDE       |
+|METAL + POLY ION|
+|= IONIC         |
+|(II) MEANS CU 2+|
+|HYDROXIDE OH 1- |
+|                |
++----------------+
++----------------+
+|III-1 A (2/2)   |
+|CU 2+   OH 1-   |
+|CRISS-CROSS     |
+|CU1 (OH)2       |
+|+2 + 2(-1) = 0  |
+|DROP SUBSCRIPT 1|
+|ANSWER CU(OH)2  |
+|                |
++----------------+
++----------------+
+|III-1 B         |
+|SELENIUM DIOXIDE|
+|2 NONMETALS SO  |
+|USE PREFIXES    |
+|NO PREFIX = 1 SE|
+|DI = 2 O        |
+|ANSWER SEO2     |
+|                |
++----------------+
++----------------+
+|III-1 C         |
+|TRINITROGEN     |
+|DICHLORIDE      |
+|TRI = 3 N       |
+|DI  = 2 CL      |
+|(NO CRISS-CROSS)|
+|ANSWER N3CL2    |
+|                |
++----------------+
++----------------+
+|III-1 D (1/2)   |
+|AMMONIUM        |
+|CYANIDE         |
+|2 POLYATOMIC    |
+|IONS            |
+|AMMONIUM NH4 1+ |
+|CYANIDE  CN 1-  |
+|                |
++----------------+
++----------------+
+|III-1 D (2/2)   |
+|NH4 1+   CN 1-  |
+|+1 + (-1) = 0   |
+|1 TO 1 RATIO    |
+|ONLY 1 OF EACH, |
+|SO NO ( ) NEEDED|
+|ANSWER NH4CN    |
+|                |
++----------------+
++----------------+
+|III-1 E (1/2)   |
+|ZINC NITRATE    |
+|ZINC IS ALWAYS  |
+|ZN 2+           |
+|NITRATE NO3 1-  |
+|                |
+|                |
+|                |
++----------------+
++----------------+
+|III-1 E (2/2)   |
+|ZN 2+   NO3 1-  |
+|CRISS-CROSS     |
+|ZN1 (NO3)2      |
+|+2 + 2(-1) = 0  |
+|DROP SUBSCRIPT 1|
+|ANSWER ZN(NO3)2 |
+|                |
++----------------+
++----------------+
+|III-1 F (1/3)   |
+|TIN(III)        |
+|CARBONATE       |
+|(III) MEANS     |
+|SN 3+           |
+|CARBONATE CO3 2-|
+|                |
+|                |
++----------------+
++----------------+
+|III-1 F (2/3)   |
+|SN 3+   CO3 2-  |
+|CRISS-CROSS     |
+|3 GOES TO CO3   |
+|2 GOES TO SN    |
+|SN2 (CO3)3      |
+|ANSWER SN2(CO3)3|
+|                |
++----------------+
++----------------+
+|III-1 F (3/3)   |
+|CHARGE CHECK    |
+|SN  2*(+3) = +6 |
+|CO3 3*(-2) = -6 |
+|+6 + (-6) = 0   |
+|BALANCED        |
+|(LOWEST RATIO)  |
+|                |
++----------------+
++----------------+
+|III-1 G (1/3)   |
+|LEAD(IV)        |
+|PHOSPHATE       |
+|(IV) MEANS      |
+|PB 4+           |
+|PHOSPHATE PO4 3-|
+|                |
+|                |
++----------------+
++----------------+
+|III-1 G (2/3)   |
+|PB 4+   PO4 3-  |
+|CRISS-CROSS     |
+|4 GOES TO PO4   |
+|3 GOES TO PB    |
+|PB3 (PO4)4      |
+|ANSWER PB3(PO4)4|
+|                |
++----------------+
++----------------+
+|III-1 G (3/3)   |
+|CHARGE CHECK    |
+|PB  3*(+4)=+12  |
+|PO4 4*(-3)=-12  |
+|+12 + (-12) = 0 |
+|BALANCED        |
+|(LOWEST RATIO)  |
+|                |
++----------------+
++----------------+
+|III-1 H (1/2)   |
+|MAGNESIUM       |
+|PERCHLORATE     |
+|MAGNESIUM IS    |
+|ALWAYS MG 2+    |
+|PERCHLORATE     |
+|CLO4 1-         |
+|                |
++----------------+
++----------------+
+|III-1 H (2/2)   |
+|MG 2+  CLO4 1-  |
+|CRISS-CROSS     |
+|MG1 (CLO4)2     |
+|+2 + 2(-1) = 0  |
+|DROP SUBSCRIPT 1|
+|ANSWER MG(CLO4)2|
+|                |
++----------------+
++----------------+
+|III-1 I (1/2)   |
+|SILVER SULFIDE  |
+|SILVER IS       |
+|ALWAYS AG 1+    |
+|SULFIDE IS S 2- |
+|                |
+|                |
+|                |
++----------------+
++----------------+
+|III-1 I (2/2)   |
+|AG 1+   S 2-    |
+|CRISS-CROSS     |
+|AG2 S1          |
+|2(+1) + (-2) = 0|
+|DROP SUBSCRIPT 1|
+|ANSWER AG2S     |
+|                |
++----------------+
++----------------+
+|III-1 J         |
+|AMMONIA         |
+|COMMON NAME     |
+|YOU MEMORIZE IT |
+|1 N AND 3 H     |
+|ANSWER NH3      |
+|                |
+|                |
++----------------+
+
+===== MENU 6: III-2 NAMES =====
++----------------+
+|III-2 A (1/2)   |
+|ALCL3 = AL CL3  |
+|AL = METAL      |
+|CL = NONMETAL   |
+|= IONIC, BINARY |
+|AL IS ALWAYS 3+ |
+|NO ROMAN NUMERAL|
+|                |
++----------------+
++----------------+
+|III-2 A (2/2)   |
+|RULE METAL NAME |
+|+ ROOT + IDE    |
+|CHLOR + IDE =   |
+|CHLORIDE        |
+|ANSWER ALUMINUM |
+|  CHLORIDE      |
+|                |
++----------------+
++----------------+
+|III-2 B (1/2)   |
+|NAMNO4 = NA MNO4|
+|NA = SODIUM 1+  |
+|MNO4 1- IS A    |
 |POLYATOMIC ION  |
-|=SULFATE ION    |
-+----------------+   [ENTER]
+|= PERMANGANATE  |
+|                |
+|                |
++----------------+
++----------------+
+|III-2 B (2/2)   |
+|RULE METAL NAME |
+|+ POLYATOMIC    |
+|ION NAME        |
+|(NOT CHANGED)   |
+|ANSWER SODIUM   |
+|  PERMANGANATE  |
+|                |
++----------------+
++----------------+
+|III-2 C (1/3)   |
+|OCL2 = O CL2    |
+|O AND CL ARE    |
+|BOTH NONMETALS  |
+|= MOLECULAR,    |
+|USE PREFIXES    |
+|                |
+|                |
++----------------+
++----------------+
+|III-2 C (2/3)   |
+|1 O = OXYGEN    |
+|(SKIP MONO ON   |
+|FIRST ELEMENT)  |
+|2 CL = DI +     |
+|CHLORIDE        |
+|                |
+|                |
++----------------+
++----------------+
+|III-2 C (3/3)   |
+|ANSWER OXYGEN   |
+|  DICHLORIDE    |
+|ALSO CALLED     |
+|  DICHLORINE    |
+|  MONOXIDE      |
+|  (WRITTEN CL2O)|
+|                |
++----------------+
++----------------+
+|III-2 D (1/2)   |
+|CF4             |
+|C AND F ARE     |
+|BOTH NONMETALS  |
+|= MOLECULAR,    |
+|USE PREFIXES    |
+|                |
+|                |
++----------------+
++----------------+
+|III-2 D (2/2)   |
+|1 C = CARBON    |
+|(SKIP MONO)     |
+|4 F = TETRA +   |
+|FLUORIDE        |
+|ANSWER CARBON   |
+|  TETRAFLUORIDE |
+|                |
++----------------+
++----------------+
+|III-2 E (1/4)   |
+|TINO3 = TI NO3  |
+|TI = TITANIUM,  |
+|A TRANSITION    |
+|METAL, SO IT    |
+|NEEDS A ROMAN   |
+|NUMERAL         |
+|                |
++----------------+
++----------------+
+|III-2 E (2/4)   |
+|NO3 = NITRATE   |
+|CHARGE 1-       |
+|ONE NO3 = -1    |
+|SO TI = +1      |
+|+1 + (-1) = 0   |
+|ROMAN NUMERAL I |
+|                |
++----------------+
++----------------+
+|III-2 E (3/4)   |
+|ANSWER          |
+|TITANIUM(I)     |
+|NITRATE         |
+|                |
+|                |
+|                |
+|                |
++----------------+
++----------------+
+|III-2 E (4/4)   |
+|NOTE            |
+|IF THE SYMBOL   |
+|WAS TL (NOT TI) |
+|THEN IT IS      |
+|THALLIUM(I)     |
+|NITRATE         |
+|                |
++----------------+
++----------------+
+|III-2 F (1/3)   |
+|H2SO3 = H2 SO3  |
+|H + POLYATOMIC  |
+|ION WITH OXYGEN |
+|= OXYACID       |
+|SO NO HYDRO-    |
+|                |
+|                |
++----------------+
++----------------+
+|III-2 F (2/3)   |
+|SO3 2- = SULFITE|
+|RULE            |
+|-ITE ION =      |
+|  -OUS ACID     |
+|-ATE ION =      |
+|  -IC ACID      |
+|                |
++----------------+
++----------------+
+|III-2 F (3/3)   |
+|SULFITE ENDS IN |
+|-ITE SO -OUS    |
+|SULFUR + OUS    |
+|ANSWER          |
+|SULFUROUS ACID  |
+|                |
+|                |
++----------------+
++----------------+
+|III-2 G (1/2)   |
+|MNF2 = MN F2    |
+|MN = MANGANESE, |
+|TRANSITION METAL|
+|NEEDS A NUMERAL |
+|F IS 1-         |
+|2 F = 2(-1) = -2|
+|                |
++----------------+
++----------------+
+|III-2 G (2/2)   |
+|MN + (-2) = 0   |
+|SO MN = +2      |
+|NUMERAL II      |
+|ANSWER          |
+|MANGANESE(II)   |
+|FLUORIDE        |
+|                |
++----------------+
++----------------+
+|III-2 H (1/2)   |
+|ZNCO3 = ZN CO3  |
+|ZN = ZINC       |
+|ALWAYS 2+ SO    |
+|NO NUMERAL      |
+|CO3 2- =        |
+|CARBONATE       |
+|                |
++----------------+
++----------------+
+|III-2 H (2/2)   |
+|RULE METAL NAME |
+|+ POLYATOMIC    |
+|ION NAME        |
+|ANSWER          |
+|ZINC CARBONATE  |
+|                |
+|                |
++----------------+
++----------------+
+|III-2 I (1/2)   |
+|S2CL5 = S2 CL5  |
+|S AND CL ARE    |
+|BOTH NONMETALS  |
+|= MOLECULAR,    |
+|USE PREFIXES    |
+|                |
+|                |
++----------------+
++----------------+
+|III-2 I (2/2)   |
+|2 S = DI +      |
+|SULFUR          |
+|5 CL = PENTA +  |
+|CHLORIDE        |
+|ANSWER DISULFUR |
+|  PENTACHLORIDE |
+|                |
++----------------+
++----------------+
+|III-2 J         |
+|SO4 2-          |
+|POLYATOMIC ION  |
+|WITH A 2- CHARGE|
+|MEMORIZED NAME  |
+|ANSWER          |
+|SULFATE ION     |
+|                |
++----------------+

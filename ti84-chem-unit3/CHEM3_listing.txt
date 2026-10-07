@@ -1,0 +1,334 @@
+CHEM3 for the TI-84 Plus (honors chem Unit III answer key + step-by-step work)
+==============================================================================
+
+EASIEST WAY: send CHEM3.8xp with TI Connect CE (free from education.ti.com).
+  Plug in the calculator, drag CHEM3.8xp onto it, and pick RAM (not Archive).
+  If it asks to replace the old CHEM3, say yes.  It needs about 10 KB of free RAM.
+
+RUN IT: PRGM, pick CHEM3, ENTER, ENTER.
+  Pick a menu option with its number.  ENTER = next screen.
+  Each section goes back to the menu when it ends.  7:QUIT exits.
+  Press ON to stop it any time (then 1:Quit).
+
+TYPING IT IN BY HAND (only if you have no cable -- it is 300 lines)
+  PRGM > NEW > 1:Create New, type CHEM3 (ALPHA is already on), ENTER.
+  Every line below starts with ":" -- the calculator adds that, don't type it.
+  Press ENTER at the end of each line.
+  Commands (press PRGM while editing):
+    ClrHome   PRGM > I/O > 8
+    Disp      PRGM > I/O > 3
+    Pause     PRGM > CTL > 8
+    Lbl       PRGM > CTL > 9
+    Goto      PRGM > CTL > 0
+    Menu(     PRGM > CTL > C:Menu(   (shortcut: PRGM, then ALPHA, then PRGM)
+  Characters:
+    "        ALPHA then +
+    space    ALPHA then 0
+    =        2ND then MATH (TEST menu) > 1
+    letters  ALPHA then the key (2ND ALPHA locks ALPHA on for whole words)
+    , ( ) . + - * /   their own keys (- is the minus key, * is the x key)
+  Type every character exactly as shown.
+
+PROGRAM LISTING
+---------------
+PROGRAM:CHEM3
+:Lbl M
+:Menu("CHEM UNIT 3 KEY","ANSWER SHEET",A,"PART I EXPLAIN",B,"P2 Q1 PCT K",C,"P2 Q2 HYDRATE",D,"III-1 FORMULAS",E,"III-2 NAMES",F,"QUIT",Q
+:Lbl A
+:ClrHome
+:Disp "ANS 1/7 PART I","1 D  2 B  3 D","4 C  5 C  6 B","7 A","8-10 NO KEY","(NOT IN PHOTO)","MARKED 8D 9A 10B"
+:Pause
+:ClrHome
+:Disp "ANS 2/7 PART II","1  56.58 PCT K","2A 52.12 PCT H2O","2B 59.75 PCT H2O","2C 12.77 PCT ERR","2A=EXPERIMENTAL","2B=TRUE"
+:Pause
+:ClrHome
+:Disp "CAPS NOTE","NO LOWERCASE ON","THIS SCREEN. IN","A SYMBOL LIKE CU","CL SN PB ZN MG","THE 2ND LETTER","IS LOWERCASE."
+:Pause
+:ClrHome
+:Disp "ANS 3/7 III-1","A CU(OH)2","B SEO2","C N3CL2","D NH4CN","E ZN(NO3)2"
+:Pause
+:ClrHome
+:Disp "ANS 4/7 III-1","F SN2(CO3)3","G PB3(PO4)4","H MG(CLO4)2","I AG2S","J NH3"
+:Pause
+:ClrHome
+:Disp "ANS 5/7 III-2","A ALUMINUM","  CHLORIDE","B SODIUM","  PERMANGANATE","C OXYGEN","  DICHLORIDE"
+:Pause
+:ClrHome
+:Disp "ANS 6/7 III-2","D CARBON","  TETRAFLUORIDE","E TITANIUM(I)","  NITRATE","  (TL=THALLIUM)","F SULFUROUS ACID"
+:Pause
+:ClrHome
+:Disp "ANS 7/7 III-2","G MANGANESE(II)","  FLUORIDE","H ZINC CARBONATE","I DISULFUR","  PENTACHLORIDE","J SULFATE ION"
+:Pause
+:Goto M
+:Lbl B
+:ClrHome
+:Disp "PART I Q1","ANSWER D","SUBSCRIPT = THE","NUMBER OF ATOMS","OF AN ELEMENT IN","THE COMPOUND.","H2O HAS 2 H, 1 O"
+:Pause
+:ClrHome
+:Disp "PART I Q2 (1/3)","ANSWER B","HYDROPHOSPHORIC","ACID","YOU MARKED D,","BUT B IS CORRECT"
+:Pause
+:ClrHome
+:Disp "PART I Q2 (2/3)","WHY","H3P IS H + ONE","NONMETAL (P)","AND NO OXYGEN,","SO IT IS A","BINARY ACID."
+:Pause
+:ClrHome
+:Disp "PART I Q2 (3/3)","BINARY ACID RULE","HYDRO- + ROOT","+ -IC ACID","P ROOT=PHOSPHOR","HYDROPHOSPHORIC","ACID"
+:Pause
+:ClrHome
+:Disp "PART I Q3","ANSWER D","IN AN IONIC","FORMULA THE SUM","OF ALL CHARGES","(CHARGE*NUMBER)","MUST EQUAL ZERO."
+:Pause
+:ClrHome
+:Disp "PART I Q4 (1/2)","ANSWER C","POTASSIUM","CHLORIDE = KCL","BINARY = ONLY","2 ELEMENTS","(K AND CL)."
+:Pause
+:ClrHome
+:Disp "PART I Q4 (2/2)","THE OTHERS HAVE","POLYATOMIC IONS","LI3PO4  PO4 3-","AG2SO4  SO4 2-","NA3PO4  PO4 3-","SO NOT BINARY."
+:Pause
+:ClrHome
+:Disp "PART I Q5 (1/3)","ANSWER C (+2)","FORMULA X3(PO4)2","FIND CHARGE OF X","PHOSPHATE PO4","HAS CHARGE 3-"
+:Pause
+:ClrHome
+:Disp "PART I Q5 (2/3)","TOTAL CHARGE = 0","3X + 2(-3) = 0","3X - 6 = 0","3X = +6","X = +6 / 3","X = +2"
+:Pause
+:ClrHome
+:Disp "PART I Q5 (3/3)","CHECK","3(+2) = +6","2(-3) = -6","+6 + (-6) = 0","IT WORKS, SO","ANSWER C  +2"
+:Pause
+:ClrHome
+:Disp "PART I Q6","ANSWER B (1-)","A 3+ ION NEEDS","THREE 1- IONS","+3 + 3(-1) = 0","EXAMPLE ALCL3","AL 3+, 3 CL 1-"
+:Pause
+:ClrHome
+:Disp "PART I Q7","ANSWER A LITHIUM","IONIC = METAL +","NONMETAL.","LI IS A METAL.","C, P, BR ARE","ALL NONMETALS."
+:Pause
+:ClrHome
+:Disp "PART I Q8-10","NOT IN THE","PHOTO, SO","NO ANSWER KEY.","YOU MARKED","8 D  9 A  10 B","ASK YOUR TEACHER"
+:Pause
+:Goto M
+:Lbl C
+:ClrHome
+:Disp "P2 Q1 STEP 1/6","GIVEN","K2CO3 POTASSIUM","CARBONATE","K = 39.10 G/MOL","C = 12.01 G/MOL","O = 16.00 G/MOL"
+:Pause
+:ClrHome
+:Disp "P2 Q1 STEP 2/6","FIND PCT K","FORMULA IN WORDS","PCT K =","(MASS OF ALL K /","MOLAR MASS)","* 100"
+:Pause
+:ClrHome
+:Disp "P2 Q1 STEP 3/6","MOLAR MASS K2CO3","2 K, 1 C, 3 O","K 2*39.10=78.20","C 1*12.01=12.01","O 3*16.00=48.00","(ALL IN G/MOL)"
+:Pause
+:ClrHome
+:Disp "P2 Q1 STEP 4/6","ADD THEM UP","78.20","+ 12.01","+ 48.00","= 138.21 G/MOL"
+:Pause
+:ClrHome
+:Disp "P2 Q1 STEP 5/6","PLUG IN (G/MOL)","MASS K = 78.20","MOLAR MASS","= 138.21","78.20 / 138.21","= 0.5658"
+:Pause
+:ClrHome
+:Disp "P2 Q1 STEP 6/6","0.5658 * 100","= 56.58","+--------------+","ANSWER","56.58 PCT K","+--------------+"
+:Pause
+:Goto M
+:Lbl D
+:Menu("P2 Q2 HYDRATE","GIVEN",G,"2A EXP PCT H2O",H,"2B TRUE PCT",I,"2C PCT ERROR",J,"MAIN MENU",M
+:Lbl G
+:ClrHome
+:Disp "P2 Q2 GIVEN 1/3","HYDRATE","SN(NO3)2 . 20H2O","HYDRATE HEATED","= 7.31 G","ANHYDRATE MASS","= 3.50 G"
+:Pause
+:ClrHome
+:Disp "P2 Q2 GIVEN 2/3","ATOMIC MASSES","SN = 118.71","N  = 14.01","O  = 16.00","H  = 1.008","(ALL IN G/MOL)"
+:Pause
+:ClrHome
+:Disp "P2 Q2 GIVEN 3/3","FIND","2A EXPERIMENTAL","   PCT WATER","2B TRUE","   PCT WATER","2C PCT ERROR"
+:Pause
+:Goto D
+:Lbl H
+:ClrHome
+:Disp "Q2A STEP 1/5","GIVEN","HYDRATE 7.31 G","ANHYDRATE 3.50 G","FIND","EXPERIMENTAL","PCT WATER"
+:Pause
+:ClrHome
+:Disp "Q2A STEP 2/5","FORMULA IN WORDS","PCT H2O =","(MASS OF WATER","LOST / MASS OF","HYDRATE) * 100"
+:Pause
+:ClrHome
+:Disp "Q2A STEP 3/5","WATER LOST =","HYDRATE MINUS","ANHYDRATE","7.31 - 3.50","= 3.81 G H2O"
+:Pause
+:ClrHome
+:Disp "Q2A STEP 4/5","PLUG IN","WATER / HYDRATE","3.81 G / 7.31 G","= 0.5212"
+:Pause
+:ClrHome
+:Disp "Q2A STEP 5/5","0.5212 * 100","= 52.12","+--------------+","2A ANSWER","52.12 PCT H2O","+--------------+"
+:Pause
+:Goto D
+:Lbl I
+:ClrHome
+:Disp "Q2B STEP 1/10","FIND","TRUE PCT WATER","FROM THE FORMULA","SN(NO3)2 . 20H2O"
+:Pause
+:ClrHome
+:Disp "Q2B STEP 2/10","FORMULA IN WORDS","PCT H2O =","(MASS OF 20 H2O","/ MOLAR MASS OF","HYDRATE) * 100"
+:Pause
+:ClrHome
+:Disp "Q2B STEP 3/10","COUNT ATOMS IN","SN(NO3)2","SN = 1","N  = 1*2 = 2","O  = 3*2 = 6"
+:Pause
+:ClrHome
+:Disp "Q2B STEP 4/10","MASS SN(NO3)2","SN 1*118.71","   = 118.71","N 2*14.01=28.02","O 6*16.00=96.00","(ALL IN G/MOL)"
+:Pause
+:ClrHome
+:Disp "Q2B STEP 5/10","ADD SN(NO3)2","118.71","+ 28.02","+ 96.00","= 242.73 G/MOL"
+:Pause
+:ClrHome
+:Disp "Q2B STEP 6/10","MASS OF 1 H2O","H 2*1.008=2.016","O 1*16.00=16.00","2.016 + 16.00","= 18.016 G/MOL"
+:Pause
+:ClrHome
+:Disp "Q2B STEP 7/10","MASS OF 20 H2O","20 * 18.016","= 360.32 G/MOL"
+:Pause
+:ClrHome
+:Disp "Q2B STEP 8/10","MOLAR MASS OF","WHOLE HYDRATE","242.73","+ 360.32","= 603.05 G/MOL"
+:Pause
+:ClrHome
+:Disp "Q2B STEP 9/10","PLUG IN","20 H2O / HYDRATE","360.32 / 603.05","= 0.5975"
+:Pause
+:ClrHome
+:Disp "Q2B STEP 10/10","0.5975 * 100","= 59.75","+--------------+","2B ANSWER","59.75 PCT H2O","+--------------+"
+:Pause
+:Goto D
+:Lbl J
+:ClrHome
+:Disp "Q2C STEP 1/5","FIND PCT ERROR","EXPERIMENTAL","= 52.12 (2A)","TRUE","= 59.75 (2B)"
+:Pause
+:ClrHome
+:Disp "Q2C STEP 2/5","FORMULA IN WORDS","PCT ERROR =","ABS(EXP - TRUE)","/ TRUE * 100","ABS MEANS DROP","THE MINUS SIGN"
+:Pause
+:ClrHome
+:Disp "Q2C STEP 3/5","SUBTRACT","52.12 - 59.75","= -7.63","ABS(-7.63)","= 7.63"
+:Pause
+:ClrHome
+:Disp "Q2C STEP 4/5","DIVIDE BY TRUE","7.63 / 59.75","= 0.1277"
+:Pause
+:ClrHome
+:Disp "Q2C STEP 5/5","0.1277 * 100","= 12.77","+--------------+","2C ANSWER","12.77 PCT ERROR","+--------------+"
+:Pause
+:Goto D
+:Lbl E
+:ClrHome
+:Disp "III-1 A (1/2)","COPPER(II)","HYDROXIDE","METAL + POLY ION","= IONIC","(II) MEANS CU 2+","HYDROXIDE OH 1-"
+:Pause
+:ClrHome
+:Disp "III-1 A (2/2)","CU 2+   OH 1-","CRISS-CROSS","CU1 (OH)2","+2 + 2(-1) = 0","DROP SUBSCRIPT 1","ANSWER CU(OH)2"
+:Pause
+:ClrHome
+:Disp "III-1 B","SELENIUM DIOXIDE","2 NONMETALS SO","USE PREFIXES","NO PREFIX = 1 SE","DI = 2 O","ANSWER SEO2"
+:Pause
+:ClrHome
+:Disp "III-1 C","TRINITROGEN","DICHLORIDE","TRI = 3 N","DI  = 2 CL","(NO CRISS-CROSS)","ANSWER N3CL2"
+:Pause
+:ClrHome
+:Disp "III-1 D (1/2)","AMMONIUM","CYANIDE","2 POLYATOMIC","IONS","AMMONIUM NH4 1+","CYANIDE  CN 1-"
+:Pause
+:ClrHome
+:Disp "III-1 D (2/2)","NH4 1+   CN 1-","+1 + (-1) = 0","1 TO 1 RATIO","ONLY 1 OF EACH,","SO NO ( ) NEEDED","ANSWER NH4CN"
+:Pause
+:ClrHome
+:Disp "III-1 E (1/2)","ZINC NITRATE","ZINC IS ALWAYS","ZN 2+","NITRATE NO3 1-"
+:Pause
+:ClrHome
+:Disp "III-1 E (2/2)","ZN 2+   NO3 1-","CRISS-CROSS","ZN1 (NO3)2","+2 + 2(-1) = 0","DROP SUBSCRIPT 1","ANSWER ZN(NO3)2"
+:Pause
+:ClrHome
+:Disp "III-1 F (1/3)","TIN(III)","CARBONATE","(III) MEANS","SN 3+","CARBONATE CO3 2-"
+:Pause
+:ClrHome
+:Disp "III-1 F (2/3)","SN 3+   CO3 2-","CRISS-CROSS","3 GOES TO CO3","2 GOES TO SN","SN2 (CO3)3","ANSWER SN2(CO3)3"
+:Pause
+:ClrHome
+:Disp "III-1 F (3/3)","CHARGE CHECK","SN  2*(+3) = +6","CO3 3*(-2) = -6","+6 + (-6) = 0","BALANCED","(LOWEST RATIO)"
+:Pause
+:ClrHome
+:Disp "III-1 G (1/3)","LEAD(IV)","PHOSPHATE","(IV) MEANS","PB 4+","PHOSPHATE PO4 3-"
+:Pause
+:ClrHome
+:Disp "III-1 G (2/3)","PB 4+   PO4 3-","CRISS-CROSS","4 GOES TO PO4","3 GOES TO PB","PB3 (PO4)4","ANSWER PB3(PO4)4"
+:Pause
+:ClrHome
+:Disp "III-1 G (3/3)","CHARGE CHECK","PB  3*(+4)=+12","PO4 4*(-3)=-12","+12 + (-12) = 0","BALANCED","(LOWEST RATIO)"
+:Pause
+:ClrHome
+:Disp "III-1 H (1/2)","MAGNESIUM","PERCHLORATE","MAGNESIUM IS","ALWAYS MG 2+","PERCHLORATE","CLO4 1-"
+:Pause
+:ClrHome
+:Disp "III-1 H (2/2)","MG 2+  CLO4 1-","CRISS-CROSS","MG1 (CLO4)2","+2 + 2(-1) = 0","DROP SUBSCRIPT 1","ANSWER MG(CLO4)2"
+:Pause
+:ClrHome
+:Disp "III-1 I (1/2)","SILVER SULFIDE","SILVER IS","ALWAYS AG 1+","SULFIDE IS S 2-"
+:Pause
+:ClrHome
+:Disp "III-1 I (2/2)","AG 1+   S 2-","CRISS-CROSS","AG2 S1","2(+1) + (-2) = 0","DROP SUBSCRIPT 1","ANSWER AG2S"
+:Pause
+:ClrHome
+:Disp "III-1 J","AMMONIA","COMMON NAME","YOU MEMORIZE IT","1 N AND 3 H","ANSWER NH3"
+:Pause
+:Goto M
+:Lbl F
+:ClrHome
+:Disp "III-2 A (1/2)","ALCL3 = AL CL3","AL = METAL","CL = NONMETAL","= IONIC, BINARY","AL IS ALWAYS 3+","NO ROMAN NUMERAL"
+:Pause
+:ClrHome
+:Disp "III-2 A (2/2)","RULE METAL NAME","+ ROOT + IDE","CHLOR + IDE =","CHLORIDE","ANSWER ALUMINUM","  CHLORIDE"
+:Pause
+:ClrHome
+:Disp "III-2 B (1/2)","NAMNO4 = NA MNO4","NA = SODIUM 1+","MNO4 1- IS A","POLYATOMIC ION","= PERMANGANATE"
+:Pause
+:ClrHome
+:Disp "III-2 B (2/2)","RULE METAL NAME","+ POLYATOMIC","ION NAME","(NOT CHANGED)","ANSWER SODIUM","  PERMANGANATE"
+:Pause
+:ClrHome
+:Disp "III-2 C (1/3)","OCL2 = O CL2","O AND CL ARE","BOTH NONMETALS","= MOLECULAR,","USE PREFIXES"
+:Pause
+:ClrHome
+:Disp "III-2 C (2/3)","1 O = OXYGEN","(SKIP MONO ON","FIRST ELEMENT)","2 CL = DI +","CHLORIDE"
+:Pause
+:ClrHome
+:Disp "III-2 C (3/3)","ANSWER OXYGEN","  DICHLORIDE","ALSO CALLED","  DICHLORINE","  MONOXIDE","  (WRITTEN CL2O)"
+:Pause
+:ClrHome
+:Disp "III-2 D (1/2)","CF4","C AND F ARE","BOTH NONMETALS","= MOLECULAR,","USE PREFIXES"
+:Pause
+:ClrHome
+:Disp "III-2 D (2/2)","1 C = CARBON","(SKIP MONO)","4 F = TETRA +","FLUORIDE","ANSWER CARBON","  TETRAFLUORIDE"
+:Pause
+:ClrHome
+:Disp "III-2 E (1/4)","TINO3 = TI NO3","TI = TITANIUM,","A TRANSITION","METAL, SO IT","NEEDS A ROMAN","NUMERAL"
+:Pause
+:ClrHome
+:Disp "III-2 E (2/4)","NO3 = NITRATE","CHARGE 1-","ONE NO3 = -1","SO TI = +1","+1 + (-1) = 0","ROMAN NUMERAL I"
+:Pause
+:ClrHome
+:Disp "III-2 E (3/4)","ANSWER","TITANIUM(I)","NITRATE"
+:Pause
+:ClrHome
+:Disp "III-2 E (4/4)","NOTE","IF THE SYMBOL","WAS TL (NOT TI)","THEN IT IS","THALLIUM(I)","NITRATE"
+:Pause
+:ClrHome
+:Disp "III-2 F (1/3)","H2SO3 = H2 SO3","H + POLYATOMIC","ION WITH OXYGEN","= OXYACID","SO NO HYDRO-"
+:Pause
+:ClrHome
+:Disp "III-2 F (2/3)","SO3 2- = SULFITE","RULE","-ITE ION =","  -OUS ACID","-ATE ION =","  -IC ACID"
+:Pause
+:ClrHome
+:Disp "III-2 F (3/3)","SULFITE ENDS IN","-ITE SO -OUS","SULFUR + OUS","ANSWER","SULFUROUS ACID"
+:Pause
+:ClrHome
+:Disp "III-2 G (1/2)","MNF2 = MN F2","MN = MANGANESE,","TRANSITION METAL","NEEDS A NUMERAL","F IS 1-","2 F = 2(-1) = -2"
+:Pause
+:ClrHome
+:Disp "III-2 G (2/2)","MN + (-2) = 0","SO MN = +2","NUMERAL II","ANSWER","MANGANESE(II)","FLUORIDE"
+:Pause
+:ClrHome
+:Disp "III-2 H (1/2)","ZNCO3 = ZN CO3","ZN = ZINC","ALWAYS 2+ SO","NO NUMERAL","CO3 2- =","CARBONATE"
+:Pause
+:ClrHome
+:Disp "III-2 H (2/2)","RULE METAL NAME","+ POLYATOMIC","ION NAME","ANSWER","ZINC CARBONATE"
+:Pause
+:ClrHome
+:Disp "III-2 I (1/2)","S2CL5 = S2 CL5","S AND CL ARE","BOTH NONMETALS","= MOLECULAR,","USE PREFIXES"
+:Pause
+:ClrHome
+:Disp "III-2 I (2/2)","2 S = DI +","SULFUR","5 CL = PENTA +","CHLORIDE","ANSWER DISULFUR","  PENTACHLORIDE"
+:Pause
+:ClrHome
+:Disp "III-2 J","SO4 2-","POLYATOMIC ION","WITH A 2- CHARGE","MEMORIZED NAME","ANSWER","SULFATE ION"
+:Pause
+:Goto M
+:Lbl Q
+:ClrHome
