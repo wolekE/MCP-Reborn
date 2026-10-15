@@ -1,0 +1,2662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PHYS-84 Plus · AP Physics 1 Calculator</title>
+<style>
+:root {
+  --desk: #0e1014;
+  --body: #24272d;
+  --body-hi: #2f333a;
+  --body-lo: #191b1f;
+  --lcd: #c9d4b6;
+  --lcd-2: #bdc9a8;
+  --lcd-in: #e6ecdb;
+  --ink: #1b2416;
+  --ink-dim: #4f5e45;
+  --ink-err: #7d1616;
+  --key: #31353c;
+  --key-hi: #424750;
+  --key-text: #f2f4f6;
+  --key-light: #e4e7eb;
+  --key-light-text: #1d2126;
+  --blue: #5cb2f2;
+  --blue-dk: #2a77b3;
+  --green: #7bc874;
+  --green-dk: #3c8a37;
+  --label: #aeb7c2;
+  --muted: #858f9b;
+  --accent: #ffd166;
+  --mono: "DejaVu Sans Mono", Consolas, "Lucida Console", Menlo, "Courier New", monospace;
+  --sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+html { background: var(--desk); }
+body {
+  background: var(--desk) radial-gradient(1200px 700px at 50% -15%, #2b3039 0%, var(--desk) 62%) no-repeat;
+  color: var(--key-text);
+  font: 15px/1.45 var(--sans);
+  min-height: 100vh;
+  padding: 18px 12px 48px;
+}
+.calc {
+  max-width: 1140px;
+  margin: 0 auto;
+  background: linear-gradient(180deg, var(--body-hi), var(--body) 18%, var(--body-lo));
+  border-radius: 30px 30px 44px 44px;
+  padding: 18px 22px 26px;
+  box-shadow: 0 0 0 2px #050607, 0 24px 70px rgba(0,0,0,.65), inset 0 1px 0 rgba(255,255,255,.09), inset 0 -2px 0 rgba(0,0,0,.4);
+}
+/* ---------- header ---------- */
+.top { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 4px 16px; padding: 2px 6px 12px; }
+.logo { font: italic 800 26px/1 var(--sans); letter-spacing: .02em; color: #fff; }
+.logo i { font-weight: 600; color: var(--blue); }
+.logo small { font: 700 11px/1 var(--sans); letter-spacing: .18em; color: var(--muted); font-style: normal; margin-left: 8px; vertical-align: middle; }
+.top .sub { font: 700 10.5px/1.3 var(--sans); letter-spacing: .16em; color: var(--muted); text-transform: uppercase; }
+/* ---------- mode bar (LCD) ---------- */
+.mode {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px;
+  background: var(--lcd); color: var(--ink); font: 13px/1.3 var(--mono);
+  padding: 9px 12px; border-radius: 8px;
+  box-shadow: inset 0 2px 6px rgba(0,0,0,.35), 0 0 0 3px #121417, 0 0 0 5px #3a3f47;
+  margin: 0 3px;
+}
+.mode .on { background: var(--ink); color: var(--lcd); padding: 1px 5px; border-radius: 2px; }
+.mode .off { color: var(--ink-dim); }
+.mode label { display: inline-flex; align-items: center; gap: 4px; white-space: nowrap; }
+.mode input {
+  width: 8.5em; background: var(--lcd-in); color: var(--ink); border: 1px solid #5d6b52; border-radius: 4px;
+  padding: 3px 6px; font: 13px var(--mono);
+}
+.mode input:focus { outline: 2px solid var(--blue-dk); outline-offset: 0; }
+.mode input.bad { border-color: var(--ink-err); background: #f2d9d6; }
+.mode .msg { color: var(--ink-err); font-weight: 700; }
+/* ---------- keys ---------- */
+.key {
+  appearance: none; border: 0; border-radius: 9px; padding: 9px 14px; margin: 0;
+  font: 700 12.5px/1.1 var(--sans); letter-spacing: .05em; color: var(--key-text);
+  background: linear-gradient(180deg, var(--key-hi), var(--key));
+  box-shadow: 0 3px 0 #0d0e11, 0 5px 9px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.13);
+  cursor: pointer; transition: transform .05s, box-shadow .05s, filter .1s; user-select: none;
+}
+.key:hover { filter: brightness(1.12); }
+.key:active { transform: translateY(2px); box-shadow: 0 1px 0 #0d0e11, 0 2px 4px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.08); }
+.key:focus-visible, .tab:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.key.blue { background: linear-gradient(180deg, #86c8f7, var(--blue)); color: #0a2134; box-shadow: 0 3px 0 var(--blue-dk), 0 5px 9px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.4); }
+.key.green { background: linear-gradient(180deg, #9bd894, var(--green)); color: #0f2a0d; box-shadow: 0 3px 0 var(--green-dk), 0 5px 9px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.4); }
+.key.light { background: linear-gradient(180deg, #f6f7f9, var(--key-light)); color: var(--key-light-text); box-shadow: 0 3px 0 #8d949c, 0 5px 9px rgba(0,0,0,.4), inset 0 1px 0 #fff; }
+.key.small { padding: 7px 11px; font-size: 11.5px; }
+.key.tiny { padding: 5px 8px; font-size: 12px; border-radius: 7px; }
+.key.chip { padding: 6px 10px; font-size: 11.5px; letter-spacing: .02em; border-radius: 8px; }
+/* ---------- tabs ---------- */
+.tabs { display: flex; flex-wrap: wrap; gap: 12px 9px; margin: 18px 0 20px; }
+.tab {
+  flex: 1 1 116px; position: relative; appearance: none; border: 0; cursor: pointer;
+  padding: 19px 8px 10px; border-radius: 10px 10px 14px 14px;
+  font: 800 12px/1.1 var(--sans); letter-spacing: .06em; text-transform: uppercase; color: var(--key-text);
+  background: linear-gradient(180deg, var(--key-hi), var(--key));
+  box-shadow: 0 4px 0 #0b0c0e, 0 6px 10px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.12);
+  transition: transform .05s, box-shadow .05s;
+}
+.tab .second { position: absolute; top: 5px; left: 0; right: 0; font: 700 9px/1 var(--sans); letter-spacing: .12em; color: var(--blue); }
+.tab:active { transform: translateY(2px); box-shadow: 0 2px 0 #0b0c0e; }
+.tab[aria-selected="true"] { background: linear-gradient(180deg, #86c8f7, var(--blue)); color: #0a2134; box-shadow: 0 4px 0 var(--blue-dk), 0 6px 12px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.4); }
+.tab[aria-selected="true"] .second { color: #0a2134; opacity: .7; }
+/* ---------- panels ---------- */
+.panel { display: none; }
+.panel.active { display: block; }
+.panel > h2 { margin: 0 0 4px; font-size: 22px; letter-spacing: .01em; }
+.lede { color: var(--label); margin: 0 0 18px; max-width: 78ch; }
+.lede b { color: #fff; }
+/* ---------- tool cards ---------- */
+.tool {
+  background: rgba(255,255,255,.035); border: 1px solid rgba(255,255,255,.07);
+  border-radius: 18px; padding: 16px 16px 18px; margin: 0 0 18px;
+}
+.tool h3 { margin: 0 0 3px; font-size: 16.5px; letter-spacing: .01em; }
+.tool .formula { font: 14px/1.5 var(--mono); color: var(--accent); }
+.tool .hint { color: var(--label); font-size: 13px; margin: 4px 0 12px; max-width: 80ch; }
+.tool .hint b { color: #fff; }
+.io { display: grid; grid-template-columns: minmax(260px, 360px) minmax(0, 1fr); gap: 18px; align-items: start; }
+.fld { display: block; margin: 0 0 10px; }
+.fld[hidden] { display: none !important; }
+.fld .lab { display: block; font-size: 12.5px; color: var(--label); margin-bottom: 3px; }
+.fld .lab i { color: var(--muted); font-style: normal; }
+.fld .sym { color: #fff; font-family: var(--mono); font-weight: 700; }
+.inrow { display: flex; align-items: center; gap: 7px; }
+input[type="text"], select {
+  min-width: 0; background: var(--lcd-in); color: var(--ink);
+  border: 2px solid #121417; border-radius: 7px; padding: 7px 9px;
+  font: 15px var(--mono); box-shadow: inset 0 2px 3px rgba(0,0,0,.25);
+}
+.inrow input, .inrow select { flex: 1; width: 100%; }
+select { font: 13.5px var(--sans); padding: 7px 6px; cursor: pointer; }
+input[type="text"]:focus, select:focus { outline: none; border-color: var(--blue); box-shadow: 0 0 0 3px rgba(92,178,242,.35), inset 0 2px 3px rgba(0,0,0,.25); }
+input.bad { border-color: #e2504f !important; background: #f6dcda !important; }
+input::placeholder { color: #8a957e; }
+.unit { min-width: 3.3em; font: 13px var(--mono); color: var(--label); white-space: nowrap; }
+.key.q { padding: 6px 9px; font: 800 13px/1 var(--mono); }
+.rows .rowhead, .rows .row { display: grid; gap: 6px; align-items: center; }
+.rows .rowhead { font-size: 11.5px; color: var(--label); margin: 2px 0 4px; }
+.rows .rowhead .hu { color: var(--muted); font-family: var(--mono); }
+.rows .row { margin-bottom: 6px; }
+.rows .row input { width: 100%; padding: 6px 7px; font-size: 14px; }
+.rows .ri { font: 12px var(--mono); color: var(--muted); text-align: right; }
+.btns { display: flex; flex-wrap: wrap; gap: 9px; margin: 14px 0 6px; }
+.examples { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 12px; }
+.examples .exlab { font: 700 10.5px/1 var(--sans); letter-spacing: .14em; color: var(--green); text-transform: uppercase; width: 100%; }
+/* ---------- LCD screen ---------- */
+.lcd {
+  background-color: var(--lcd);
+  background-image: linear-gradient(rgba(0,0,0,.028) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,.028) 1px, transparent 1px);
+  background-size: 3px 3px;
+  color: var(--ink); font: 14.5px/1.55 var(--mono);
+  border-radius: 9px; padding: 12px 14px;
+  box-shadow: inset 0 2px 7px rgba(0,0,0,.38), 0 0 0 3px #121417, 0 0 0 5px #3a3f47;
+  overflow-wrap: anywhere;
+}
+.screen { min-height: 150px; }
+.lcd .ln { padding: 1px 0; }
+.lcd .ln.h { font: 800 11.5px/1.4 var(--sans); letter-spacing: .1em; text-transform: uppercase; color: var(--ink-dim); margin-top: 10px; padding-bottom: 2px; border-bottom: 1px dashed rgba(27,36,22,.28); }
+.lcd .ln.h:first-child { margin-top: 0; }
+.lcd .ln.f { font-weight: 700; }
+.lcd .ln.s { padding-left: 1.3em; }
+.lcd .ln.r { padding-left: 1.3em; font-weight: 700; }
+.lcd .ln.a { background: var(--ink); color: var(--lcd); font-weight: 700; padding: 4px 9px; margin: 7px 0 3px; border-radius: 3px; }
+.lcd .ln.n { font: italic 13px/1.45 var(--sans); color: var(--ink-dim); margin-top: 4px; }
+.lcd .ln.x { color: var(--ink-err); font-weight: 700; }
+.lcd .ln.err { font: 900 14px/1.4 var(--mono); letter-spacing: .06em; }
+.lcd sub, .lcd sup { font-size: 72%; line-height: 0; }
+.lcd .cur { display: inline-block; width: .6em; height: 1.05em; background: var(--ink); vertical-align: text-bottom; animation: blink 1.1s steps(1) infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+.viz:empty { display: none; }
+.viz { margin-top: 14px; padding: 8px; }
+.viz svg { display: block; width: 100%; height: auto; max-height: 460px; }
+/* ---------- static info blocks ---------- */
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.lcd.static { font-size: 14px; }
+.lcd.static b { font-family: var(--sans); letter-spacing: .02em; }
+.lcd.static ul, .refcard ul, .refcard ol { margin: 6px 0 0; padding-left: 1.2em; }
+table.t { width: 100%; border-collapse: collapse; font-size: 13.5px; margin: 10px 0 0; }
+table.t th, table.t td { text-align: left; padding: 6px 8px; border-bottom: 1px solid rgba(255,255,255,.08); vertical-align: top; }
+table.t th { color: var(--label); font-size: 11.5px; letter-spacing: .08em; text-transform: uppercase; }
+.lcd table.t th, .lcd table.t td { border-bottom-color: rgba(27,36,22,.2); }
+.lcd table.t th { color: var(--ink-dim); }
+.trap { font-size: 13.5px; color: var(--label); margin: 10px 0 0; }
+.trap b { color: var(--accent); }
+.refgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 16px; }
+.refcard { background: rgba(255,255,255,.035); border: 1px solid rgba(255,255,255,.07); border-radius: 16px; padding: 14px 15px 16px; font-size: 13.5px; }
+.refcard h4 { margin: 0 0 8px; font-size: 14px; letter-spacing: .08em; text-transform: uppercase; color: var(--blue); }
+.refcard .lcd { margin: 4px 0 8px; font-size: 13.5px; line-height: 1.7; }
+.refcard li { margin: 2px 0; }
+code { font-family: var(--mono); background: rgba(255,255,255,.08); padding: 1px 5px; border-radius: 4px; font-size: 92%; }
+/* ---------- scratch calculator ---------- */
+.scratch { max-width: 460px; margin: 0 auto; }
+.calc-screen { height: 250px; display: flex; flex-direction: column; padding: 10px 12px; }
+.hist { flex: 1; overflow-y: auto; font-size: 14px; }
+.hist .he { cursor: pointer; padding: 1px 0; }
+.hist .he:hover { background: rgba(27,36,22,.08); }
+.hist .hx { text-align: left; }
+.hist .hr { text-align: right; font-weight: 700; }
+.hist .herr { color: var(--ink-err); font-weight: 700; }
+.calc-in { width: 100%; margin-top: 6px; background: transparent !important; border: 0 !important; border-top: 1px dashed rgba(27,36,22,.35) !important; border-radius: 0 !important; box-shadow: none !important; padding: 6px 2px 0 !important; font-size: 16px !important; }
+.keypad { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px 9px; margin-top: 18px; }
+.keypad .key { padding: 12px 4px; font-size: 13px; letter-spacing: .02em; }
+.keypad .key.num { font-size: 16px; }
+/* ---------- tests ---------- */
+.test-summary { font: 700 14px var(--mono); margin-left: 12px; }
+.test-summary.ok { color: var(--green); }
+.test-summary.bad { color: #ff7a7a; }
+#test-out table.t td.pass { color: var(--green); font-weight: 800; }
+#test-out table.t td.fail { color: #ff7a7a; font-weight: 800; }
+#test-out table.t td.det { font-family: var(--mono); font-size: 12px; color: var(--label); overflow-wrap: anywhere; }
+#test-out table.t tr.failrow td { background: rgba(255,90,90,.08); }
+.foot { margin-top: 22px; padding: 12px 6px 0; border-top: 1px solid rgba(255,255,255,.07); color: var(--muted); font-size: 12.5px; }
+.foot b { color: var(--label); }
+/* ---------- responsive ---------- */
+@media (max-width: 820px) {
+  .io { grid-template-columns: 1fr; }
+  .two { grid-template-columns: 1fr; }
+}
+@media (max-width: 560px) {
+  body { padding: 8px 6px 30px; }
+  .calc { padding: 14px 10px 20px; border-radius: 22px 22px 30px 30px; }
+  .tool { padding: 13px 11px 15px; }
+  .tab { flex-basis: 30%; font-size: 11px; padding: 18px 4px 9px; }
+  .lcd { font-size: 13.5px; padding: 10px 11px; }
+  .refgrid { grid-template-columns: 1fr; }
+  .keypad .key { padding: 11px 2px; font-size: 12px; }
+}
+@media print {
+  body { background: #fff; color: #000; padding: 0; }
+  .calc { box-shadow: none; background: #fff; }
+  .tabs, .mode, .btns, .examples, .foot { display: none; }
+}
+</style>
+</head>
+<body>
+<div class="calc">
+  <header class="top">
+    <div class="logo">PHYS-84 <i>Plus</i><small>AP PHYSICS 1</small></div>
+    <div class="sub">Newton’s laws · Gravitation · Equilibrium · Center of mass</div>
+  </header>
+
+  <div class="mode" id="modebar" aria-label="Calculator settings">
+    <span class="on">DEGREE</span><span class="off">RADIAN</span>
+    <span class="on">3 SIG FIGS</span>
+    <label for="const-g">g =<input id="const-g" type="text" autocomplete="off" spellcheck="false" aria-label="Gravitational field g in meters per second squared">m/s²</label>
+    <label for="const-G">G =<input id="const-G" type="text" autocomplete="off" spellcheck="false" aria-label="Gravitational constant G">N·m²/kg²</label>
+    <button type="button" class="key tiny" id="const-reset" title="Restore g = 9.8 and G = 6.67e-11">RESET</button>
+    <span class="msg" id="const-msg" role="status"></span>
+  </div>
+
+  <nav class="tabs" role="tablist" aria-label="Topics">
+    <button type="button" class="tab" role="tab" id="tab-n12" data-tab="n12" aria-controls="p-n12"><span class="second">ALT+1</span>1st &amp; 2nd law</button>
+    <button type="button" class="tab" role="tab" id="tab-n3" data-tab="n3" aria-controls="p-n3"><span class="second">ALT+2</span>3rd law</button>
+    <button type="button" class="tab" role="tab" id="tab-grav" data-tab="grav" aria-controls="p-grav"><span class="second">ALT+3</span>Gravitation</button>
+    <button type="button" class="tab" role="tab" id="tab-eq" data-tab="eq" aria-controls="p-eq"><span class="second">ALT+4</span>Equilibrium</button>
+    <button type="button" class="tab" role="tab" id="tab-cm" data-tab="cm" aria-controls="p-cm"><span class="second">ALT+5</span>Center of mass</button>
+    <button type="button" class="tab" role="tab" id="tab-ref" data-tab="ref" aria-controls="p-ref"><span class="second">ALT+6</span>Reference</button>
+    <button type="button" class="tab" role="tab" id="tab-calc" data-tab="calc" aria-controls="p-calc"><span class="second">ALT+7</span>Calc</button>
+    <button type="button" class="tab" role="tab" id="tab-tests" data-tab="tests" aria-controls="p-tests"><span class="second">ALT+8</span>Tests</button>
+  </nav>
+
+  <main>
+    <!-- ================= 1. Newton's 1st & 2nd laws ================= -->
+    <section class="panel" id="p-n12" role="tabpanel" aria-labelledby="tab-n12">
+      <h2>Newton’s first &amp; second laws</h2>
+      <p class="lede">If the <b>net external force is zero</b>, velocity stays constant (at rest <i>or</i> moving in a straight line at constant speed). Otherwise <b>ΣF = ma</b> and the acceleration points along the net force. Inertia is resistance to a change in velocity: a property (mass), not a force.</p>
+      <div id="tools-n12"></div>
+      <article class="tool">
+        <h3>First-law reasoning: what you know → what you can conclude</h3>
+        <table class="t">
+          <thead><tr><th>What you know</th><th>What you can conclude</th></tr></thead>
+          <tbody>
+            <tr><td>Net force is zero</td><td>Velocity is constant, but it could be zero or nonzero.</td></tr>
+            <tr><td>Net force points right</td><td>Acceleration points right. The object could still be moving left (slowing down).</td></tr>
+            <tr><td>Moving left and slowing down</td><td>Acceleration and net force point right.</td></tr>
+            <tr><td>Constant speed while turning</td><td>Velocity changes direction, so acceleration is not zero.</td></tr>
+            <tr><td>Velocity is zero at one instant</td><td>Net force may be nonzero (a tossed ball at its highest point).</td></tr>
+          </tbody>
+        </table>
+        <p class="trap"><b>Free-body diagrams:</b> draw only forces acting <i>on</i> the chosen object (weight, normal, tension, friction, applied). Never draw “motion” or “inertia” as a force.</p>
+      </article>
+    </section>
+
+    <!-- ================= 2. Newton's 3rd law ================= -->
+    <section class="panel" id="p-n3" role="tabpanel" aria-labelledby="tab-n3">
+      <h2>Newton’s third law</h2>
+      <p class="lede">If A exerts a force on B, then B exerts an <b>equal-magnitude, opposite-direction</b> force on A: <b>F<sub>A on B</sub> = −F<sub>B on A</sub></b>. Equal forces do <b>not</b> mean equal accelerations, because a = F/m.</p>
+      <div id="tools-n3"></div>
+      <article class="tool">
+        <h3>Reminder: third-law pairs vs. balanced forces</h3>
+        <div class="two">
+          <div class="lcd static">
+            <b>THIRD-LAW PAIR</b>
+            <ul>
+              <li>Act on <u>two different objects</u></li>
+              <li>Equal size, opposite direction</li>
+              <li>Same interaction (same type of force), at the same time</li>
+              <li>Never cancel each other, because they act on different objects</li>
+            </ul>
+          </div>
+          <div class="lcd static">
+            <b>BALANCED FORCES</b>
+            <ul>
+              <li>Act on the <u>same object</u></li>
+              <li>Vector sum is zero, so that object doesn’t accelerate</li>
+              <li>Usually different interactions (e.g. weight &amp; normal)</li>
+              <li>Used to decide whether that one object accelerates</li>
+            </ul>
+          </div>
+        </div>
+        <table class="t">
+          <thead><tr><th>One force</th><th>Its third-law partner (swap “on” and “by”)</th></tr></thead>
+          <tbody>
+            <tr><td>Earth pulls a book downward</td><td>The book pulls Earth upward (toward the book)</td></tr>
+            <tr><td>Table pushes the book upward</td><td>The book pushes the table downward</td></tr>
+            <tr><td>Swimmer pushes water backward</td><td>Water pushes the swimmer forward</td></tr>
+            <tr><td>Rocket pushes exhaust backward</td><td>Exhaust pushes the rocket forward</td></tr>
+          </tbody>
+        </table>
+        <p class="trap"><b>Book on a table:</b> weight (Earth on book) and normal force (table on book) balance, but they are <i>not</i> a third-law pair: both act on the book.</p>
+        <p class="trap"><b>Truck vs. car:</b> the forces are equal. The car’s bigger acceleration (and damage) comes from its smaller mass, not a bigger force.</p>
+      </article>
+    </section>
+
+    <!-- ================= 3. Universal gravitation ================= -->
+    <section class="panel" id="p-grav" role="tabpanel" aria-labelledby="tab-grav">
+      <h2>Universal gravitation</h2>
+      <p class="lede"><b>F<sub>g</sub> = G·m<sub>1</sub>·m<sub>2</sub> / r²</b>, where r is the <b>center-to-center</b> distance. Gravity is always attractive, and each object feels the same size force (3rd law). Mass stays the same everywhere; weight changes with g.</p>
+      <div id="tools-grav"></div>
+    </section>
+
+    <!-- ================= 4. Equilibrium ================= -->
+    <section class="panel" id="p-eq" role="tabpanel" aria-labelledby="tab-eq">
+      <h2>Equilibrium</h2>
+      <p class="lede">Translational equilibrium: <b>ΣF<sub>x</sub> = 0 and ΣF<sub>y</sub> = 0</b>, meaning at rest or at constant velocity. Routine: choose the object → draw its free-body diagram → choose axes → split angled forces into components → add signed components on each axis and solve.</p>
+      <div id="tools-eq"></div>
+    </section>
+
+    <!-- ================= 5. Center of mass ================= -->
+    <section class="panel" id="p-cm" role="tabpanel" aria-labelledby="tab-cm">
+      <h2>Center of mass</h2>
+      <p class="lede">The center of mass is the <b>mass-weighted average position</b>: x<sub>CM</sub> = Σ(m·x)/Σm. Pick one origin, use consistent units (kg &amp; m or g &amp; cm both work, since mass units cancel), and include only the objects in the system. For two masses it lies between them, closer to the heavier one.</p>
+      <div id="tools-cm"></div>
+    </section>
+
+    <!-- ================= 6. Quick reference ================= -->
+    <section class="panel" id="p-ref" role="tabpanel" aria-labelledby="tab-ref">
+      <h2>Quick reference</h2>
+      <p class="lede">Formula sheet for the quiz. Uses g = 9.8 m/s² and G = 6.67 × 10⁻¹¹ N·m²/kg² unless told otherwise.</p>
+      <div class="refgrid">
+        <div class="refcard">
+          <h4>Newton’s 1st &amp; 2nd laws</h4>
+          <div class="lcd">ΣF = 0 ⇒ a = 0 ⇒ v constant<br>ΣF = m·a &nbsp;(a points along ΣF)<br>W = mg</div>
+          <ul>
+            <li>Inertia ∝ mass. It is a property, not a force.</li>
+            <li>ΣF = 0: at rest <i>or</i> moving at constant velocity.</li>
+            <li>ΣF right ⇒ a right (velocity may still point left).</li>
+            <li>Constant speed while turning ⇒ a ≠ 0.</li>
+            <li>v = 0 for an instant does not mean ΣF = 0.</li>
+            <li>Constant-velocity box: N = W = mg, friction = push (opposite direction).</li>
+          </ul>
+        </div>
+        <div class="refcard">
+          <h4>Newton’s 3rd law</h4>
+          <div class="lcd">F<sub>A on B</sub> = −F<sub>B on A</sub><br>a<sub>A</sub> = F/m<sub>A</sub>, &nbsp;a<sub>B</sub> = F/m<sub>B</sub></div>
+          <ul>
+            <li>Pairs act on <b>different</b> objects, at the same time, same type of force.</li>
+            <li>Balanced forces act on the <b>same</b> object and sum to zero.</li>
+            <li>Swap test: partner of “A on B” is “B on A”.</li>
+            <li>Same force, smaller mass ⇒ bigger acceleration, opposite directions.</li>
+          </ul>
+        </div>
+        <div class="refcard">
+          <h4>Universal gravitation</h4>
+          <div class="lcd">F<sub>g</sub> = G·m<sub>1</sub>·m<sub>2</sub> / r²<br>G = 6.67 × 10⁻¹¹ N·m²/kg²<br>g = GM / r², &nbsp;W = mg<br>F<sub>new</sub> = F·(m<sub>1</sub> factor)(m<sub>2</sub> factor)/(r factor)²<br>r = R + h, &nbsp;W<sub>new</sub> = W<sub>surface</sub>·(R/r)²</div>
+          <table class="t">
+            <thead><tr><th>Change</th><th>New force</th></tr></thead>
+            <tbody>
+              <tr><td>One mass doubles</td><td>2F</td></tr>
+              <tr><td>Both masses double</td><td>4F</td></tr>
+              <tr><td>Distance doubles</td><td>F/4</td></tr>
+              <tr><td>Distance halves</td><td>4F</td></tr>
+              <tr><td>Both double, distance triples</td><td>4F/9</td></tr>
+              <tr><td>Altitude h = R (r = 2R)</td><td>W/4</td></tr>
+              <tr><td>Altitude h = 2R (r = 3R)</td><td>W/9</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="refcard">
+          <h4>Equilibrium</h4>
+          <div class="lcd">ΣF<sub>x</sub> = 0, &nbsp;ΣF<sub>y</sub> = 0</div>
+          <table class="t">
+            <thead><tr><th>Angle measured from</th><th>Horizontal comp.</th><th>Vertical comp.</th></tr></thead>
+            <tbody>
+              <tr><td>Horizontal</td><td>F cos θ</td><td>F sin θ</td></tr>
+              <tr><td>Vertical</td><td>F sin θ</td><td>F cos θ</td></tr>
+            </tbody>
+          </table>
+          <div class="lcd">Two cords (θ above horizontal):<br>T<sub>L</sub> cos θ<sub>L</sub> = T<sub>R</sub> cos θ<sub>R</sub><br>m = (T<sub>L</sub> sin θ<sub>L</sub> + T<sub>R</sub> sin θ<sub>R</sub>) / g<br>Symmetric: T = mg / (2 sin θ)<br>Stacked: T = (mass below cord)·g<br>Angled pull, const. v: f = F cos θ, N = mg − F sin θ</div>
+          <ul>
+            <li>Shallower cords (smaller θ) need more tension.</li>
+            <li>The normal force does not always equal mg.</li>
+          </ul>
+        </div>
+        <div class="refcard">
+          <h4>Center of mass</h4>
+          <div class="lcd">x<sub>CM</sub> = Σ(m·x) / Σm<br>y<sub>CM</sub> = Σ(m·y) / Σm<br>Move: Δx<sub>CM</sub> = (m<sub>moved</sub>/M<sub>total</sub>)·Δx<sub>moved</sub><br>Add: x<sub>new</sub> = x<sub>old</sub> + [m<sub>add</sub>/(M<sub>old</sub>+m<sub>add</sub>)](x<sub>add</sub> − x<sub>old</sub>)</div>
+          <ul>
+            <li>Two masses: CM lies between them, closer to the heavier one.</li>
+            <li>Uniform symmetric object: CM is on every symmetry axis (one axis gives a line, not a point).</li>
+            <li>Uniform density ≠ midpoint for irregular shapes (bigger nail head ⇒ CM nearer the head).</li>
+            <li>Adding mass pulls the CM toward the added mass; how far depends on the mass.</li>
+            <li>Include a board only if it is part of the system and not negligible.</li>
+            <li>Mass units cancel: g &amp; cm work fine; the answer keeps the position unit.</li>
+          </ul>
+        </div>
+        <div class="refcard">
+          <h4>Numbers &amp; this calculator</h4>
+          <ul>
+            <li>Answers shown to <b>3 significant figures</b>; intermediate steps keep more digits, so don’t round early.</li>
+            <li>Scientific notation for very large/small values: 1.60 × 10⁻⁹.</li>
+            <li>Angles are in <b>degrees</b>.</li>
+            <li>Inputs accept negatives, decimals, fractions (<code>1/2</code>), scientific notation (<code>6.67e-11</code> or <code>6.67×10^-11</code>), and expressions like <code>sqrt(2)</code>, <code>sin(30)</code>, <code>9.8*2</code>, <code>g</code>, <code>G</code>.</li>
+            <li>In solvers, leave exactly one box blank (or press <b>?</b>) to solve for it.</li>
+            <li>Press <b>Enter</b> in any box to solve.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= Scratch calculator ================= -->
+    <section class="panel" id="p-calc" role="tabpanel" aria-labelledby="tab-calc">
+      <h2>Scratch calculator</h2>
+      <p class="lede">A TI-84-style scratchpad in <b>DEGREE</b> mode. Type or tap keys, then press <b>ENTER</b>. <code>Ans</code> holds the last result, <code>g</code> and <code>G</code> use the current settings, and clicking a history line copies it back to the entry line. ↑ recalls the last entry.</p>
+      <div class="scratch">
+        <div class="lcd calc-screen">
+          <div class="hist" id="calc-hist" aria-live="polite"></div>
+          <input type="text" id="calc-in" class="calc-in" autocomplete="off" spellcheck="false" aria-label="Calculator entry" placeholder="e.g. 7.5sin(60)+9cos(65)">
+        </div>
+        <div class="keypad" id="calc-keys"></div>
+      </div>
+    </section>
+
+    <!-- ================= Tests ================= -->
+    <section class="panel" id="p-tests" role="tabpanel" aria-labelledby="tab-tests">
+      <h2>Self-tests</h2>
+      <p class="lede">Checks every worked example from the study guide plus formatting, parsing and input validation. Tests run with the default g = 9.8 and G = 6.67 × 10⁻¹¹, and your own settings and entries are restored afterward. You can also run <code>runTests()</code> from the browser console.</p>
+      <div><button type="button" class="key blue" id="run-tests">RUN TESTS</button><span class="test-summary" id="test-summary"></span></div>
+      <div id="test-out"></div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <b>Tips:</b> press <b>Enter</b> to solve · leave one box blank to solve for it · type fractions like <code>1/2</code> or scientific notation like <code>6.67e-11</code> · use signs (+/−) for direction · <b>Alt+1…8</b> switches tabs.
+  </footer>
+</div>
+<noscript><p style="color:#fff;text-align:center">This calculator needs JavaScript enabled.</p></noscript>
+
+<script>
+(function () {
+'use strict';
+
+/* =====================================================================
+   0. CONSTANTS & SMALL HELPERS
+   ===================================================================== */
+const DEFAULTS = Object.freeze({ g: 9.8, G: 6.67e-11 });
+const CONST = { g: DEFAULTS.g, G: DEFAULTS.G };
+let TESTING = false;
+
+const $ = (sel, root) => (root || document).querySelector(sel);
+const $$ = (sel, root) => Array.from((root || document).querySelectorAll(sel));
+const ESC_MAP = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
+const esc = s => String(s).replace(/[&<>"']/g, ch => ESC_MAP[ch]);
+
+function el(tag, attrs, ...kids) {
+  const n = document.createElement(tag);
+  if (attrs) {
+    for (const [k, v] of Object.entries(attrs)) {
+      if (v == null || v === false) continue;
+      if (k === 'html') n.innerHTML = v;
+      else if (k === 'text') n.textContent = v;
+      else if (k === 'class') n.className = v;
+      else if (k.startsWith('on') && typeof v === 'function') n.addEventListener(k.slice(2), v);
+      else n.setAttribute(k, v === true ? '' : v);
+    }
+  }
+  for (const kid of kids.flat()) {
+    if (kid == null) continue;
+    n.append(kid.nodeType ? kid : document.createTextNode(String(kid)));
+  }
+  return n;
+}
+
+class InputError extends Error {
+  constructor(message, field, kind) {
+    super(message);
+    this.name = 'InputError';
+    this.field = field == null ? null : field;
+    this.kind = kind || 'INVALID';
+  }
+}
+function fail(message, field, kind) { throw new InputError(message, field, kind); }
+
+/* =====================================================================
+   1. NUMBER FORMATTING (3 significant figures, scientific notation)
+   ===================================================================== */
+const MINUS = '−';
+const SUPS = { '-': '⁻', '0': '⁰', '1': '¹', '2': '²', '3': '³', '4': '⁴', '5': '⁵', '6': '⁶', '7': '⁷', '8': '⁸', '9': '⁹' };
+const SUBD = '₀₁₂₃₄₅₆₇₈₉';
+const supInt = n => String(n).split('').map(ch => SUPS[ch] || ch).join('');
+const subN = n => String(n).split('').map(d => SUBD[+d] || d).join('');
+
+function sciStr(x, digits, trim) {
+  const parts = x.toExponential(digits - 1).split('e');
+  let m = parts[0];
+  if (trim && m.includes('.')) m = m.replace(/0+$/, '').replace(/\.$/, '');
+  const e = parseInt(parts[1], 10);
+  return m.replace('-', MINUS) + (e === 0 ? '' : ' × 10' + supInt(e));
+}
+/* n significant figures; scientific notation when |x| >= hi or |x| < 0.001 */
+function fmtSig(x, n, trim, hi) {
+  if (typeof x !== 'number' || Number.isNaN(x)) return 'undefined';
+  if (!Number.isFinite(x)) return x > 0 ? '∞' : MINUS + '∞';
+  if (x === 0) return '0';
+  const r = Number(x.toPrecision(n));
+  const a = Math.abs(r);
+  if (a >= hi || a < 1e-3) return sciStr(x, n, trim);
+  let s = x.toPrecision(n);
+  if (/e/i.test(s)) s = String(Math.round(r));          // e.g. 1234 → "1230" at 3 s.f.
+  else if (trim && s.includes('.')) s = s.replace(/0+$/, '').replace(/\.$/, '');
+  return s.replace('-', MINUS);
+}
+const sig3 = x => fmtSig(x, 3, false, 1e5);   // final answers
+const full = x => fmtSig(x, 6, true, 1e6);    // intermediate values (no early rounding)
+const same3 = x => Number(x.toPrecision(3)) === Number(x.toPrecision(6));
+/* "= 107.8 N ≈ 108 N"  or  "= 6.50 m" */
+function eqv(x, unit) {
+  const u = unit ? ' ' + unit : '';
+  if (x === 0 || !Number.isFinite(x) || same3(x)) return '= ' + sig3(x) + u;
+  return '= ' + full(x) + u + ' ≈ ' + sig3(x) + u;
+}
+/* exact-ish equality sign for a 3 s.f. rendering */
+const approxSign = x => (Number(x.toPrecision(3)) === x ? '=' : '≈');
+const P = s => (s.startsWith(MINUS) ? '(' + s + ')' : s);   // wrap negatives in parentheses
+const clean = (x, scale) => (Math.abs(x) <= 1e-12 * (scale || 1) ? 0 : x);
+
+function gcd(a, b) { a = Math.abs(a); b = Math.abs(b); while (b) { const t = a % b; a = b; b = t; } return a; }
+function reduceFrac(n, d) { const g = gcd(n, d) || 1; return [n / g, d / g]; }
+/* rational approximation by continued fractions (exact for typed decimals like 0.5, 1.5, 1/3) */
+function toFrac(x, maxDen) {
+  maxDen = maxDen || 100000;
+  if (!Number.isFinite(x)) return null;
+  const sign = x < 0 ? -1 : 1;
+  const ax = Math.abs(x);
+  let h0 = 0, h1 = 1, k0 = 1, k1 = 0, b = ax;
+  for (let i = 0; i < 64; i++) {
+    const a = Math.floor(b);
+    const h2 = a * h1 + h0, k2 = a * k1 + k0;
+    if (k2 > maxDen) break;
+    h0 = h1; h1 = h2; k0 = k1; k1 = k2;
+    if (Math.abs(ax - h1 / k1) <= 1e-12 * Math.max(1, ax)) return { n: sign * h1, d: k1 };
+    const fr = b - a;
+    if (fr < 1e-15) break;
+    b = 1 / fr;
+  }
+  return (k1 && Math.abs(ax - h1 / k1) <= 1e-12 * Math.max(1, ax)) ? { n: sign * h1, d: k1 } : null;
+}
+function fracSym(n, d, sym) {
+  if (d === 1) return (n === 1 ? '' : String(n)) + sym;
+  if (n === 1) return sym + '/' + d;
+  return n + sym + '/' + d;
+}
+const fracPlain = (n, d) => (d === 1 ? String(n) : n + '/' + d);
+
+/* =====================================================================
+   2. TRIG IN DEGREES (snapped so cos 90° = 0 exactly)
+   ===================================================================== */
+const D2R = Math.PI / 180;
+function snap(v) {
+  for (const t of [0, 0.5, -0.5, 1, -1]) if (Math.abs(v - t) < 1e-12) return t;
+  return v;
+}
+const cleanDeg = v => (Math.abs(v - Math.round(v)) < 1e-9 ? Math.round(v) : v);
+const sinD = d => snap(Math.sin(d * D2R));
+const cosD = d => snap(Math.cos(d * D2R));
+function tanD(d) {
+  const c = cosD(d);
+  if (c === 0) fail('tan(' + full(d) + '°) is undefined (cos = 0).', null, 'DOMAIN');
+  return snap(sinD(d) / c);
+}
+function invTrig(fn, x, name) {
+  if (x < -1 - 1e-12 || x > 1 + 1e-12) fail(name + '(' + full(x) + ') is undefined: the input must be between −1 and 1.', null, 'DOMAIN');
+  return cleanDeg(fn(Math.max(-1, Math.min(1, x))) / D2R);
+}
+
+/* =====================================================================
+   3. SAFE EXPRESSION PARSER (no eval) — used by every input box
+   ===================================================================== */
+let ANS = 0;
+const FUNCS = {
+  sin: sinD, cos: cosD, tan: tanD,
+  asin: x => invTrig(Math.asin, x, 'sin⁻¹'),
+  acos: x => invTrig(Math.acos, x, 'cos⁻¹'),
+  atan: x => cleanDeg(Math.atan(x) / D2R),
+  sqrt: x => { if (x < 0) fail('Can’t take the square root of a negative number.', null, 'DOMAIN'); return Math.sqrt(x); },
+  ln: x => { if (x <= 0) fail('ln needs a positive number.', null, 'DOMAIN'); return Math.log(x); },
+  log: x => { if (x <= 0) fail('log needs a positive number.', null, 'DOMAIN'); return Math.log10(x); },
+  abs: Math.abs,
+};
+const SUPER_MAP = { '⁰': '0', '¹': '1', '²': '2', '³': '3', '⁴': '4', '⁵': '5', '⁶': '6', '⁷': '7', '⁸': '8', '⁹': '9', '⁻': '-', '⁺': '+' };
+function normalizeExpr(s) {
+  return String(s)
+    .replace(/(sin|cos|tan)⁻¹/g, 'a$1')
+    .replace(/[⁰¹²³⁴⁵⁶⁷⁸⁹⁻⁺]+/g, m => '^(' + m.split('').map(c => SUPER_MAP[c]).join('') + ')')
+    .replace(/[−–—]/g, '-')
+    .replace(/[×·∙⋅*]/g, '*')
+    .replace(/÷/g, '/')
+    .replace(/π/g, ' pi ')
+    .replace(/√/g, ' sqrt ')
+    .replace(/ᴇ/g, 'E')
+    .replace(/(\d|\.)\s*[xX]\s*(?=10\s*\^)/g, '$1*');
+}
+function tokenize(src) {
+  const toks = [];
+  let i = 0;
+  while (i < src.length) {
+    const ch = src[i];
+    if (/\s/.test(ch)) { i++; continue; }
+    const rest = src.slice(i);
+    let m;
+    if ((m = /^(\d+\.?\d*|\.\d+)([eE][+-]?\d+)?/.exec(rest))) { toks.push({ t: 'num', v: parseFloat(m[0]), s: m[0] }); i += m[0].length; continue; }
+    if ((m = /^[A-Za-z]+/.exec(rest))) { toks.push({ t: 'id', v: m[0], s: m[0] }); i += m[0].length; continue; }
+    if ('+-*/^()'.includes(ch)) { toks.push({ t: ch, s: ch }); i++; continue; }
+    if (ch === ',') fail('Remove the comma. Type 1000, not 1,000 (use a period for decimals).', null, 'SYNTAX');
+    fail('I don’t understand the character “' + ch + '”.', null, 'SYNTAX');
+  }
+  return toks;
+}
+function evaluate(str) {
+  const toks = tokenize(normalizeExpr(str));
+  if (!toks.length) fail('Nothing to evaluate.', null, 'SYNTAX');
+  let i = 0;
+  const peek = () => toks[i];
+  const take = () => toks[i++];
+  function expr() {
+    let v = term();
+    while (peek() && (peek().t === '+' || peek().t === '-')) {
+      const op = take().t;
+      const r = term();
+      v = op === '+' ? v + r : v - r;
+    }
+    return v;
+  }
+  function term() {
+    let v = unary();
+    for (;;) {
+      const p = peek();
+      if (!p) break;
+      if (p.t === '*' || p.t === '/') {
+        take();
+        const r = unary();
+        if (p.t === '/') { if (r === 0) fail('Division by zero.', null, 'DIVIDE BY 0'); v /= r; } else v *= r;
+      } else if (p.t === '(' || p.t === 'id') {
+        v *= power();                       // implicit multiplication: 2(3), 2pi, 7.5sin(60)
+      } else if (p.t === 'num') {
+        fail('Missing operator before “' + p.s + '”.', null, 'SYNTAX');
+      } else break;
+    }
+    return v;
+  }
+  function unary() {
+    const p = peek();
+    if (p && (p.t === '-' || p.t === '+')) { take(); const v = unary(); return p.t === '-' ? -v : v; }
+    return power();
+  }
+  function power() {
+    const b = primary();
+    if (peek() && peek().t === '^') {
+      take();
+      const e = unary();
+      const r = Math.pow(b, e);
+      if (Number.isNaN(r)) fail('That power is undefined (negative base with a fractional exponent).', null, 'DOMAIN');
+      return r;
+    }
+    return b;
+  }
+  function primary() {
+    const p = take();
+    if (!p) fail('The expression ends too early.', null, 'SYNTAX');
+    if (p.t === 'num') return p.v;
+    if (p.t === '(') {
+      const v = expr();
+      if (peek() && peek().t === ')') take();
+      else if (peek()) fail('Expected “)” but found “' + peek().s + '”.', null, 'SYNTAX');
+      return v;                              // a missing final ")" is allowed, like on a TI-84
+    }
+    if (p.t === 'id') {
+      if (p.v === 'g') return CONST.g;
+      if (p.v === 'G') return CONST.G;
+      const name = p.v.toLowerCase();
+      if (name === 'pi') return Math.PI;
+      if (name === 'ans') return ANS;
+      if (FUNCS[name]) {
+        const arg = (peek() && peek().t === '(') ? primary() : unary();
+        return FUNCS[name](arg);
+      }
+      fail('Unknown name “' + p.v + '”.', null, 'SYNTAX');
+    }
+    if (p.t === ')') fail('Unexpected “)”.', null, 'SYNTAX');
+    fail('Unexpected “' + p.s + '”.', null, 'SYNTAX');
+  }
+  const v = expr();
+  if (i < toks.length) fail('Unexpected “' + toks[i].s + '”.', null, 'SYNTAX');
+  if (!Number.isFinite(v)) fail('The result is too large or undefined.', null, 'OVERFLOW');
+  return v;
+}
+/* show a typed plain number exactly as typed ("2.0" stays "2.0"); otherwise a formatted value */
+const PLAIN_NUM = /^[+\-−]?(\d+\.?\d*|\.\d+)$/;
+function echo(s, v) {
+  const t = String(s).trim();
+  if (PLAIN_NUM.test(t) && t.replace(/\D/g, '').length <= 9) {
+    let neg = /^[-−]/.test(t);
+    let b = t.replace(/^[+\-−]/, '');
+    if (b.startsWith('.')) b = '0' + b;
+    if (b.endsWith('.')) b = b.slice(0, -1);
+    b = b.replace(/^0+(?=\d)/, '');
+    if (Number(b) === 0) neg = false;
+    return (neg ? MINUS : '') + b;
+  }
+  return full(v);
+}
+
+/* =====================================================================
+   4. STEP-BY-STEP WORK BUILDER
+   ===================================================================== */
+class Work {
+  constructor() { this.L = []; }
+  add(k, t) { this.L.push([k, t]); return this; }
+  h(t) { return this.add('h', t); }   // step heading
+  f(t) { return this.add('f', t); }   // formula
+  s(t) { return this.add('s', t); }   // substitution / arithmetic
+  r(t) { return this.add('r', t); }   // result line
+  a(t) { return this.add('a', t); }   // highlighted final answer
+  n(t) { return this.add('n', t); }   // note / interpretation
+  x(t) { return this.add('x', t); }   // warning
+  html() { return this.L.map(([k, t]) => '<div class="ln ' + k + '">' + t + '</div>').join(''); }
+}
+
+/* =====================================================================
+   5. TOOL FRAMEWORK — fields, rows, validation, solve, render
+   ===================================================================== */
+const TOOLS = {};
+const CONSTRAINTS = {
+  any: null,
+  pos: (v, L) => (v > 0 ? null : L + ' must be positive (greater than 0).'),
+  nonneg: (v, L) => (v >= 0 ? null : L + ' can’t be negative.'),
+  factor: (v, L) => (v > 0 ? null : L + ' must be positive (2 = doubled, 1/2 or 0.5 = halved, 1 = unchanged).'),
+  cordAngle: (v, L) => (v > 0 && v <= 90 ? null : L + ' must be more than 0° and at most 90° above the horizontal.'),
+  pullAngle: (v, L) => (v > -90 && v < 90 ? null : L + ' must be between −90° and 90° (measured from the horizontal floor).'),
+};
+function checkConstraint(v, spec, label, loc) {
+  const fn = CONSTRAINTS[spec.c || 'any'];
+  const msg = fn ? fn(v, label) : null;
+  if (msg) fail(spec.msg || msg, loc, 'INVALID');
+}
+function readExpr(s, label, loc) {
+  const t = String(s == null ? '' : s).trim();
+  if (!t) return null;
+  try { return evaluate(t); }
+  catch (e) {
+    if (e instanceof InputError) throw new InputError(label + ': ' + e.message, loc, e.kind);
+    throw e;
+  }
+}
+const linkVal = name => String(Number(CONST[name].toPrecision(12)));
+function resolveUnit(tool, u) {
+  if (!u) return '';
+  if (u.charAt(0) === '@') { const inp = tool.inputs[u.slice(1)]; return inp ? inp.value : ''; }
+  return u;
+}
+
+function makeCtx(tool) {
+  const w = new Work();
+  const out = {};
+  const fdef = k => tool.fmap[k];
+  const c = {
+    w, out, tool, svg: '',
+    str: k => tool.inputs[k].value,
+    blank: k => !String(tool.inputs[k].value).trim(),
+    unit: k => resolveUnit(tool, fdef(k).unit),
+    sel: k => tool.inputs[k].value,
+    text: k => String(tool.inputs[k].value).trim(),
+    num(k) {
+      const f = fdef(k);
+      const v = readExpr(c.str(k), f.name, k);
+      if (v === null) fail(f.name + ' is blank. Enter a value.', k, 'ARGUMENT');
+      checkConstraint(v, f, f.name, k);
+      return v;
+    },
+    opt(k) {
+      const f = fdef(k);
+      const v = readExpr(c.str(k), f.name, k);
+      if (v === null) return null;
+      checkConstraint(v, f, f.name, k);
+      return v;
+    },
+    raw: k => echo(c.str(k), c.num(k)),
+    /* "(2.0 kg)" — value as typed, with unit, in parentheses */
+    q(k, unit) {
+      const u = unit === undefined ? c.unit(k) : unit;
+      return '(' + c.raw(k) + (u ? ' ' + u : '') + ')';
+    },
+    unknown(keys) {
+      const blanks = keys.filter(k => c.blank(k));
+      if (blanks.length === 1) return blanks[0];
+      if (blanks.length === 0) fail('All ' + keys.length + ' boxes are filled. Leave exactly one box blank, and that one gets solved for. (Tip: press ? next to a box.)', null, 'ARGUMENT');
+      fail(blanks.length + ' boxes are blank (' + blanks.map(k => fdef(k).name).join(', ') + '). Fill in all but one, since only one unknown can be solved for.', blanks, 'ARGUMENT');
+    },
+    rows(k) {
+      const f = fdef(k);
+      const data = tool.rowsApi[k].get();
+      const res = [];
+      data.forEach((cells, ri) => {
+        if (f.cols.every((cl, ci) => !String(cells[ci]).trim())) return;   // skip fully blank rows
+        const row = { i: ri + 1, v: {}, raw: {}, text: {} };
+        f.cols.forEach((cl, ci) => {
+          const s = cells[ci];
+          if (cl.type === 'text') { row.text[cl.k] = String(s).trim(); return; }
+          const L = cl.name + ' in row ' + (ri + 1);
+          const loc = { k: k, row: ri, col: ci };
+          const v = readExpr(s, L, loc);
+          if (v === null) fail(L + ' is blank. Fill it in or remove the row.', loc, 'ARGUMENT');
+          checkConstraint(v, cl, L, loc);
+          row.v[cl.k] = v;
+          row.raw[cl.k] = echo(s, v);
+        });
+        res.push(row);
+      });
+      return res;
+    },
+  };
+  return c;
+}
+
+function idleScreen(tool) {
+  tool.screen.innerHTML = '<div class="ln n">' + (tool.def.idle || 'Enter values, then press SOLVE (or Enter).') + '</div><span class="cur"></span>';
+  tool.viz.innerHTML = '';
+}
+function clearMarks(tool) { $$('input.bad', tool.root).forEach(i => i.classList.remove('bad')); }
+function markFields(tool, field) {
+  if (field == null) return;
+  const list = Array.isArray(field) ? field : [field];
+  let first = null;
+  list.forEach(f => {
+    let inp = null;
+    if (typeof f === 'string') inp = tool.inputs[f];
+    else if (f && tool.rowsApi[f.k]) inp = tool.rowsApi[f.k].input(f.row, f.col);
+    if (inp && inp.tagName === 'INPUT') { inp.classList.add('bad'); if (!first) first = inp; }
+  });
+  if (first && !TESTING) { try { first.focus({ preventScroll: true }); } catch (e) { /* ignore */ } }
+}
+function run(tool) {
+  clearMarks(tool);
+  const c = makeCtx(tool);
+  try {
+    tool.def.solve(c);
+    tool.screen.innerHTML = c.w.html();
+    tool.viz.innerHTML = c.svg || '';
+    tool.lastOk = true;
+    return { ok: true, out: c.out, text: tool.screen.textContent };
+  } catch (e) {
+    const isInput = e instanceof InputError;
+    if (!isInput) console.error(e);
+    tool.lastOk = false;
+    tool.viz.innerHTML = '';
+    const kind = isInput ? e.kind : 'INTERNAL';
+    const msg = isInput ? e.message : 'Unexpected problem: ' + e.message;
+    tool.screen.innerHTML = '<div class="ln err">ERR:' + esc(kind) + '</div><div class="ln x">' + esc(msg) + '</div>' +
+      '<div class="ln n">Fix the highlighted box, then press SOLVE again.</div>';
+    if (isInput) markFields(tool, e.field);
+    return { ok: false, error: msg, kind: kind, out: c.out, text: tool.screen.textContent };
+  }
+}
+
+function buildRows(tool, f) {
+  const wrap = el('div', { class: 'fld rows' });
+  wrap.append(el('div', { class: 'lab', html: esc(f.name) + (f.note ? ' <i>' + f.note + '</i>' : '') }));
+  const cols = '1.5em ' + f.cols.map(cl => (cl.type === 'text' ? 'minmax(0,1.25fr)' : 'minmax(0,1fr)')).join(' ') + ' 2.1em';
+  const head = el('div', { class: 'rowhead', style: 'grid-template-columns:' + cols }, el('span'));
+  f.cols.forEach(cl => {
+    const s = el('span', { text: cl.name });
+    if (cl.unit) { const u = el('span', { class: 'hu' }); tool.unitEls.push([u, cl.unit, true]); s.append(' ', u); }
+    head.append(s);
+  });
+  head.append(el('span'));
+  const list = el('div', { class: 'rowlist' });
+  const renumber = () => Array.from(list.children).forEach((r, i) => { r.firstChild.textContent = i + 1; });
+  function addRow(vals, focus) {
+    const r = el('div', { class: 'row', style: 'grid-template-columns:' + cols }, el('span', { class: 'ri' }));
+    f.cols.forEach((cl, ci) => {
+      const inp = el('input', { type: 'text', autocomplete: 'off', spellcheck: 'false', placeholder: cl.ph || '', 'aria-label': cl.name });
+      inp.value = vals && vals[ci] != null ? vals[ci] : '';
+      inp.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); run(tool); } });
+      inp.addEventListener('input', () => inp.classList.remove('bad'));
+      r.append(inp);
+    });
+    r.append(el('button', {
+      class: 'key tiny', type: 'button', title: 'Remove this row', 'aria-label': 'Remove row',
+      onclick: () => {
+        if (list.children.length > 1) { r.remove(); renumber(); }
+        else $$('input', r).forEach(i => { i.value = ''; });
+      },
+    }, '×'));
+    list.append(r);
+    renumber();
+    if (focus) r.querySelector('input').focus();
+  }
+  const add = el('button', { class: 'key small', type: 'button', onclick: () => addRow(null, true) }, f.addLabel || '+ ADD ROW');
+  wrap.append(head, list, add);
+  tool.rowsApi[f.k] = {
+    get: () => Array.from(list.children).map(r => $$('input', r).map(i => i.value)),
+    set: arr => {
+      list.innerHTML = '';
+      const rows = arr && arr.length ? arr : Array.from({ length: f.initial || 2 }, () => null);
+      rows.forEach(v => addRow(v));
+    },
+    input: (row, col) => (list.children[row] ? $$('input', list.children[row])[col] : null),
+  };
+  tool.fieldEls[f.k] = wrap;
+  return wrap;
+}
+
+function buildField(tool, f) {
+  const type = f.type || 'num';
+  if (type === 'rows') return buildRows(tool, f);
+  const wrap = el('div', { class: 'fld' });
+  const id = 'in-' + tool.def.id + '-' + f.k;
+  wrap.append(el('label', { for: id, class: 'lab', html: (f.sym ? '<b class="sym">' + f.sym + '</b> ' : '') + esc(f.name) + (f.optional ? ' <i>(optional)</i>' : '') }));
+  const row = el('div', { class: 'inrow' });
+  let inp;
+  if (type === 'select') {
+    inp = el('select', { id: id });
+    f.options.forEach(o => inp.append(el('option', { value: o[0] }, o[1])));
+    inp.addEventListener('change', () => tool.refresh());
+    row.append(inp);
+  } else {
+    inp = el('input', { id: id, type: 'text', autocomplete: 'off', autocapitalize: 'off', spellcheck: 'false', placeholder: f.ph || '' });
+    inp.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); run(tool); } });
+    inp.addEventListener('input', () => { inp.classList.remove('bad'); if (f.link) inp.dataset.linked = '0'; });
+    row.append(inp);
+    if (type === 'num') {
+      const u = el('span', { class: 'unit' });
+      tool.unitEls.push([u, f.unit, false]);
+      row.append(u);
+      if (f.solvable) {
+        row.append(el('button', {
+          class: 'key light q', type: 'button', title: 'Solve for this (clears the box)', 'aria-label': 'Solve for ' + f.name,
+          onclick: () => {
+            inp.value = '';
+            if (f.link) inp.dataset.linked = '0';
+            const keys = tool.def.fields.filter(x => x.solvable).map(x => x.k);
+            const blanks = keys.filter(k => !tool.inputs[k].value.trim()).length;
+            if (blanks === 1) run(tool); else inp.focus();
+          },
+        }, '?'));
+      }
+    }
+  }
+  wrap.append(row);
+  tool.inputs[f.k] = inp;
+  tool.fieldEls[f.k] = wrap;
+  return wrap;
+}
+
+function defineTool(containerId, def) {
+  const tool = { def: def, inputs: {}, fmap: {}, rowsApi: {}, fieldEls: {}, unitEls: [], lastOk: false };
+  const root = el('article', { class: 'tool', id: 'tool-' + def.id });
+  tool.root = root;
+  root.append(el('h3', { html: def.title }));
+  if (def.formula) root.append(el('div', { class: 'formula', html: def.formula }));
+  if (def.hint) root.append(el('p', { class: 'hint', html: def.hint }));
+  const io = el('div', { class: 'io' });
+  const left = el('div', { class: 'inputs' });
+  const right = el('div', { class: 'outputs' });
+  def.fields.forEach(f => { tool.fmap[f.k] = f; left.append(buildField(tool, f)); });
+  left.append(el('div', { class: 'btns' },
+    el('button', { class: 'key blue', type: 'button', onclick: () => run(tool) }, 'SOLVE ⏎'),
+    el('button', { class: 'key', type: 'button', onclick: () => tool.clear() }, 'CLEAR')));
+  if (def.examples && def.examples.length) {
+    const ex = el('div', { class: 'examples' }, el('span', { class: 'exlab' }, 'Load an example'));
+    def.examples.forEach(e => ex.append(el('button', { class: 'key green chip', type: 'button', onclick: () => { tool.set(e.vals); run(tool); } }, e.label)));
+    left.append(ex);
+  }
+  tool.screen = el('div', { class: 'lcd screen', 'aria-live': 'polite' });
+  tool.viz = el('div', { class: 'viz lcd' });
+  right.append(tool.screen, tool.viz);
+  io.append(left, right);
+  root.append(io);
+
+  tool.refresh = () => {
+    tool.unitEls.forEach(([u, src, paren]) => { const t = resolveUnit(tool, src); u.textContent = paren ? (t ? '(' + t + ')' : '') : t; });
+    def.fields.forEach(f => {
+      if (!f.when) return;
+      const show = Object.entries(f.when).every(([k, v]) => tool.inputs[k].value === v);
+      tool.fieldEls[f.k].hidden = !show;
+    });
+  };
+  /* set all fields: given values, else defaults (linked g fields follow the global g) */
+  tool.set = vals => {
+    vals = vals || {};
+    def.fields.forEach(f => {
+      const type = f.type || 'num';
+      const v = vals[f.k];
+      if (type === 'rows') { tool.rowsApi[f.k].set(v); return; }
+      const inp = tool.inputs[f.k];
+      if (type === 'select') { inp.value = v != null ? v : (f.def != null ? f.def : f.options[0][0]); return; }
+      if (v != null) { inp.value = v; if (f.link) inp.dataset.linked = '0'; }
+      else if (f.link) { inp.value = linkVal(f.link); inp.dataset.linked = '1'; }
+      else inp.value = f.def != null ? f.def : '';
+    });
+    clearMarks(tool);
+    tool.refresh();
+  };
+  tool.clear = () => { tool.set({}); idleScreen(tool); tool.lastOk = false; };
+  tool.solve = () => run(tool);
+  tool.values = () => {
+    const vals = {};
+    def.fields.forEach(f => { vals[f.k] = (f.type === 'rows') ? tool.rowsApi[f.k].get() : tool.inputs[f.k].value; });
+    return vals;
+  };
+  tool.snapshot = () => {
+    const linked = {};
+    def.fields.forEach(f => { if (f.link) linked[f.k] = tool.inputs[f.k].dataset.linked; });
+    return { vals: tool.values(), linked: linked, screen: tool.screen.innerHTML, viz: tool.viz.innerHTML, lastOk: tool.lastOk };
+  };
+  tool.restore = s => {
+    tool.set(s.vals);
+    Object.entries(s.linked).forEach(([k, v]) => { tool.inputs[k].dataset.linked = v; });
+    tool.screen.innerHTML = s.screen;
+    tool.viz.innerHTML = s.viz;
+    tool.lastOk = s.lastOk;
+  };
+  document.getElementById(containerId).append(root);
+  TOOLS[def.id] = tool;
+  tool.clear();
+  return tool;
+}
+
+/* =====================================================================
+   6. SVG DIAGRAMS (drawn in LCD ink)
+   ===================================================================== */
+const INK = '#1b2416', DIM = '#5d6d52', RED = '#8c1d1d', LCDC = '#c9d4b6';
+const f1 = v => String(Math.round(v * 10) / 10);
+function svgWrap(w, h, body, label) {
+  return '<svg viewBox="0 0 ' + w + ' ' + h + '" role="img" aria-label="' + esc(label) + '" xmlns="http://www.w3.org/2000/svg" ' +
+    'font-family="DejaVu Sans Mono, Consolas, Menlo, monospace" font-size="12">' + body + '</svg>';
+}
+function arrowSVG(x1, y1, x2, y2, o) {
+  o = o || {};
+  const color = o.color || INK, width = o.width || 2.6, head = o.head || 10;
+  const dx = x2 - x1, dy = y2 - y1, L = Math.hypot(dx, dy);
+  if (L < 2) return '';
+  const ux = dx / L, uy = dy / L;
+  const bx = x2 - ux * head, by = y2 - uy * head;
+  const px = -uy * head * 0.5, py = ux * head * 0.5;
+  return '<line x1="' + f1(x1) + '" y1="' + f1(y1) + '" x2="' + f1(bx) + '" y2="' + f1(by) + '" stroke="' + color + '" stroke-width="' + width + '" stroke-linecap="round"' + (o.dash ? ' stroke-dasharray="' + o.dash + '"' : '') + '/>' +
+    '<polygon points="' + f1(x2) + ',' + f1(y2) + ' ' + f1(bx + px) + ',' + f1(by + py) + ' ' + f1(bx - px) + ',' + f1(by - py) + '" fill="' + color + '"/>';
+}
+function txt(x, y, s, o) {
+  o = o || {};
+  return '<text x="' + f1(x) + '" y="' + f1(y) + '" text-anchor="' + (o.anchor || 'middle') + '" fill="' + (o.color || INK) + '" font-size="' + (o.size || 12) + '"' + (o.bold ? ' font-weight="700"' : '') + '>' + s + '</text>';
+}
+function arcPath(cx, cy, r, a1, a2, color) {
+  const x1 = cx + r * Math.cos(a1 * D2R), y1 = cy - r * Math.sin(a1 * D2R);
+  const x2 = cx + r * Math.cos(a2 * D2R), y2 = cy - r * Math.sin(a2 * D2R);
+  const large = Math.abs(a2 - a1) > 180 ? 1 : 0;
+  const sweep = a2 > a1 ? 0 : 1;
+  return '<path d="M' + f1(x1) + ' ' + f1(y1) + ' A' + r + ' ' + r + ' 0 ' + large + ' ' + sweep + ' ' + f1(x2) + ' ' + f1(y2) + '" fill="none" stroke="' + (color || DIM) + '" stroke-width="1.6"/>';
+}
+function niceStep(range, target) {
+  const raw = range / (target || 6);
+  const p = Math.pow(10, Math.floor(Math.log10(raw)));
+  const f = raw / p;
+  return (f < 1.5 ? 1 : f < 3 ? 2 : f < 7 ? 5 : 10) * p;
+}
+const short = (s, n) => (s.length > n ? s.slice(0, n - 1) + '…' : s);
+
+/* number line: masses as dots sized by mass, red fulcrum marker at the CM */
+function numberLineSVG(points, o) {
+  const W = 660, H = 178, L = 46, R = W - 46, Y = 104;
+  const xs = points.map(p => p.x);
+  if (o.cm != null) xs.push(o.cm);
+  if (o.oldCm != null) xs.push(o.oldCm);
+  let lo = Math.min.apply(null, xs), hi = Math.max.apply(null, xs);
+  if (hi - lo < 1e-9) { const d = Math.abs(lo) > 0 ? Math.abs(lo) * 0.5 : 1; lo -= d; hi += d; }
+  const pad = (hi - lo) * 0.1; lo -= pad; hi += pad;
+  const X = v => L + (v - lo) / (hi - lo) * (R - L);
+  let b = '<line x1="' + L + '" y1="' + Y + '" x2="' + R + '" y2="' + Y + '" stroke="' + INK + '" stroke-width="2"/>';
+  const step = niceStep(hi - lo, 7);
+  for (let t = Math.ceil(lo / step) * step; t <= hi + step * 1e-9; t += step) {
+    const tx = X(t);
+    b += '<line x1="' + f1(tx) + '" y1="' + (Y - 4) + '" x2="' + f1(tx) + '" y2="' + (Y + 4) + '" stroke="' + DIM + '" stroke-width="1.5"/>';
+    b += txt(tx, Y + 36, full(Math.abs(t) < step * 1e-9 ? 0 : t), { color: DIM, size: 11 });
+  }
+  b += txt(R, Y + 58, 'position (' + esc(o.unit || '') + ')', { anchor: 'end', color: DIM, size: 11 });
+  const mmax = Math.max.apply(null, points.map(p => p.m));
+  points.forEach(p => {
+    const r = 5 + 13 * Math.sqrt(p.m / mmax), cx = X(p.x);
+    b += '<circle cx="' + f1(cx) + '" cy="' + f1(Y - r) + '" r="' + f1(r) + '" fill="' + (p.hl ? RED : INK) + '" fill-opacity="0.88"/>';
+    b += txt(cx, Y - 2 * r - 7, esc(p.label), { size: 11, bold: true, color: p.hl ? RED : INK });
+  });
+  if (o.oldCm != null) {
+    const ox = X(o.oldCm);
+    b += '<polygon points="' + f1(ox) + ',' + (Y + 2) + ' ' + f1(ox - 9) + ',' + (Y + 19) + ' ' + f1(ox + 9) + ',' + (Y + 19) + '" fill="none" stroke="' + DIM + '" stroke-width="1.6"/>';
+  }
+  if (o.cm != null) {
+    const cx = X(o.cm);
+    b += '<line x1="' + f1(cx) + '" y1="22" x2="' + f1(cx) + '" y2="' + Y + '" stroke="' + RED + '" stroke-width="1.5" stroke-dasharray="4 3"/>';
+    b += '<polygon points="' + f1(cx) + ',' + (Y + 2) + ' ' + f1(cx - 10) + ',' + (Y + 20) + ' ' + f1(cx + 10) + ',' + (Y + 20) + '" fill="' + RED + '"/>';
+    const anchor = cx < L + 70 ? 'start' : cx > R - 70 ? 'end' : 'middle';
+    b += txt(cx, 15, esc(o.cmLabel || 'CM'), { bold: true, color: RED, anchor: anchor });
+  }
+  return svgWrap(W, H, b, 'Number line showing the masses and the center of mass');
+}
+
+/* 2D grid with equal scaling on both axes */
+function gridSVG(points, cm, unit) {
+  const W = 460, H = 440, M = 46, S = 360;
+  const xs = points.map(p => p.x).concat([cm.x]), ys = points.map(p => p.y).concat([cm.y]);
+  let x0 = Math.min.apply(null, xs), x1 = Math.max.apply(null, xs), y0 = Math.min.apply(null, ys), y1 = Math.max.apply(null, ys);
+  if (x0 > 0 && x0 < (x1 - x0)) x0 = 0;
+  if (y0 > 0 && y0 < (y1 - y0)) y0 = 0;
+  if (x1 < 0 && -x1 < (x1 - x0)) x1 = 0;
+  if (y1 < 0 && -y1 < (y1 - y0)) y1 = 0;
+  let span = Math.max(x1 - x0, y1 - y0);
+  if (span < 1e-9) span = Math.max(Math.abs(x0), Math.abs(y0), 1);
+  span *= 1.2;
+  const cxm = (x0 + x1) / 2, cym = (y0 + y1) / 2;
+  const lx = cxm - span / 2, ly = cym - span / 2;
+  const X = v => M + (v - lx) / span * S, Y = v => M + S - (v - ly) / span * S;
+  const step = niceStep(span, 6);
+  let b = '<rect x="' + M + '" y="' + M + '" width="' + S + '" height="' + S + '" fill="none" stroke="' + DIM + '" stroke-width="1"/>';
+  for (let t = Math.ceil(lx / step) * step; t <= lx + span + step * 1e-9; t += step) {
+    const v = Math.abs(t) < step * 1e-9 ? 0 : t;
+    b += '<line x1="' + f1(X(v)) + '" y1="' + M + '" x2="' + f1(X(v)) + '" y2="' + (M + S) + '" stroke="' + DIM + '" stroke-opacity="' + (v === 0 ? 0.9 : 0.3) + '" stroke-width="' + (v === 0 ? 1.8 : 1) + '"/>';
+    b += txt(X(v), M + S + 16, full(v), { color: DIM, size: 10.5 });
+  }
+  for (let t = Math.ceil(ly / step) * step; t <= ly + span + step * 1e-9; t += step) {
+    const v = Math.abs(t) < step * 1e-9 ? 0 : t;
+    b += '<line x1="' + M + '" y1="' + f1(Y(v)) + '" x2="' + (M + S) + '" y2="' + f1(Y(v)) + '" stroke="' + DIM + '" stroke-opacity="' + (v === 0 ? 0.9 : 0.3) + '" stroke-width="' + (v === 0 ? 1.8 : 1) + '"/>';
+    b += txt(M - 6, Y(v) + 4, full(v), { color: DIM, size: 10.5, anchor: 'end' });
+  }
+  b += txt(M + S, M + S + 32, 'x (' + esc(unit) + ')', { anchor: 'end', color: DIM, size: 11 });
+  b += txt(M, M - 10, 'y (' + esc(unit) + ')', { anchor: 'start', color: DIM, size: 11 });
+  const mmax = Math.max.apply(null, points.map(p => p.m));
+  points.forEach(p => {
+    const r = 5 + 12 * Math.sqrt(p.m / mmax);
+    b += '<circle cx="' + f1(X(p.x)) + '" cy="' + f1(Y(p.y)) + '" r="' + f1(r) + '" fill="' + INK + '" fill-opacity="0.85"/>';
+    b += txt(X(p.x), Y(p.y) - r - 5, esc(p.label), { size: 11, bold: true });
+  });
+  const cx = X(cm.x), cy = Y(cm.y);
+  b += '<circle cx="' + f1(cx) + '" cy="' + f1(cy) + '" r="8" fill="none" stroke="' + RED + '" stroke-width="2.2"/>' +
+    '<line x1="' + f1(cx - 13) + '" y1="' + f1(cy) + '" x2="' + f1(cx + 13) + '" y2="' + f1(cy) + '" stroke="' + RED + '" stroke-width="2"/>' +
+    '<line x1="' + f1(cx) + '" y1="' + f1(cy - 13) + '" x2="' + f1(cx) + '" y2="' + f1(cy + 13) + '" stroke="' + RED + '" stroke-width="2"/>';
+  b += txt(cx, cy + 26, 'CM (' + sig3(cm.x) + ', ' + sig3(cm.y) + ')', { bold: true, color: RED, size: 11.5 });
+  return svgWrap(W, H, b, 'Grid showing the masses and the center of mass');
+}
+
+/* free-body diagram as a point particle (dot) inside a dashed box outline */
+function fbdSVG(forces, o) {
+  o = o || {};
+  const W = 460, H = 300, cx = 230, cy = 150;
+  const shown = forces.filter(f => f.mag > 0);
+  const max = Math.max.apply(null, shown.map(f => f.mag).concat([1e-300]));
+  let b = '<rect x="' + (cx - 52) + '" y="' + (cy - 36) + '" width="104" height="72" rx="4" fill="none" stroke="' + DIM + '" stroke-width="1.5" stroke-dasharray="5 4"/>';
+  if (o.theta) {
+    const sgn = o.pullRight ? 1 : -1;
+    b += '<line x1="' + cx + '" y1="' + cy + '" x2="' + (cx + sgn * 95) + '" y2="' + cy + '" stroke="' + DIM + '" stroke-dasharray="3 3"/>';
+    const a1 = o.pullRight ? 0 : 180, a2 = o.pullRight ? o.theta : 180 - o.theta;
+    b += arcPath(cx, cy, 34, a1, a2);
+    const am = ((a1 + a2) / 2) * D2R;
+    b += txt(cx + 50 * Math.cos(am), cy - 50 * Math.sin(am) + 4, 'θ', { color: DIM, size: 12, bold: true });
+  }
+  shown.forEach(f => {
+    const L = 34 + 82 * (f.mag / max);
+    const a = f.ang * D2R, ca = Math.cos(a), sa = Math.sin(a);
+    const x2 = cx + L * ca, y2 = cy - L * sa;
+    b += arrowSVG(cx, cy, x2, y2, { color: f.color || INK });
+    const lx = x2 + 10 * ca, ly = y2 - 12 * sa + (Math.abs(sa) > 0.7 ? (sa > 0 ? -2 : 12) : 4);
+    const anchor = ca > 0.35 ? 'start' : ca < -0.35 ? 'end' : 'middle';
+    b += txt(lx, ly, f.label, { anchor: anchor, bold: true, size: 12, color: f.color || INK });
+  });
+  b += '<circle cx="' + cx + '" cy="' + cy + '" r="4.5" fill="' + INK + '"/>';
+  return svgWrap(W, H, b, 'Free-body diagram');
+}
+
+/* =====================================================================
+   7. THE CALCULATORS
+   ===================================================================== */
+const DIRS = { right: ['right', 'left'], up: ['up', 'down'], forward: ['forward', 'backward'] };
+const gS = () => full(CONST.g);
+const GS = () => full(CONST.G);
+const signNote = (x, what) => (x > 0
+  ? 'Positive: the ' + what + ' points in your + direction.'
+  : 'Negative: the ' + what + ' points in the − direction (opposite your + direction).');
+
+/* ---------------- 1. Newton's 1st & 2nd laws ---------------- */
+defineTool('tools-n12', {
+  id: 'fma',
+  title: 'F = ma solver',
+  formula: 'ΣF = m·a',
+  hint: 'Leave exactly <b>one</b> box blank and press SOLVE. Signs show direction: + is your chosen positive direction, − is the opposite.',
+  fields: [
+    { k: 'F', name: 'Net force', sym: 'ΣF', unit: 'N', c: 'any', solvable: true, ph: 'e.g. 6.0' },
+    { k: 'm', name: 'Mass', sym: 'm', unit: 'kg', c: 'pos', solvable: true, ph: 'e.g. 2.0' },
+    { k: 'a', name: 'Acceleration', sym: 'a', unit: 'm/s²', c: 'any', solvable: true, ph: 'e.g. 3.0' },
+  ],
+  examples: [
+    { label: 'Find ΣF: 2.0 kg at 3.0 m/s²', vals: { m: '2.0', a: '3.0' } },
+    { label: 'Find a: −6.0 N on 2.0 kg', vals: { F: '-6.0', m: '2.0' } },
+    { label: 'Find m: 12 N gives 4.0 m/s²', vals: { F: '12', a: '4.0' } },
+  ],
+  solve(c) {
+    const w = c.w, out = c.out;
+    const k = c.unknown(['F', 'm', 'a']);
+    w.h('Solve for ' + { F: 'ΣF', m: 'm', a: 'a' }[k]);
+    w.f('ΣF = m·a');
+    if (k === 'F') {
+      const m = c.num('m'), a = c.num('a'), F = m * a;
+      w.s('ΣF = ' + c.q('m') + c.q('a'));
+      w.r('ΣF ' + eqv(F, 'N'));
+      w.a('ΣF = ' + sig3(F) + ' N');
+      w.n(F === 0 ? 'ΣF = 0 ⇒ a = 0: the velocity is constant.' : signNote(F, 'net force'));
+      out.F = F;
+    } else if (k === 'm') {
+      const F = c.num('F'), a = c.num('a');
+      w.f('m = ΣF / a');
+      if (a === 0) fail(F === 0 ? 'ΣF = 0 and a = 0 works for any mass, so m can’t be determined. Use a nonzero force and acceleration.' : 'a = 0 with a nonzero net force is impossible: a net force always produces an acceleration.', 'a', 'DOMAIN');
+      const m = F / a;
+      if (!(m > 0)) fail(F === 0 ? 'ΣF = 0 with a ≠ 0 would mean zero mass, which is impossible.' : 'ΣF and a have opposite signs. Acceleration always points the same way as the net force, so they need the same sign.', ['F', 'a'], 'DOMAIN');
+      w.s('m = ' + c.q('F') + ' / ' + c.q('a'));
+      w.r('m ' + eqv(m, 'kg'));
+      w.a('m = ' + sig3(m) + ' kg');
+      out.m = m;
+    } else {
+      const F = c.num('F'), m = c.num('m'), a = F / m;
+      w.f('a = ΣF / m');
+      w.s('a = ' + c.q('F') + ' / ' + c.q('m'));
+      w.r('a ' + eqv(a, 'm/s²'));
+      w.a('a = ' + sig3(a) + ' m/s²');
+      w.n(a === 0 ? 'ΣF = 0 ⇒ a = 0: the velocity is constant (at rest or moving steadily).' : signNote(a, 'acceleration') + ' It always points the same way as the net force.');
+      out.a = a;
+    }
+  },
+});
+
+defineTool('tools-n12', {
+  id: 'net',
+  title: 'Net force on one axis → acceleration',
+  formula: 'ΣF = F₁ + F₂ + …, &nbsp; a = ΣF / m',
+  hint: 'One row per force along the same line. Use + for your positive direction and − for the opposite direction. Mass is optional (it’s needed for the acceleration).',
+  fields: [
+    { k: 'dir', type: 'select', name: 'Positive direction', options: [['right', '+ = right, − = left'], ['up', '+ = up, − = down'], ['forward', '+ = forward, − = backward']], def: 'right' },
+    { k: 'forces', type: 'rows', name: 'Forces (signed)', initial: 3, addLabel: '+ ADD FORCE',
+      cols: [{ k: 'label', type: 'text', name: 'Name', ph: 'e.g. push' }, { k: 'F', name: 'Force', unit: 'N', c: 'any', ph: 'e.g. 6.0' }] },
+    { k: 'm', name: 'Mass', sym: 'm', unit: 'kg', c: 'pos', optional: true, ph: 'optional' },
+  ],
+  examples: [
+    { label: 'Balanced: 6.0 N push, 6.0 N friction', vals: { forces: [['push', '6.0'], ['friction', '-6.0']], m: '2.0' } },
+    { label: 'Unbalanced: 10 N push, 4.0 N friction', vals: { forces: [['push', '10'], ['friction', '-4.0']], m: '2.0' } },
+  ],
+  solve(c) {
+    const w = c.w, out = c.out;
+    const rows = c.rows('forces');
+    if (!rows.length) fail('Enter at least one force.', { k: 'forces', row: 0, col: 1 }, 'ARGUMENT');
+    const words = DIRS[c.sel('dir')];
+    w.h('Add the forces (signs give direction)');
+    rows.forEach((r, j) => w.s('F' + subN(j + 1) + (r.text.label ? ' (' + esc(r.text.label) + ')' : '') + ' = ' + r.raw.F + ' N'));
+    w.f('ΣF = ' + rows.map((r, j) => 'F' + subN(j + 1)).join(' + '));
+    w.s('ΣF = ' + rows.map(r => '(' + r.raw.F + ' N)').join(' + '));
+    let sum = 0, mag = 0;
+    rows.forEach(r => { sum += r.v.F; mag += Math.abs(r.v.F); });
+    const F = Math.abs(sum) <= 1e-9 * mag ? 0 : sum;
+    w.r('ΣF ' + eqv(F, 'N'));
+    out.F = F;
+    const m = c.opt('m');
+    if (F === 0) {
+      w.a('ΣF = 0 N &nbsp;⇒&nbsp; a = 0');
+      if (m !== null) w.s('a = ΣF / m = 0 / ' + c.q('m') + ' = 0 m/s²');
+      w.n('Net force is zero, so the acceleration is zero and the <b>velocity is constant</b> (Newton’s 1st law). The object could be at rest <b>or</b> moving in a straight line at constant speed. The forces alone can’t tell which.');
+      out.a = 0;
+      out.constantVelocity = true;
+    } else {
+      const d = F > 0 ? words[0] : words[1];
+      w.a('ΣF = ' + sig3(F) + ' N' + (F < 0 ? ' (' + sig3(-F) + ' N ' + d + ')' : ' (' + d + ')'));
+      out.constantVelocity = false;
+      out.dir = d;
+      if (m !== null) {
+        const a = F / m;
+        w.h('Newton’s 2nd law');
+        w.f('a = ΣF / m');
+        w.s('a = (' + full(F) + ' N) / ' + c.q('m'));
+        w.r('a ' + eqv(a, 'm/s²'));
+        w.a('a = ' + sig3(a) + ' m/s²' + (a < 0 ? ' (' + sig3(-a) + ' m/s² ' + d + ')' : ' (' + d + ')'));
+        w.n('The acceleration points the same way as the net force. The velocity could still point the other way (e.g. an object that is slowing down).');
+        out.a = a;
+      } else {
+        w.n('Enter a mass to also get the acceleration (a = ΣF / m).');
+      }
+    }
+  },
+});
+
+defineTool('tools-n12', {
+  id: 'box',
+  title: 'Constant-velocity box',
+  formula: 'W = mg, &nbsp; N = W, &nbsp; f = F<sub>push</sub> (opposite direction)',
+  hint: 'A box slides across a level floor at <b>constant velocity</b> while pushed horizontally. Positive push = to the right; negative = to the left.',
+  fields: [
+    { k: 'm', name: 'Mass', sym: 'm', unit: 'kg', c: 'pos', ph: 'e.g. 2.0' },
+    { k: 'F', name: 'Horizontal push', sym: 'F<sub>push</sub>', unit: 'N', c: 'any', ph: 'e.g. 6.0' },
+  ],
+  examples: [{ label: '2.0 kg box, 6.0 N push', vals: { m: '2.0', F: '6.0' } }],
+  solve(c) {
+    const w = c.w, out = c.out, g = CONST.g;
+    const m = c.num('m'), F = c.num('F');
+    const W = m * g, f = Math.abs(F);
+    const pd = F >= 0 ? 'right' : 'left', fd = F >= 0 ? 'left' : 'right';
+    w.h('1 · Weight (Earth pulls down on the box)');
+    w.f('W = mg');
+    w.s('W = ' + c.q('m') + '(' + gS() + ' m/s²)');
+    w.r('W ' + eqv(W, 'N') + ' (down)');
+    w.h('2 · Vertical: no vertical acceleration');
+    w.f('ΣF<sub>y</sub> = 0 &nbsp;⇒&nbsp; N − W = 0 &nbsp;⇒&nbsp; N = W');
+    w.r('N ' + eqv(W, 'N') + ' (up)');
+    w.h('3 · Horizontal: constant velocity ⇒ ΣF<sub>x</sub> = 0');
+    w.f('F<sub>push</sub> − f = 0 &nbsp;⇒&nbsp; f = F<sub>push</sub>');
+    w.r('f ' + eqv(f, 'N') + (F === 0 ? '' : ' (' + fd + ', opposite the push)'));
+    w.a('Weight ' + sig3(W) + ' N down · Normal ' + sig3(W) + ' N up');
+    w.a(F === 0 ? 'Push 0 N · Friction 0 N' : 'Push ' + sig3(f) + ' N ' + pd + ' · Friction ' + sig3(f) + ' N ' + fd);
+    w.n(F === 0
+      ? 'No push, so friction must also be zero for the velocity to stay constant (e.g. a frictionless floor).'
+      : 'ΣF = 0 and a = 0. Friction equals the push only because the velocity is constant. If the box sped up, the push would be bigger than friction.');
+    out.W = W; out.N = W; out.f = f; out.fdir = F === 0 ? 'none' : fd;
+    c.svg = fbdSVG([
+      { mag: W, ang: -90, label: 'W = ' + sig3(W) + ' N' },
+      { mag: W, ang: 90, label: 'N = ' + sig3(W) + ' N' },
+      { mag: f, ang: F >= 0 ? 0 : 180, label: 'F = ' + sig3(f) + ' N' },
+      { mag: f, ang: F >= 0 ? 180 : 0, label: 'f = ' + sig3(f) + ' N', color: DIM },
+    ]);
+  },
+});
+
+/* ---------------- 2. Newton's 3rd law ---------------- */
+function thirdSVG(o) {
+  const W = 500, H = 196, bw = 120, bh = 64, y = 54;
+  const bLeft = o.dB === 'left';
+  const leftName = bLeft ? o.B : o.A, rightName = bLeft ? o.A : o.B;
+  const leftA = bLeft ? o.aB : o.aA, rightA = bLeft ? o.aA : o.aB;
+  const xL = 250 - bw, xR = 250;
+  let b = '<line x1="30" y1="' + (y + bh) + '" x2="470" y2="' + (y + bh) + '" stroke="' + DIM + '" stroke-width="2"/>';
+  b += '<rect x="' + xL + '" y="' + y + '" width="' + bw + '" height="' + bh + '" fill="none" stroke="' + INK + '" stroke-width="2.2"/>';
+  b += '<rect x="' + xR + '" y="' + y + '" width="' + bw + '" height="' + bh + '" fill="none" stroke="' + INK + '" stroke-width="2.2"/>';
+  b += txt(xL + bw / 2, y + 20, esc(short(leftName, 13)), { bold: true, size: 12 });
+  b += txt(xR + bw / 2, y + 20, esc(short(rightName, 13)), { bold: true, size: 12 });
+  if (o.F > 0) {
+    const ay = y + 44;
+    b += arrowSVG(xL + bw - 14, ay, xL - 70, ay, { width: 3 });
+    b += arrowSVG(xR + 14, ay, xR + bw + 70, ay, { width: 3 });
+    b += txt(xL - 70, ay - 10, sig3(o.F) + ' N', { anchor: 'start', bold: true, size: 12 });
+    b += txt(xR + bw + 70, ay - 10, sig3(o.F) + ' N', { anchor: 'end', bold: true, size: 12 });
+  }
+  b += txt(xL + bw / 2, y + bh + 24, 'a = ' + sig3(leftA) + ' m/s² ←', { size: 12 });
+  b += txt(xR + bw / 2, y + bh + 24, 'a = ' + sig3(rightA) + ' m/s² →', { size: 12 });
+  b += txt(250, y + bh + 50, 'equal-size forces, opposite directions', { size: 11, color: DIM });
+  return svgWrap(W, H, b, 'Two objects pushing on each other with equal and opposite forces');
+}
+defineTool('tools-n3', {
+  id: 'third',
+  title: 'Interaction tool: equal forces, different accelerations',
+  formula: 'F<sub>A on B</sub> = −F<sub>B on A</sub>, &nbsp; a = F / m',
+  hint: 'Enter the size of the force between the two objects and both masses. Assumes these are the only horizontal forces on each object.',
+  fields: [
+    { k: 'F', name: 'Force magnitude', sym: 'F', unit: 'N', c: 'nonneg', ph: 'e.g. 10', msg: 'Force magnitude can’t be negative. Enter its size here and choose the direction below.' },
+    { k: 'mA', name: 'Mass of object A', sym: 'm<sub>A</sub>', unit: 'kg', c: 'pos', ph: 'e.g. 2.0' },
+    { k: 'mB', name: 'Mass of object B', sym: 'm<sub>B</sub>', unit: 'kg', c: 'pos', ph: 'e.g. 5.0' },
+    { k: 'dir', type: 'select', name: 'Force of A on B points', options: [['right', 'to the right →'], ['left', '← to the left']], def: 'right' },
+    { k: 'nA', type: 'text', name: 'Name of A', optional: true, ph: 'e.g. 2 kg cart' },
+    { k: 'nB', type: 'text', name: 'Name of B', optional: true, ph: 'e.g. 5 kg cart' },
+  ],
+  examples: [{ label: 'Carts: 10 N between 2.0 kg and 5.0 kg', vals: { F: '10', mA: '2.0', mB: '5.0', dir: 'right', nA: '2 kg cart', nB: '5 kg cart' } }],
+  solve(c) {
+    const w = c.w, out = c.out;
+    const F = c.num('F'), mA = c.num('mA'), mB = c.num('mB');
+    const A = c.text('nA') ? esc(c.text('nA')) : 'A', B = c.text('nB') ? esc(c.text('nB')) : 'B';
+    const dB = c.sel('dir'), dA = dB === 'right' ? 'left' : 'right';
+    const aA = F / mA, aB = F / mB;
+    w.h('Newton’s 3rd law: same size, opposite directions');
+    w.f('F<sub>A on B</sub> = −F<sub>B on A</sub>');
+    w.r('Force on ' + B + ' (by ' + A + ') = ' + c.raw('F') + ' N ' + dB);
+    w.r('Force on ' + A + ' (by ' + B + ') = ' + c.raw('F') + ' N ' + dA);
+    w.h('Acceleration of each object: a = F / m');
+    w.s(A + ': a = ' + c.q('F') + ' / ' + c.q('mA') + ' ' + eqv(aA, 'm/s²') + ' ' + dA);
+    w.s(B + ': a = ' + c.q('F') + ' / ' + c.q('mB') + ' ' + eqv(aB, 'm/s²') + ' ' + dB);
+    w.a(A + ': ' + sig3(aA) + ' m/s² ' + dA + ' · ' + B + ': ' + sig3(aB) + ' m/s² ' + dB);
+    if (F === 0) w.n('No interaction force, so neither object accelerates.');
+    else if (mA === mB) w.n('Equal masses, so equal-size accelerations, in opposite directions.');
+    else {
+      const small = mA < mB ? A : B, ratio = Math.max(mA, mB) / Math.min(mA, mB);
+      w.n('Same size force on each, but ' + small + ' has less mass, so it accelerates ' + full(ratio) + '× as much (a ∝ 1/m). The accelerations point in opposite directions.');
+    }
+    out.FonA = F; out.FonB = F; out.aA = aA; out.aB = aB; out.dirA = dA; out.dirB = dB;
+    c.svg = thirdSVG({ A: c.text('nA') || 'A', B: c.text('nB') || 'B', F: F, dB: dB, aA: aA, aB: aB });
+  },
+});
+
+/* ---------------- 3. Universal gravitation ---------------- */
+defineTool('tools-grav', {
+  id: 'grav',
+  title: 'Newton’s law of gravitation solver',
+  formula: 'F<sub>g</sub> = G·m<sub>1</sub>·m<sub>2</sub> / r²',
+  hint: 'Leave exactly <b>one</b> box blank. SI units: kg, meters (center-to-center), newtons. Type big/small numbers like <code>5.97e24</code>.',
+  fields: [
+    { k: 'F', name: 'Gravitational force', sym: 'F<sub>g</sub>', unit: 'N', c: 'pos', solvable: true, ph: 'e.g. 1.6e-9' },
+    { k: 'm1', name: 'Mass 1', sym: 'm<sub>1</sub>', unit: 'kg', c: 'pos', solvable: true, ph: 'e.g. 2.0' },
+    { k: 'm2', name: 'Mass 2', sym: 'm<sub>2</sub>', unit: 'kg', c: 'pos', solvable: true, ph: 'e.g. 3.0' },
+    { k: 'r', name: 'Center-to-center distance', sym: 'r', unit: 'm', c: 'pos', solvable: true, ph: 'e.g. 0.50' },
+  ],
+  examples: [
+    { label: 'F: 2.0 kg & 3.0 kg, 0.50 m apart', vals: { m1: '2.0', m2: '3.0', r: '0.50' } },
+    { label: 'r: 2.0 kg & 3.0 kg feel 1.60e-9 N', vals: { F: '1.60e-9', m1: '2.0', m2: '3.0' } },
+    { label: 'F: Earth & 70 kg person', vals: { m1: '5.97e24', m2: '70', r: '6.37e6' } },
+  ],
+  solve(c) {
+    const w = c.w, out = c.out, G = CONST.G;
+    const k = c.unknown(['F', 'm1', 'm2', 'r']);
+    const LBL = { F: 'F<sub>g</sub>', m1: 'm<sub>1</sub>', m2: 'm<sub>2</sub>', r: 'r' };
+    w.h('Solve for ' + LBL[k]);
+    w.f('F<sub>g</sub> = G·m<sub>1</sub>·m<sub>2</sub> / r²');
+    if (k === 'F') {
+      const m1 = c.num('m1'), m2 = c.num('m2'), r = c.num('r');
+      const top = G * m1 * m2, bot = r * r, F = top / bot;
+      w.s('F<sub>g</sub> = (' + GS() + ')(' + c.raw('m1') + ')(' + c.raw('m2') + ') / (' + c.raw('r') + ')²');
+      w.s('F<sub>g</sub> = ' + full(top) + ' / ' + full(bot));
+      w.r('F<sub>g</sub> ' + eqv(F, 'N'));
+      w.a('F<sub>g</sub> = ' + sig3(F) + ' N');
+      w.n('Each object feels this same size force, pulling it toward the other (Newton’s 3rd law).');
+      out.F = F;
+    } else if (k === 'm1' || k === 'm2') {
+      const o = k === 'm1' ? 'm2' : 'm1';
+      const F = c.num('F'), mo = c.num(o), r = c.num('r');
+      const top = F * r * r, bot = G * mo, m = top / bot;
+      w.f(LBL[k] + ' = F<sub>g</sub>·r² / (G·' + LBL[o] + ')');
+      w.s(LBL[k] + ' = (' + c.raw('F') + ')(' + c.raw('r') + ')² / [(' + GS() + ')(' + c.raw(o) + ')]');
+      w.s(LBL[k] + ' = ' + full(top) + ' / ' + full(bot));
+      w.r(LBL[k] + ' ' + eqv(m, 'kg'));
+      w.a(LBL[k] + ' = ' + sig3(m) + ' kg');
+      out[k] = m;
+    } else {
+      const F = c.num('F'), m1 = c.num('m1'), m2 = c.num('m2');
+      const inside = G * m1 * m2 / F, r = Math.sqrt(inside);
+      w.f('r = √( G·m<sub>1</sub>·m<sub>2</sub> / F<sub>g</sub> )');
+      w.s('r = √[ (' + GS() + ')(' + c.raw('m1') + ')(' + c.raw('m2') + ') / (' + c.raw('F') + ') ]');
+      w.s('r = √(' + full(inside) + ')');
+      w.r('r ' + eqv(r, 'm'));
+      w.a('r = ' + sig3(r) + ' m');
+      w.n('r is the center-to-center distance.');
+      out.r = r;
+    }
+  },
+});
+
+defineTool('tools-grav', {
+  id: 'ratio',
+  title: 'Ratio tool: how does the force change?',
+  formula: 'F<sub>new</sub> = F × (m<sub>1</sub> factor)(m<sub>2</sub> factor) / (distance factor)²',
+  hint: 'Type each multiplier: <b>2</b> = doubled, <b>3</b> = tripled, <b>1/2</b> or 0.5 = halved, <b>1</b> = unchanged. Optionally give the original force in newtons.',
+  fields: [
+    { k: 'a', name: 'Mass 1 factor', sym: '×m<sub>1</sub>', unit: '', c: 'factor', def: '1' },
+    { k: 'b', name: 'Mass 2 factor', sym: '×m<sub>2</sub>', unit: '', c: 'factor', def: '1' },
+    { k: 'd', name: 'Distance factor', sym: '×r', unit: '', c: 'factor', def: '1' },
+    { k: 'F0', name: 'Original force', sym: 'F', unit: 'N', c: 'pos', optional: true, ph: 'optional' },
+  ],
+  examples: [
+    { label: 'Both ×2, distance ×3', vals: { a: '2', b: '2', d: '3' } },
+    { label: 'One mass doubles', vals: { a: '2', b: '1', d: '1' } },
+    { label: 'Distance doubles', vals: { a: '1', b: '1', d: '2' } },
+    { label: 'Distance halved', vals: { a: '1', b: '1', d: '1/2' } },
+  ],
+  solve(c) {
+    const w = c.w, out = c.out;
+    const a = c.num('a'), b = c.num('b'), d = c.num('d');
+    const ratio = a * b / (d * d);
+    w.f('F<sub>new</sub> / F<sub>old</sub> = (m<sub>1</sub> factor)(m<sub>2</sub> factor) / (distance factor)²');
+    w.s('F<sub>new</sub> = F × (' + c.raw('a') + ')(' + c.raw('b') + ') / (' + c.raw('d') + ')²');
+    w.s('F<sub>new</sub> = F × ' + full(a * b) + ' / ' + full(d * d));
+    const fa = toFrac(a), fb = toFrac(b), fd = toFrac(d);
+    let frac = null;
+    if (fa && fb && fd) {
+      const rr = reduceFrac(fa.n * fb.n * fd.d * fd.d, fa.d * fb.d * fd.n * fd.n);
+      if (rr[0] <= 1e6 && rr[1] <= 1e6) { frac = fracSym(rr[0], rr[1], 'F'); out.num = rr[0]; out.den = rr[1]; }
+    }
+    const dec = sig3(ratio) + 'F';
+    if (frac) {
+      w.r('F<sub>new</sub> = ' + frac + ' ' + approxSign(ratio) + ' ' + dec);
+      w.a('F<sub>new</sub> = ' + frac + ' &nbsp;(' + approxSign(ratio) + ' ' + dec + ')');
+    } else {
+      w.r('F<sub>new</sub> ≈ ' + dec);
+      w.a('F<sub>new</sub> ≈ ' + dec);
+      w.n('These factors don’t make a simple fraction, so only the decimal is shown.');
+    }
+    const F0 = c.opt('F0');
+    if (F0 !== null) {
+      const Fn = ratio * F0;
+      w.h('With the original force');
+      w.s('F<sub>new</sub> = ' + (frac ? fracPlain(out.num, out.den) : full(ratio)) + ' × ' + c.q('F0'));
+      w.r('F<sub>new</sub> ' + eqv(Fn, 'N'));
+      w.a('F<sub>new</sub> = ' + sig3(Fn) + ' N');
+      out.Fnew = Fn;
+    }
+    w.n(ratio > 1 ? 'Ratio > 1: the attraction gets stronger.' : ratio < 1 ? 'Ratio < 1: the attraction gets weaker. Distance counts twice because it is squared.' : 'The changes cancel out: the force is unchanged.');
+    out.ratio = ratio; out.frac = frac;
+  },
+});
+
+defineTool('tools-grav', {
+  id: 'alt',
+  title: 'Weight at altitude',
+  formula: 'r = R + h, &nbsp; W<sub>new</sub> = W<sub>surface</sub> × (R / r)²',
+  hint: 'Give the altitude h as a multiple of the planet’s radius R (h = 2 means h = 2R), or in meters together with R.',
+  fields: [
+    { k: 'W', name: 'Weight at the surface', sym: 'W<sub>surface</sub>', unit: 'N', c: 'pos', ph: 'e.g. 90' },
+    { k: 'mode', type: 'select', name: 'Altitude given as', options: [['R', 'a multiple of R (h = k·R)'], ['m', 'meters (enter R and h)']], def: 'R' },
+    { k: 'k', name: 'Altitude in planet radii', sym: 'h', unit: '× R', c: 'nonneg', when: { mode: 'R' }, ph: 'e.g. 2', msg: 'Altitude can’t be negative. This formula only applies on or above the surface.' },
+    { k: 'R', name: 'Planet radius', sym: 'R', unit: 'm', c: 'pos', when: { mode: 'm' }, ph: 'e.g. 6.37e6' },
+    { k: 'h', name: 'Altitude above the surface', sym: 'h', unit: 'm', c: 'nonneg', when: { mode: 'm' }, ph: 'e.g. 4.0e5', msg: 'Altitude can’t be negative. This formula only applies on or above the surface.' },
+  ],
+  examples: [
+    { label: '90 N at h = 2R', vals: { W: '90', mode: 'R', k: '2' } },
+    { label: '90 N at h = R', vals: { W: '90', mode: 'R', k: '1' } },
+    { label: 'Earth: 700 N at 400 km', vals: { W: '700', mode: 'm', R: '6.37e6', h: '4.0e5' } },
+  ],
+  solve(c) {
+    const w = c.w, out = c.out;
+    const W = c.num('W');
+    w.f('r = R + h');
+    w.f('W<sub>new</sub> = W<sub>surface</sub> × (R / r)²');
+    let ratio;
+    if (c.sel('mode') === 'R') {
+      const k = c.num('k'), n = 1 + k;
+      ratio = 1 / (n * n);
+      w.s('r = R + ' + c.raw('k') + 'R = ' + full(n) + 'R');
+      w.s('W<sub>new</sub> = ' + c.q('W') + ' × (R / ' + full(n) + 'R)²');
+      const fr = toFrac(n);
+      if (fr && fr.n <= 1000 && fr.d <= 1000) {
+        const rr = reduceFrac(fr.d * fr.d, fr.n * fr.n);
+        w.s('W<sub>new</sub> = ' + c.q('W') + ' × ' + fracPlain(rr[0], rr[1]));
+        out.frac = fracPlain(rr[0], rr[1]);
+      } else {
+        w.s('W<sub>new</sub> = ' + c.q('W') + ' × ' + full(ratio));
+      }
+    } else {
+      const R = c.num('R'), h = c.num('h'), r = R + h;
+      ratio = (R / r) * (R / r);
+      w.s('r = ' + c.raw('R') + ' m + ' + c.raw('h') + ' m = ' + full(r) + ' m');
+      w.s('(R / r)² = (' + c.raw('R') + ' / ' + full(r) + ')² = ' + full(ratio));
+      w.s('W<sub>new</sub> = ' + c.q('W') + ' × ' + full(ratio));
+      out.r = r;
+    }
+    const Wn = W * ratio;
+    w.r('W<sub>new</sub> ' + eqv(Wn, 'N'));
+    w.a('W<sub>new</sub> = ' + sig3(Wn) + ' N');
+    w.n('The mass doesn’t change. Only the weight (and g) shrink, by the factor (R/r)². Altitude h = R gives ¼; h = 2R gives 1/9.');
+    out.W = Wn; out.ratio = ratio;
+  },
+});
+
+defineTool('tools-grav', {
+  id: 'wmg',
+  title: 'Weight solver',
+  formula: 'W = m·g',
+  hint: 'g starts at the global value from the top bar. Clear it (press <b>?</b>) to solve for g instead.',
+  fields: [
+    { k: 'W', name: 'Weight', sym: 'W', unit: 'N', c: 'pos', solvable: true, ph: 'e.g. 19.6' },
+    { k: 'm', name: 'Mass', sym: 'm', unit: 'kg', c: 'pos', solvable: true, ph: 'e.g. 2.0' },
+    { k: 'g', name: 'Gravitational field strength', sym: 'g', unit: 'm/s²', c: 'pos', solvable: true, link: 'g', ph: 'e.g. 9.8' },
+  ],
+  examples: [
+    { label: 'W of 2.0 kg on Earth', vals: { m: '2.0' } },
+    { label: 'm from a 90 N weight', vals: { W: '90' } },
+    { label: 'g: 70 kg weighs 113 N', vals: { W: '113', m: '70', g: '' } },
+  ],
+  solve(c) {
+    const w = c.w, out = c.out;
+    const k = c.unknown(['W', 'm', 'g']);
+    w.h('Solve for ' + k);
+    w.f('W = m·g');
+    if (k === 'W') {
+      const m = c.num('m'), g = c.num('g'), W = m * g;
+      w.s('W = ' + c.q('m') + c.q('g'));
+      w.r('W ' + eqv(W, 'N'));
+      w.a('W = ' + sig3(W) + ' N');
+      out.W = W;
+    } else if (k === 'm') {
+      const W = c.num('W'), g = c.num('g'), m = W / g;
+      w.f('m = W / g');
+      w.s('m = ' + c.q('W') + ' / ' + c.q('g'));
+      w.r('m ' + eqv(m, 'kg'));
+      w.a('m = ' + sig3(m) + ' kg');
+      out.m = m;
+    } else {
+      const W = c.num('W'), m = c.num('m'), g = W / m;
+      w.f('g = W / m');
+      w.s('g = ' + c.q('W') + ' / ' + c.q('m'));
+      w.r('g ' + eqv(g, 'm/s²'));
+      w.a('g = ' + sig3(g) + ' m/s² &nbsp;(= ' + sig3(g) + ' N/kg)');
+      out.g = g;
+    }
+    w.n('Mass is the same everywhere; weight depends on the local g.');
+  },
+});
+
+defineTool('tools-grav', {
+  id: 'gfield',
+  title: 'Gravitational field solver',
+  formula: 'g = G·M / r²',
+  hint: 'Leave exactly <b>one</b> box blank. M is the planet’s mass; r is the distance from the planet’s center (r = R + h above the surface).',
+  fields: [
+    { k: 'g', name: 'Gravitational field strength', sym: 'g', unit: 'm/s²', c: 'pos', solvable: true, ph: 'e.g. 9.8' },
+    { k: 'M', name: 'Planet mass', sym: 'M', unit: 'kg', c: 'pos', solvable: true, ph: 'e.g. 5.97e24' },
+    { k: 'r', name: 'Distance from the center', sym: 'r', unit: 'm', c: 'pos', solvable: true, ph: 'e.g. 6.37e6' },
+  ],
+  examples: [
+    { label: 'g at Earth’s surface', vals: { M: '5.97e24', r: '6.37e6' } },
+    { label: 'g at h = R above Earth', vals: { M: '5.97e24', r: '2*6.37e6' } },
+    { label: 'M from g = 9.8 at r = 6.37e6 m', vals: { g: '9.8', r: '6.37e6' } },
+  ],
+  solve(c) {
+    const w = c.w, out = c.out, G = CONST.G;
+    const k = c.unknown(['g', 'M', 'r']);
+    w.h('Solve for ' + k);
+    w.f('g = G·M / r²');
+    if (k === 'g') {
+      const M = c.num('M'), r = c.num('r'), top = G * M, bot = r * r, g = top / bot;
+      w.s('g = (' + GS() + ')(' + c.raw('M') + ') / (' + c.raw('r') + ')²');
+      w.s('g = ' + full(top) + ' / ' + full(bot));
+      w.r('g ' + eqv(g, 'm/s²'));
+      w.a('g = ' + sig3(g) + ' m/s²');
+      out.g = g;
+    } else if (k === 'M') {
+      const g = c.num('g'), r = c.num('r'), M = g * r * r / G;
+      w.f('M = g·r² / G');
+      w.s('M = (' + c.raw('g') + ')(' + c.raw('r') + ')² / (' + GS() + ')');
+      w.s('M = ' + full(g * r * r) + ' / ' + GS());
+      w.r('M ' + eqv(M, 'kg'));
+      w.a('M = ' + sig3(M) + ' kg');
+      out.M = M;
+    } else {
+      const g = c.num('g'), M = c.num('M'), inside = G * M / g, r = Math.sqrt(inside);
+      w.f('r = √( G·M / g )');
+      w.s('r = √[ (' + GS() + ')(' + c.raw('M') + ') / (' + c.raw('g') + ') ]');
+      w.s('r = √(' + full(inside) + ')');
+      w.r('r ' + eqv(r, 'm'));
+      w.a('r = ' + sig3(r) + ' m');
+      out.r = r;
+    }
+  },
+});
+
+/* ---------------- 4. Equilibrium ---------------- */
+function compSVG(F, Fx, Fy, th, ref) {
+  const W = 400, H = 310, ox = 200, oy = 155, R = 118;
+  let b = '<line x1="22" y1="' + oy + '" x2="378" y2="' + oy + '" stroke="' + DIM + '" stroke-width="1.2"/>' +
+    '<line x1="' + ox + '" y1="18" x2="' + ox + '" y2="292" stroke="' + DIM + '" stroke-width="1.2"/>' +
+    txt(382, oy + 4, '+x', { anchor: 'start', color: DIM, size: 11 }) + txt(ox, 13, '+y', { color: DIM, size: 11 });
+  if (F === 0) return svgWrap(W, H, b + txt(ox + 8, oy - 10, 'zero vector', { anchor: 'start' }), 'Zero vector');
+  const s = R / F, tx = ox + Fx * s, ty = oy - Fy * s;
+  if (Math.abs(Fx) > 1e-9 * F) {
+    b += arrowSVG(ox, oy, tx, oy, { color: DIM, width: 2.2, dash: '6 4' });
+    b += txt((ox + tx) / 2, oy + (Fy >= 0 ? 20 : -10), 'F<tspan baseline-shift="sub" font-size="9">x</tspan> = ' + sig3(Fx) + ' N', { size: 11.5, bold: true, color: DIM });
+  }
+  if (Math.abs(Fy) > 1e-9 * F) {
+    b += arrowSVG(tx, oy, tx, ty, { color: DIM, width: 2.2, dash: '6 4' });
+    b += txt(tx + (Fx >= 0 ? 8 : -8), (oy + ty) / 2 + 4, 'F<tspan baseline-shift="sub" font-size="9">y</tspan> = ' + sig3(Fy) + ' N', { anchor: Fx >= 0 ? 'start' : 'end', size: 11.5, bold: true, color: DIM });
+  }
+  b += arrowSVG(ox, oy, tx, ty, { width: 3.2, head: 12 });
+  const phi = Math.atan2(Fy, Fx);
+  b += txt(tx + 14 * Math.cos(phi), ty - 14 * Math.sin(phi) + 4, 'F = ' + sig3(F) + ' N', { anchor: Math.cos(phi) >= 0 ? 'start' : 'end', bold: true, size: 12 });
+  let t = th % 360;
+  const a1 = ref === 'h' ? 0 : 90, a2 = ref === 'h' ? t : 90 - t;
+  if (Math.abs(t) > 0.5) {
+    b += arcPath(ox, oy, 38, a1, a2, RED);
+    const am = ((a1 + a2) / 2) * D2R;
+    b += txt(ox + 54 * Math.cos(am), oy - 54 * Math.sin(am) + 4, 'θ', { bold: true, color: RED, size: 13 });
+  }
+  return svgWrap(W, H, b, 'Force vector and its x and y components');
+}
+defineTool('tools-eq', {
+  id: 'comp',
+  title: 'Force component resolver',
+  formula: 'from horizontal: F<sub>x</sub> = F cos θ, F<sub>y</sub> = F sin θ &nbsp;|&nbsp; from vertical: F<sub>x</sub> = F sin θ, F<sub>y</sub> = F cos θ',
+  hint: 'Enter the force’s size and its angle in degrees. Negative angles are fine (e.g. −30° = 30° below the horizontal).',
+  fields: [
+    { k: 'F', name: 'Magnitude', sym: 'F', unit: 'N', c: 'nonneg', ph: 'e.g. 10', msg: 'Magnitude can’t be negative. Use the angle to set the direction.' },
+    { k: 'th', name: 'Angle', sym: 'θ', unit: '°', c: 'any', ph: 'e.g. 30' },
+    { k: 'ref', type: 'select', name: 'Angle measured from', options: [['h', 'the horizontal (x-axis)'], ['v', 'the vertical (y-axis)']], def: 'h' },
+  ],
+  examples: [
+    { label: '10 N at 30° from horizontal', vals: { F: '10', th: '30', ref: 'h' } },
+    { label: '10 N at 30° from vertical', vals: { F: '10', th: '30', ref: 'v' } },
+    { label: '7.5 N cord at 60°', vals: { F: '7.5', th: '60', ref: 'h' } },
+  ],
+  solve(c) {
+    const w = c.w, out = c.out;
+    const F = c.num('F'), th = c.num('th'), ref = c.sel('ref');
+    const sn = sinD(th), cs = cosD(th);
+    const ths = c.raw('th') + '°';
+    let Fx, Fy;
+    if (ref === 'h') {
+      w.h('Angle measured from the horizontal');
+      w.f('F<sub>x</sub> = F cos θ, &nbsp; F<sub>y</sub> = F sin θ');
+      Fx = clean(F * cs, F); Fy = clean(F * sn, F);
+      w.s('F<sub>x</sub> = ' + c.q('F') + ' cos(' + ths + ') = (' + c.raw('F') + ')(' + full(cs) + ')');
+      w.r('F<sub>x</sub> ' + eqv(Fx, 'N'));
+      w.s('F<sub>y</sub> = ' + c.q('F') + ' sin(' + ths + ') = (' + c.raw('F') + ')(' + full(sn) + ')');
+      w.r('F<sub>y</sub> ' + eqv(Fy, 'N'));
+    } else {
+      w.h('Angle measured from the vertical');
+      w.f('F<sub>x</sub> = F sin θ, &nbsp; F<sub>y</sub> = F cos θ');
+      Fx = clean(F * sn, F); Fy = clean(F * cs, F);
+      w.s('F<sub>x</sub> = ' + c.q('F') + ' sin(' + ths + ') = (' + c.raw('F') + ')(' + full(sn) + ')');
+      w.r('F<sub>x</sub> ' + eqv(Fx, 'N'));
+      w.s('F<sub>y</sub> = ' + c.q('F') + ' cos(' + ths + ') = (' + c.raw('F') + ')(' + full(cs) + ')');
+      w.r('F<sub>y</sub> ' + eqv(Fy, 'N'));
+    }
+    w.a('F<sub>x</sub> = ' + sig3(Fx) + ' N, &nbsp; F<sub>y</sub> = ' + sig3(Fy) + ' N');
+    w.s('Check: √(F<sub>x</sub>² + F<sub>y</sub>²) = ' + full(Math.hypot(Fx, Fy)) + ' N ✓');
+    w.n(ref === 'h'
+      ? 'θ is measured from the +x axis, counterclockwise positive. A negative component points left (x) or down (y).'
+      : 'θ is measured from the +y axis toward +x. A negative component points left (x) or down (y).');
+    out.Fx = Fx; out.Fy = Fy;
+    c.svg = compSVG(F, Fx, Fy, th, ref);
+  },
+});
+
+function cordsSVG(o) {
+  const W = 460, H = 270, kx = 230, ky = 138;
+  const len = th => Math.min(112 / Math.max(sinD(th), 1e-6), 195);
+  const Ll = len(o.thL), Lr = len(o.thR);
+  const lx = kx - Ll * cosD(o.thL), ly = ky - Ll * sinD(o.thL);
+  const rx = kx + Lr * cosD(o.thR), ry = ky - Lr * sinD(o.thR);
+  let b = '';
+  [[lx, ly], [rx, ry]].forEach(p => {
+    b += '<rect x="' + f1(p[0] - 16) + '" y="' + f1(p[1] - 7) + '" width="32" height="7" fill="' + DIM + '"/>';
+  });
+  b += '<line x1="' + f1(kx - 80) + '" y1="' + ky + '" x2="' + f1(kx + 80) + '" y2="' + ky + '" stroke="' + DIM + '" stroke-dasharray="3 3"/>';
+  b += '<line x1="' + kx + '" y1="' + ky + '" x2="' + f1(lx) + '" y2="' + f1(ly) + '" stroke="' + INK + '" stroke-width="2.4"/>';
+  b += '<line x1="' + kx + '" y1="' + ky + '" x2="' + f1(rx) + '" y2="' + f1(ry) + '" stroke="' + INK + '" stroke-width="2.4"/>';
+  b += arcPath(kx, ky, 42, 180, 180 - o.thL, RED) + arcPath(kx, ky, 42, 0, o.thR, RED);
+  const mL = (180 - o.thL / 2) * D2R, mR = (o.thR / 2) * D2R;
+  b += txt(kx + 58 * Math.cos(mL), ky - 58 * Math.sin(mL) + 4, 'θ<tspan baseline-shift="sub" font-size="9">L</tspan>', { bold: true, color: RED });
+  b += txt(kx + 58 * Math.cos(mR), ky - 58 * Math.sin(mR) + 4, 'θ<tspan baseline-shift="sub" font-size="9">R</tspan>', { bold: true, color: RED });
+  b += txt((kx + lx) / 2 - 10, (ky + ly) / 2 - 6, o.lLabel, { anchor: 'end', bold: true, size: 12 });
+  b += txt((kx + rx) / 2 + 10, (ky + ry) / 2 - 6, o.rLabel, { anchor: 'start', bold: true, size: 12 });
+  b += '<line x1="' + kx + '" y1="' + ky + '" x2="' + kx + '" y2="' + (ky + 52) + '" stroke="' + INK + '" stroke-width="2.4"/>';
+  b += '<rect x="' + (kx - 40) + '" y="' + (ky + 52) + '" width="80" height="44" rx="3" fill="' + INK + '"/>';
+  b += txt(kx, ky + 79, o.mLabel, { bold: true, color: LCDC, size: 12.5 });
+  b += '<circle cx="' + kx + '" cy="' + ky + '" r="4" fill="' + INK + '"/>';
+  return svgWrap(W, H, b, 'Mass hanging from two cords');
+}
+defineTool('tools-eq', {
+  id: 'cords',
+  title: 'Two cords holding a mystery mass',
+  formula: 'm = (T<sub>L</sub> sin θ<sub>L</sub> + T<sub>R</sub> sin θ<sub>R</sub>) / g, &nbsp; check T<sub>L</sub> cos θ<sub>L</sub> = T<sub>R</sub> cos θ<sub>R</sub>',
+  hint: 'Angles are measured <b>above the horizontal</b>. Tension pulls along each cord, away from the mass. The mass is stationary.',
+  fields: [
+    { k: 'TL', name: 'Left cord tension', sym: 'T<sub>L</sub>', unit: 'N', c: 'pos', ph: 'e.g. 7.5', msg: 'Left cord tension must be positive (a cord can only pull).' },
+    { k: 'thL', name: 'Left cord angle', sym: 'θ<sub>L</sub>', unit: '°', c: 'cordAngle', ph: 'e.g. 60' },
+    { k: 'TR', name: 'Right cord tension', sym: 'T<sub>R</sub>', unit: 'N', c: 'pos', ph: 'e.g. 9.0', msg: 'Right cord tension must be positive (a cord can only pull).' },
+    { k: 'thR', name: 'Right cord angle', sym: 'θ<sub>R</sub>', unit: '°', c: 'cordAngle', ph: 'e.g. 65' },
+  ],
+  examples: [{ label: 'Class: 7.5 N at 60°, 9.0 N at 65°', vals: { TL: '7.5', thL: '60', TR: '9.0', thR: '65' } }],
+  solve(c) {
+    const w = c.w, out = c.out, g = CONST.g;
+    const TL = c.num('TL'), thL = c.num('thL'), TR = c.num('TR'), thR = c.num('thR');
+    const VL = clean(TL * sinD(thL), TL), VR = clean(TR * sinD(thR), TR);
+    const HL = clean(TL * cosD(thL), TL), HR = clean(TR * cosD(thR), TR);
+    w.h('Vertical: ΣF<sub>y</sub> = 0');
+    w.f('T<sub>L</sub> sin θ<sub>L</sub> + T<sub>R</sub> sin θ<sub>R</sub> = mg');
+    w.s('T<sub>L</sub> sin θ<sub>L</sub> = ' + c.q('TL') + ' sin(' + c.raw('thL') + '°) = ' + full(VL) + ' N');
+    w.s('T<sub>R</sub> sin θ<sub>R</sub> = ' + c.q('TR') + ' sin(' + c.raw('thR') + '°) = ' + full(VR) + ' N');
+    const Wt = VL + VR, m = Wt / g;
+    w.s('mg = ' + full(VL) + ' + ' + full(VR) + ' = ' + full(Wt) + ' N');
+    w.f('m = (T<sub>L</sub> sin θ<sub>L</sub> + T<sub>R</sub> sin θ<sub>R</sub>) / g');
+    w.s('m = ' + full(Wt) + ' N / ' + gS() + ' m/s²');
+    w.r('m ' + eqv(m, 'kg'));
+    w.a('m = ' + sig3(m) + ' kg');
+    w.h('Horizontal check: ΣF<sub>x</sub> = 0 ⇒ T<sub>L</sub> cos θ<sub>L</sub> = T<sub>R</sub> cos θ<sub>R</sub>');
+    w.s('T<sub>L</sub> cos θ<sub>L</sub> = ' + c.q('TL') + ' cos(' + c.raw('thL') + '°) ' + eqv(HL, 'N') + ' (pulls left)');
+    w.s('T<sub>R</sub> cos θ<sub>R</sub> = ' + c.q('TR') + ' cos(' + c.raw('thR') + '°) ' + eqv(HR, 'N') + ' (pulls right)');
+    const mis = Math.abs(HL - HR), avg = (HL + HR) / 2;
+    const pct = avg > 0 ? 100 * mis / avg : 0;
+    w.r('Mismatch = |' + full(HL) + ' − ' + full(HR) + '| ' + eqv(mis, 'N') + (avg > 0 ? ' (' + pct.toFixed(1) + '% of the average)' : ''));
+    w.a('Horizontals: left ' + sig3(HL) + ' N, right ' + sig3(HR) + ' N, mismatch ' + sig3(mis) + ' N');
+    if (mis === 0) w.n('The horizontal components balance exactly, as they must for equilibrium.');
+    else if (pct <= 5) w.n('Small mismatch: consistent with rounded measurements. In perfect equilibrium the horizontal components would be exactly equal.');
+    else w.x('Large mismatch: ΣF<sub>x</sub> ≠ 0, so these tensions and angles can’t hold the mass still. Double-check the measurements.');
+    out.m = m; out.HL = HL; out.HR = HR; out.mismatch = mis;
+    c.svg = cordsSVG({ thL: thL, thR: thR, lLabel: 'T = ' + sig3(TL) + ' N', rLabel: 'T = ' + sig3(TR) + ' N', mLabel: sig3(m) + ' kg' });
+  },
+});
+
+defineTool('tools-eq', {
+  id: 'cordsT',
+  title: 'Two cords: find both tensions from the mass',
+  formula: 'T<sub>L</sub> = mg cos θ<sub>R</sub> / sin(θ<sub>L</sub> + θ<sub>R</sub>), &nbsp; T<sub>R</sub> = mg cos θ<sub>L</sub> / sin(θ<sub>L</sub> + θ<sub>R</sub>)',
+  hint: 'The reverse problem: you know the hanging mass and both angles (above the horizontal).',
+  fields: [
+    { k: 'm', name: 'Hanging mass', sym: 'm', unit: 'kg', c: 'pos', ph: 'e.g. 1.50' },
+    { k: 'thL', name: 'Left cord angle', sym: 'θ<sub>L</sub>', unit: '°', c: 'cordAngle', ph: 'e.g. 60' },
+    { k: 'thR', name: 'Right cord angle', sym: 'θ<sub>R</sub>', unit: '°', c: 'cordAngle', ph: 'e.g. 65' },
+  ],
+  examples: [
+    { label: '1.50 kg, 60° and 65°', vals: { m: '1.50', thL: '60', thR: '65' } },
+    { label: '0.50 kg, both 62°', vals: { m: '0.50', thL: '62', thR: '62' } },
+  ],
+  solve(c) {
+    const w = c.w, out = c.out, g = CONST.g;
+    const m = c.num('m'), thL = c.num('thL'), thR = c.num('thR');
+    const den = sinD(thL + thR);
+    if (den === 0) fail('Both cords are vertical (90°), so the tensions can’t be found separately. Only T<sub>L</sub> + T<sub>R</sub> = mg is known.'.replace(/<\/?sub>/g, ''), ['thL', 'thR'], 'DOMAIN');
+    const W = m * g, TL = W * cosD(thR) / den, TR = W * cosD(thL) / den;
+    w.h('Set up both equilibrium equations');
+    w.f('ΣF<sub>x</sub> = 0: T<sub>L</sub> cos θ<sub>L</sub> = T<sub>R</sub> cos θ<sub>R</sub>');
+    w.f('ΣF<sub>y</sub> = 0: T<sub>L</sub> sin θ<sub>L</sub> + T<sub>R</sub> sin θ<sub>R</sub> = mg');
+    w.s('mg = ' + c.q('m') + '(' + gS() + ' m/s²) = ' + full(W) + ' N');
+    w.h('Solve the pair');
+    w.s('T<sub>L</sub> = mg cos θ<sub>R</sub> / sin(θ<sub>L</sub> + θ<sub>R</sub>) = (' + full(W) + ')(cos ' + c.raw('thR') + '°) / sin(' + full(thL + thR) + '°)');
+    w.r('T<sub>L</sub> ' + eqv(TL, 'N'));
+    w.s('T<sub>R</sub> = mg cos θ<sub>L</sub> / sin(θ<sub>L</sub> + θ<sub>R</sub>) = (' + full(W) + ')(cos ' + c.raw('thL') + '°) / sin(' + full(thL + thR) + '°)');
+    w.r('T<sub>R</sub> ' + eqv(TR, 'N'));
+    w.a('T<sub>L</sub> = ' + sig3(TL) + ' N, &nbsp; T<sub>R</sub> = ' + sig3(TR) + ' N');
+    w.s('Check horizontals: ' + full(TL * cosD(thL)) + ' N = ' + full(TR * cosD(thR)) + ' N ✓');
+    w.n('The steeper cord (larger angle) carries more of the weight.');
+    out.TL = TL; out.TR = TR;
+    c.svg = cordsSVG({ thL: thL, thR: thR, lLabel: 'T = ' + sig3(TL) + ' N', rLabel: 'T = ' + sig3(TR) + ' N', mLabel: c.raw('m') + ' kg' });
+  },
+});
+
+defineTool('tools-eq', {
+  id: 'sym',
+  title: 'Symmetric cords',
+  formula: '2T sin θ = mg &nbsp;⇒&nbsp; T = mg / (2 sin θ)',
+  hint: 'Two identical cords, each at angle θ above the horizontal. Leave exactly <b>one</b> box blank.',
+  fields: [
+    { k: 'T', name: 'Tension in each cord', sym: 'T', unit: 'N', c: 'pos', solvable: true, ph: 'e.g. 2.8' },
+    { k: 'm', name: 'Hanging mass', sym: 'm', unit: 'kg', c: 'pos', solvable: true, ph: 'e.g. 0.50' },
+    { k: 'th', name: 'Angle above horizontal', sym: 'θ', unit: '°', c: 'cordAngle', solvable: true, ph: 'e.g. 62' },
+  ],
+  examples: [
+    { label: 'T: 0.50 kg at 62°', vals: { m: '0.50', th: '62' } },
+    { label: 'θ: 0.50 kg, T = 5.0 N', vals: { T: '5.0', m: '0.50' } },
+  ],
+  solve(c) {
+    const w = c.w, out = c.out, g = CONST.g;
+    const k = c.unknown(['T', 'm', 'th']);
+    w.h('Solve for ' + (k === 'th' ? 'θ' : k));
+    w.f('2T sin θ = mg');
+    if (k === 'T') {
+      const m = c.num('m'), th = c.num('th'), s = sinD(th), T = m * g / (2 * s);
+      w.f('T = mg / (2 sin θ)');
+      w.s('T = ' + c.q('m') + '(' + gS() + ' m/s²) / [2 sin(' + c.raw('th') + '°)]');
+      w.s('T = ' + full(m * g) + ' N / ' + full(2 * s));
+      w.r('T ' + eqv(T, 'N'));
+      w.a('T = ' + sig3(T) + ' N (each cord)');
+      out.T = T;
+      c.svg = cordsSVG({ thL: th, thR: th, lLabel: 'T = ' + sig3(T) + ' N', rLabel: 'T = ' + sig3(T) + ' N', mLabel: c.raw('m') + ' kg' });
+    } else if (k === 'm') {
+      const T = c.num('T'), th = c.num('th'), s = sinD(th), m = 2 * T * s / g;
+      w.f('m = 2T sin θ / g');
+      w.s('m = 2' + c.q('T') + ' sin(' + c.raw('th') + '°) / ' + gS() + ' m/s²');
+      w.s('m = ' + full(2 * T * s) + ' N / ' + gS() + ' m/s²');
+      w.r('m ' + eqv(m, 'kg'));
+      w.a('m = ' + sig3(m) + ' kg');
+      out.m = m;
+      c.svg = cordsSVG({ thL: th, thR: th, lLabel: 'T = ' + sig3(T) + ' N', rLabel: 'T = ' + sig3(T) + ' N', mLabel: sig3(m) + ' kg' });
+    } else {
+      const T = c.num('T'), m = c.num('m'), x = m * g / (2 * T);
+      if (x > 1 + 1e-12) fail('The cords can’t hold this mass: even vertical cords (θ = 90°) need T ≥ mg/2 = ' + full(m * g / 2) + ' N.', 'T', 'DOMAIN');
+      const th = invTrig(Math.asin, x, 'sin⁻¹');
+      w.f('sin θ = mg / (2T)');
+      w.s('sin θ = ' + c.q('m') + '(' + gS() + ' m/s²) / [2' + c.q('T') + '] = ' + full(x));
+      w.s('θ = sin⁻¹(' + full(x) + ')');
+      w.r('θ ' + eqv(th, '°'));
+      w.a('θ = ' + sig3(th) + '° above horizontal');
+      out.th = th;
+      c.svg = cordsSVG({ thL: th, thR: th, lLabel: 'T = ' + sig3(T) + ' N', rLabel: 'T = ' + sig3(T) + ' N', mLabel: c.raw('m') + ' kg' });
+    }
+    w.n('Each cord supports half the weight vertically. Shallower cords (smaller θ) need more tension.');
+  },
+});
+
+function stackSVG(masses, tensions) {
+  const n = masses.length, cordH = 48, boxH = 36, W = 380;
+  const H = 30 + n * (cordH + boxH) + 12;
+  let b = '<rect x="60" y="10" width="160" height="10" fill="' + DIM + '"/>';
+  for (let i = 0; i < 8; i++) b += '<line x1="' + (64 + i * 20) + '" y1="10" x2="' + (54 + i * 20) + '" y2="2" stroke="' + DIM + '" stroke-width="1.4"/>';
+  let y = 20;
+  masses.forEach((m, i) => {
+    b += '<line x1="140" y1="' + y + '" x2="140" y2="' + (y + cordH) + '" stroke="' + INK + '" stroke-width="2.4"/>';
+    b += txt(156, y + cordH / 2 + 5, 'T' + subN(i + 1) + ' = ' + sig3(tensions[i]) + ' N', { anchor: 'start', bold: true, size: 12.5 });
+    y += cordH;
+    b += '<rect x="95" y="' + y + '" width="90" height="' + boxH + '" rx="3" fill="' + INK + '"/>';
+    b += txt(140, y + boxH / 2 + 5, esc(m), { bold: true, color: LCDC, size: 12.5 });
+    y += boxH;
+  });
+  return svgWrap(W, H, b, 'Stacked hanging masses with the tension in each cord');
+}
+defineTool('tools-eq', {
+  id: 'stack',
+  title: 'Stacked hanging masses',
+  formula: 'T<sub>cord</sub> = (total mass below that cord) × g',
+  hint: 'List the masses from <b>top to bottom</b>. Cord 1 hangs from the ceiling and holds everything; each lower cord holds only the masses below it.',
+  fields: [
+    { k: 'ms', type: 'rows', name: 'Masses, top → bottom', initial: 2, addLabel: '+ ADD MASS', cols: [{ k: 'm', name: 'Mass', unit: 'kg', c: 'pos', ph: 'e.g. 7' }] },
+  ],
+  examples: [
+    { label: '7 kg above 4 kg', vals: { ms: [['7'], ['4']] } },
+    { label: '3 masses: 2, 3, 5 kg', vals: { ms: [['2'], ['3'], ['5']] } },
+  ],
+  solve(c) {
+    const w = c.w, out = c.out, g = CONST.g;
+    const rows = c.rows('ms');
+    if (!rows.length) fail('Enter at least one mass.', { k: 'ms', row: 0, col: 0 }, 'ARGUMENT');
+    const n = rows.length;
+    w.f('Each cord holds up everything below it: T = (mass below) · g');
+    w.s('Masses top → bottom: ' + rows.map(r => r.raw.m + ' kg').join(', '));
+    const T = new Array(n);
+    let below = 0;
+    w.h('Start at the bottom and work up');
+    for (let i = n - 1; i >= 0; i--) {
+      below += rows[i].v.m;
+      T[i] = below * g;
+      const names = rows.slice(i).map(r => r.raw.m);
+      const pos = n === 1 ? 'the only cord' : i === 0 ? 'top cord' : i === n - 1 ? 'lowest cord' : 'middle cord';
+      w.s('Cord ' + (i + 1) + ' (' + pos + ') holds ' + (names.length > 1 ? names.join(' + ') + ' = ' + full(below) : names[0]) + ' kg');
+      w.r('T' + subN(i + 1) + ' = (' + full(below) + ' kg)(' + gS() + ' m/s²) ' + eqv(T[i], 'N'));
+    }
+    w.h('Answer, top → bottom');
+    T.forEach((t, i) => w.a('T' + subN(i + 1) + ' = ' + sig3(t) + ' N' + (n > 1 ? (i === 0 ? ' (upper/top cord)' : i === n - 1 ? ' (lower cord)' : '') : '')));
+    w.n('The top cord has the most tension because it supports the whole stack.');
+    out.T = T;
+    c.svg = stackSVG(rows.map(r => r.raw.m + ' kg'), T);
+  },
+});
+
+defineTool('tools-eq', {
+  id: 'pull',
+  title: 'Angled pull at constant velocity',
+  formula: 'f = F cos θ, &nbsp; N = mg − F sin θ',
+  hint: 'A box is pulled across a level floor at <b>constant velocity</b> by a force at angle θ above the horizontal (a negative θ means pushing down at an angle below the horizontal).',
+  fields: [
+    { k: 'm', name: 'Mass', sym: 'm', unit: 'kg', c: 'pos', ph: 'e.g. 50' },
+    { k: 'F', name: 'Pull force', sym: 'F', unit: 'N', c: 'nonneg', ph: 'e.g. 200', msg: 'Pull force can’t be negative. Enter its size; the angle sets its direction.' },
+    { k: 'th', name: 'Angle above horizontal', sym: 'θ', unit: '°', c: 'pullAngle', ph: 'e.g. 30' },
+  ],
+  examples: [{ label: '50 kg, 200 N at 30°', vals: { m: '50', F: '200', th: '30' } }],
+  solve(c) {
+    const w = c.w, out = c.out, g = CONST.g;
+    const m = c.num('m'), F = c.num('F'), th = c.num('th');
+    const Fx = clean(F * cosD(th), F), Fy = clean(F * sinD(th), F), W = m * g;
+    const N = clean(W - Fy, W);
+    if (N < 0) fail('The upward pull (F sin θ = ' + full(Fy) + ' N) is bigger than the weight (' + full(W) + ' N), so the box would lift off the floor. The normal force can’t be negative. Check the values.', ['F', 'th'], 'DOMAIN');
+    w.h('1 · Components of the pull');
+    w.s('F<sub>x</sub> = F cos θ = ' + c.q('F') + ' cos(' + c.raw('th') + '°) ' + eqv(Fx, 'N'));
+    w.s('F<sub>y</sub> = F sin θ = ' + c.q('F') + ' sin(' + c.raw('th') + '°) ' + eqv(Fy, 'N'));
+    w.h('2 · Horizontal: constant velocity ⇒ ΣF<sub>x</sub> = 0');
+    w.f('F cos θ − f = 0 &nbsp;⇒&nbsp; f = F cos θ');
+    w.r('f ' + eqv(Fx, 'N') + ' (opposite the motion)');
+    w.h('3 · Vertical: ΣF<sub>y</sub> = 0');
+    w.f('N + F sin θ − mg = 0 &nbsp;⇒&nbsp; N = mg − F sin θ');
+    w.s('mg = ' + c.q('m') + '(' + gS() + ' m/s²) = ' + full(W) + ' N');
+    w.s('N = ' + full(W) + ' N − ' + P(full(Fy)) + ' N');
+    w.r('N ' + eqv(N, 'N'));
+    w.a('Friction f = ' + sig3(Fx) + ' N · Normal N = ' + sig3(N) + ' N');
+    if (N > 0) {
+      const mu = Fx / N;
+      w.s('If friction is kinetic: μ<sub>k</sub> = f / N = ' + full(Fx) + ' / ' + full(N) + ' ' + eqv(mu, ''));
+      out.mu = mu;
+    }
+    w.n(Fy > 0 ? 'N < mg because the pull lifts part of the weight.' : Fy < 0 ? 'N > mg because the force also pushes the box down into the floor.' : 'A horizontal pull leaves N = mg.');
+    out.f = Fx; out.N = N; out.W = W;
+    const right = true;
+    c.svg = fbdSVG([
+      { mag: W, ang: -90, label: 'mg = ' + sig3(W) + ' N' },
+      { mag: N, ang: 90, label: 'N = ' + sig3(N) + ' N' },
+      { mag: F, ang: th, label: 'F = ' + sig3(F) + ' N' },
+      { mag: Fx, ang: 180, label: 'f = ' + sig3(Fx) + ' N', color: DIM },
+    ], { theta: th, pullRight: right });
+  },
+});
+
+/* ---------------- 5. Center of mass ---------------- */
+const MASS_UNITS = [['kg', 'kg'], ['g', 'g']];
+const POS_UNITS = [['m', 'm'], ['cm', 'cm']];
+defineTool('tools-cm', {
+  id: 'cm1',
+  title: 'Center of mass in 1D',
+  formula: 'x<sub>CM</sub> = Σ(m·x) / Σm',
+  hint: 'Any number of point masses on a line. Pick one origin and use consistent units: kg &amp; m or g &amp; cm both work. Positions can be negative.',
+  fields: [
+    { k: 'mu', type: 'select', name: 'Mass unit', options: MASS_UNITS, def: 'kg' },
+    { k: 'pu', type: 'select', name: 'Position unit', options: POS_UNITS, def: 'm' },
+    { k: 'pts', type: 'rows', name: 'Masses and positions', initial: 2, addLabel: '+ ADD MASS',
+      cols: [{ k: 'm', name: 'Mass', unit: '@mu', c: 'pos', ph: 'e.g. 2' }, { k: 'x', name: 'Position x', unit: '@pu', c: 'any', ph: 'e.g. 2' }] },
+  ],
+  examples: [
+    { label: 'Class: 2 kg at 2 m, 6 kg at 8 m', vals: { mu: 'kg', pu: 'm', pts: [['2', '2'], ['6', '8']] } },
+    { label: 'Three cars on a bridge', vals: { mu: 'kg', pu: 'm', pts: [['1000', '5'], ['500', '20'], ['2000', '45']] } },
+    { label: 'Blocks: 40 g at 0 cm, 10 g at 50 cm', vals: { mu: 'g', pu: 'cm', pts: [['40', '0'], ['10', '50']] } },
+    { label: 'Spheres: 2.0 kg at 0, 10.0 kg at 2.0 m', vals: { mu: 'kg', pu: 'm', pts: [['2.0', '0'], ['10.0', '2.0']] } },
+  ],
+  solve(c) {
+    const w = c.w, out = c.out;
+    const mu = c.sel('mu'), pu = c.sel('pu');
+    const rows = c.rows('pts');
+    if (!rows.length) fail('Enter at least one mass and its position.', { k: 'pts', row: 0, col: 0 }, 'ARGUMENT');
+    let M = 0, S = 0;
+    const terms = rows.map(r => r.v.m * r.v.x);
+    rows.forEach((r, j) => { M += r.v.m; S += terms[j]; });
+    if (!(M > 0)) fail('Total mass can’t be zero.', null, 'DIVIDE BY 0');
+    w.f('x<sub>CM</sub> = Σ(m·x) / Σm');
+    w.h('Multiply each mass by its position, then add');
+    w.s('Σ(m·x) = ' + rows.map(r => '(' + r.raw.m + ')(' + r.raw.x + ')').join(' + '));
+    w.s('Σ(m·x) = ' + terms.map(t => P(full(t))).join(' + ') + ' = ' + full(S) + ' ' + mu + '·' + pu);
+    w.h('Add the masses');
+    w.s('Σm = ' + rows.map(r => r.raw.m).join(' + ') + ' = ' + full(M) + ' ' + mu);
+    w.h('Divide');
+    const x = S / M;
+    w.s('x<sub>CM</sub> = ' + full(S) + ' / ' + full(M));
+    w.r('x<sub>CM</sub> ' + eqv(x, pu));
+    w.a('x<sub>CM</sub> = ' + sig3(x) + ' ' + pu + ' (from your origin)');
+    w.h('Distance from each mass to the CM');
+    const ds = rows.map((r, j) => {
+      const d = clean(Math.abs(x - r.v.x), Math.max(Math.abs(x), Math.abs(r.v.x), 1));
+      const side = d === 0 ? ': the CM is right at this mass' : x > r.v.x ? ' (CM is to its right, +x)' : ' (CM is to its left, −x)';
+      w.s('Mass ' + (j + 1) + ' (' + r.raw.m + ' ' + mu + ' at ' + r.raw.x + ' ' + pu + '): |' + full(x) + ' − ' + P(r.raw.x) + '| ' + eqv(d, pu) + side);
+      return d;
+    });
+    if (rows.length === 2 && rows[0].v.m !== rows[1].v.m) w.n('The CM lies between the two masses, closer to the heavier one.');
+    w.n('Mass units cancel, so the answer keeps the position unit (' + pu + ').');
+    out.x = x; out.d = ds; out.M = M;
+    c.svg = numberLineSVG(rows.map(r => ({ x: r.v.x, m: r.v.m, label: r.raw.m + ' ' + mu })), { cm: x, unit: pu, cmLabel: 'CM = ' + sig3(x) + ' ' + pu });
+  },
+});
+
+defineTool('tools-cm', {
+  id: 'cm2',
+  title: 'Center of mass in 2D',
+  formula: 'x<sub>CM</sub> = Σ(m·x) / Σm, &nbsp; y<sub>CM</sub> = Σ(m·y) / Σm',
+  hint: 'Use the same total mass for both coordinates.',
+  fields: [
+    { k: 'mu', type: 'select', name: 'Mass unit', options: MASS_UNITS, def: 'kg' },
+    { k: 'pu', type: 'select', name: 'Position unit', options: POS_UNITS, def: 'm' },
+    { k: 'pts', type: 'rows', name: 'Masses and coordinates', initial: 3, addLabel: '+ ADD MASS',
+      cols: [{ k: 'm', name: 'Mass', unit: '@mu', c: 'pos', ph: '3' }, { k: 'x', name: 'x', unit: '@pu', c: 'any', ph: '1' }, { k: 'y', name: 'y', unit: '@pu', c: 'any', ph: '2' }] },
+  ],
+  examples: [{ label: '3 kg (1,2), 4 kg (5,3), 1 kg (7,1)', vals: { mu: 'kg', pu: 'm', pts: [['3', '1', '2'], ['4', '5', '3'], ['1', '7', '1']] } }],
+  solve(c) {
+    const w = c.w, out = c.out;
+    const mu = c.sel('mu'), pu = c.sel('pu');
+    const rows = c.rows('pts');
+    if (!rows.length) fail('Enter at least one mass with its coordinates.', { k: 'pts', row: 0, col: 0 }, 'ARGUMENT');
+    let M = 0, Sx = 0, Sy = 0;
+    rows.forEach(r => { M += r.v.m; Sx += r.v.m * r.v.x; Sy += r.v.m * r.v.y; });
+    if (!(M > 0)) fail('Total mass can’t be zero.', null, 'DIVIDE BY 0');
+    w.h('Total mass');
+    w.s('Σm = ' + rows.map(r => r.raw.m).join(' + ') + ' = ' + full(M) + ' ' + mu);
+    w.h('x-coordinate');
+    w.f('x<sub>CM</sub> = Σ(m·x) / Σm');
+    w.s('Σ(m·x) = ' + rows.map(r => '(' + r.raw.m + ')(' + r.raw.x + ')').join(' + ') + ' = ' + full(Sx));
+    const x = Sx / M, y = Sy / M;
+    w.r('x<sub>CM</sub> = ' + full(Sx) + ' / ' + full(M) + ' ' + eqv(x, pu));
+    w.h('y-coordinate');
+    w.f('y<sub>CM</sub> = Σ(m·y) / Σm');
+    w.s('Σ(m·y) = ' + rows.map(r => '(' + r.raw.m + ')(' + r.raw.y + ')').join(' + ') + ' = ' + full(Sy));
+    w.r('y<sub>CM</sub> = ' + full(Sy) + ' / ' + full(M) + ' ' + eqv(y, pu));
+    w.a('CM = (' + sig3(x) + ', ' + sig3(y) + ') ' + pu);
+    w.n('Exact values: (' + full(x) + ', ' + full(y) + ') ' + pu + '. Mass units cancel.');
+    out.x = x; out.y = y; out.M = M;
+    c.svg = gridSVG(rows.map(r => ({ x: r.v.x, y: r.v.y, m: r.v.m, label: r.raw.m + ' ' + mu })), { x: x, y: y }, pu);
+  },
+});
+
+defineTool('tools-cm', {
+  id: 'move',
+  title: 'Move-a-mass tool',
+  formula: 'Δx<sub>CM</sub> = (m<sub>moved</sub> / M<sub>total</sub>) × Δx<sub>moved</sub>',
+  hint: 'One part of the system moves while all masses stay the same. M<sub>total</sub> includes the moved mass. Δx = new position − old position (sign gives direction). Leave exactly <b>one</b> box blank.',
+  fields: [
+    { k: 'mu', type: 'select', name: 'Mass unit', options: MASS_UNITS, def: 'kg' },
+    { k: 'pu', type: 'select', name: 'Position unit', options: POS_UNITS, def: 'm' },
+    { k: 'dcm', name: 'Shift of the center of mass', sym: 'Δx<sub>CM</sub>', unit: '@pu', c: 'any', solvable: true, ph: 'solve' },
+    { k: 'mm', name: 'Moved mass', sym: 'm<sub>moved</sub>', unit: '@mu', c: 'pos', solvable: true, ph: 'e.g. 1' },
+    { k: 'M', name: 'Total mass of the system', sym: 'M<sub>total</sub>', unit: '@mu', c: 'pos', solvable: true, ph: 'e.g. 2' },
+    { k: 'dx', name: 'Displacement of the moved mass', sym: 'Δx<sub>moved</sub>', unit: '@pu', c: 'any', solvable: true, ph: 'e.g. 20' },
+  ],
+  examples: [
+    { label: 'Ring 30 → 50 cm, ring = board mass', vals: { mu: 'kg', pu: 'cm', mm: '1', M: '2', dx: '20' } },
+    { label: '6 kg of 8 kg moves −3 m', vals: { mu: 'kg', pu: 'm', mm: '6', M: '8', dx: '-3' } },
+  ],
+  solve(c) {
+    const w = c.w, out = c.out;
+    const mu = c.sel('mu'), pu = c.sel('pu');
+    const k = c.unknown(['dcm', 'mm', 'M', 'dx']);
+    const LBL = { dcm: 'Δx<sub>CM</sub>', mm: 'm<sub>moved</sub>', M: 'M<sub>total</sub>', dx: 'Δx<sub>moved</sub>' };
+    w.h('Solve for ' + LBL[k]);
+    w.f('Δx<sub>CM</sub> = (m<sub>moved</sub> / M<sub>total</sub>) × Δx<sub>moved</sub>');
+    const tooBig = () => fail('The moved mass can’t be more than the total mass (the total includes it).', ['mm', 'M'], 'INVALID');
+    let dcm, mm, M, dx;
+    if (k === 'dcm') {
+      mm = c.num('mm'); M = c.num('M'); dx = c.num('dx');
+      if (mm > M) tooBig();
+      dcm = mm / M * dx;
+      w.s('Δx<sub>CM</sub> = (' + c.raw('mm') + ' / ' + c.raw('M') + ') × ' + c.q('dx', pu));
+      w.s('Δx<sub>CM</sub> = (' + full(mm / M) + ') × ' + P(c.raw('dx')) + ' ' + pu);
+      w.r('Δx<sub>CM</sub> ' + eqv(dcm, pu));
+      w.a('Δx<sub>CM</sub> = ' + sig3(dcm) + ' ' + pu);
+      out.dcm = dcm;
+    } else if (k === 'dx') {
+      dcm = c.num('dcm'); mm = c.num('mm'); M = c.num('M');
+      if (mm > M) tooBig();
+      dx = dcm * M / mm;
+      w.f('Δx<sub>moved</sub> = Δx<sub>CM</sub> × M<sub>total</sub> / m<sub>moved</sub>');
+      w.s('Δx<sub>moved</sub> = ' + c.q('dcm', pu) + '(' + c.raw('M') + ') / ' + c.raw('mm'));
+      w.r('Δx<sub>moved</sub> ' + eqv(dx, pu));
+      w.a('Δx<sub>moved</sub> = ' + sig3(dx) + ' ' + pu);
+      out.dx = dx;
+    } else if (k === 'mm') {
+      dcm = c.num('dcm'); M = c.num('M'); dx = c.num('dx');
+      if (dx === 0) fail('If the mass doesn’t move (Δx<sub>moved</sub> = 0), the CM can’t shift, so the moved mass can’t be found.'.replace(/<\/?sub>/g, ''), 'dx', 'DOMAIN');
+      mm = dcm * M / dx;
+      if (!(mm > 0)) fail('Δx_CM and Δx_moved must have the same sign: the CM always shifts the same way as the moved mass.', ['dcm', 'dx'], 'DOMAIN');
+      if (mm > M * (1 + 1e-12)) fail('That would need a moved mass bigger than the total mass. The CM can shift at most as far as the moved mass itself.', ['dcm', 'dx'], 'DOMAIN');
+      w.f('m<sub>moved</sub> = Δx<sub>CM</sub> × M<sub>total</sub> / Δx<sub>moved</sub>');
+      w.s('m<sub>moved</sub> = ' + c.q('dcm', pu) + '(' + c.raw('M') + ' ' + mu + ') / ' + c.q('dx', pu));
+      w.r('m<sub>moved</sub> ' + eqv(mm, mu));
+      w.a('m<sub>moved</sub> = ' + sig3(mm) + ' ' + mu);
+      out.mm = mm;
+    } else {
+      dcm = c.num('dcm'); mm = c.num('mm'); dx = c.num('dx');
+      if (dcm === 0) fail('With Δx_CM = 0 the total mass would have to be infinite. Enter a nonzero shift.', 'dcm', 'DOMAIN');
+      M = mm * dx / dcm;
+      if (!(M > 0)) fail('Δx_CM and Δx_moved must have the same sign: the CM always shifts the same way as the moved mass.', ['dcm', 'dx'], 'DOMAIN');
+      if (M < mm * (1 - 1e-12)) fail('That would make the total mass smaller than the moved mass. The CM can’t shift farther than the moved mass does.', ['dcm', 'dx'], 'DOMAIN');
+      w.f('M<sub>total</sub> = m<sub>moved</sub> × Δx<sub>moved</sub> / Δx<sub>CM</sub>');
+      w.s('M<sub>total</sub> = (' + c.raw('mm') + ' ' + mu + ')' + c.q('dx', pu) + ' / ' + c.q('dcm', pu));
+      w.r('M<sub>total</sub> ' + eqv(M, mu));
+      w.a('M<sub>total</sub> = ' + sig3(M) + ' ' + mu);
+      out.M = M;
+    }
+    if (dx !== 0 && dcm !== 0) w.n('The CM moves the same direction as the moved mass, but only the fraction m/M = ' + full(mm / M) + ' as far.');
+    else w.n('No displacement means no shift of the center of mass.');
+  },
+});
+
+defineTool('tools-cm', {
+  id: 'add',
+  title: 'Add-a-mass tool',
+  formula: 'x<sub>new</sub> = x<sub>old</sub> + [m<sub>added</sub> / (M<sub>old</sub> + m<sub>added</sub>)] × (x<sub>added</sub> − x<sub>old</sub>)',
+  hint: 'A new mass joins a system whose old center of mass and total mass you know. Leave exactly <b>one</b> box blank (usually x<sub>new</sub>).',
+  fields: [
+    { k: 'mu', type: 'select', name: 'Mass unit', options: MASS_UNITS, def: 'kg' },
+    { k: 'pu', type: 'select', name: 'Position unit', options: POS_UNITS, def: 'm' },
+    { k: 'xo', name: 'Old center of mass', sym: 'x<sub>old</sub>', unit: '@pu', c: 'any', solvable: true, ph: 'e.g. 0.8' },
+    { k: 'Mo', name: 'Old total mass', sym: 'M<sub>old</sub>', unit: '@mu', c: 'pos', solvable: true, ph: 'e.g. 5' },
+    { k: 'ma', name: 'Added mass', sym: 'm<sub>added</sub>', unit: '@mu', c: 'pos', solvable: true, ph: 'e.g. 1' },
+    { k: 'xa', name: 'Position of the added mass', sym: 'x<sub>added</sub>', unit: '@pu', c: 'any', solvable: true, ph: 'e.g. 0.5' },
+    { k: 'xn', name: 'New center of mass', sym: 'x<sub>new</sub>', unit: '@pu', c: 'any', solvable: true, ph: 'solve' },
+  ],
+  examples: [
+    { label: 'Fulcrum: 1 kg + 4 kg board, add 1 kg at center', vals: { mu: 'kg', pu: 'm', xo: '0.8', Mo: '5', ma: '1', xa: '0.5' } },
+    { label: 'Add 2 kg at 10 m to 8 kg with CM 6.5 m', vals: { mu: 'kg', pu: 'm', xo: '6.5', Mo: '8', ma: '2', xa: '10' } },
+    { label: 'How much mass moves CM 6.5 → 7 m?', vals: { mu: 'kg', pu: 'm', xo: '6.5', Mo: '8', xa: '10', xn: '7' } },
+  ],
+  solve(c) {
+    const w = c.w, out = c.out;
+    const mu = c.sel('mu'), pu = c.sel('pu');
+    const k = c.unknown(['xo', 'Mo', 'ma', 'xa', 'xn']);
+    const LBL = { xo: 'x<sub>old</sub>', Mo: 'M<sub>old</sub>', ma: 'm<sub>added</sub>', xa: 'x<sub>added</sub>', xn: 'x<sub>new</sub>' };
+    w.h('Solve for ' + LBL[k]);
+    w.f('x<sub>new</sub> = x<sub>old</sub> + [m<sub>added</sub> / (M<sub>old</sub> + m<sub>added</sub>)](x<sub>added</sub> − x<sub>old</sub>)');
+    w.f('equivalently (M<sub>old</sub> + m<sub>added</sub>)·x<sub>new</sub> = M<sub>old</sub>·x<sub>old</sub> + m<sub>added</sub>·x<sub>added</sub>');
+    let xo, Mo, ma, xa, xn;
+    if (k === 'xn') {
+      xo = c.num('xo'); Mo = c.num('Mo'); ma = c.num('ma'); xa = c.num('xa');
+      const fr = ma / (Mo + ma), gap = xa - xo, shift = clean(fr * gap, Math.max(Math.abs(xo), Math.abs(xa), 1));
+      xn = xo + shift;
+      w.s('x<sub>new</sub> = ' + c.raw('xo') + ' + [' + c.raw('ma') + ' / (' + c.raw('Mo') + ' + ' + c.raw('ma') + ')](' + c.raw('xa') + ' − ' + P(c.raw('xo')) + ')');
+      w.s('x<sub>new</sub> = ' + c.raw('xo') + ' + (' + full(fr) + ')(' + full(gap) + ')');
+      w.s('x<sub>new</sub> = ' + c.raw('xo') + ' + ' + P(full(shift)));
+      w.r('x<sub>new</sub> ' + eqv(xn, pu));
+      w.a('x<sub>new</sub> = ' + sig3(xn) + ' ' + pu);
+      w.s('Check (weighted average): (' + c.raw('Mo') + '·' + P(c.raw('xo')) + ' + ' + c.raw('ma') + '·' + P(c.raw('xa')) + ') / ' + full(Mo + ma) + ' = ' + full((Mo * xo + ma * xa) / (Mo + ma)) + ' ' + pu + ' ✓');
+      out.xn = xn;
+    } else if (k === 'ma') {
+      xo = c.num('xo'); Mo = c.num('Mo'); xa = c.num('xa'); xn = c.num('xn');
+      if (xa === xn) fail('The new CM can’t be exactly at the added mass unless the added mass is infinite.', ['xa', 'xn'], 'DOMAIN');
+      ma = Mo * (xn - xo) / (xa - xn);
+      if (!(ma > 0)) fail('Adding mass can only pull the CM toward the added mass, so x_new must lie strictly between x_old and x_added.', ['xn'], 'DOMAIN');
+      w.f('m<sub>added</sub> = M<sub>old</sub>(x<sub>new</sub> − x<sub>old</sub>) / (x<sub>added</sub> − x<sub>new</sub>)');
+      w.s('m<sub>added</sub> = (' + c.raw('Mo') + ')(' + c.raw('xn') + ' − ' + P(c.raw('xo')) + ') / (' + c.raw('xa') + ' − ' + P(c.raw('xn')) + ')');
+      w.s('m<sub>added</sub> = ' + full(Mo * (xn - xo)) + ' / ' + full(xa - xn));
+      w.r('m<sub>added</sub> ' + eqv(ma, mu));
+      w.a('m<sub>added</sub> = ' + sig3(ma) + ' ' + mu);
+      out.ma = ma;
+    } else if (k === 'Mo') {
+      xo = c.num('xo'); ma = c.num('ma'); xa = c.num('xa'); xn = c.num('xn');
+      if (xn === xo) fail('If the CM didn’t move, the old mass would have to be infinite (or the mass was added at x_old). Enter a different x_new.', ['xo', 'xn'], 'DOMAIN');
+      Mo = ma * (xa - xn) / (xn - xo);
+      if (!(Mo > 0)) fail('Adding mass can only pull the CM toward the added mass, so x_new must lie strictly between x_old and x_added.', ['xn'], 'DOMAIN');
+      w.f('M<sub>old</sub> = m<sub>added</sub>(x<sub>added</sub> − x<sub>new</sub>) / (x<sub>new</sub> − x<sub>old</sub>)');
+      w.s('M<sub>old</sub> = (' + c.raw('ma') + ')(' + c.raw('xa') + ' − ' + P(c.raw('xn')) + ') / (' + c.raw('xn') + ' − ' + P(c.raw('xo')) + ')');
+      w.r('M<sub>old</sub> ' + eqv(Mo, mu));
+      w.a('M<sub>old</sub> = ' + sig3(Mo) + ' ' + mu);
+      out.Mo = Mo;
+    } else if (k === 'xa') {
+      xo = c.num('xo'); Mo = c.num('Mo'); ma = c.num('ma'); xn = c.num('xn');
+      xa = ((Mo + ma) * xn - Mo * xo) / ma;
+      w.f('x<sub>added</sub> = [(M<sub>old</sub> + m<sub>added</sub>)x<sub>new</sub> − M<sub>old</sub>x<sub>old</sub>] / m<sub>added</sub>');
+      w.s('x<sub>added</sub> = [(' + full(Mo + ma) + ')(' + c.raw('xn') + ') − (' + c.raw('Mo') + ')(' + c.raw('xo') + ')] / ' + c.raw('ma'));
+      w.r('x<sub>added</sub> ' + eqv(xa, pu));
+      w.a('x<sub>added</sub> = ' + sig3(xa) + ' ' + pu);
+      out.xa = xa;
+    } else {
+      Mo = c.num('Mo'); ma = c.num('ma'); xa = c.num('xa'); xn = c.num('xn');
+      xo = ((Mo + ma) * xn - ma * xa) / Mo;
+      w.f('x<sub>old</sub> = [(M<sub>old</sub> + m<sub>added</sub>)x<sub>new</sub> − m<sub>added</sub>x<sub>added</sub>] / M<sub>old</sub>');
+      w.s('x<sub>old</sub> = [(' + full(Mo + ma) + ')(' + c.raw('xn') + ') − (' + c.raw('ma') + ')(' + c.raw('xa') + ')] / ' + c.raw('Mo'));
+      w.r('x<sub>old</sub> ' + eqv(xo, pu));
+      w.a('x<sub>old</sub> = ' + sig3(xo) + ' ' + pu);
+      out.xo = xo;
+    }
+    const shift = clean(xn - xo, Math.max(Math.abs(xn), Math.abs(xo), 1));
+    let dirWord;
+    if (shift === 0) {
+      dirWord = 'none';
+      w.n('No shift: the mass was added right at the old center of mass.');
+    } else {
+      dirWord = shift < 0 ? 'left' : 'right';
+      w.r('Shift: Δx<sub>CM</sub> = x<sub>new</sub> − x<sub>old</sub> ' + eqv(shift, pu));
+      w.a('CM shifts ' + (shift < 0 ? 'LEFT (toward −x)' : 'RIGHT (toward +x)') + ' by ' + sig3(Math.abs(shift)) + ' ' + pu + ', toward the added mass');
+      w.n('Any positive added mass pulls the CM toward its own position. The size of the mass controls how far, not the direction.');
+    }
+    out.shift = shift; out.direction = dirWord;
+    c.svg = numberLineSVG([
+      { x: xo, m: Mo, label: 'old ' + full(Mo) + ' ' + mu },
+      { x: xa, m: ma, label: '+' + full(ma) + ' ' + mu, hl: true },
+    ], { cm: xn, oldCm: xo, unit: pu, cmLabel: 'new CM = ' + sig3(xn) + ' ' + pu });
+  },
+});
+
+/* =====================================================================
+   8. GLOBAL CONSTANTS BAR
+   ===================================================================== */
+function initConstants() {
+  const gi = $('#const-g'), Gi = $('#const-G'), msg = $('#const-msg');
+  gi.value = '9.8';
+  Gi.value = '6.67e-11';
+  function apply() {
+    gi.classList.remove('bad'); Gi.classList.remove('bad');
+    let g, G;
+    try { g = evaluate(gi.value); if (!(g > 0)) throw new InputError('must be positive'); }
+    catch (e) { gi.classList.add('bad'); msg.textContent = 'g: ' + e.message + ' (still using ' + full(CONST.g) + ')'; return; }
+    try { G = evaluate(Gi.value); if (!(G > 0)) throw new InputError('must be positive'); }
+    catch (e) { Gi.classList.add('bad'); msg.textContent = 'G: ' + e.message + ' (still using ' + full(CONST.G) + ')'; return; }
+    msg.textContent = '';
+    CONST.g = g; CONST.G = G;
+    Object.values(TOOLS).forEach(t => {
+      t.def.fields.forEach(f => {
+        if (f.link && t.inputs[f.k].dataset.linked === '1') t.inputs[f.k].value = linkVal(f.link);
+      });
+      if (t.lastOk) run(t);      // keep any shown answers in sync with the new constants
+    });
+  }
+  [gi, Gi].forEach(inp => {
+    inp.addEventListener('change', apply);
+    inp.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); apply(); } });
+  });
+  $('#const-reset').addEventListener('click', () => { gi.value = '9.8'; Gi.value = '6.67e-11'; apply(); });
+}
+
+/* =====================================================================
+   9. TABS
+   ===================================================================== */
+const TAB_IDS = ['n12', 'n3', 'grav', 'eq', 'cm', 'ref', 'calc', 'tests'];
+function showTab(id, focus) {
+  if (!TAB_IDS.includes(id)) id = 'n12';
+  $$('.tab').forEach(b => {
+    const on = b.dataset.tab === id;
+    b.setAttribute('aria-selected', on ? 'true' : 'false');
+    b.tabIndex = on ? 0 : -1;
+    if (on && focus) b.focus();
+  });
+  $$('.panel').forEach(p => p.classList.toggle('active', p.id === 'p-' + id));
+  try { localStorage.setItem('phys84.tab', id); } catch (e) { /* storage unavailable */ }
+}
+function initTabs() {
+  $$('.tab').forEach(b => b.addEventListener('click', () => showTab(b.dataset.tab)));
+  $('.tabs').addEventListener('keydown', e => {
+    const cur = TAB_IDS.indexOf(document.activeElement && document.activeElement.dataset ? document.activeElement.dataset.tab : '');
+    if (cur < 0) return;
+    if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+      e.preventDefault();
+      showTab(TAB_IDS[(cur + (e.key === 'ArrowRight' ? 1 : TAB_IDS.length - 1)) % TAB_IDS.length], true);
+    }
+  });
+  document.addEventListener('keydown', e => {
+    if (e.altKey && !e.ctrlKey && !e.metaKey) {
+      const m = /^Digit([1-8])$/.exec(e.code || '');
+      if (m) { e.preventDefault(); showTab(TAB_IDS[+m[1] - 1]); }
+    }
+  });
+  let start = (location.hash || '').replace('#', '');
+  if (!TAB_IDS.includes(start)) { try { start = localStorage.getItem('phys84.tab') || 'n12'; } catch (e) { start = 'n12'; } }
+  showTab(start);
+}
+
+/* =====================================================================
+   10. SCRATCH CALCULATOR (TI-84 style)
+   ===================================================================== */
+function calcFmt(x) {
+  if (x === 0) return '0';
+  const a = Math.abs(x);
+  if (a >= 1e10 || a < 1e-3) return sciStr(x, 10, true);
+  return String(Number(x.toPrecision(10))).replace('-', MINUS);
+}
+function initCalc() {
+  const hist = $('#calc-hist'), inp = $('#calc-in');
+  let last = '';
+  function push(exprText, resText, isErr) {
+    const line = el('div', { class: 'he', title: 'Click to reuse this entry' },
+      el('div', { class: 'hx', text: exprText }),
+      el('div', { class: isErr ? 'hr herr' : 'hr', text: resText }));
+    line.addEventListener('click', () => { inp.value = exprText; inp.focus(); });
+    hist.append(line);
+    hist.scrollTop = hist.scrollHeight;
+  }
+  function enter() {
+    const s = inp.value.trim();
+    if (!s) return;
+    last = s;
+    try { const v = evaluate(s); ANS = v; push(s, calcFmt(v), false); inp.value = ''; }
+    catch (e) {
+      if (!(e instanceof InputError)) throw e;
+      push(s, 'ERR:' + e.kind + ' ' + e.message, true);
+    }
+  }
+  function insert(t) {
+    const st = inp.selectionStart != null ? inp.selectionStart : inp.value.length;
+    const en = inp.selectionEnd != null ? inp.selectionEnd : inp.value.length;
+    if (!inp.value && /^[+\-*/^²]/.test(t) && t !== '(−)' && hist.children.length) t = 'Ans' + t;
+    inp.value = inp.value.slice(0, st) + t + inp.value.slice(en);
+    const pos = st + t.length;
+    inp.focus();
+    try { inp.setSelectionRange(pos, pos); } catch (e) { /* ignore */ }
+  }
+  const K = [
+    ['sin', 'sin('], ['cos', 'cos('], ['tan', 'tan('], ['√', '√('], ['^', '^'],
+    ['sin⁻¹', 'sin⁻¹('], ['cos⁻¹', 'cos⁻¹('], ['tan⁻¹', 'tan⁻¹('], ['x²', '²'], ['π', 'π'],
+    ['(', '('], [')', ')'], ['EE', 'E'], ['ANS', 'Ans'], ['÷', '/'],
+    ['7', '7', 'num'], ['8', '8', 'num'], ['9', '9', 'num'], ['×', '*'], ['DEL', '#del'],
+    ['4', '4', 'num'], ['5', '5', 'num'], ['6', '6', 'num'], ['−', '-'], ['CLEAR', '#clear'],
+    ['1', '1', 'num'], ['2', '2', 'num'], ['3', '3', 'num'], ['+', '+'], ['g', 'g'],
+    ['0', '0', 'num'], ['.', '.', 'num'], ['(−)', '−'], ['G', 'G'], ['ENTER', '#enter'],
+  ];
+  const pad = $('#calc-keys');
+  K.forEach(([label, act, kind]) => {
+    let cls = 'key';
+    if (kind === 'num') cls += ' light num';
+    else if (act === '#enter') cls += ' blue';
+    else if (act === '#clear' || act === '#del') cls += ' green';
+    pad.append(el('button', {
+      class: cls, type: 'button', 'aria-label': label,
+      onclick: () => {
+        if (act === '#enter') enter();
+        else if (act === '#clear') { if (inp.value) inp.value = ''; else hist.innerHTML = ''; inp.focus(); }
+        else if (act === '#del') {
+          const st = inp.selectionStart, en = inp.selectionEnd;
+          if (st != null && st !== en) inp.value = inp.value.slice(0, st) + inp.value.slice(en);
+          else if (st) { inp.value = inp.value.slice(0, st - 1) + inp.value.slice(st); try { inp.setSelectionRange(st - 1, st - 1); } catch (e) { /* ignore */ } }
+          inp.focus();
+        } else insert(act);
+      },
+    }, label));
+  });
+  inp.addEventListener('keydown', e => {
+    if (e.key === 'Enter') { e.preventDefault(); enter(); }
+    else if (e.key === 'ArrowUp' && last) { e.preventDefault(); inp.value = last; }
+  });
+}
+
+/* =====================================================================
+   11. SELF-TESTS — every worked example from the study guide
+   ===================================================================== */
+const TESTS = [];
+const T = (group, name, fn) => TESTS.push({ group: group, name: name, fn: fn });
+function near(actual, expected, what, relTol) {
+  const tol = relTol == null ? 1e-6 : relTol;
+  const ok = expected === 0 ? Math.abs(actual) <= 1e-12 : Math.abs(actual - expected) <= tol * Math.abs(expected);
+  if (!ok) throw new Error((what || 'value') + ': expected ≈ ' + expected + ', got ' + actual);
+  return (what || 'value') + ' = ' + full(actual);
+}
+function s3(actual, expected, what) {
+  const got = sig3(actual);
+  if (got !== expected) throw new Error((what || 'value') + ': expected "' + expected + '" (3 s.f.), got "' + got + '"');
+  return (what || 'value') + ' → ' + got;
+}
+function eq(actual, expected, what) {
+  if (actual !== expected) throw new Error((what || 'value') + ': expected ' + JSON.stringify(expected) + ', got ' + JSON.stringify(actual));
+  return (what || 'value') + ' = ' + actual;
+}
+function solveWith(id, vals) {
+  const t = TOOLS[id];
+  t.set(vals);
+  const r = t.solve();
+  if (!r.ok) throw new Error(id + ' reported an error: ' + r.error);
+  return r;
+}
+function expectErr(id, vals, re) {
+  const t = TOOLS[id];
+  t.set(vals);
+  const r = t.solve();
+  if (r.ok) throw new Error('expected an error message, but it solved');
+  if (re && !re.test(r.error)) throw new Error('message “' + r.error + '” doesn’t match ' + re);
+  return 'ERR:' + r.kind + ' “' + r.error + '”';
+}
+const has = (text, needle) => { if (!text.includes(needle)) throw new Error('screen text is missing “' + needle + '”'); return 'shows “' + needle + '”'; };
+const J = arr => arr.join('; ');
+
+/* formatting & parsing */
+T('Format', '3 sig figs & scientific notation', () => J([
+  s3(1.6008e-9, '1.60 × 10⁻⁹'), s3(6.5, '6.50'), s3(107.8, '108'), s3(30, '30.0'), s3(2.375, '2.38'),
+  s3(0.44444, '0.444'), s3(390, '390'), s3(-3, '−3.00'), s3(105000, '1.05 × 10⁵'), s3(3500, '3500'), s3(0.000123, '1.23 × 10⁻⁴'),
+  eq(full(107.8), '107.8', 'full(107.8)'), eq(full(6.67e-11), '6.67 × 10⁻¹¹', 'full(G)'), eq(sig3(0), '0', 'sig3(0)'),
+]));
+T('Parse', 'numbers, fractions, sci notation, functions', () => J([
+  near(evaluate('6.67e-11'), 6.67e-11, '6.67e-11'), near(evaluate('6.67×10^-11'), 6.67e-11, '6.67×10^-11'),
+  near(evaluate('6.67x10^-11'), 6.67e-11, '6.67x10^-11'), near(evaluate('1/2'), 0.5, '1/2'), near(evaluate('−3.5'), -3.5, '−3.5'),
+  near(evaluate('.5'), 0.5, '.5'), near(evaluate('2(3)'), 6, '2(3)'), near(evaluate('sqrt(16)'), 4, 'sqrt(16)'),
+  near(evaluate('sin(30)'), 0.5, 'sin(30)'), eq(evaluate('cos(90)'), 0, 'cos(90)'), near(evaluate('-2^2'), -4, '-2^2'),
+  near(evaluate('2π'), 2 * Math.PI, '2π'), near(evaluate('10⁻²'), 0.01, '10⁻²'), near(evaluate('2*g'), 19.6, '2*g'),
+]));
+T('Parse', 'bad input gives a clear error', () => {
+  const bad = ['abc', '2+', '1,000', '2 3', '5/0'];
+  return bad.map(s => { try { evaluate(s); } catch (e) { if (e instanceof InputError) return '“' + s + '” → ' + e.kind; throw e; } throw new Error('“' + s + '” was accepted'); }).join('; ');
+});
+
+/* 1. Newton's 1st & 2nd laws */
+T('1 · F = ma', 'solve for F, m and a', () => J([
+  near(solveWith('fma', { m: '2.0', a: '3.0' }).out.F, 6, 'F'),
+  near(solveWith('fma', { F: '12', a: '4.0' }).out.m, 3, 'm'),
+  near(solveWith('fma', { F: '-6.0', m: '2.0' }).out.a, -3, 'a'),
+]));
+T('1 · F = ma', 'needs exactly one blank; mass must be positive', () => J([
+  expectErr('fma', { m: '2' }, /blank/),
+  expectErr('fma', { F: '6', m: '2', a: '3' }, /exactly one/),
+  expectErr('fma', { F: '6', m: '-2' }, /Mass must be positive/),
+  expectErr('fma', { F: '6', a: '-3' }, /same sign/),
+]));
+T('1 · Net force', 'balanced forces ⇒ constant velocity', () => {
+  const r = solveWith('net', { forces: [['push', '6.0'], ['friction', '-6.0']], m: '2.0' });
+  return J([eq(r.out.F, 0, 'ΣF'), eq(r.out.constantVelocity, true, 'constant velocity'), has(r.text, 'velocity is constant'), has(r.text, 'at rest')]);
+});
+T('1 · Net force', 'unbalanced: ΣF = 6 N, a = 3 m/s²', () => {
+  const r = solveWith('net', { forces: [['push', '10'], ['friction', '-4']], m: '2.0' });
+  return J([near(r.out.F, 6, 'ΣF'), near(r.out.a, 3, 'a'), eq(r.out.dir, 'right', 'direction')]);
+});
+T('1 · Net force', 'no forces entered → error', () => expectErr('net', {}, /at least one force/));
+T('1 · Box', '2.0 kg, 6.0 N push → W 19.6 N, N 19.6 N, f 6.0 N left', () => {
+  const r = solveWith('box', { m: '2.0', F: '6.0' });
+  return J([near(r.out.W, 19.6, 'W'), near(r.out.N, 19.6, 'N'), near(r.out.f, 6, 'f'), eq(r.out.fdir, 'left', 'friction direction')]);
+});
+
+/* 2. Newton's 3rd law */
+T('2 · 3rd law', '10 N, 2 kg & 5 kg → 5 and 2 m/s², opposite', () => {
+  const r = solveWith('third', { F: '10', mA: '2', mB: '5', dir: 'right' });
+  if (r.out.dirA === r.out.dirB) throw new Error('accelerations should be opposite');
+  return J([near(r.out.aA, 5, 'a(2 kg)'), near(r.out.aB, 2, 'a(5 kg)'), eq(r.out.FonA, r.out.FonB, 'equal forces'), 'directions ' + r.out.dirA + ' / ' + r.out.dirB]);
+});
+T('2 · 3rd law', 'negative force magnitude → error', () => expectErr('third', { F: '-10', mA: '2', mB: '5' }, /can’t be negative/));
+
+/* 3. Universal gravitation */
+T('3 · Gravitation', '2.0 kg, 3.0 kg, 0.50 m → 1.60 × 10⁻⁹ N', () => {
+  const r = solveWith('grav', { m1: '2.0', m2: '3.0', r: '0.50' });
+  return J([s3(r.out.F, '1.60 × 10⁻⁹', 'F'), has(r.text, '1.60 × 10⁻⁹ N')]);
+});
+T('3 · Gravitation', 'reverse solves: r, m1, m2', () => J([
+  near(solveWith('grav', { F: '1.6008e-9', m1: '2.0', m2: '3.0' }).out.r, 0.5, 'r'),
+  near(solveWith('grav', { F: '1.6008e-9', m2: '3.0', r: '0.50' }).out.m1, 2, 'm1'),
+  near(solveWith('grav', { F: '1.6008e-9', m1: '2.0', r: '0.50' }).out.m2, 3, 'm2'),
+]));
+T('3 · Gravitation', 'distance must be positive', () => expectErr('grav', { m1: '2', m2: '3', r: '0' }, /must be positive/));
+T('3 · Ratio', 'both masses ×2, distance ×3 → 4F/9', () => {
+  const r = solveWith('ratio', { a: '2', b: '2', d: '3' });
+  return J([eq(r.out.frac, '4F/9', 'fraction'), s3(r.out.ratio, '0.444', 'decimal')]);
+});
+T('3 · Ratio', 'guide table: 2F, F/4, 4F (halved)', () => J([
+  eq(solveWith('ratio', { a: '2', b: '1', d: '1' }).out.frac, '2F', 'one mass doubles'),
+  eq(solveWith('ratio', { a: '1', b: '1', d: '2' }).out.frac, 'F/4', 'distance doubles'),
+  eq(solveWith('ratio', { a: '1', b: '1', d: '1/2' }).out.frac, '4F', 'distance halved'),
+]));
+T('3 · Altitude', '90 N at h = 2R → 10 N', () => {
+  const r = solveWith('alt', { W: '90', mode: 'R', k: '2' });
+  return J([near(r.out.W, 10, 'W_new'), eq(r.out.frac, '1/9', 'factor')]);
+});
+T('3 · Altitude', 'meters mode: R = 6.37e6, h = 2R → 10 N', () => near(solveWith('alt', { W: '90', mode: 'm', R: '6.37e6', h: '1.274e7' }).out.W, 10, 'W_new'));
+T('3 · W = mg', '2.0 kg → 19.6 N; 90 N → 9.18 kg', () => J([
+  near(solveWith('wmg', { m: '2.0' }).out.W, 19.6, 'W'),
+  s3(solveWith('wmg', { W: '90' }).out.m, '9.18', 'm'),
+]));
+T('3 · g = GM/r²', 'Earth: M = 5.97e24 kg, r = 6.37e6 m → 9.81 m/s²', () => s3(solveWith('gfield', { M: '5.97e24', r: '6.37e6' }).out.g, '9.81', 'g'));
+
+/* 4. Equilibrium */
+T('4 · Components', '10 N at 30°: horizontal and vertical modes', () => {
+  const h = solveWith('comp', { F: '10', th: '30', ref: 'h' }).out, v = solveWith('comp', { F: '10', th: '30', ref: 'v' }).out;
+  return J([s3(h.Fx, '8.66', 'Fx(h)'), s3(h.Fy, '5.00', 'Fy(h)'), s3(v.Fx, '5.00', 'Fx(v)'), s3(v.Fy, '8.66', 'Fy(v)')]);
+});
+T('4 · Components', '90° gives an exact zero; negative angle', () => {
+  const a = solveWith('comp', { F: '10', th: '90', ref: 'h' }).out, b = solveWith('comp', { F: '10', th: '-30', ref: 'h' }).out;
+  return J([eq(a.Fx, 0, 'Fx at 90°'), near(a.Fy, 10, 'Fy at 90°'), s3(b.Fy, '−5.00', 'Fy at −30°')]);
+});
+T('4 · Two cords', '7.5 N at 60°, 9.0 N at 65° → m ≈ 1.50 kg, 3.75 N & 3.80 N', () => {
+  const r = solveWith('cords', { TL: '7.5', thL: '60', TR: '9.0', thR: '65' });
+  return J([s3(r.out.m, '1.50', 'm'), s3(r.out.HL, '3.75', 'left horizontal'), s3(r.out.HR, '3.80', 'right horizontal'), s3(r.out.mismatch, '0.0536', 'mismatch')]);
+});
+T('4 · Two cords', 'angle must be above horizontal', () => expectErr('cords', { TL: '7.5', thL: '0', TR: '9', thR: '65' }, /above the horizontal/));
+T('4 · Two cords → T', '1.50 kg at 60° & 65° → about 7.5 N & 9.0 N', () => {
+  const r = solveWith('cordsT', { m: '1.50', thL: '60', thR: '65' });
+  return J([near(r.out.TL, 7.5, 'T_L', 0.02), near(r.out.TR, 9.0, 'T_R', 0.02)]);
+});
+T('4 · Symmetric', '0.50 kg at 62° → T ≈ 2.8 N', () => {
+  const r = solveWith('sym', { m: '0.50', th: '62' });
+  if (Math.abs(r.out.T - 2.8) > 0.05) throw new Error('T = ' + r.out.T);
+  return J([s3(r.out.T, '2.77', 'T'), 'rounds to 2.8 N at 2 s.f.']);
+});
+T('4 · Symmetric', 'reverse solves and impossible tension', () => J([
+  near(solveWith('sym', { T: String(0.5 * 9.8 / (2 * Math.sin(62 * D2R))), th: '62' }).out.m, 0.5, 'm'),
+  near(solveWith('sym', { T: String(0.5 * 9.8 / (2 * Math.sin(62 * D2R))), m: '0.50' }).out.th, 62, 'θ'),
+  expectErr('sym', { T: '1', m: '0.5' }, /can’t hold/),
+]));
+T('4 · Stacked', '7 kg above 4 kg → lower 39.2 N, upper 107.8 N', () => {
+  const r = solveWith('stack', { ms: [['7'], ['4']] });
+  return J([near(r.out.T[1], 39.2, 'lower'), near(r.out.T[0], 107.8, 'upper')]);
+});
+T('4 · Angled pull', '50 kg, 200 N at 30° → friction ≈ 173 N, normal = 390 N', () => {
+  const r = solveWith('pull', { m: '50', F: '200', th: '30' });
+  return J([s3(r.out.f, '173', 'friction'), near(r.out.N, 390, 'normal')]);
+});
+T('4 · Angled pull', 'lift-off is rejected', () => expectErr('pull', { m: '1', F: '200', th: '60' }, /lift off/));
+
+/* 5. Center of mass */
+T('5 · CM 1D', '2 kg at 2 m, 6 kg at 8 m → 6.5 m (4.5 m and 1.5 m away)', () => {
+  const r = solveWith('cm1', { mu: 'kg', pu: 'm', pts: [['2', '2'], ['6', '8']] });
+  return J([near(r.out.x, 6.5, 'x_CM'), near(r.out.d[0], 4.5, 'from 2 kg'), near(r.out.d[1], 1.5, 'from 6 kg')]);
+});
+T('5 · CM 1D', 'cars 1000 kg @5, 500 kg @20, 2000 kg @45 → 30 m', () => near(solveWith('cm1', { mu: 'kg', pu: 'm', pts: [['1000', '5'], ['500', '20'], ['2000', '45']] }).out.x, 30, 'x_CM'));
+T('5 · CM 1D', '40 g @0 cm, 10 g @50 cm → 10 cm', () => {
+  const r = solveWith('cm1', { mu: 'g', pu: 'cm', pts: [['40', '0'], ['10', '50']] });
+  return J([near(r.out.x, 10, 'x_CM'), has(r.text, '10.0 cm')]);
+});
+T('5 · CM 1D', '2.0 kg @0, 10.0 kg @2.0 m → 1.67 m', () => s3(solveWith('cm1', { mu: 'kg', pu: 'm', pts: [['2.0', '0'], ['10.0', '2.0']] }).out.x, '1.67', 'x_CM'));
+T('5 · CM 1D', 'validation: mass must be positive; empty list', () => J([
+  expectErr('cm1', { pts: [['-2', '2'], ['6', '8']] }, /must be positive/),
+  expectErr('cm1', { pts: [['0', '2']] }, /must be positive/),
+  expectErr('cm1', { pts: [['', ''], ['', '']] }, /at least one/),
+  expectErr('cm1', { pts: [['2', ''], ['6', '8']] }, /blank/),
+]));
+T('5 · CM 2D', '3 kg (1,2), 4 kg (5,3), 1 kg (7,1) → (3.75, 2.375)', () => {
+  const r = solveWith('cm2', { mu: 'kg', pu: 'm', pts: [['3', '1', '2'], ['4', '5', '3'], ['1', '7', '1']] });
+  return J([near(r.out.x, 3.75, 'x_CM'), near(r.out.y, 2.375, 'y_CM')]);
+});
+T('5 · Move a mass', 'Δx_CM = (m/M)Δx: 1 of 2 kg moves 20 cm → 10 cm', () => J([
+  near(solveWith('move', { mm: '1', M: '2', dx: '20' }).out.dcm, 10, 'Δx_CM'),
+  near(solveWith('move', { dcm: '10', M: '2', dx: '20' }).out.mm, 1, 'm_moved'),
+  near(solveWith('move', { dcm: '10', mm: '1', dx: '20' }).out.M, 2, 'M_total'),
+  near(solveWith('move', { dcm: '10', mm: '1', M: '2' }).out.dx, 20, 'Δx_moved'),
+  expectErr('move', { mm: '3', M: '2', dx: '20' }, /can’t be more than the total/),
+]));
+T('5 · Add a mass', 'fulcrum question: CM 0.8 → 0.75 (moves left)', () => {
+  const r = solveWith('add', { xo: '0.8', Mo: '5', ma: '1', xa: '0.5' });
+  return J([near(r.out.xn, 0.75, 'x_new'), eq(r.out.direction, 'left', 'direction')]);
+});
+T('5 · Add a mass', 'other unknowns and direction right', () => J([
+  near(solveWith('add', { xo: '6.5', Mo: '8', ma: '2', xa: '10' }).out.xn, 7.2, 'x_new'),
+  eq(solveWith('add', { xo: '6.5', Mo: '8', ma: '2', xa: '10' }).out.direction, 'right', 'direction'),
+  near(solveWith('add', { xo: '6.5', Mo: '8', xa: '10', xn: '7.2' }).out.ma, 2, 'm_added'),
+  near(solveWith('add', { xo: '6.5', ma: '2', xa: '10', xn: '7.2' }).out.Mo, 8, 'M_old'),
+  near(solveWith('add', { xo: '6.5', Mo: '8', ma: '2', xn: '7.2' }).out.xa, 10, 'x_added'),
+  near(solveWith('add', { Mo: '8', ma: '2', xa: '10', xn: '7.2' }).out.xo, 6.5, 'x_old'),
+]));
+
+/* every example button must solve cleanly */
+T('UI', 'every “Load an example” button solves without error', () => {
+  let n = 0;
+  Object.values(TOOLS).forEach(t => (t.def.examples || []).forEach(ex => {
+    t.set(ex.vals);
+    const r = t.solve();
+    if (!r.ok) throw new Error(t.def.id + ' / “' + ex.label + '”: ' + r.error);
+    if (!t.screen.textContent.trim()) throw new Error(t.def.id + ': empty screen');
+    n++;
+  }));
+  return n + ' examples solved';
+});
+
+function runTests() {
+  const saved = { g: CONST.g, G: CONST.G };
+  CONST.g = DEFAULTS.g; CONST.G = DEFAULTS.G;
+  TESTING = true;
+  const snaps = Object.values(TOOLS).map(t => [t, t.snapshot()]);
+  const results = TESTS.map(t => {
+    try { return { group: t.group, name: t.name, pass: true, detail: t.fn() || '' }; }
+    catch (e) { return { group: t.group, name: t.name, pass: false, detail: e && e.message ? e.message : String(e) }; }
+  });
+  snaps.forEach(([t, s]) => t.restore(s));
+  CONST.g = saved.g; CONST.G = saved.G;
+  TESTING = false;
+  const passed = results.filter(r => r.pass).length, failed = results.length - passed;
+  const out = $('#test-out'), sum = $('#test-summary');
+  if (out) {
+    out.innerHTML = '<table class="t"><thead><tr><th>Topic</th><th>Test</th><th>Result</th><th>Details</th></tr></thead><tbody>' +
+      results.map(r => '<tr' + (r.pass ? '' : ' class="failrow"') + '><td>' + esc(r.group) + '</td><td>' + esc(r.name) + '</td><td class="' + (r.pass ? 'pass">PASS' : 'fail">FAIL') + '</td><td class="det">' + esc(r.detail) + '</td></tr>').join('') +
+      '</tbody></table>';
+  }
+  if (sum) {
+    sum.textContent = passed + ' / ' + results.length + ' passed' + (failed ? ' · ' + failed + ' FAILED' : ' ✓');
+    sum.className = 'test-summary ' + (failed ? 'bad' : 'ok');
+  }
+  if (typeof console !== 'undefined') {
+    console.log('PHYS-84 self-tests: ' + passed + '/' + results.length + ' passed');
+    if (console.table) console.table(results.map(r => ({ topic: r.group, test: r.name, result: r.pass ? 'PASS' : 'FAIL', details: r.detail })));
+  }
+  return { passed: passed, failed: failed, total: results.length, results: results };
+}
+
+/* =====================================================================
+   12. START
+   ===================================================================== */
+initConstants();
+initTabs();
+initCalc();
+$('#run-tests').addEventListener('click', runTests);
+window.runTests = runTests;
+window.PHYS84 = { TOOLS: TOOLS, evaluate: evaluate, sig3: sig3, full: full, CONST: CONST, runTests: runTests };
+})();
+</script>
+</body>
+</html>
