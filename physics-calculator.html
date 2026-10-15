@@ -232,7 +232,7 @@ code { font-family: var(--mono); background: rgba(255,255,255,.08); padding: 1px
   .lcd { font-size: 13.5px; padding: 10px 11px; }
   .refgrid { grid-template-columns: 1fr; }
   .keypad .key { padding: 11px 2px; font-size: 12px; }
-  .viz svg { min-width: 470px; }
+  .viz svg { max-height: none; }
 }
 @media print {
   body { background: #fff; color: #000; padding: 0; }
@@ -529,18 +529,17 @@ function sciStr(x, digits, trim) {
   return m.replace('-', MINUS) + (e === 0 ? '' : ' × 10' + supInt(e));
 }
 /* drop binary noise (0.1 + 0.2) and nudge exact decimal halves away from zero, so 2.675 → 2.68 like on paper */
-const nudge = x => Number(x.toPrecision(15)) * (1 + 4 * Number.EPSILON);
-/* n significant figures; scientific notation when |x| >= hi or |x| < 0.001
-   (3 s.f. results that round to 1000, 10000, … also use it, since "1000" would hide the sig figs) */
+const nudge = x => { const y = Number(x.toPrecision(15)) * (1 + 4 * Number.EPSILON); return Number.isFinite(y) ? y : x; };
+/* n significant figures; scientific notation when |x| >= hi or |x| < 0.001 */
+let BAD_NUM = false;     // set when a non-finite number is formatted, so run() can report an overflow
 function fmtSig(x, n, trim, hi) {
-  if (typeof x !== 'number' || Number.isNaN(x)) return 'undefined';
-  if (!Number.isFinite(x)) return x > 0 ? '∞' : MINUS + '∞';
+  if (typeof x !== 'number' || Number.isNaN(x)) { BAD_NUM = true; return 'undefined'; }
+  if (!Number.isFinite(x)) { BAD_NUM = true; return x > 0 ? '∞' : MINUS + '∞'; }
   if (x === 0) return '0';
   const xn = nudge(x);
   const r = Number(xn.toPrecision(n));
   const a = Math.abs(r);
-  const pow10 = !trim && a >= 1000 && Math.abs(Math.log10(a) - Math.round(Math.log10(a))) < 1e-12;
-  if (a >= hi || Math.abs(xn) < 1e-3 || pow10) return sciStr(xn, n, trim);
+  if (a >= hi || Math.abs(xn) < 1e-3) return sciStr(xn, n, trim);
   let s = xn.toPrecision(n);
   if (/e/i.test(s)) s = String(Math.round(r));          // e.g. 1234 → "1230" at 3 s.f.
   else if (trim && s.includes('.')) s = s.replace(/0+$/, '').replace(/\.$/, '');
@@ -663,7 +662,9 @@ function tokenize(src) {
   }
   return toks;
 }
-function evaluate(str) {
+/* opts.mass: 'menu' (box has a kg/g menu) or 'kg' (kg-only box) — then "40 g" is rejected instead of meaning 40 × 9.8 */
+function evaluate(str, opts) {
+  opts = opts || {};
   const toks = tokenize(normalizeExpr(str));
   if (!toks.length) fail('Nothing to evaluate.', null, 'SYNTAX');
   let i = 0;
@@ -689,8 +690,10 @@ function evaluate(str) {
         if (p.t === '/') { if (r === 0) fail('Division by zero.', null, 'DIVIDE BY 0'); v /= r; } else v *= r;
       } else if (p.t === '(' || p.t === 'id') {
         const prev = toks[i - 1];
-        if (p.t === 'id' && (p.v === 'g' || p.v === 'G') && prev && prev.t === 'num') {
-          fail('Leave units out of the box. “' + prev.s + ' ' + p.v + '” would mean ' + prev.s + ' × ' + p.v + ' (the constant). For grams, type just ' + prev.s + ' and choose g in the unit menu; to multiply by the constant, type ' + prev.s + '*' + p.v + '.', null, 'SYNTAX');
+        if (opts.mass && p.t === 'id' && p.v === 'g' && prev && prev.t === 'num') {
+          fail(opts.mass === 'menu'
+            ? 'Leave units out of the box: “' + prev.s + ' g” would mean ' + prev.s + ' × 9.8 (the constant g). For grams, type just ' + prev.s + ' and choose g in the Mass unit menu. To multiply by the constant, type ' + prev.s + '*g.'
+            : 'Leave units out of the box: this box is in kg, and “' + prev.s + ' g” would mean ' + prev.s + ' × 9.8 (the constant g). Convert grams to kg first (e.g. 500 g = 0.5 kg). To multiply by the constant, type ' + prev.s + '*g.', null, 'SYNTAX');
         }
         v *= power();                       // implicit multiplication: 2(3), 2pi, 7.5sin(60)
       } else if (p.t === 'num') {
@@ -709,6 +712,7 @@ function evaluate(str) {
     if (peek() && peek().t === '^') {
       take();
       const e = unary();
+      if (b === 0 && e === 0) fail('0^0 is undefined.', null, 'DOMAIN');
       const r = Math.pow(b, e);
       if (Number.isNaN(r)) fail('That power is undefined (negative base with a fractional exponent).', null, 'DOMAIN');
       return r;
@@ -804,10 +808,11 @@ function checkConstraint(v, spec, label, loc) {
   const msg = fn ? fn(v, label) : null;
   if (msg) fail(spec.msg || msg, loc, 'INVALID');
 }
-function readExpr(s, label, loc) {
+const massMode = spec => (spec.unit === '@mu' ? 'menu' : spec.unit === 'kg' ? 'kg' : null);
+function readExpr(s, label, loc, spec) {
   const t = String(s == null ? '' : s).trim();
   if (!t) return null;
-  try { return evaluate(t); }
+  try { return evaluate(t, { mass: spec ? massMode(spec) : null }); }
   catch (e) {
     if (e instanceof InputError) throw new InputError(label + ': ' + e.message, loc, e.kind);
     throw e;
@@ -833,14 +838,14 @@ function makeCtx(tool) {
     text: k => String(tool.inputs[k].value).trim(),
     num(k) {
       const f = fdef(k);
-      const v = readExpr(c.str(k), f.name, k);
+      const v = readExpr(c.str(k), f.name, k, f);
       if (v === null) fail(f.name + ' is blank. Enter a value.', k, 'ARGUMENT');
       checkConstraint(v, f, f.name, k);
       return v;
     },
     opt(k) {
       const f = fdef(k);
-      const v = readExpr(c.str(k), f.name, k);
+      const v = readExpr(c.str(k), f.name, k, f);
       if (v === null) return null;
       checkConstraint(v, f, f.name, k);
       return v;
@@ -873,7 +878,7 @@ function makeCtx(tool) {
           if (cl.type === 'text') { row.text[cl.k] = String(s).trim(); return; }
           const L = cl.name + ' in row ' + (ri + 1);
           const loc = { k: k, row: ri, col: ci };
-          const v = readExpr(s, L, loc);
+          const v = readExpr(s, L, loc, cl);
           if (v === null) fail(L + ' is blank. Fill it in or remove the row.', loc, 'ARGUMENT');
           checkConstraint(v, cl, L, loc);
           row.v[cl.k] = v;
@@ -908,11 +913,15 @@ const allFinite = v => (typeof v === 'number' ? Number.isFinite(v) : Array.isArr
 function run(tool) {
   clearMarks(tool);
   const c = makeCtx(tool);
+  BAD_NUM = false;
+  AVAIL = tool.screen.clientWidth > 40 ? tool.screen.clientWidth - 16 : 0;
+  tool.drawnFor = AVAIL;
   try {
     tool.def.solve(c);
-    if (!Object.values(c.out).every(allFinite)) fail('The answer is too large or too small to compute. Check the size (the exponents) of the numbers you typed.', null, 'OVERFLOW');
-    tool.screen.innerHTML = c.w.html();
-    tool.viz.innerHTML = c.svg || '';
+    const html = c.w.html();
+    if (BAD_NUM || !Object.values(c.out).every(allFinite)) fail('The answer is too large or too small to compute. Check the size (the exponents) of the numbers you typed.', null, 'OVERFLOW');
+    tool.screen.innerHTML = html;
+    tool.viz.innerHTML = c.svg && !/="[^"]*(NaN|Infinity)/.test(c.svg) ? c.svg : '';
     tool.lastOk = true;
     return { ok: true, out: c.out, text: tool.screen.textContent };
   } catch (e) {
@@ -939,11 +948,9 @@ function userRun(tool) {
 }
 /* re-solve after a setting changes (unit menu, constants) without stealing focus; fall back to the idle screen */
 function rerun(tool) {
-  if (!tool.lastOk) { idleScreen(tool); return; }
+  if (!tool.lastOk) return;
   QUIET = true;
-  const r = run(tool);
-  QUIET = false;
-  if (!r.ok) { clearMarks(tool); idleScreen(tool); }
+  try { run(tool); } finally { QUIET = false; }
 }
 
 function buildRows(tool, f) {
@@ -1126,6 +1133,9 @@ function defineTool(containerId, def) {
    ===================================================================== */
 const INK = '#1b2416', DIM = '#46553c', RED = '#8c1d1d', LCDC = '#c9d4b6';
 const f1 = v => String(Math.round(v * 10) / 10);
+/* On narrow screens a diagram shrinks to fit, so its text is drawn larger (FONT_K) to stay readable. */
+let FONT_K = 1, AVAIL = 0;
+const setK = W => { FONT_K = AVAIL > 0 ? Math.min(Math.max(0.95 * W / AVAIL, 1), 1.9) : 1; };
 function svgWrap(w, h, body, label) {
   return '<svg viewBox="0 0 ' + w + ' ' + h + '" role="img" aria-label="' + esc(label) + '" xmlns="http://www.w3.org/2000/svg" ' +
     'font-family="DejaVu Sans Mono, Consolas, Menlo, monospace" font-size="12">' + body + '</svg>';
@@ -1143,7 +1153,7 @@ function arrowSVG(x1, y1, x2, y2, o) {
 }
 function txt(x, y, s, o) {
   o = o || {};
-  return '<text x="' + f1(x) + '" y="' + f1(y) + '" text-anchor="' + (o.anchor || 'middle') + '" fill="' + (o.color || INK) + '" font-size="' + (o.size || 12) + '"' + (o.bold ? ' font-weight="700"' : '') + '>' + s + '</text>';
+  return '<text x="' + f1(x) + '" y="' + f1(y) + '" text-anchor="' + (o.anchor || 'middle') + '" fill="' + (o.color || INK) + '" font-size="' + f1((o.size || 12) * FONT_K) + '"' + (o.bold ? ' font-weight="700"' : '') + '>' + s + '</text>';
 }
 function arcPath(cx, cy, r, a1, a2, color) {
   const x1 = cx + r * Math.cos(a1 * D2R), y1 = cy - r * Math.sin(a1 * D2R);
@@ -1161,19 +1171,24 @@ function niceStep(range, target) {
 const short = (s, n) => (s.length > n ? s.slice(0, n - 1) + '…' : s);
 
 /* tick labels: factor out a power of ten when the numbers get long (axis title gets "×10⁶") */
-function tickScale(step) {
-  const p = Math.floor(Math.log10(step));
-  if (p >= 5 || p <= -4) { const k = Math.pow(10, p); return { f: v => full(clean(v / k, 1)), tag: '×10' + supInt(p) + ' ' }; }
+function tickScale(step, lo, hi) {
+  const big = Math.max(Math.abs(lo), Math.abs(hi));
+  if (big >= 1e5 || (big > 0 && big < 1e-3)) {
+    const p = Math.floor(Math.log10(big)), k = Math.pow(10, p);
+    return { f: v => full(clean(v / k, step / k)), tag: '×10' + supInt(p) + ' ' };
+  }
   return { f: v => full(v), tag: '' };
 }
-const labelW = (str, size) => String(str).replace(/<[^>]*>/g, '').length * (size || 12) * 0.62 + 6;
+const labelW = (str, size) => String(str).replace(/<[^>]*>/g, '').length * (size || 12) * FONT_K * 0.62 + 6;
 const clampMid = (x, w, W) => Math.min(Math.max(x, w / 2 + 2), W - w / 2 - 2);
 /* how much to widen a (near-)zero span so tick spacing stays well above floating-point resolution */
-const widenSpan = (lo, hi) => (hi - lo <= 1e-9 * Math.max(1, Math.abs(lo), Math.abs(hi)) ? Math.max(Math.abs(lo) * 0.5, 1) : 0);
+const widenSpan = (lo, hi) => (hi === lo || hi - lo <= 1e-9 * Math.max(Math.abs(lo), Math.abs(hi)) ? (Math.abs(lo) * 0.5 || 1) : 0);
 
 /* number line: masses as dots sized by mass, red fulcrum marker at the CM */
 function numberLineSVG(points, o) {
-  const W = 580, H = 190, L = 40, R = W - 40, Y = 114;
+  const W = 520, L = 34, R = W - 34;
+  setK(W);
+  const K = FONT_K, Y = Math.round(74 + 40 * K), H = Math.round(Y + 48 + 24 * K);
   const xs = points.map(p => p.x);
   if (o.cm != null) xs.push(o.cm);
   if (o.oldCm != null) xs.push(o.oldCm);
@@ -1182,16 +1197,16 @@ function numberLineSVG(points, o) {
   const pad = (hi - lo) * 0.1; lo -= pad; hi += pad;
   const X = v => L + (v - lo) / (hi - lo) * (R - L);
   let b = '<line x1="' + L + '" y1="' + Y + '" x2="' + R + '" y2="' + Y + '" stroke="' + INK + '" stroke-width="2"/>';
-  const step = niceStep(hi - lo, 7), ts = tickScale(step), t0 = Math.ceil(lo / step) * step;
+  const step = niceStep(hi - lo, K > 1.4 ? 5 : 7), ts = tickScale(step, lo, hi), t0 = Math.ceil(lo / step) * step;
   for (let n = 0; n < 40; n++) {
     const t = t0 + n * step;
     if (t > hi + step * 1e-9) break;
     const v = Math.abs(t) < step * 1e-9 ? 0 : t, tx = X(v);
     b += '<line x1="' + f1(tx) + '" y1="' + (Y - 4) + '" x2="' + f1(tx) + '" y2="' + (Y + 4) + '" stroke="' + DIM + '" stroke-width="1.5"/>';
-    b += txt(tx, Y + 36, ts.f(v), { color: DIM, size: 11 });
+    b += txt(tx, Y + 22 + 12 * K, ts.f(v), { color: DIM, size: 11 });
   }
-  b += txt(R, Y + 60, 'position (' + ts.tag + esc(o.unit || '') + ')', { anchor: 'end', color: DIM, size: 11 });
-  if (o.oldCm != null) b += txt(L, Y + 60, '△ old CM   ▲ new CM', { anchor: 'start', color: DIM, size: 11 });
+  b += txt(R, Y + 40 + 22 * K, 'position (' + ts.tag + esc(o.unit || '') + ')', { anchor: 'end', color: DIM, size: 11 });
+  if (o.oldCm != null) b += txt(L, Y + 40 + 22 * K, '△ old CM   ▲ new CM', { anchor: 'start', color: DIM, size: 11 });
   const mmax = Math.max.apply(null, points.map(p => p.m));
   const rad = p => 5 + 13 * Math.sqrt(p.m / mmax);
   // biggest dots first so smaller ones stay visible on top
@@ -1205,7 +1220,7 @@ function numberLineSVG(points, o) {
     let lv = 0;
     while (lv < 3 && rows[lv] && rows[lv].some(q => cx - w / 2 < q[1] && cx + w / 2 > q[0])) lv++;
     (rows[lv] = rows[lv] || []).push([cx - w / 2, cx + w / 2]);
-    b += txt(cx, Y - 43 - lv * 15, esc(p.label), { size: 11, bold: true, color: p.hl ? RED : INK });
+    b += txt(cx, Y - 43 - lv * 14 * K, esc(p.label), { size: 11, bold: true, color: p.hl ? RED : INK });
   });
   if (o.oldCm != null) {
     const ox = X(o.oldCm);
@@ -1213,10 +1228,10 @@ function numberLineSVG(points, o) {
   }
   if (o.cm != null) {
     const cx = X(o.cm);
-    b += '<line x1="' + f1(cx) + '" y1="22" x2="' + f1(cx) + '" y2="' + Y + '" stroke="' + RED + '" stroke-width="1.5" stroke-dasharray="4 3"/>';
+    b += '<line x1="' + f1(cx) + '" y1="' + f1(10 + 13 * K) + '" x2="' + f1(cx) + '" y2="' + Y + '" stroke="' + RED + '" stroke-width="1.5" stroke-dasharray="4 3"/>';
     b += '<polygon points="' + f1(cx) + ',' + (Y + 2) + ' ' + f1(cx - 10) + ',' + (Y + 20) + ' ' + f1(cx + 10) + ',' + (Y + 20) + '" fill="' + RED + '"/>';
     const lab = esc(o.cmLabel || 'CM'), w = labelW(lab, 12);
-    b += txt(clampMid(cx, w, W), 15, lab, { bold: true, color: RED });
+    b += txt(clampMid(cx, w, W), 4 + 11 * K, lab, { bold: true, color: RED });
   }
   return svgWrap(W, H, b, 'Number line showing the masses and the center of mass');
 }
@@ -1224,6 +1239,7 @@ function numberLineSVG(points, o) {
 /* 2D grid with equal scaling on both axes */
 function gridSVG(points, cm, unit) {
   const W = 460, H = 450, M = 50, S = 360;
+  setK(W);
   const xs = points.map(p => p.x).concat([cm.x]), ys = points.map(p => p.y).concat([cm.y]);
   let x0 = Math.min.apply(null, xs), x1 = Math.max.apply(null, xs), y0 = Math.min.apply(null, ys), y1 = Math.max.apply(null, ys);
   if (x0 > 0 && x0 < (x1 - x0)) x0 = 0;
@@ -1231,12 +1247,12 @@ function gridSVG(points, cm, unit) {
   if (x1 < 0 && -x1 < (x1 - x0)) x1 = 0;
   if (y1 < 0 && -y1 < (y1 - y0)) y1 = 0;
   let span = Math.max(x1 - x0, y1 - y0);
-  if (span <= 1e-9 * Math.max(1, Math.abs(x0), Math.abs(x1), Math.abs(y0), Math.abs(y1))) span = Math.max(Math.abs(x0), Math.abs(y0), 1);
+  if (span === 0 || span <= 1e-9 * Math.max(Math.abs(x0), Math.abs(x1), Math.abs(y0), Math.abs(y1))) span = Math.max(Math.abs(x0), Math.abs(y0)) || 1;
   span *= 1.2;
   const cxm = (x0 + x1) / 2, cym = (y0 + y1) / 2;
   const lx = cxm - span / 2, ly = cym - span / 2;
   const X = v => M + (v - lx) / span * S, Y = v => M + S - (v - ly) / span * S;
-  const step = niceStep(span, 6), ts = tickScale(step);
+  const step = niceStep(span, FONT_K > 1.4 ? 5 : 6), ts = tickScale(step, lx, lx + span);
   let b = '<rect x="' + M + '" y="' + M + '" width="' + S + '" height="' + S + '" fill="none" stroke="' + DIM + '" stroke-width="1"/>';
   const gridLine = (v, vertical) => {
     const z = v === 0, op = z ? 0.9 : 0.3, sw = z ? 1.8 : 1;
@@ -1279,6 +1295,7 @@ function gridSVG(points, cm, unit) {
 function fbdSVG(forces, o) {
   o = o || {};
   const W = 460, H = 300, cx = 230, cy = 150;
+  setK(W);
   const shown = forces.filter(f => f.mag > 0);
   const max = Math.max.apply(null, shown.map(f => f.mag).concat([1e-300]));
   let b = '<rect x="' + (cx - 52) + '" y="' + (cy - 36) + '" width="104" height="72" rx="4" fill="none" stroke="' + DIM + '" stroke-width="1.5" stroke-dasharray="5 4"/>';
@@ -1292,18 +1309,18 @@ function fbdSVG(forces, o) {
   }
   const placed = [];
   shown.forEach(f => {
-    const L = 34 + 82 * (f.mag / max);
+    const L = 60 + 62 * (f.mag / max);      // always reaches past the dashed box outline
     const a = f.ang * D2R, ca = Math.cos(a), sa = Math.sin(a);
     const x2 = cx + L * ca, y2 = cy - L * sa;
     b += arrowSVG(cx, cy, x2, y2, { color: f.color || INK });
     const anchor = ca > 0.35 ? 'start' : ca < -0.35 ? 'end' : 'middle';
     const w = labelW(f.label, 12);
-    let lx = x2 + 10 * ca, ly = y2 - 12 * sa + (Math.abs(sa) > 0.7 ? (sa > 0 ? -2 : 12) : 4);
+    let lx = x2 + 10 * ca, ly = y2 - 12 * sa + (Math.abs(sa) > 0.7 ? (sa > 0 ? -2 : 12 * FONT_K) : 4);
     let x0 = anchor === 'start' ? lx : anchor === 'end' ? lx - w : lx - w / 2;
     if (x0 < 2) { lx += 2 - x0; x0 = 2; }
     if (x0 + w > W - 2) { lx -= x0 + w - (W - 2); x0 = W - 2 - w; }
     for (let k = 0; k < 6 && placed.some(q => Math.abs(q.y - ly) < 14 && x0 < q.x1 && x0 + w > q.x0); k++) ly += sa > 0.2 ? -15 : 15;
-    ly = Math.min(Math.max(ly, 13), H - 4);
+    ly = Math.min(Math.max(ly, 13 * FONT_K), H - 4);
     placed.push({ x0: x0, x1: x0 + w, y: ly });
     b += txt(lx, ly, f.label, { anchor: anchor, bold: true, size: 12, color: f.color || INK });
   });
@@ -1472,6 +1489,8 @@ defineTool('tools-n12', {
 /* ---------------- 2. Newton's 3rd law ---------------- */
 function thirdSVG(o) {
   const W = 500, H = 196, bw = 120, bh = 64, y = 54;
+  setK(W);
+  const nameLen = Math.max(5, Math.floor(13 / FONT_K));
   const bLeft = o.dB === 'left';
   const leftName = bLeft ? o.B : o.A, rightName = bLeft ? o.A : o.B;
   const leftA = bLeft ? o.aB : o.aA, rightA = bLeft ? o.aA : o.aB;
@@ -1479,8 +1498,8 @@ function thirdSVG(o) {
   let b = '<line x1="30" y1="' + (y + bh) + '" x2="470" y2="' + (y + bh) + '" stroke="' + DIM + '" stroke-width="2"/>';
   b += '<rect x="' + xL + '" y="' + y + '" width="' + bw + '" height="' + bh + '" fill="none" stroke="' + INK + '" stroke-width="2.2"/>';
   b += '<rect x="' + xR + '" y="' + y + '" width="' + bw + '" height="' + bh + '" fill="none" stroke="' + INK + '" stroke-width="2.2"/>';
-  b += txt(xL + bw / 2, y + 20, esc(short(leftName, 13)), { bold: true, size: 12 });
-  b += txt(xR + bw / 2, y + 20, esc(short(rightName, 13)), { bold: true, size: 12 });
+  b += txt(xL + bw / 2, y + 8 + 12 * FONT_K, esc(short(leftName, nameLen)), { bold: true, size: 12 });
+  b += txt(xR + bw / 2, y + 8 + 12 * FONT_K, esc(short(rightName, nameLen)), { bold: true, size: 12 });
   const moving = o.F > 0;
   if (moving) {
     const ay = y + 44;
@@ -1489,10 +1508,10 @@ function thirdSVG(o) {
     b += txt(xL - 70, ay - 10, sig3(o.F) + ' N', { anchor: 'start', bold: true, size: 12 });
     b += txt(xR + bw + 70, ay - 10, sig3(o.F) + ' N', { anchor: 'end', bold: true, size: 12 });
   }
-  b += txt(xL + bw / 2, y + bh + 24, 'a = ' + sig3(leftA) + ' m/s²' + (moving ? ' ←' : ''), { size: 12 });
-  b += txt(xR + bw / 2, y + bh + 24, 'a = ' + sig3(rightA) + ' m/s²' + (moving ? ' →' : ''), { size: 12 });
-  b += txt(250, y + bh + 50, moving ? 'equal-size forces, opposite directions' : 'no interaction force', { size: 11, color: DIM });
-  return svgWrap(W, H, b, 'Two objects pushing on each other with equal and opposite forces');
+  b += txt(xL + bw - 6, y + bh + 10 + 14 * FONT_K, 'a = ' + sig3(leftA) + ' m/s²' + (moving ? ' ←' : ''), { size: 12, anchor: 'end' });
+  b += txt(xR + 6, y + bh + 10 + 14 * FONT_K, 'a = ' + sig3(rightA) + ' m/s²' + (moving ? ' →' : ''), { size: 12, anchor: 'start' });
+  b += txt(250, y + bh + 22 + 30 * FONT_K, moving ? 'equal-size forces, opposite directions' : 'no interaction force', { size: 11, color: DIM });
+  return svgWrap(W, Math.round(H + 34 * (FONT_K - 1)), b, 'Two objects pushing on each other with equal and opposite forces');
 }
 defineTool('tools-n3', {
   id: 'third',
@@ -1613,7 +1632,7 @@ defineTool('tools-grav', {
     let ratio = a * b / (d * d);
     w.f('F<sub>new</sub> / F<sub>old</sub> = (m<sub>1</sub> factor)(m<sub>2</sub> factor) / (distance factor)²');
     w.s('F<sub>new</sub> = F × (' + c.raw('a') + ')(' + c.raw('b') + ') / (' + c.raw('d') + ')²');
-    w.s('F<sub>new</sub> = F × ' + full(a * b) + ' / ' + full(d * d));
+    w.s('F<sub>new</sub> = F × ' + PS(full(a * b)) + ' / ' + PS(full(d * d)));
     const fa = toFrac(a), fb = toFrac(b), fd = toFrac(d);
     let frac = null, rr = null;
     if (fa && fb && fd) {
@@ -1622,7 +1641,7 @@ defineTool('tools-grav', {
     }
     if (!rr) {                         // e.g. distance ×√2 still gives exactly F/2
       const f2 = toFrac(Number(ratio.toPrecision(12)), 1000);
-      if (f2 && f2.n > 0 && Math.abs(ratio - f2.n / f2.d) <= 1e-9 * ratio) rr = [f2.n, f2.d];
+      if (f2 && f2.n > 0 && f2.n <= 1e6 && Math.abs(ratio - f2.n / f2.d) <= 1e-9 * ratio) rr = [f2.n, f2.d];
     }
     if (rr) { frac = fracSym(rr[0], rr[1], 'F'); out.num = rr[0]; out.den = rr[1]; ratio = rr[0] / rr[1]; }
     const dec = sig3(ratio) + 'F';
@@ -1695,6 +1714,7 @@ defineTool('tools-grav', {
       out.r = r;
     }
     const Wn = W * ratio;
+    if (!(ratio > 0)) fail('That altitude is too large to compute. Check the exponent you typed.', null, 'OVERFLOW');
     w.r('W<sub>new</sub> ' + eqv(Wn, 'N'));
     w.a('W<sub>new</sub> = ' + sig3(Wn) + ' N');
     w.n('The mass doesn’t change. Only the weight (and g) shrink, by the factor (R/r)². Altitude h = R gives ¼; h = 2R gives 1/9.');
@@ -1796,42 +1816,62 @@ defineTool('tools-grav', {
 
 /* ---------------- 4. Equilibrium ---------------- */
 function compSVG(F, Fx, Fy, th, ref) {
-  const W = 400, H = 310, ox = 200, oy = 155, R = 118;
+  const W = 400, H = 310, ox = 200, oy = 155;
+  setK(W);
+  const K = FONT_K, sub = c => '<tspan baseline-shift="sub" font-size="9">' + c + '</tspan>';
   let b = '<line x1="22" y1="' + oy + '" x2="378" y2="' + oy + '" stroke="' + DIM + '" stroke-width="1.2"/>' +
-    '<line x1="' + ox + '" y1="18" x2="' + ox + '" y2="292" stroke="' + DIM + '" stroke-width="1.2"/>' +
-    txt(392, oy - 6, '+x', { anchor: 'end', color: DIM, size: 11 }) + txt(ox + 6, 14, '+y', { anchor: 'start', color: DIM, size: 11 });
-  if (F === 0) return svgWrap(W, H, b + txt(ox + 8, oy - 10, 'zero vector', { anchor: 'start' }), 'Zero vector');
+    '<line x1="' + ox + '" y1="18" x2="' + ox + '" y2="292" stroke="' + DIM + '" stroke-width="1.2"/>';
+  // labels are placed in priority order; each one is nudged until it no longer overlaps an earlier one
+  const placed = [];
+  const hit = bx => placed.some(q => bx[0] < q[0] + q[2] && q[0] < bx[0] + bx[2] && bx[1] < q[1] + q[3] && q[1] < bx[1] + bx[3]);
+  const boxOf = (x, y, w, anchor, size) => [anchor === 'start' ? x : anchor === 'end' ? x - w : x - w / 2, y - (size || 12) * 1.08 * K, w, (size || 12) * 1.55 * K];
+  function put(x, y, str, o, dy, optional) {
+    const w = labelW(str, o.size), a = o.anchor || 'middle';
+    if (a === 'start') x = Math.min(x, W - 3 - w); else if (a === 'end') x = Math.max(x, 3 + w); else x = clampMid(x, w, W);
+    for (let k = 0; k < 8; k++) {
+      const yy = Math.min(Math.max(y + k * (dy || 0), 13 * K), H - 4), bx = boxOf(x, yy, w, a, o.size);
+      if (!hit(bx)) { placed.push(bx); b += txt(x, yy, str, o); return true; }
+      if (!dy) break;
+    }
+    if (!optional) { const yy = Math.min(Math.max(y, 13 * K), H - 4); placed.push(boxOf(x, yy, w, a, o.size)); b += txt(x, yy, str, o); }
+    return false;
+  }
+  if (F === 0) {
+    put(ox + 8, oy - 10, 'zero vector', { anchor: 'start' });
+    return svgWrap(W, H, b + txt(392, oy - 6, '+x', { anchor: 'end', color: DIM, size: 11 }), 'Zero vector');
+  }
+  // shorten the arrow when its labels need the room beside the tip
+  const phi = Math.atan2(Fy, Fx), cphi = Math.abs(Math.cos(phi)), flat = Math.abs(Math.sin(phi)) < 0.36;
+  const need = Math.max(labelW('Fy = ' + sig3(Fy) + ' N', 11.5) + 8, labelW('F = ' + sig3(F) + ' N', 12) + 14);
+  const R = Math.max(70, Math.min(118, cphi > 1e-6 ? (W / 2 - 6 - need) / cphi : 118));
   const s = R / F, tx = ox + Fx * s, ty = oy - Fy * s;
-  const sub = c => '<tspan baseline-shift="sub" font-size="9">' + c + '</tspan>';
-  if (Math.abs(Fx) > 1e-9 * F) {
-    b += arrowSVG(ox, oy, tx, oy, { color: DIM, width: 2.2, dash: '6 4' });
-    const lab = 'F' + sub('x') + ' = ' + sig3(Fx) + ' N', w = labelW(lab, 11.5);
-    b += txt(clampMid((ox + tx) / 2, w, W), oy + (Fy >= 0 ? 20 : -10), lab, { size: 11.5, bold: true, color: DIM });
-  }
-  if (Math.abs(Fy) > 1e-9 * F) {
-    b += arrowSVG(tx, oy, tx, ty, { color: DIM, width: 2.2, dash: '6 4' });
-    const lab = 'F' + sub('y') + ' = ' + sig3(Fy) + ' N', w = labelW(lab, 11.5);
-    let lxp = tx + (Fx >= 0 ? 8 : -8);
-    lxp = Fx >= 0 ? Math.min(lxp, W - 4 - w) : Math.max(lxp, 4 + w);
-    b += txt(lxp, (oy + ty) / 2 + 4, lab, { anchor: Fx >= 0 ? 'start' : 'end', size: 11.5, bold: true, color: DIM });
-  }
+  const hasX = Math.abs(Fx) > 1e-9 * F, hasY = Math.abs(Fy) > 1e-9 * F;
+  if (hasX) b += arrowSVG(ox, oy, tx, oy, { color: DIM, width: 2.2, dash: '6 4' });
+  if (hasY) b += arrowSVG(tx, oy, tx, ty, { color: DIM, width: 2.2, dash: '6 4' });
   b += arrowSVG(ox, oy, tx, ty, { width: 3.2, head: 12 });
-  const phi = Math.atan2(Fy, Fx), lab = 'F = ' + sig3(F) + ' N', w = labelW(lab, 12);
-  if (Math.abs(Math.sin(phi)) < 0.3) {
-    b += txt(clampMid(tx, w, W), ty - 16, lab, { bold: true, size: 12 });
-  } else {
-    const right = Math.cos(phi) >= 0;
-    let lxp = tx + 14 * Math.cos(phi);
-    lxp = right ? Math.min(lxp, W - 4 - w) : Math.max(lxp, 4 + w);
-    b += txt(lxp, Math.min(Math.max(ty - 14 * Math.sin(phi) + 4, 14), H - 4), lab, { anchor: right ? 'start' : 'end', bold: true, size: 12 });
+  const up = Fy >= 0 ? -1 : 1;                       // direction "away from the axis, on the vector's side"
+  // 1. F at the tip
+  const fl = 'F = ' + sig3(F) + ' N';
+  if (flat) put(tx, Fy < 0 ? ty + 14 + 12 * K : ty - 16, fl, { bold: true, size: 12 }, up * 8 * K);
+  else put(tx + 14 * Math.cos(phi), ty - 14 * Math.sin(phi) + 4, fl, { anchor: Math.cos(phi) >= 0 ? 'start' : 'end', bold: true, size: 12 }, up * 8 * K);
+  // 2. Fy beside the vertical dashed segment (stacked past F when the vector is nearly flat)
+  if (hasY) {
+    const yl = 'F' + sub('y') + ' = ' + sig3(Fy) + ' N';
+    if (flat) put(tx, (Fy < 0 ? ty + 14 + 12 * K : ty - 16) + up * 19 * K, yl, { size: 11.5, bold: true, color: DIM }, up * 8 * K);
+    else put(tx + (Fx >= 0 ? 8 : -8), (oy + ty) / 2 + 4, yl, { anchor: Fx >= 0 ? 'start' : 'end', size: 11.5, bold: true, color: DIM }, -up * 8 * K);
   }
-  const t = th % 360;
-  const a1 = ref === 'h' ? 0 : 90, a2 = ref === 'h' ? t : 90 - t;
+  // 3. Fx along the horizontal dashed segment, on the far side of the axis from the vector
+  if (hasX) put((ox + tx) / 2, oy + (Fy >= 0 ? 8 + 12 * K : -8 - 6 * K), 'F' + sub('x') + ' = ' + sig3(Fx) + ' N', { size: 11.5, bold: true, color: DIM }, -up * 8 * K);
+  // 4. angle arc (label only when there is room)
+  const t = th % 360, a1 = ref === 'h' ? 0 : 90, a2 = ref === 'h' ? t : 90 - t;
   if (Math.abs(t) > 0.5) {
     b += arcPath(ox, oy, 38, a1, a2, RED);
     const am = ((a1 + a2) / 2) * D2R;
-    b += txt(ox + 54 * Math.cos(am), oy - 54 * Math.sin(am) + 4, 'θ', { bold: true, color: RED, size: 13 });
+    if (Math.abs(a2 - a1) >= 5) put(ox + 46 * Math.cos(am), oy - 46 * Math.sin(am) + 4, 'θ', { bold: true, color: RED, size: 13 }, 0, true);
   }
+  // 5. axis tags wherever they fit
+  put(392, oy - 6, '+x', { anchor: 'end', color: DIM, size: 11 }, 0, true) || put(392, oy + 6 + 11 * K, '+x', { anchor: 'end', color: DIM, size: 11 }, 0, true);
+  put(ox - 6, 6 + 9 * K, '+y', { anchor: 'end', color: DIM, size: 11 }, 0, true) || put(ox + 6, 6 + 9 * K, '+y', { anchor: 'start', color: DIM, size: 11 }, 0, true);
   return svgWrap(W, H, b, 'Force vector and its x and y components');
 }
 defineTool('tools-eq', {
@@ -1884,6 +1924,7 @@ defineTool('tools-eq', {
 
 function cordsSVG(o) {
   const W = 460, H = 270, kx = 230, ky = 138;
+  setK(W);
   const len = th => Math.min(112 / Math.max(sinD(th), 1e-6), 195);
   const Ll = len(o.thL), Lr = len(o.thR);
   const cL = cosD(o.thL), sL = sinD(o.thL), cR = cosD(o.thR), sR = sinD(o.thR);
@@ -1906,8 +1947,8 @@ function cordsSVG(o) {
   const wL = labelW(labL, 12), wR = labelW(labR, 12);
   const pLx = kx - 0.55 * Ll * cL - 12 * sL, pLy = ky - 0.55 * Ll * sL + 12 * cL + 4;
   const pRx = kx + 0.55 * Lr * cR + 12 * sR, pRy = ky - 0.55 * Lr * sR + 12 * cR + 4;
-  b += txt(Math.max(pLx, wL + 4), Math.max(pLy, 26), labL, { anchor: 'end', bold: true, size: 12 });
-  b += txt(Math.min(pRx, W - wR - 4), Math.max(pRy, 26), labR, { anchor: 'start', bold: true, size: 12 });
+  b += txt(Math.max(pLx, wL + 4), Math.max(pLy, 14 + 12 * FONT_K), labL, { anchor: 'end', bold: true, size: 12 });
+  b += txt(Math.min(pRx, W - wR - 4), Math.max(pRy, 14 + 12 * FONT_K), labR, { anchor: 'start', bold: true, size: 12 });
   b += '<line x1="' + kx + '" y1="' + ky + '" x2="' + kx + '" y2="' + (ky + 52) + '" stroke="' + INK + '" stroke-width="2.4"/>';
   const mw = Math.max(80, labelW(o.mLabel, 12.5) + 10);
   b += '<rect x="' + f1(kx - mw / 2) + '" y="' + (ky + 52) + '" width="' + f1(mw) + '" height="44" rx="3" fill="' + INK + '"/>';
@@ -2017,7 +2058,7 @@ defineTool('tools-eq', {
       const m = c.num('m'), th = c.num('th'), s = sinD(th), T = m * g / (2 * s);
       w.f('T = mg / (2 sin θ)');
       w.s('T = ' + c.q('m') + '(' + gS() + ' m/s²) / [2 sin(' + c.raw('th') + '°)]');
-      w.s('T = ' + full(m * g) + ' N / ' + full(2 * s));
+      w.s('T = ' + PS(full(m * g)) + ' N / ' + PS(full(2 * s)));
       w.r('T ' + eqv(T, 'N'));
       w.a('T = ' + sig3(T) + ' N (each cord)');
       out.T = T;
@@ -2033,6 +2074,7 @@ defineTool('tools-eq', {
       c.svg = cordsSVG({ thL: th, thR: th, TL: T, TR: T, mLabel: sig3(m) + ' kg' });
     } else {
       const T = c.num('T'), m = c.num('m'), x = m * g / (2 * T);
+      if (!Number.isFinite(x)) fail('The answer is too large or too small to compute. Check the size (the exponents) of the numbers you typed.', null, 'OVERFLOW');
       if (x > 1 + 1e-12) fail('The cords can’t hold this mass: even vertical cords (θ = 90°) need T ≥ mg/2 = ' + full(m * g / 2) + ' N.', 'T', 'DOMAIN');
       const th = invTrig(Math.asin, x, 'sin⁻¹');
       w.f('sin θ = mg / (2T)');
@@ -2049,6 +2091,7 @@ defineTool('tools-eq', {
 
 function stackSVG(masses, tensions) {
   const n = masses.length, cordH = 42, boxH = 34, W = 380;
+  setK(W);
   const H = 30 + n * (cordH + boxH) + 12;
   let b = '<rect x="60" y="10" width="160" height="10" fill="' + DIM + '"/>';
   for (let i = 0; i < 8; i++) b += '<line x1="' + (64 + i * 20) + '" y1="10" x2="' + (54 + i * 20) + '" y2="2" stroke="' + DIM + '" stroke-width="1.4"/>';
@@ -2357,7 +2400,7 @@ defineTool('tools-cm', {
       w.s('x<sub>new</sub> = ' + c.raw('xo') + ' + ' + P(full(shift)));
       w.r('x<sub>new</sub> ' + eqv(xn, pu));
       w.a('x<sub>new</sub> = ' + sig3(xn) + ' ' + pu);
-      w.s('Check (weighted average): (' + c.raw('Mo') + '·' + P(c.raw('xo')) + ' + ' + c.raw('ma') + '·' + P(c.raw('xa')) + ') / ' + full(Mo + ma) + ' = ' + full((Mo * xo + ma * xa) / (Mo + ma)) + ' ' + pu + ' ✓');
+      w.s('Check (weighted average): (' + PS(c.raw('Mo')) + '·' + PS(c.raw('xo')) + ' + ' + PS(c.raw('ma')) + '·' + PS(c.raw('xa')) + ') / ' + PS(full(Mo + ma)) + ' = ' + full((Mo * xo + ma * xa) / (Mo + ma)) + ' ' + pu + ' ✓');
       out.xn = xn;
     } else if (k === 'ma') {
       xo = c.num('xo'); Mo = c.num('Mo'); xa = c.num('xa'); xn = c.num('xn');
@@ -2387,7 +2430,7 @@ defineTool('tools-cm', {
       xo = c.num('xo'); Mo = c.num('Mo'); ma = c.num('ma'); xn = c.num('xn');
       xa = ((Mo + ma) * xn - Mo * xo) / ma;
       w.f('x<sub>added</sub> = [(M<sub>old</sub> + m<sub>added</sub>)x<sub>new</sub> − M<sub>old</sub>x<sub>old</sub>] / m<sub>added</sub>');
-      w.s('x<sub>added</sub> = [(' + full(Mo + ma) + ')(' + c.raw('xn') + ') − (' + c.raw('Mo') + ')(' + c.raw('xo') + ')] / ' + c.raw('ma'));
+      w.s('x<sub>added</sub> = [(' + full(Mo + ma) + ')(' + c.raw('xn') + ') − (' + c.raw('Mo') + ')(' + c.raw('xo') + ')] / ' + PS(c.raw('ma')));
       w.r('x<sub>added</sub> ' + eqv(xa, pu));
       w.a('x<sub>added</sub> = ' + sig3(xa) + ' ' + pu);
       out.xa = xa;
@@ -2395,7 +2438,7 @@ defineTool('tools-cm', {
       Mo = c.num('Mo'); ma = c.num('ma'); xa = c.num('xa'); xn = c.num('xn');
       xo = ((Mo + ma) * xn - ma * xa) / Mo;
       w.f('x<sub>old</sub> = [(M<sub>old</sub> + m<sub>added</sub>)x<sub>new</sub> − m<sub>added</sub>x<sub>added</sub>] / M<sub>old</sub>');
-      w.s('x<sub>old</sub> = [(' + full(Mo + ma) + ')(' + c.raw('xn') + ') − (' + c.raw('ma') + ')(' + c.raw('xa') + ')] / ' + c.raw('Mo'));
+      w.s('x<sub>old</sub> = [(' + full(Mo + ma) + ')(' + c.raw('xn') + ') − (' + c.raw('ma') + ')(' + c.raw('xa') + ')] / ' + PS(c.raw('Mo')));
       w.r('x<sub>old</sub> ' + eqv(xo, pu));
       w.a('x<sub>old</sub> = ' + sig3(xo) + ' ' + pu);
       out.xo = xo;
@@ -2467,7 +2510,18 @@ function showTab(id, focus) {
   });
   $$('.panel').forEach(p => p.classList.toggle('active', p.id === 'p-' + id));
   try { localStorage.setItem('phys84.tab', id); } catch (e) { /* storage unavailable */ }
+  redrawVisible();
 }
+/* diagrams drawn while their tab was hidden (or before a resize) are redrawn at the current width */
+function redrawVisible() {
+  Object.values(TOOLS).forEach(t => {
+    if (!t.lastOk || !t.root.closest('.panel.active') || !t.viz.innerHTML) return;
+    const avail = t.screen.clientWidth > 40 ? t.screen.clientWidth - 16 : 0;
+    if (avail && Math.abs(avail - (t.drawnFor || 0)) > 8) rerun(t);
+  });
+}
+let resizeTimer = 0;
+window.addEventListener('resize', () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(redrawVisible, 200); });
 function initTabs() {
   $$('.tab').forEach(b => b.addEventListener('click', () => showTab(b.dataset.tab)));
   $('.tabs').addEventListener('keydown', e => {
@@ -2502,12 +2556,13 @@ function calcFmt(x) {
 function initCalc() {
   const hist = $('#calc-hist'), inp = $('#calc-in'), pad = $('#calc-keys');
   const entries = [];
-  let recall = -1, hasAns = false, touch = false;
+  let recall = -1, hasAns = false, touch = false, tcaret = null;
+  ['click', 'keyup', 'select', 'input'].forEach(ev => inp.addEventListener(ev, () => { tcaret = inp.selectionStart; }));
   function push(exprText, resText, isErr) {
     const line = el('button', { type: 'button', class: 'he', title: 'Reuse this entry', 'aria-label': 'Reuse ' + exprText + (isErr ? '' : ', result ' + resText) },
       el('span', { class: 'hx', text: exprText }),
       el('span', { class: isErr ? 'hr herr' : 'hr', text: resText }));
-    line.addEventListener('click', () => { inp.value = exprText; inp.focus(); });
+    line.addEventListener('click', () => { inp.value = exprText; tcaret = null; inp.focus(); });
     hist.append(line);
     hist.scrollTop = hist.scrollHeight;
   }
@@ -2516,7 +2571,7 @@ function initCalc() {
     if (!s) return;
     entries.push(s);
     recall = -1;
-    try { const v = evaluate(s); ANS = v; hasAns = true; push(s, calcFmt(v), false); inp.value = ''; }
+    try { const v = evaluate(s); ANS = v; hasAns = true; push(s, calcFmt(v), false); inp.value = ''; tcaret = null; }
     catch (e) {
       if (e instanceof InputError) push(s, 'ERR:' + e.kind + ' ' + e.message, true);
       else push(s, 'ERR: that expression is too complicated to evaluate.', true);
@@ -2524,15 +2579,21 @@ function initCalc() {
   }
   /* keypad taps on a phone must not focus the text box (that would pop up the system keyboard) */
   const focusInput = () => { if (!touch) inp.focus(); };
-  const caret = () => (touch || inp.selectionStart == null ? [inp.value.length, inp.value.length] : [inp.selectionStart, inp.selectionEnd]);
+  const caret = () => {
+    if (!touch && inp.selectionStart != null) return [inp.selectionStart, inp.selectionEnd];
+    const p = tcaret == null || tcaret > inp.value.length ? inp.value.length : tcaret;
+    return [p, p];
+  };
   function insert(t) {
     const [st, en] = caret();
     const before = inp.value.slice(0, st);
     if (!inp.value && hasAns && /^[+\-*/^²]/.test(t)) t = 'Ans' + t;     // TI-84 style: an operator first means "Ans …"
     if (t === 'E' && !/[\d.]$/.test(before)) t = /[A-Za-z)π²]$/.test(before) ? '*1E' : '1E';
     inp.value = before + t + inp.value.slice(en);
+    const pos = st + t.length;
+    tcaret = pos;
     focusInput();
-    if (!touch) { const pos = st + t.length; try { inp.setSelectionRange(pos, pos); } catch (e) { /* ignore */ } }
+    if (!touch) { try { inp.setSelectionRange(pos, pos); } catch (e) { /* ignore */ } }
   }
   const K = [
     ['sin', 'sin('], ['cos', 'cos('], ['tan', 'tan('], ['√', '√('], ['^', '^'],
@@ -2554,12 +2615,13 @@ function initCalc() {
       class: cls, type: 'button', 'aria-label': label === '(−)' ? 'negative' : label,
       onclick: () => {
         if (act === '#enter') enter();
-        else if (act === '#clear') { if (inp.value) inp.value = ''; else hist.innerHTML = ''; focusInput(); }
+        else if (act === '#clear') { if (inp.value) inp.value = ''; else hist.innerHTML = ''; tcaret = null; focusInput(); }
         else if (act === '#del') {
           const [st, en] = caret();
           if (st !== en) inp.value = inp.value.slice(0, st) + inp.value.slice(en);
           else if (st) {
             inp.value = inp.value.slice(0, st - 1) + inp.value.slice(st);
+            tcaret = st - 1;
             if (!touch) { try { inp.setSelectionRange(st - 1, st - 1); } catch (e) { /* ignore */ } }
           }
           focusInput();
@@ -2791,17 +2853,24 @@ T('5 · Add a mass', 'other unknowns and direction right', () => J([
 
 /* fixes found in review */
 T('Format', 'half-way rounding, powers of ten, one notation per line', () => J([
-  s3(2.675, '2.68'), s3(1.005, '1.01'), s3(999.5, '1.00 × 10³'), s3(1000, '1.00 × 10³'), s3(0.00099951, '1.00 × 10⁻³'), s3(9800, '9800'),
+  s3(2.675, '2.68'), s3(1.005, '1.01'), s3(999.5, '1000'), s3(1000, '1000'), s3(2000, '2000'), s3(0.00099951, '1.00 × 10⁻³'), s3(9800, '9800'),
+  s3(Number.MAX_VALUE, '1.80 × 10³⁰⁸'),
   eq(eqv(29.3406, '°'), '= 29.3406° ≈ 29.3°', 'degrees'), eq(eqv(123456, 'N'), '= 1.23456 × 10⁵ N ≈ 1.23 × 10⁵ N', 'notation'),
 ]));
-T('Parse', 'typed units are rejected (40 g is not 40 × 9.8); 30° is fine', () => {
-  const msgs = ['40 g', '40g', '50 cm', '2 kg'].map(x => { try { evaluate(x); } catch (e) { if (e instanceof InputError && /units/i.test(e.message)) return '“' + x + '” rejected'; throw e; } throw new Error('“' + x + '” was accepted'); });
+T('Parse', 'typed units are rejected in mass boxes (40 g is not 40 × 9.8); 30° is fine', () => {
+  const msgs = [['40 g', 'menu'], ['40g', 'kg'], ['50 cm', null], ['2 kg', null]].map(([x, mass]) => { try { evaluate(x, { mass: mass }); } catch (e) { if (e instanceof InputError && /units/i.test(e.message)) return '“' + x + '” rejected'; throw e; } throw new Error('“' + x + '” was accepted'); });
   let inc = false;
   try { evaluate('2e'); } catch (e) { inc = /Incomplete exponent/.test(e.message); }
   if (!inc) throw new Error('“2e” should say incomplete exponent');
   return J(msgs.concat([near(evaluate('30°'), 30, '30°'), near(evaluate('2*g'), 19.6, '2*g'), '“2e” → incomplete exponent']));
 });
-T('Parse', 'grams mode: “40 g” in a CM row gives an error, not 1.24 cm', () => expectErr('cm1', { mu: 'g', pu: 'cm', pts: [['40 g', '0'], ['10', '50']] }, /units/i));
+T('Parse', 'grams mode: “40 g” in a CM row gives an error, not 1.24 cm', () => expectErr('cm1', { mu: 'g', pu: 'cm', pts: [['40 g', '0'], ['10', '50']] }, /Mass unit menu/));
+T('Parse', 'outside mass boxes “2g” still means 2 × g; kg-only boxes explain the conversion', () => J([
+  near(evaluate('2g'), 19.6, '2g (calculator)'), near(evaluate('3G'), 2.001e-10, '3G'), eq(evaluate('7.5sin(60)') > 6.49, true, '7.5sin(60)'),
+  near(solveWith('fma', { m: '2', a: '3.0g' }).out.F, 58.8, 'a = 3.0g'),
+  expectErr('box', { m: '500 g', F: '2' }, /in kg/),
+  (() => { let ok = false; try { evaluate('0^0'); } catch (e) { ok = e.kind === 'DOMAIN'; } if (!ok) throw new Error('0^0 should be undefined'); return '0^0 → ERR:DOMAIN'; })(),
+]));
 T('Overflow', 'results too large to compute give an error, never ∞', () => J([
   expectErr('grav', { m1: '1e200', m2: '1e200', r: '1' }, /too large/),
   expectErr('net', { forces: [['a', '1e308'], ['b', '1e308']], m: '2' }, /too large/),
@@ -2821,7 +2890,10 @@ T('3 · Ratio', 'distance ×√2 → F/2; changes that cancel are “unchanged�
   const b = solveWith('ratio', { a: '3', b: '1', d: 'sqrt(3)' });
   const c2 = solveWith('ratio', { a: '1', b: '1/2', d: '1' });
   if (c2.text.includes('distance counts')) throw new Error('distance note shown although distance is unchanged');
-  return J([eq(a.out.frac, 'F/2', '√2'), eq(b.out.frac, 'F', '3, √3'), has(b.text, 'unchanged'), eq(solveWith('ratio', { a: '1', b: '1', d: '0.1' }).out.ratio, 100, 'd = 0.1')]);
+  const big = solveWith('ratio', { a: '1e21', b: '1', d: '1' });
+  if (/e\+|\d{10,}F/.test(big.text)) throw new Error('raw JS number in ratio output: ' + big.text);
+  return J([eq(a.out.frac, 'F/2', '√2'), eq(b.out.frac, 'F', '3, √3'), has(b.text, 'unchanged'), eq(solveWith('ratio', { a: '1', b: '1', d: '0.1' }).out.ratio, 100, 'd = 0.1'),
+    has(big.text, '1.00 × 10²¹F')]);
 });
 T('Display', 'typed scientific notation is kept; “/” operands are parenthesized', () => J([
   has(solveWith('grav', { F: '1.60e-9', m1: '2.0', m2: '3.0' }).text, '(1.60 × 10⁻⁹ N)'),
