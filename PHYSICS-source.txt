@@ -10,7 +10,9 @@ Menu("PHYS-84 PLUS","NEWTON 1ST+2ND",1,"NEWTON 3RD LAW",2,"GRAVITATION",3,"EQUIL
 Lbl ER
 ClrHome
 Output(1,1,"ERROR")
-Output(3,1,Str1)
+For(J,1,length(Str1),16)
+Output(3+iPart(J/16),1,sub(Str1,J,min(16,1+length(Str1)-J)))
+End
 Output(8,1,"PRESS ENTER")
 Pause 
 If R=1:Goto 1
@@ -92,8 +94,8 @@ Lbl 12
 ClrHome
 Disp "NET FORCE","+ = YOUR + DIR."
 Input "HOW MANY F? ",N
-"ENTER A WHOLE   NUMBER, 1 OR    MORE"→Str1
-If N<1 or fPart(N):Goto ER
+"ENTER A WHOLE   NUMBER 1 TO 99"→Str1
+If N<1 or N>99 or fPart(N):Goto ER
 N→dim(L₁)
 For(I,1,N)
 Disp "FORCE NUMBER",I
@@ -273,7 +275,7 @@ Pause
 Goto 31
 Lbl 32
 ClrHome
-Disp "2=DOUBLE .5=HALF","1=NO CHANGE"
+Disp "FACTOR 2=DOUBLE",".5=HALF 1=SAME"
 Input "M1 FACTOR=",A
 Input "M2 FACTOR=",B
 Input "R FACTOR=",C
@@ -281,7 +283,7 @@ Input "R FACTOR=",C
 If A≤0 or B≤0 or C≤0:Goto ER
 AB/C²→K
 ClrHome
-Disp "FNEW=F(M1F)(M2F)","        /(RF)²"
+Disp "FNEW=F*M1F*M2F","        /(RF)²"
 K→X
 Disp "FNEW/F=",expr(Str9)
 Disp "AS A FRACTION",K►Frac
@@ -294,7 +296,7 @@ Lbl 33
 Menu("ALTITUDE GIVEN","AS K TIMES R",3E,"IN METERS",3F,"BACK",3)
 Lbl 3E
 ClrHome
-Disp "H=K*R (RADIUS R)"
+Disp "H=K*R, R=RADIUS"
 Input "SURFACE W (N)=",W
 Input "K (H=KR)=",K
 "W MUST BE >0"→Str1
@@ -531,7 +533,7 @@ Output(6,7,expr(Str9))
 Output(8,1,"ENTER=HORIZ.")
 Pause 
 ClrHome
-Output(1,1,"HORIZONTAL CHECK")
+Output(1,1,"HORIZ. CHECK")
 H→X
 Output(2,1,"TLCOSθL=")
 Output(2,9,expr(Str9))
@@ -657,8 +659,8 @@ Lbl 44
 ClrHome
 Disp "MASSES FROM","TOP TO BOTTOM"
 Input "HOW MANY? ",N
-"ENTER A WHOLE   NUMBER, 1 OR    MORE"→Str1
-If N<1 or fPart(N):Goto ER
+"ENTER A WHOLE   NUMBER 1 TO 99"→Str1
+If N<1 or N>99 or fPart(N):Goto ER
 N→dim(L₂)
 For(I,1,N)
 Disp "MASS NUMBER",I
@@ -741,8 +743,8 @@ Lbl 51
 ClrHome
 Disp "SAME UNITS-","KG,M OR G,CM"
 Input "HOW MANY? ",N
-"ENTER A WHOLE   NUMBER, 1 OR    MORE"→Str1
-If N<1 or fPart(N):Goto ER
+"ENTER A WHOLE   NUMBER 1 TO 99"→Str1
+If N<1 or N>99 or fPart(N):Goto ER
 N→dim(L₁)
 N→dim(L₂)
 For(I,1,N)
@@ -758,7 +760,7 @@ sum(L₁L₂)→S
 sum(L₁)→M
 S/M→C
 ClrHome
-Output(1,1,"XCM=SUM MX/SUM M")
+Output(1,1,"XCM=SUM MX/SUMM")
 S→X
 Output(2,1,"SUM MX=")
 Output(2,8,expr(Str9))
@@ -793,8 +795,8 @@ Lbl 52
 ClrHome
 Disp "SAME UNITS-","KG,M OR G,CM"
 Input "HOW MANY? ",N
-"ENTER A WHOLE   NUMBER, 1 OR    MORE"→Str1
-If N<1 or fPart(N):Goto ER
+"ENTER A WHOLE   NUMBER 1 TO 99"→Str1
+If N<1 or N>99 or fPart(N):Goto ER
 N→dim(L₁)
 N→dim(L₂)
 N→dim(L₃)
@@ -815,8 +817,8 @@ sum(L₁L₃)→T
 S/M→C
 T/M→D
 ClrHome
-Output(1,1,"XCM=SUM MX/SUM M")
-Output(2,1,"YCM=SUM MY/SUM M")
+Output(1,1,"XCM=SUM MX/SUMM")
+Output(2,1,"YCM=SUM MY/SUMM")
 M→X
 Output(3,1,"SUM M=")
 Output(3,7,expr(Str9))
