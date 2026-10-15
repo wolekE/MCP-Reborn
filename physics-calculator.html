@@ -26,7 +26,7 @@
   --green: #7bc874;
   --green-dk: #3c8a37;
   --label: #aeb7c2;
-  --muted: #858f9b;
+  --muted: #a0a9b4;
   --accent: #ffd166;
   --mono: "DejaVu Sans Mono", Consolas, "Lucida Console", Menlo, "Courier New", monospace;
   --sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
@@ -103,7 +103,7 @@ body {
 .tab .second { position: absolute; top: 5px; left: 0; right: 0; font: 700 9px/1 var(--sans); letter-spacing: .12em; color: var(--blue); }
 .tab:active { transform: translateY(2px); box-shadow: 0 2px 0 #0b0c0e; }
 .tab[aria-selected="true"] { background: linear-gradient(180deg, #86c8f7, var(--blue)); color: #0a2134; box-shadow: 0 4px 0 var(--blue-dk), 0 6px 12px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.4); }
-.tab[aria-selected="true"] .second { color: #0a2134; opacity: .7; }
+.tab[aria-selected="true"] .second { color: #0a2134; }
 /* ---------- panels ---------- */
 .panel { display: none; }
 .panel.active { display: block; }
@@ -135,7 +135,7 @@ input[type="text"], select {
 select { font: 13.5px var(--sans); padding: 7px 6px; cursor: pointer; }
 input[type="text"]:focus, select:focus { outline: none; border-color: var(--blue); box-shadow: 0 0 0 3px rgba(92,178,242,.35), inset 0 2px 3px rgba(0,0,0,.25); }
 input.bad { border-color: #e2504f !important; background: #f6dcda !important; }
-input::placeholder { color: #8a957e; }
+input::placeholder { color: #5c6752; font-style: italic; }
 .unit { min-width: 3.3em; font: 13px var(--mono); color: var(--label); white-space: nowrap; }
 .key.q { padding: 6px 9px; font: 800 13px/1 var(--mono); }
 .rows .rowhead, .rows .row { display: grid; gap: 6px; align-items: center; }
@@ -172,8 +172,8 @@ input::placeholder { color: #8a957e; }
 .lcd .cur { display: inline-block; width: .6em; height: 1.05em; background: var(--ink); vertical-align: text-bottom; animation: blink 1.1s steps(1) infinite; }
 @keyframes blink { 50% { opacity: 0; } }
 .viz:empty { display: none; }
-.viz { margin-top: 14px; padding: 8px; }
-.viz svg { display: block; width: 100%; height: auto; max-height: 460px; }
+.viz { margin-top: 14px; padding: 8px; overflow-x: auto; }
+.viz svg { display: block; width: 100%; height: auto; max-height: 560px; }
 /* ---------- static info blocks ---------- */
 .two { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 .lcd.static { font-size: 14px; }
@@ -186,8 +186,8 @@ table.t th { color: var(--label); font-size: 11.5px; letter-spacing: .08em; text
 .lcd table.t th { color: var(--ink-dim); }
 .trap { font-size: 13.5px; color: var(--label); margin: 10px 0 0; }
 .trap b { color: var(--accent); }
-.refgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 16px; }
-.refcard { background: rgba(255,255,255,.035); border: 1px solid rgba(255,255,255,.07); border-radius: 16px; padding: 14px 15px 16px; font-size: 13.5px; }
+.refgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(330px, 100%), 1fr)); gap: 16px; }
+.refcard { min-width: 0; overflow-wrap: anywhere; background: rgba(255,255,255,.035); border: 1px solid rgba(255,255,255,.07); border-radius: 16px; padding: 14px 15px 16px; font-size: 13.5px; }
 .refcard h4 { margin: 0 0 8px; font-size: 14px; letter-spacing: .08em; text-transform: uppercase; color: var(--blue); }
 .refcard .lcd { margin: 4px 0 8px; font-size: 13.5px; line-height: 1.7; }
 .refcard li { margin: 2px 0; }
@@ -196,10 +196,12 @@ code { font-family: var(--mono); background: rgba(255,255,255,.08); padding: 1px
 .scratch { max-width: 460px; margin: 0 auto; }
 .calc-screen { height: 250px; display: flex; flex-direction: column; padding: 10px 12px; }
 .hist { flex: 1; overflow-y: auto; font-size: 14px; }
-.hist .he { cursor: pointer; padding: 1px 0; }
+.hist .he { display: block; width: 100%; background: none; border: 0; color: inherit; font: inherit; text-align: inherit; cursor: pointer; padding: 1px 2px; border-radius: 3px; }
 .hist .he:hover { background: rgba(27,36,22,.08); }
-.hist .hx { text-align: left; }
-.hist .hr { text-align: right; font-weight: 700; }
+.hist .he:focus-visible { outline: 2px dashed var(--ink-dim); outline-offset: 1px; }
+.calc-in:focus-visible { outline: 2px dashed var(--ink-dim) !important; outline-offset: 3px; }
+.hist .hx { display: block; text-align: left; }
+.hist .hr { display: block; text-align: right; font-weight: 700; }
 .hist .herr { color: var(--ink-err); font-weight: 700; }
 .calc-in { width: 100%; margin-top: 6px; background: transparent !important; border: 0 !important; border-top: 1px dashed rgba(27,36,22,.35) !important; border-radius: 0 !important; box-shadow: none !important; padding: 6px 2px 0 !important; font-size: 16px !important; }
 .keypad { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px 9px; margin-top: 18px; }
@@ -209,6 +211,7 @@ code { font-family: var(--mono); background: rgba(255,255,255,.08); padding: 1px
 .test-summary { font: 700 14px var(--mono); margin-left: 12px; }
 .test-summary.ok { color: var(--green); }
 .test-summary.bad { color: #ff7a7a; }
+#test-out { overflow-x: auto; }
 #test-out table.t td.pass { color: var(--green); font-weight: 800; }
 #test-out table.t td.fail { color: #ff7a7a; font-weight: 800; }
 #test-out table.t td.det { font-family: var(--mono); font-size: 12px; color: var(--label); overflow-wrap: anywhere; }
@@ -228,6 +231,7 @@ code { font-family: var(--mono); background: rgba(255,255,255,.08); padding: 1px
   .lcd { font-size: 13.5px; padding: 10px 11px; }
   .refgrid { grid-template-columns: 1fr; }
   .keypad .key { padding: 11px 2px; font-size: 12px; }
+  .viz svg { min-width: 470px; }
 }
 @media print {
   body { background: #fff; color: #000; padding: 0; }
@@ -243,7 +247,7 @@ code { font-family: var(--mono); background: rgba(255,255,255,.08); padding: 1px
     <div class="sub">Newton’s laws · Gravitation · Equilibrium · Center of mass</div>
   </header>
 
-  <div class="mode" id="modebar" aria-label="Calculator settings">
+  <div class="mode" id="modebar" role="group" aria-label="Calculator settings">
     <span class="on">DEGREE</span><span class="off">RADIAN</span>
     <span class="on">3 SIG FIGS</span>
     <label for="const-g">g =<input id="const-g" type="text" autocomplete="off" spellcheck="false" aria-label="Gravitational field g in meters per second squared">m/s²</label>
@@ -425,6 +429,7 @@ code { font-family: var(--mono); background: rgba(255,255,255,.08); padding: 1px
             <li>Scientific notation for very large/small values: 1.60 × 10⁻⁹.</li>
             <li>Angles are in <b>degrees</b>.</li>
             <li>Inputs accept negatives, decimals, fractions (<code>1/2</code>), scientific notation (<code>6.67e-11</code> or <code>6.67×10^-11</code>), and expressions like <code>sqrt(2)</code>, <code>sin(30)</code>, <code>9.8*2</code>, <code>g</code>, <code>G</code>.</li>
+            <li>Don’t type units in the boxes: the unit is shown beside each box or chosen from its menu (kg/g, m/cm).</li>
             <li>In solvers, leave exactly one box blank (or press <b>?</b>) to solve for it.</li>
             <li>Press <b>Enter</b> in any box to solve.</li>
           </ul>
@@ -470,6 +475,7 @@ code { font-family: var(--mono); background: rgba(255,255,255,.08); padding: 1px
 const DEFAULTS = Object.freeze({ g: 9.8, G: 6.67e-11 });
 const CONST = { g: DEFAULTS.g, G: DEFAULTS.G };
 let TESTING = false;
+let QUIET = false;       // background re-runs (constants changed): never move keyboard focus
 
 const $ = (sel, root) => (root || document).querySelector(sel);
 const $$ = (sel, root) => Array.from((root || document).querySelectorAll(sel));
@@ -521,31 +527,41 @@ function sciStr(x, digits, trim) {
   const e = parseInt(parts[1], 10);
   return m.replace('-', MINUS) + (e === 0 ? '' : ' × 10' + supInt(e));
 }
-/* n significant figures; scientific notation when |x| >= hi or |x| < 0.001 */
+/* drop binary noise (0.1 + 0.2) and nudge exact decimal halves away from zero, so 2.675 → 2.68 like on paper */
+const nudge = x => Number(x.toPrecision(15)) * (1 + 4 * Number.EPSILON);
+/* n significant figures; scientific notation when |x| >= hi or |x| < 0.001
+   (3 s.f. results that round to 1000, 10000, … also use it, since "1000" would hide the sig figs) */
 function fmtSig(x, n, trim, hi) {
   if (typeof x !== 'number' || Number.isNaN(x)) return 'undefined';
   if (!Number.isFinite(x)) return x > 0 ? '∞' : MINUS + '∞';
   if (x === 0) return '0';
-  const r = Number(x.toPrecision(n));
+  const xn = nudge(x);
+  const r = Number(xn.toPrecision(n));
   const a = Math.abs(r);
-  if (a >= hi || a < 1e-3) return sciStr(x, n, trim);
-  let s = x.toPrecision(n);
+  const pow10 = !trim && a >= 1000 && Math.abs(Math.log10(a) - Math.round(Math.log10(a))) < 1e-12;
+  if (a >= hi || Math.abs(xn) < 1e-3 || pow10) return sciStr(xn, n, trim);
+  let s = xn.toPrecision(n);
   if (/e/i.test(s)) s = String(Math.round(r));          // e.g. 1234 → "1230" at 3 s.f.
   else if (trim && s.includes('.')) s = s.replace(/0+$/, '').replace(/\.$/, '');
   return s.replace('-', MINUS);
 }
 const sig3 = x => fmtSig(x, 3, false, 1e5);   // final answers
 const full = x => fmtSig(x, 6, true, 1e6);    // intermediate values (no early rounding)
-const same3 = x => Number(x.toPrecision(3)) === Number(x.toPrecision(6));
-/* "= 107.8 N ≈ 108 N"  or  "= 6.50 m" */
+const same3 = x => { const xn = nudge(x); return Number(xn.toPrecision(3)) === Number(xn.toPrecision(6)); };
+/* "= 107.8 N ≈ 108 N"  or  "= 6.50 m"  (both sides in the same notation) */
 function eqv(x, unit) {
-  const u = unit ? ' ' + unit : '';
-  if (x === 0 || !Number.isFinite(x) || same3(x)) return '= ' + sig3(x) + u;
-  return '= ' + full(x) + u + ' ≈ ' + sig3(x) + u;
+  const u = !unit ? '' : unit === '°' ? '°' : ' ' + unit;
+  const s3 = sig3(x);
+  if (x === 0 || !Number.isFinite(x) || same3(x)) return '= ' + s3 + u;
+  let f = full(x);
+  if (s3.includes('×') && !f.includes('×')) f = sciStr(nudge(x), 6, true);
+  return '= ' + f + u + ' ≈ ' + s3 + u;
 }
-/* exact-ish equality sign for a 3 s.f. rendering */
-const approxSign = x => (Number(x.toPrecision(3)) === x ? '=' : '≈');
+/* "=" when the 3 s.f. rendering is exact, otherwise "≈" */
+const approxSign = x => (Number(nudge(x).toPrecision(3)) === Number(x.toPrecision(15)) ? '=' : '≈');
 const P = s => (s.startsWith(MINUS) ? '(' + s + ')' : s);   // wrap negatives in parentheses
+/* wrap an operand of "/" when it is negative or in scientific notation: (4.002 × 10⁻¹⁰) / 0.25 */
+const PS = s => (s.includes('×') || s.startsWith(MINUS) ? '(' + s + ')' : s);
 const clean = (x, scale) => (Math.abs(x) <= 1e-12 * (scale || 1) ? 0 : x);
 
 function gcd(a, b) { a = Math.abs(a); b = Math.abs(b); while (b) { const t = a % b; a = b; b = t; } return a; }
@@ -554,6 +570,7 @@ function reduceFrac(n, d) { const g = gcd(n, d) || 1; return [n / g, d / g]; }
 function toFrac(x, maxDen) {
   maxDen = maxDen || 100000;
   if (!Number.isFinite(x)) return null;
+  if (x === 0) return { n: 0, d: 1 };
   const sign = x < 0 ? -1 : 1;
   const ax = Math.abs(x);
   let h0 = 0, h1 = 1, k0 = 1, k1 = 0, b = ax;
@@ -562,12 +579,12 @@ function toFrac(x, maxDen) {
     const h2 = a * h1 + h0, k2 = a * k1 + k0;
     if (k2 > maxDen) break;
     h0 = h1; h1 = h2; k0 = k1; k1 = k2;
-    if (Math.abs(ax - h1 / k1) <= 1e-12 * Math.max(1, ax)) return { n: sign * h1, d: k1 };
+    if (h1 && Math.abs(ax - h1 / k1) <= 1e-12 * ax) return { n: sign * h1, d: k1 };
     const fr = b - a;
     if (fr < 1e-15) break;
     b = 1 / fr;
   }
-  return (k1 && Math.abs(ax - h1 / k1) <= 1e-12 * Math.max(1, ax)) ? { n: sign * h1, d: k1 } : null;
+  return (k1 && h1 && Math.abs(ax - h1 / k1) <= 1e-12 * ax) ? { n: sign * h1, d: k1 } : null;
 }
 function fracSym(n, d, sym) {
   if (d === 1) return (n === 1 ? '' : String(n)) + sym;
@@ -611,6 +628,7 @@ const FUNCS = {
   log: x => { if (x <= 0) fail('log needs a positive number.', null, 'DOMAIN'); return Math.log10(x); },
   abs: Math.abs,
 };
+const UNIT_WORDS = ['kg', 'm', 'cm', 'mm', 'km', 's', 'n', 'newton', 'newtons', 'deg', 'degree', 'degrees', 'lb', 'lbs', 'ms', 'mps', 'kgm'];
 const SUPER_MAP = { '⁰': '0', '¹': '1', '²': '2', '³': '3', '⁴': '4', '⁵': '5', '⁶': '6', '⁷': '7', '⁸': '8', '⁹': '9', '⁻': '-', '⁺': '+' };
 function normalizeExpr(s) {
   return String(s)
@@ -622,6 +640,7 @@ function normalizeExpr(s) {
     .replace(/π/g, ' pi ')
     .replace(/√/g, ' sqrt ')
     .replace(/ᴇ/g, 'E')
+    .replace(/°/g, ' ')
     .replace(/(\d|\.)\s*[xX]\s*(?=10\s*\^)/g, '$1*');
 }
 function tokenize(src) {
@@ -632,7 +651,10 @@ function tokenize(src) {
     if (/\s/.test(ch)) { i++; continue; }
     const rest = src.slice(i);
     let m;
-    if ((m = /^(\d+\.?\d*|\.\d+)([eE][+-]?\d+)?/.exec(rest))) { toks.push({ t: 'num', v: parseFloat(m[0]), s: m[0] }); i += m[0].length; continue; }
+    if ((m = /^(\d+\.?\d*|\.\d+)([eE][+-]?\d+)?/.exec(rest))) {
+      if (!m[2] && /^[eE]([+-]|$|[^A-Za-z])/.test(rest.slice(m[0].length))) fail('Incomplete exponent: type a whole number after E, e.g. 2E5 = 2 × 10⁵ or 6.67E-11.', null, 'SYNTAX');
+      toks.push({ t: 'num', v: parseFloat(m[0]), s: m[0] }); i += m[0].length; continue;
+    }
     if ((m = /^[A-Za-z]+/.exec(rest))) { toks.push({ t: 'id', v: m[0], s: m[0] }); i += m[0].length; continue; }
     if ('+-*/^()'.includes(ch)) { toks.push({ t: ch, s: ch }); i++; continue; }
     if (ch === ',') fail('Remove the comma. Type 1000, not 1,000 (use a period for decimals).', null, 'SYNTAX');
@@ -665,6 +687,10 @@ function evaluate(str) {
         const r = unary();
         if (p.t === '/') { if (r === 0) fail('Division by zero.', null, 'DIVIDE BY 0'); v /= r; } else v *= r;
       } else if (p.t === '(' || p.t === 'id') {
+        const prev = toks[i - 1];
+        if (p.t === 'id' && (p.v === 'g' || p.v === 'G') && prev && prev.t === 'num') {
+          fail('Leave units out of the box. “' + prev.s + ' ' + p.v + '” would mean ' + prev.s + ' × ' + p.v + ' (the constant). For grams, type just ' + prev.s + ' and choose g in the unit menu; to multiply by the constant, type ' + prev.s + '*' + p.v + '.', null, 'SYNTAX');
+        }
         v *= power();                       // implicit multiplication: 2(3), 2pi, 7.5sin(60)
       } else if (p.t === 'num') {
         fail('Missing operator before “' + p.s + '”.', null, 'SYNTAX');
@@ -708,6 +734,7 @@ function evaluate(str) {
         const arg = (peek() && peek().t === '(') ? primary() : unary();
         return FUNCS[name](arg);
       }
+      if (UNIT_WORDS.includes(name)) fail('Leave units out of the box (“' + p.v + '”). The unit is shown next to the box, or picked from the unit menu.', null, 'SYNTAX');
       fail('Unknown name “' + p.v + '”.', null, 'SYNTAX');
     }
     if (p.t === ')') fail('Unexpected “)”.', null, 'SYNTAX');
@@ -720,6 +747,7 @@ function evaluate(str) {
 }
 /* show a typed plain number exactly as typed ("2.0" stays "2.0"); otherwise a formatted value */
 const PLAIN_NUM = /^[+\-−]?(\d+\.?\d*|\.\d+)$/;
+const SCI_NUM = /^([+\-−]?)(\d+\.?\d*|\.\d+)[eE]([+-]?\d+)$/;
 function echo(s, v) {
   const t = String(s).trim();
   if (PLAIN_NUM.test(t) && t.replace(/\D/g, '').length <= 9) {
@@ -730,6 +758,14 @@ function echo(s, v) {
     b = b.replace(/^0+(?=\d)/, '');
     if (Number(b) === 0) neg = false;
     return (neg ? MINUS : '') + b;
+  }
+  const m = SCI_NUM.exec(t);
+  if (m && m[2].replace(/\D/g, '').length <= 9 && Number(m[2]) !== 0) {
+    let man = m[2];
+    if (man.startsWith('.')) man = '0' + man;
+    if (man.endsWith('.')) man = man.slice(0, -1);
+    const e = parseInt(m[3], 10);
+    return (m[1] && m[1] !== '+' ? MINUS : '') + man + (e === 0 ? '' : ' × 10' + supInt(e));
   }
   return full(v);
 }
@@ -817,7 +853,11 @@ function makeCtx(tool) {
     unknown(keys) {
       const blanks = keys.filter(k => c.blank(k));
       if (blanks.length === 1) return blanks[0];
-      if (blanks.length === 0) fail('All ' + keys.length + ' boxes are filled. Leave exactly one box blank, and that one gets solved for. (Tip: press ? next to a box.)', null, 'ARGUMENT');
+      if (blanks.length === 0) {
+        const linked = keys.filter(k => fdef(k).link);
+        fail('All ' + keys.length + ' boxes are filled. Leave exactly one box blank, and that one gets solved for. (Tip: press ? next to a box.)' +
+          (linked.length ? ' Note: ' + linked.map(k => fdef(k).link).join(', ') + ' is pre-filled from the top bar. Clear it to solve for it.' : ''), keys, 'ARGUMENT');
+      }
       fail(blanks.length + ' boxes are blank (' + blanks.map(k => fdef(k).name).join(', ') + '). Fill in all but one, since only one unknown can be solved for.', blanks, 'ARGUMENT');
     },
     rows(k) {
@@ -861,13 +901,15 @@ function markFields(tool, field) {
     else if (f && tool.rowsApi[f.k]) inp = tool.rowsApi[f.k].input(f.row, f.col);
     if (inp && inp.tagName === 'INPUT') { inp.classList.add('bad'); if (!first) first = inp; }
   });
-  if (first && !TESTING) { try { first.focus({ preventScroll: true }); } catch (e) { /* ignore */ } }
+  if (first && !TESTING && !QUIET) { try { first.focus({ preventScroll: true }); } catch (e) { /* ignore */ } }
 }
+const allFinite = v => (typeof v === 'number' ? Number.isFinite(v) : Array.isArray(v) ? v.every(allFinite) : true);
 function run(tool) {
   clearMarks(tool);
   const c = makeCtx(tool);
   try {
     tool.def.solve(c);
+    if (!Object.values(c.out).every(allFinite)) fail('The answer is too large or too small to compute. Check the size (the exponents) of the numbers you typed.', null, 'OVERFLOW');
     tool.screen.innerHTML = c.w.html();
     tool.viz.innerHTML = c.svg || '';
     tool.lastOk = true;
@@ -880,10 +922,27 @@ function run(tool) {
     const kind = isInput ? e.kind : 'INTERNAL';
     const msg = isInput ? e.message : 'Unexpected problem: ' + e.message;
     tool.screen.innerHTML = '<div class="ln err">ERR:' + esc(kind) + '</div><div class="ln x">' + esc(msg) + '</div>' +
-      '<div class="ln n">Fix the highlighted box, then press SOLVE again.</div>';
+      '<div class="ln n">' + (isInput && e.field != null ? 'Fix the highlighted box, then press SOLVE again.' : 'Fix the inputs, then press SOLVE again.') + '</div>';
     if (isInput) markFields(tool, e.field);
     return { ok: false, error: msg, kind: kind, out: c.out, text: tool.screen.textContent };
   }
+}
+/* a solve the student asked for: on one-column (phone) layouts, bring the answer into view */
+function userRun(tool) {
+  const r = run(tool);
+  const box = tool.screen.getBoundingClientRect();
+  if (box.top > window.innerHeight - 90 || box.bottom < 0) {
+    try { tool.screen.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); } catch (e) { tool.screen.scrollIntoView(); }
+  }
+  return r;
+}
+/* re-solve after a setting changes (unit menu, constants) without stealing focus; fall back to the idle screen */
+function rerun(tool) {
+  if (!tool.lastOk) { idleScreen(tool); return; }
+  QUIET = true;
+  const r = run(tool);
+  QUIET = false;
+  if (!r.ok) { clearMarks(tool); idleScreen(tool); }
 }
 
 function buildRows(tool, f) {
@@ -898,21 +957,31 @@ function buildRows(tool, f) {
   });
   head.append(el('span'));
   const list = el('div', { class: 'rowlist' });
-  const renumber = () => Array.from(list.children).forEach((r, i) => { r.firstChild.textContent = i + 1; });
+  const renumber = () => Array.from(list.children).forEach((r, i) => {
+    r.firstChild.textContent = i + 1;
+    $$('input', r).forEach((inp, ci) => inp.setAttribute('aria-label', f.cols[ci].name + ', row ' + (i + 1)));
+    r.lastChild.setAttribute('aria-label', 'Remove row ' + (i + 1));
+  });
   function addRow(vals, focus) {
     const r = el('div', { class: 'row', style: 'grid-template-columns:' + cols }, el('span', { class: 'ri' }));
     f.cols.forEach((cl, ci) => {
       const inp = el('input', { type: 'text', autocomplete: 'off', spellcheck: 'false', placeholder: cl.ph || '', 'aria-label': cl.name });
       inp.value = vals && vals[ci] != null ? vals[ci] : '';
-      inp.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); run(tool); } });
+      inp.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); userRun(tool); } });
       inp.addEventListener('input', () => inp.classList.remove('bad'));
       r.append(inp);
     });
     r.append(el('button', {
       class: 'key tiny', type: 'button', title: 'Remove this row', 'aria-label': 'Remove row',
       onclick: () => {
-        if (list.children.length > 1) { r.remove(); renumber(); }
-        else $$('input', r).forEach(i => { i.value = ''; });
+        if (list.children.length > 1) {
+          const next = r.nextElementSibling || r.previousElementSibling;
+          r.remove(); renumber();
+          if (next) next.querySelector('input').focus();
+        } else {
+          $$('input', r).forEach(i => { i.value = ''; });
+          r.querySelector('input').focus();
+        }
       },
     }, '×'));
     list.append(r);
@@ -945,11 +1014,11 @@ function buildField(tool, f) {
   if (type === 'select') {
     inp = el('select', { id: id });
     f.options.forEach(o => inp.append(el('option', { value: o[0] }, o[1])));
-    inp.addEventListener('change', () => tool.refresh());
+    inp.addEventListener('change', () => { tool.refresh(); rerun(tool); });
     row.append(inp);
   } else {
     inp = el('input', { id: id, type: 'text', autocomplete: 'off', autocapitalize: 'off', spellcheck: 'false', placeholder: f.ph || '' });
-    inp.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); run(tool); } });
+    inp.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); userRun(tool); } });
     inp.addEventListener('input', () => { inp.classList.remove('bad'); if (f.link) inp.dataset.linked = '0'; });
     row.append(inp);
     if (type === 'num') {
@@ -964,7 +1033,8 @@ function buildField(tool, f) {
             if (f.link) inp.dataset.linked = '0';
             const keys = tool.def.fields.filter(x => x.solvable).map(x => x.k);
             const blanks = keys.filter(k => !tool.inputs[k].value.trim()).length;
-            if (blanks === 1) run(tool); else inp.focus();
+            if (blanks === 1) userRun(tool);
+            else { idleScreen(tool); tool.lastOk = false; inp.focus(); }
           },
         }, '?'));
       }
@@ -988,11 +1058,11 @@ function defineTool(containerId, def) {
   const right = el('div', { class: 'outputs' });
   def.fields.forEach(f => { tool.fmap[f.k] = f; left.append(buildField(tool, f)); });
   left.append(el('div', { class: 'btns' },
-    el('button', { class: 'key blue', type: 'button', onclick: () => run(tool) }, 'SOLVE ⏎'),
+    el('button', { class: 'key blue', type: 'button', onclick: () => userRun(tool) }, 'SOLVE ⏎'),
     el('button', { class: 'key', type: 'button', onclick: () => tool.clear() }, 'CLEAR')));
   if (def.examples && def.examples.length) {
     const ex = el('div', { class: 'examples' }, el('span', { class: 'exlab' }, 'Load an example'));
-    def.examples.forEach(e => ex.append(el('button', { class: 'key green chip', type: 'button', onclick: () => { tool.set(e.vals); run(tool); } }, e.label)));
+    def.examples.forEach(e => ex.append(el('button', { class: 'key green chip', type: 'button', onclick: () => { tool.set(e.vals); userRun(tool); } }, e.label)));
     left.append(ex);
   }
   tool.screen = el('div', { class: 'lcd screen', 'aria-live': 'polite' });
@@ -1053,7 +1123,7 @@ function defineTool(containerId, def) {
 /* =====================================================================
    6. SVG DIAGRAMS (drawn in LCD ink)
    ===================================================================== */
-const INK = '#1b2416', DIM = '#5d6d52', RED = '#8c1d1d', LCDC = '#c9d4b6';
+const INK = '#1b2416', DIM = '#46553c', RED = '#8c1d1d', LCDC = '#c9d4b6';
 const f1 = v => String(Math.round(v * 10) / 10);
 function svgWrap(w, h, body, label) {
   return '<svg viewBox="0 0 ' + w + ' ' + h + '" role="img" aria-label="' + esc(label) + '" xmlns="http://www.w3.org/2000/svg" ' +
@@ -1089,29 +1159,52 @@ function niceStep(range, target) {
 }
 const short = (s, n) => (s.length > n ? s.slice(0, n - 1) + '…' : s);
 
+/* tick labels: factor out a power of ten when the numbers get long (axis title gets "×10⁶") */
+function tickScale(step) {
+  const p = Math.floor(Math.log10(step));
+  if (p >= 5 || p <= -4) { const k = Math.pow(10, p); return { f: v => full(clean(v / k, 1)), tag: '×10' + supInt(p) + ' ' }; }
+  return { f: v => full(v), tag: '' };
+}
+const labelW = (str, size) => String(str).replace(/<[^>]*>/g, '').length * (size || 12) * 0.62 + 6;
+const clampMid = (x, w, W) => Math.min(Math.max(x, w / 2 + 2), W - w / 2 - 2);
+/* how much to widen a (near-)zero span so tick spacing stays well above floating-point resolution */
+const widenSpan = (lo, hi) => (hi - lo <= 1e-9 * Math.max(1, Math.abs(lo), Math.abs(hi)) ? Math.max(Math.abs(lo) * 0.5, 1) : 0);
+
 /* number line: masses as dots sized by mass, red fulcrum marker at the CM */
 function numberLineSVG(points, o) {
-  const W = 660, H = 178, L = 46, R = W - 46, Y = 104;
+  const W = 580, H = 190, L = 40, R = W - 40, Y = 114;
   const xs = points.map(p => p.x);
   if (o.cm != null) xs.push(o.cm);
   if (o.oldCm != null) xs.push(o.oldCm);
   let lo = Math.min.apply(null, xs), hi = Math.max.apply(null, xs);
-  if (hi - lo < 1e-9) { const d = Math.abs(lo) > 0 ? Math.abs(lo) * 0.5 : 1; lo -= d; hi += d; }
+  const wd = widenSpan(lo, hi); lo -= wd; hi += wd;
   const pad = (hi - lo) * 0.1; lo -= pad; hi += pad;
   const X = v => L + (v - lo) / (hi - lo) * (R - L);
   let b = '<line x1="' + L + '" y1="' + Y + '" x2="' + R + '" y2="' + Y + '" stroke="' + INK + '" stroke-width="2"/>';
-  const step = niceStep(hi - lo, 7);
-  for (let t = Math.ceil(lo / step) * step; t <= hi + step * 1e-9; t += step) {
-    const tx = X(t);
+  const step = niceStep(hi - lo, 7), ts = tickScale(step), t0 = Math.ceil(lo / step) * step;
+  for (let n = 0; n < 40; n++) {
+    const t = t0 + n * step;
+    if (t > hi + step * 1e-9) break;
+    const v = Math.abs(t) < step * 1e-9 ? 0 : t, tx = X(v);
     b += '<line x1="' + f1(tx) + '" y1="' + (Y - 4) + '" x2="' + f1(tx) + '" y2="' + (Y + 4) + '" stroke="' + DIM + '" stroke-width="1.5"/>';
-    b += txt(tx, Y + 36, full(Math.abs(t) < step * 1e-9 ? 0 : t), { color: DIM, size: 11 });
+    b += txt(tx, Y + 36, ts.f(v), { color: DIM, size: 11 });
   }
-  b += txt(R, Y + 58, 'position (' + esc(o.unit || '') + ')', { anchor: 'end', color: DIM, size: 11 });
+  b += txt(R, Y + 60, 'position (' + ts.tag + esc(o.unit || '') + ')', { anchor: 'end', color: DIM, size: 11 });
+  if (o.oldCm != null) b += txt(L, Y + 60, '△ old CM   ▲ new CM', { anchor: 'start', color: DIM, size: 11 });
   const mmax = Math.max.apply(null, points.map(p => p.m));
-  points.forEach(p => {
-    const r = 5 + 13 * Math.sqrt(p.m / mmax), cx = X(p.x);
-    b += '<circle cx="' + f1(cx) + '" cy="' + f1(Y - r) + '" r="' + f1(r) + '" fill="' + (p.hl ? RED : INK) + '" fill-opacity="0.88"/>';
-    b += txt(cx, Y - 2 * r - 7, esc(p.label), { size: 11, bold: true, color: p.hl ? RED : INK });
+  const rad = p => 5 + 13 * Math.sqrt(p.m / mmax);
+  // biggest dots first so smaller ones stay visible on top
+  points.slice().sort((a, c) => c.m - a.m).forEach(p => {
+    b += '<circle cx="' + f1(X(p.x)) + '" cy="' + f1(Y - rad(p)) + '" r="' + f1(rad(p)) + '" fill="' + (p.hl ? RED : INK) + '" fill-opacity="0.85" stroke="' + LCDC + '" stroke-width="1"/>';
+  });
+  // labels left to right, bumped up a row when they would overlap
+  const rows = [];
+  points.slice().sort((a, c) => X(a.x) - X(c.x)).forEach(p => {
+    const w = labelW(p.label, 11), cx = clampMid(X(p.x), w, W);
+    let lv = 0;
+    while (lv < 3 && rows[lv] && rows[lv].some(q => cx - w / 2 < q[1] && cx + w / 2 > q[0])) lv++;
+    (rows[lv] = rows[lv] || []).push([cx - w / 2, cx + w / 2]);
+    b += txt(cx, Y - 43 - lv * 15, esc(p.label), { size: 11, bold: true, color: p.hl ? RED : INK });
   });
   if (o.oldCm != null) {
     const ox = X(o.oldCm);
@@ -1121,15 +1214,15 @@ function numberLineSVG(points, o) {
     const cx = X(o.cm);
     b += '<line x1="' + f1(cx) + '" y1="22" x2="' + f1(cx) + '" y2="' + Y + '" stroke="' + RED + '" stroke-width="1.5" stroke-dasharray="4 3"/>';
     b += '<polygon points="' + f1(cx) + ',' + (Y + 2) + ' ' + f1(cx - 10) + ',' + (Y + 20) + ' ' + f1(cx + 10) + ',' + (Y + 20) + '" fill="' + RED + '"/>';
-    const anchor = cx < L + 70 ? 'start' : cx > R - 70 ? 'end' : 'middle';
-    b += txt(cx, 15, esc(o.cmLabel || 'CM'), { bold: true, color: RED, anchor: anchor });
+    const lab = esc(o.cmLabel || 'CM'), w = labelW(lab, 12);
+    b += txt(clampMid(cx, w, W), 15, lab, { bold: true, color: RED });
   }
   return svgWrap(W, H, b, 'Number line showing the masses and the center of mass');
 }
 
 /* 2D grid with equal scaling on both axes */
 function gridSVG(points, cm, unit) {
-  const W = 460, H = 440, M = 46, S = 360;
+  const W = 460, H = 450, M = 50, S = 360;
   const xs = points.map(p => p.x).concat([cm.x]), ys = points.map(p => p.y).concat([cm.y]);
   let x0 = Math.min.apply(null, xs), x1 = Math.max.apply(null, xs), y0 = Math.min.apply(null, ys), y1 = Math.max.apply(null, ys);
   if (x0 > 0 && x0 < (x1 - x0)) x0 = 0;
@@ -1137,36 +1230,47 @@ function gridSVG(points, cm, unit) {
   if (x1 < 0 && -x1 < (x1 - x0)) x1 = 0;
   if (y1 < 0 && -y1 < (y1 - y0)) y1 = 0;
   let span = Math.max(x1 - x0, y1 - y0);
-  if (span < 1e-9) span = Math.max(Math.abs(x0), Math.abs(y0), 1);
+  if (span <= 1e-9 * Math.max(1, Math.abs(x0), Math.abs(x1), Math.abs(y0), Math.abs(y1))) span = Math.max(Math.abs(x0), Math.abs(y0), 1);
   span *= 1.2;
   const cxm = (x0 + x1) / 2, cym = (y0 + y1) / 2;
   const lx = cxm - span / 2, ly = cym - span / 2;
   const X = v => M + (v - lx) / span * S, Y = v => M + S - (v - ly) / span * S;
-  const step = niceStep(span, 6);
+  const step = niceStep(span, 6), ts = tickScale(step);
   let b = '<rect x="' + M + '" y="' + M + '" width="' + S + '" height="' + S + '" fill="none" stroke="' + DIM + '" stroke-width="1"/>';
-  for (let t = Math.ceil(lx / step) * step; t <= lx + span + step * 1e-9; t += step) {
-    const v = Math.abs(t) < step * 1e-9 ? 0 : t;
-    b += '<line x1="' + f1(X(v)) + '" y1="' + M + '" x2="' + f1(X(v)) + '" y2="' + (M + S) + '" stroke="' + DIM + '" stroke-opacity="' + (v === 0 ? 0.9 : 0.3) + '" stroke-width="' + (v === 0 ? 1.8 : 1) + '"/>';
-    b += txt(X(v), M + S + 16, full(v), { color: DIM, size: 10.5 });
-  }
-  for (let t = Math.ceil(ly / step) * step; t <= ly + span + step * 1e-9; t += step) {
-    const v = Math.abs(t) < step * 1e-9 ? 0 : t;
-    b += '<line x1="' + M + '" y1="' + f1(Y(v)) + '" x2="' + (M + S) + '" y2="' + f1(Y(v)) + '" stroke="' + DIM + '" stroke-opacity="' + (v === 0 ? 0.9 : 0.3) + '" stroke-width="' + (v === 0 ? 1.8 : 1) + '"/>';
-    b += txt(M - 6, Y(v) + 4, full(v), { color: DIM, size: 10.5, anchor: 'end' });
-  }
-  b += txt(M + S, M + S + 32, 'x (' + esc(unit) + ')', { anchor: 'end', color: DIM, size: 11 });
-  b += txt(M, M - 10, 'y (' + esc(unit) + ')', { anchor: 'start', color: DIM, size: 11 });
-  const mmax = Math.max.apply(null, points.map(p => p.m));
+  const gridLine = (v, vertical) => {
+    const z = v === 0, op = z ? 0.9 : 0.3, sw = z ? 1.8 : 1;
+    return vertical
+      ? '<line x1="' + f1(X(v)) + '" y1="' + M + '" x2="' + f1(X(v)) + '" y2="' + (M + S) + '" stroke="' + DIM + '" stroke-opacity="' + op + '" stroke-width="' + sw + '"/>' + txt(X(v), M + S + 16, ts.f(v), { color: DIM, size: 10.5 })
+      : '<line x1="' + M + '" y1="' + f1(Y(v)) + '" x2="' + (M + S) + '" y2="' + f1(Y(v)) + '" stroke="' + DIM + '" stroke-opacity="' + op + '" stroke-width="' + sw + '"/>' + txt(M - 6, Y(v) + 4, ts.f(v), { color: DIM, size: 10.5, anchor: 'end' });
+  };
+  [[lx, true], [ly, false]].forEach(([start, vertical]) => {
+    const t0 = Math.ceil(start / step) * step;
+    for (let n = 0; n < 40; n++) {
+      const t = t0 + n * step;
+      if (t > start + span + step * 1e-9) break;
+      b += gridLine(Math.abs(t) < step * 1e-9 ? 0 : t, vertical);
+    }
+  });
+  b += txt(M + S, M + S + 34, 'x (' + ts.tag + esc(unit) + ')', { anchor: 'end', color: DIM, size: 11 });
+  b += txt(M, M - 12, 'y (' + ts.tag + esc(unit) + ')', { anchor: 'start', color: DIM, size: 11 });
+  // masses at the same spot are merged into one dot with a combined label
+  const groups = [];
   points.forEach(p => {
-    const r = 5 + 12 * Math.sqrt(p.m / mmax);
-    b += '<circle cx="' + f1(X(p.x)) + '" cy="' + f1(Y(p.y)) + '" r="' + f1(r) + '" fill="' + INK + '" fill-opacity="0.85"/>';
-    b += txt(X(p.x), Y(p.y) - r - 5, esc(p.label), { size: 11, bold: true });
+    const g = groups.find(q => Math.abs(X(q.x) - X(p.x)) < 3 && Math.abs(Y(q.y) - Y(p.y)) < 3);
+    if (g) { g.m += p.m; g.labels.push(p.label); } else groups.push({ x: p.x, y: p.y, m: p.m, labels: [p.label] });
+  });
+  const mmax = Math.max.apply(null, groups.map(g => g.m));
+  groups.sort((a, c) => c.m - a.m).forEach(g => {
+    const r = 5 + 12 * Math.sqrt(g.m / mmax), lab = esc(g.labels.join(' + ')), w = labelW(lab, 11);
+    b += '<circle cx="' + f1(X(g.x)) + '" cy="' + f1(Y(g.y)) + '" r="' + f1(r) + '" fill="' + INK + '" fill-opacity="0.85" stroke="' + LCDC + '" stroke-width="1"/>';
+    b += txt(clampMid(X(g.x), w, W), Math.max(Y(g.y) - r - 5, 12), lab, { size: 11, bold: true });
   });
   const cx = X(cm.x), cy = Y(cm.y);
   b += '<circle cx="' + f1(cx) + '" cy="' + f1(cy) + '" r="8" fill="none" stroke="' + RED + '" stroke-width="2.2"/>' +
     '<line x1="' + f1(cx - 13) + '" y1="' + f1(cy) + '" x2="' + f1(cx + 13) + '" y2="' + f1(cy) + '" stroke="' + RED + '" stroke-width="2"/>' +
     '<line x1="' + f1(cx) + '" y1="' + f1(cy - 13) + '" x2="' + f1(cx) + '" y2="' + f1(cy + 13) + '" stroke="' + RED + '" stroke-width="2"/>';
-  b += txt(cx, cy + 26, 'CM (' + sig3(cm.x) + ', ' + sig3(cm.y) + ')', { bold: true, color: RED, size: 11.5 });
+  const cl = 'CM (' + sig3(cm.x) + ', ' + sig3(cm.y) + ') ' + esc(unit), cw = labelW(cl, 11.5);
+  b += txt(clampMid(cx, cw, W), cy + 27, cl, { bold: true, color: RED, size: 11.5 });
   return svgWrap(W, H, b, 'Grid showing the masses and the center of mass');
 }
 
@@ -1185,13 +1289,21 @@ function fbdSVG(forces, o) {
     const am = ((a1 + a2) / 2) * D2R;
     b += txt(cx + 50 * Math.cos(am), cy - 50 * Math.sin(am) + 4, 'θ', { color: DIM, size: 12, bold: true });
   }
+  const placed = [];
   shown.forEach(f => {
     const L = 34 + 82 * (f.mag / max);
     const a = f.ang * D2R, ca = Math.cos(a), sa = Math.sin(a);
     const x2 = cx + L * ca, y2 = cy - L * sa;
     b += arrowSVG(cx, cy, x2, y2, { color: f.color || INK });
-    const lx = x2 + 10 * ca, ly = y2 - 12 * sa + (Math.abs(sa) > 0.7 ? (sa > 0 ? -2 : 12) : 4);
     const anchor = ca > 0.35 ? 'start' : ca < -0.35 ? 'end' : 'middle';
+    const w = labelW(f.label, 12);
+    let lx = x2 + 10 * ca, ly = y2 - 12 * sa + (Math.abs(sa) > 0.7 ? (sa > 0 ? -2 : 12) : 4);
+    let x0 = anchor === 'start' ? lx : anchor === 'end' ? lx - w : lx - w / 2;
+    if (x0 < 2) { lx += 2 - x0; x0 = 2; }
+    if (x0 + w > W - 2) { lx -= x0 + w - (W - 2); x0 = W - 2 - w; }
+    for (let k = 0; k < 6 && placed.some(q => Math.abs(q.y - ly) < 14 && x0 < q.x1 && x0 + w > q.x0); k++) ly += sa > 0.2 ? -15 : 15;
+    ly = Math.min(Math.max(ly, 13), H - 4);
+    placed.push({ x0: x0, x1: x0 + w, y: ly });
     b += txt(lx, ly, f.label, { anchor: anchor, bold: true, size: 12, color: f.color || INK });
   });
   b += '<circle cx="' + cx + '" cy="' + cy + '" r="4.5" fill="' + INK + '"/>';
@@ -1284,13 +1396,14 @@ defineTool('tools-n12', {
     w.s('ΣF = ' + rows.map(r => '(' + r.raw.F + ' N)').join(' + '));
     let sum = 0, mag = 0;
     rows.forEach(r => { sum += r.v.F; mag += Math.abs(r.v.F); });
+    if (!Number.isFinite(sum) || !Number.isFinite(mag)) fail('These forces are too large to add. Check the exponents you typed.', null, 'OVERFLOW');
     const F = Math.abs(sum) <= 1e-9 * mag ? 0 : sum;
     w.r('ΣF ' + eqv(F, 'N'));
     out.F = F;
     const m = c.opt('m');
     if (F === 0) {
-      w.a('ΣF = 0 N &nbsp;⇒&nbsp; a = 0');
-      if (m !== null) w.s('a = ΣF / m = 0 / ' + c.q('m') + ' = 0 m/s²');
+      w.a('ΣF = 0 N &nbsp;⇒&nbsp; a = 0 m/s²');
+      if (m !== null) w.s('a = ΣF / m = (0 N) / ' + c.q('m') + ' = 0 m/s²');
       w.n('Net force is zero, so the acceleration is zero and the <b>velocity is constant</b> (Newton’s 1st law). The object could be at rest <b>or</b> moving in a straight line at constant speed. The forces alone can’t tell which.');
       out.a = 0;
       out.constantVelocity = true;
@@ -1338,7 +1451,7 @@ defineTool('tools-n12', {
     w.f('ΣF<sub>y</sub> = 0 &nbsp;⇒&nbsp; N − W = 0 &nbsp;⇒&nbsp; N = W');
     w.r('N ' + eqv(W, 'N') + ' (up)');
     w.h('3 · Horizontal: constant velocity ⇒ ΣF<sub>x</sub> = 0');
-    w.f('F<sub>push</sub> − f = 0 &nbsp;⇒&nbsp; f = F<sub>push</sub>');
+    w.f(F >= 0 ? 'F<sub>push</sub> − f = 0 &nbsp;⇒&nbsp; f = F<sub>push</sub>' : '|F<sub>push</sub>| − f = 0 &nbsp;⇒&nbsp; f = |F<sub>push</sub>| (the push is to the left, so friction points right)');
     w.r('f ' + eqv(f, 'N') + (F === 0 ? '' : ' (' + fd + ', opposite the push)'));
     w.a('Weight ' + sig3(W) + ' N down · Normal ' + sig3(W) + ' N up');
     w.a(F === 0 ? 'Push 0 N · Friction 0 N' : 'Push ' + sig3(f) + ' N ' + pd + ' · Friction ' + sig3(f) + ' N ' + fd);
@@ -1367,16 +1480,17 @@ function thirdSVG(o) {
   b += '<rect x="' + xR + '" y="' + y + '" width="' + bw + '" height="' + bh + '" fill="none" stroke="' + INK + '" stroke-width="2.2"/>';
   b += txt(xL + bw / 2, y + 20, esc(short(leftName, 13)), { bold: true, size: 12 });
   b += txt(xR + bw / 2, y + 20, esc(short(rightName, 13)), { bold: true, size: 12 });
-  if (o.F > 0) {
+  const moving = o.F > 0;
+  if (moving) {
     const ay = y + 44;
     b += arrowSVG(xL + bw - 14, ay, xL - 70, ay, { width: 3 });
     b += arrowSVG(xR + 14, ay, xR + bw + 70, ay, { width: 3 });
     b += txt(xL - 70, ay - 10, sig3(o.F) + ' N', { anchor: 'start', bold: true, size: 12 });
     b += txt(xR + bw + 70, ay - 10, sig3(o.F) + ' N', { anchor: 'end', bold: true, size: 12 });
   }
-  b += txt(xL + bw / 2, y + bh + 24, 'a = ' + sig3(leftA) + ' m/s² ←', { size: 12 });
-  b += txt(xR + bw / 2, y + bh + 24, 'a = ' + sig3(rightA) + ' m/s² →', { size: 12 });
-  b += txt(250, y + bh + 50, 'equal-size forces, opposite directions', { size: 11, color: DIM });
+  b += txt(xL + bw / 2, y + bh + 24, 'a = ' + sig3(leftA) + ' m/s²' + (moving ? ' ←' : ''), { size: 12 });
+  b += txt(xR + bw / 2, y + bh + 24, 'a = ' + sig3(rightA) + ' m/s²' + (moving ? ' →' : ''), { size: 12 });
+  b += txt(250, y + bh + 50, moving ? 'equal-size forces, opposite directions' : 'no interaction force', { size: 11, color: DIM });
   return svgWrap(W, H, b, 'Two objects pushing on each other with equal and opposite forces');
 }
 defineTool('tools-n3', {
@@ -1399,21 +1513,22 @@ defineTool('tools-n3', {
     const A = c.text('nA') ? esc(c.text('nA')) : 'A', B = c.text('nB') ? esc(c.text('nB')) : 'B';
     const dB = c.sel('dir'), dA = dB === 'right' ? 'left' : 'right';
     const aA = F / mA, aB = F / mB;
+    const tA = F > 0 ? ' ' + dA : '', tB = F > 0 ? ' ' + dB : '';
     w.h('Newton’s 3rd law: same size, opposite directions');
     w.f('F<sub>A on B</sub> = −F<sub>B on A</sub>');
-    w.r('Force on ' + B + ' (by ' + A + ') = ' + c.raw('F') + ' N ' + dB);
-    w.r('Force on ' + A + ' (by ' + B + ') = ' + c.raw('F') + ' N ' + dA);
+    w.r('Force on ' + B + ' (by ' + A + ') = ' + c.raw('F') + ' N' + tB);
+    w.r('Force on ' + A + ' (by ' + B + ') = ' + c.raw('F') + ' N' + tA);
     w.h('Acceleration of each object: a = F / m');
-    w.s(A + ': a = ' + c.q('F') + ' / ' + c.q('mA') + ' ' + eqv(aA, 'm/s²') + ' ' + dA);
-    w.s(B + ': a = ' + c.q('F') + ' / ' + c.q('mB') + ' ' + eqv(aB, 'm/s²') + ' ' + dB);
-    w.a(A + ': ' + sig3(aA) + ' m/s² ' + dA + ' · ' + B + ': ' + sig3(aB) + ' m/s² ' + dB);
+    w.s(A + ': a = ' + c.q('F') + ' / ' + c.q('mA') + ' ' + eqv(aA, 'm/s²') + tA);
+    w.s(B + ': a = ' + c.q('F') + ' / ' + c.q('mB') + ' ' + eqv(aB, 'm/s²') + tB);
+    w.a(A + ': ' + sig3(aA) + ' m/s²' + tA + ' · ' + B + ': ' + sig3(aB) + ' m/s²' + tB);
     if (F === 0) w.n('No interaction force, so neither object accelerates.');
     else if (mA === mB) w.n('Equal masses, so equal-size accelerations, in opposite directions.');
     else {
       const small = mA < mB ? A : B, ratio = Math.max(mA, mB) / Math.min(mA, mB);
       w.n('Same size force on each, but ' + small + ' has less mass, so it accelerates ' + full(ratio) + '× as much (a ∝ 1/m). The accelerations point in opposite directions.');
     }
-    out.FonA = F; out.FonB = F; out.aA = aA; out.aB = aB; out.dirA = dA; out.dirB = dB;
+    out.FonA = F; out.FonB = F; out.aA = aA; out.aB = aB; out.dirA = F > 0 ? dA : 'none'; out.dirB = F > 0 ? dB : 'none';
     c.svg = thirdSVG({ A: c.text('nA') || 'A', B: c.text('nB') || 'B', F: F, dB: dB, aA: aA, aB: aB });
   },
 });
@@ -1444,8 +1559,8 @@ defineTool('tools-grav', {
     if (k === 'F') {
       const m1 = c.num('m1'), m2 = c.num('m2'), r = c.num('r');
       const top = G * m1 * m2, bot = r * r, F = top / bot;
-      w.s('F<sub>g</sub> = (' + GS() + ')(' + c.raw('m1') + ')(' + c.raw('m2') + ') / (' + c.raw('r') + ')²');
-      w.s('F<sub>g</sub> = ' + full(top) + ' / ' + full(bot));
+      w.s('F<sub>g</sub> = (' + GS() + ' N·m²/kg²)' + c.q('m1') + c.q('m2') + ' / ' + c.q('r') + '²');
+      w.s('F<sub>g</sub> = ' + PS(full(top)) + ' / ' + PS(full(bot)));
       w.r('F<sub>g</sub> ' + eqv(F, 'N'));
       w.a('F<sub>g</sub> = ' + sig3(F) + ' N');
       w.n('Each object feels this same size force, pulling it toward the other (Newton’s 3rd law).');
@@ -1455,8 +1570,8 @@ defineTool('tools-grav', {
       const F = c.num('F'), mo = c.num(o), r = c.num('r');
       const top = F * r * r, bot = G * mo, m = top / bot;
       w.f(LBL[k] + ' = F<sub>g</sub>·r² / (G·' + LBL[o] + ')');
-      w.s(LBL[k] + ' = (' + c.raw('F') + ')(' + c.raw('r') + ')² / [(' + GS() + ')(' + c.raw(o) + ')]');
-      w.s(LBL[k] + ' = ' + full(top) + ' / ' + full(bot));
+      w.s(LBL[k] + ' = ' + c.q('F') + c.q('r') + '² / [(' + GS() + ' N·m²/kg²)' + c.q(o) + ']');
+      w.s(LBL[k] + ' = ' + PS(full(top)) + ' / ' + PS(full(bot)));
       w.r(LBL[k] + ' ' + eqv(m, 'kg'));
       w.a(LBL[k] + ' = ' + sig3(m) + ' kg');
       out[k] = m;
@@ -1464,7 +1579,7 @@ defineTool('tools-grav', {
       const F = c.num('F'), m1 = c.num('m1'), m2 = c.num('m2');
       const inside = G * m1 * m2 / F, r = Math.sqrt(inside);
       w.f('r = √( G·m<sub>1</sub>·m<sub>2</sub> / F<sub>g</sub> )');
-      w.s('r = √[ (' + GS() + ')(' + c.raw('m1') + ')(' + c.raw('m2') + ') / (' + c.raw('F') + ') ]');
+      w.s('r = √[ (' + GS() + ' N·m²/kg²)' + c.q('m1') + c.q('m2') + ' / ' + c.q('F') + ' ]');
       w.s('r = √(' + full(inside) + ')');
       w.r('r ' + eqv(r, 'm'));
       w.a('r = ' + sig3(r) + ' m');
@@ -1494,16 +1609,21 @@ defineTool('tools-grav', {
   solve(c) {
     const w = c.w, out = c.out;
     const a = c.num('a'), b = c.num('b'), d = c.num('d');
-    const ratio = a * b / (d * d);
+    let ratio = a * b / (d * d);
     w.f('F<sub>new</sub> / F<sub>old</sub> = (m<sub>1</sub> factor)(m<sub>2</sub> factor) / (distance factor)²');
     w.s('F<sub>new</sub> = F × (' + c.raw('a') + ')(' + c.raw('b') + ') / (' + c.raw('d') + ')²');
     w.s('F<sub>new</sub> = F × ' + full(a * b) + ' / ' + full(d * d));
     const fa = toFrac(a), fb = toFrac(b), fd = toFrac(d);
-    let frac = null;
+    let frac = null, rr = null;
     if (fa && fb && fd) {
-      const rr = reduceFrac(fa.n * fb.n * fd.d * fd.d, fa.d * fb.d * fd.n * fd.n);
-      if (rr[0] <= 1e6 && rr[1] <= 1e6) { frac = fracSym(rr[0], rr[1], 'F'); out.num = rr[0]; out.den = rr[1]; }
+      rr = reduceFrac(fa.n * fb.n * fd.d * fd.d, fa.d * fb.d * fd.n * fd.n);
+      if (rr[0] > 1e6 || rr[1] > 1e6) rr = null;
     }
+    if (!rr) {                         // e.g. distance ×√2 still gives exactly F/2
+      const f2 = toFrac(Number(ratio.toPrecision(12)), 1000);
+      if (f2 && f2.n > 0 && Math.abs(ratio - f2.n / f2.d) <= 1e-9 * ratio) rr = [f2.n, f2.d];
+    }
+    if (rr) { frac = fracSym(rr[0], rr[1], 'F'); out.num = rr[0]; out.den = rr[1]; ratio = rr[0] / rr[1]; }
     const dec = sig3(ratio) + 'F';
     if (frac) {
       w.r('F<sub>new</sub> = ' + frac + ' ' + approxSign(ratio) + ' ' + dec);
@@ -1522,7 +1642,9 @@ defineTool('tools-grav', {
       w.a('F<sub>new</sub> = ' + sig3(Fn) + ' N');
       out.Fnew = Fn;
     }
-    w.n(ratio > 1 ? 'Ratio > 1: the attraction gets stronger.' : ratio < 1 ? 'Ratio < 1: the attraction gets weaker. Distance counts twice because it is squared.' : 'The changes cancel out: the force is unchanged.');
+    const cmp = Math.abs(ratio - 1) <= 1e-9 ? 0 : ratio > 1 ? 1 : -1;
+    const distNote = Math.abs(d - 1) > 1e-12 ? ' The distance counts twice because it is squared.' : '';
+    w.n(cmp > 0 ? 'Ratio > 1: the attraction gets stronger.' + distNote : cmp < 0 ? 'Ratio < 1: the attraction gets weaker.' + distNote : 'The changes cancel out: the force is unchanged.');
     out.ratio = ratio; out.frac = frac;
   },
 });
@@ -1567,7 +1689,7 @@ defineTool('tools-grav', {
       const R = c.num('R'), h = c.num('h'), r = R + h;
       ratio = (R / r) * (R / r);
       w.s('r = ' + c.raw('R') + ' m + ' + c.raw('h') + ' m = ' + full(r) + ' m');
-      w.s('(R / r)² = (' + c.raw('R') + ' / ' + full(r) + ')² = ' + full(ratio));
+      w.s('(R / r)² = (' + PS(c.raw('R')) + ' / ' + PS(full(r)) + ')² = ' + full(ratio));
       w.s('W<sub>new</sub> = ' + c.q('W') + ' × ' + full(ratio));
       out.r = r;
     }
@@ -1646,23 +1768,23 @@ defineTool('tools-grav', {
     w.f('g = G·M / r²');
     if (k === 'g') {
       const M = c.num('M'), r = c.num('r'), top = G * M, bot = r * r, g = top / bot;
-      w.s('g = (' + GS() + ')(' + c.raw('M') + ') / (' + c.raw('r') + ')²');
-      w.s('g = ' + full(top) + ' / ' + full(bot));
+      w.s('g = (' + GS() + ' N·m²/kg²)' + c.q('M') + ' / ' + c.q('r') + '²');
+      w.s('g = ' + PS(full(top)) + ' / ' + PS(full(bot)));
       w.r('g ' + eqv(g, 'm/s²'));
       w.a('g = ' + sig3(g) + ' m/s²');
       out.g = g;
     } else if (k === 'M') {
       const g = c.num('g'), r = c.num('r'), M = g * r * r / G;
       w.f('M = g·r² / G');
-      w.s('M = (' + c.raw('g') + ')(' + c.raw('r') + ')² / (' + GS() + ')');
-      w.s('M = ' + full(g * r * r) + ' / ' + GS());
+      w.s('M = ' + c.q('g') + c.q('r') + '² / (' + GS() + ' N·m²/kg²)');
+      w.s('M = ' + PS(full(g * r * r)) + ' / (' + GS() + ')');
       w.r('M ' + eqv(M, 'kg'));
       w.a('M = ' + sig3(M) + ' kg');
       out.M = M;
     } else {
       const g = c.num('g'), M = c.num('M'), inside = G * M / g, r = Math.sqrt(inside);
       w.f('r = √( G·M / g )');
-      w.s('r = √[ (' + GS() + ')(' + c.raw('M') + ') / (' + c.raw('g') + ') ]');
+      w.s('r = √[ (' + GS() + ' N·m²/kg²)' + c.q('M') + ' / ' + c.q('g') + ' ]');
       w.s('r = √(' + full(inside) + ')');
       w.r('r ' + eqv(r, 'm'));
       w.a('r = ' + sig3(r) + ' m');
@@ -1676,21 +1798,33 @@ function compSVG(F, Fx, Fy, th, ref) {
   const W = 400, H = 310, ox = 200, oy = 155, R = 118;
   let b = '<line x1="22" y1="' + oy + '" x2="378" y2="' + oy + '" stroke="' + DIM + '" stroke-width="1.2"/>' +
     '<line x1="' + ox + '" y1="18" x2="' + ox + '" y2="292" stroke="' + DIM + '" stroke-width="1.2"/>' +
-    txt(382, oy + 4, '+x', { anchor: 'start', color: DIM, size: 11 }) + txt(ox, 13, '+y', { color: DIM, size: 11 });
+    txt(392, oy - 6, '+x', { anchor: 'end', color: DIM, size: 11 }) + txt(ox + 6, 14, '+y', { anchor: 'start', color: DIM, size: 11 });
   if (F === 0) return svgWrap(W, H, b + txt(ox + 8, oy - 10, 'zero vector', { anchor: 'start' }), 'Zero vector');
   const s = R / F, tx = ox + Fx * s, ty = oy - Fy * s;
+  const sub = c => '<tspan baseline-shift="sub" font-size="9">' + c + '</tspan>';
   if (Math.abs(Fx) > 1e-9 * F) {
     b += arrowSVG(ox, oy, tx, oy, { color: DIM, width: 2.2, dash: '6 4' });
-    b += txt((ox + tx) / 2, oy + (Fy >= 0 ? 20 : -10), 'F<tspan baseline-shift="sub" font-size="9">x</tspan> = ' + sig3(Fx) + ' N', { size: 11.5, bold: true, color: DIM });
+    const lab = 'F' + sub('x') + ' = ' + sig3(Fx) + ' N', w = labelW(lab, 11.5);
+    b += txt(clampMid((ox + tx) / 2, w, W), oy + (Fy >= 0 ? 20 : -10), lab, { size: 11.5, bold: true, color: DIM });
   }
   if (Math.abs(Fy) > 1e-9 * F) {
     b += arrowSVG(tx, oy, tx, ty, { color: DIM, width: 2.2, dash: '6 4' });
-    b += txt(tx + (Fx >= 0 ? 8 : -8), (oy + ty) / 2 + 4, 'F<tspan baseline-shift="sub" font-size="9">y</tspan> = ' + sig3(Fy) + ' N', { anchor: Fx >= 0 ? 'start' : 'end', size: 11.5, bold: true, color: DIM });
+    const lab = 'F' + sub('y') + ' = ' + sig3(Fy) + ' N', w = labelW(lab, 11.5);
+    let lxp = tx + (Fx >= 0 ? 8 : -8);
+    lxp = Fx >= 0 ? Math.min(lxp, W - 4 - w) : Math.max(lxp, 4 + w);
+    b += txt(lxp, (oy + ty) / 2 + 4, lab, { anchor: Fx >= 0 ? 'start' : 'end', size: 11.5, bold: true, color: DIM });
   }
   b += arrowSVG(ox, oy, tx, ty, { width: 3.2, head: 12 });
-  const phi = Math.atan2(Fy, Fx);
-  b += txt(tx + 14 * Math.cos(phi), ty - 14 * Math.sin(phi) + 4, 'F = ' + sig3(F) + ' N', { anchor: Math.cos(phi) >= 0 ? 'start' : 'end', bold: true, size: 12 });
-  let t = th % 360;
+  const phi = Math.atan2(Fy, Fx), lab = 'F = ' + sig3(F) + ' N', w = labelW(lab, 12);
+  if (Math.abs(Math.sin(phi)) < 0.3) {
+    b += txt(clampMid(tx, w, W), ty - 16, lab, { bold: true, size: 12 });
+  } else {
+    const right = Math.cos(phi) >= 0;
+    let lxp = tx + 14 * Math.cos(phi);
+    lxp = right ? Math.min(lxp, W - 4 - w) : Math.max(lxp, 4 + w);
+    b += txt(lxp, Math.min(Math.max(ty - 14 * Math.sin(phi) + 4, 14), H - 4), lab, { anchor: right ? 'start' : 'end', bold: true, size: 12 });
+  }
+  const t = th % 360;
   const a1 = ref === 'h' ? 0 : 90, a2 = ref === 'h' ? t : 90 - t;
   if (Math.abs(t) > 0.5) {
     b += arcPath(ox, oy, 38, a1, a2, RED);
@@ -1751,8 +1885,9 @@ function cordsSVG(o) {
   const W = 460, H = 270, kx = 230, ky = 138;
   const len = th => Math.min(112 / Math.max(sinD(th), 1e-6), 195);
   const Ll = len(o.thL), Lr = len(o.thR);
-  const lx = kx - Ll * cosD(o.thL), ly = ky - Ll * sinD(o.thL);
-  const rx = kx + Lr * cosD(o.thR), ry = ky - Lr * sinD(o.thR);
+  const cL = cosD(o.thL), sL = sinD(o.thL), cR = cosD(o.thR), sR = sinD(o.thR);
+  const lx = kx - Ll * cL, ly = ky - Ll * sL;
+  const rx = kx + Lr * cR, ry = ky - Lr * sR;
   let b = '';
   [[lx, ly], [rx, ry]].forEach(p => {
     b += '<rect x="' + f1(p[0] - 16) + '" y="' + f1(p[1] - 7) + '" width="32" height="7" fill="' + DIM + '"/>';
@@ -1761,14 +1896,21 @@ function cordsSVG(o) {
   b += '<line x1="' + kx + '" y1="' + ky + '" x2="' + f1(lx) + '" y2="' + f1(ly) + '" stroke="' + INK + '" stroke-width="2.4"/>';
   b += '<line x1="' + kx + '" y1="' + ky + '" x2="' + f1(rx) + '" y2="' + f1(ry) + '" stroke="' + INK + '" stroke-width="2.4"/>';
   b += arcPath(kx, ky, 42, 180, 180 - o.thL, RED) + arcPath(kx, ky, 42, 0, o.thR, RED);
+  const sub = c => '<tspan baseline-shift="sub" font-size="9">' + c + '</tspan>';
   const mL = (180 - o.thL / 2) * D2R, mR = (o.thR / 2) * D2R;
-  b += txt(kx + 58 * Math.cos(mL), ky - 58 * Math.sin(mL) + 4, 'θ<tspan baseline-shift="sub" font-size="9">L</tspan>', { bold: true, color: RED });
-  b += txt(kx + 58 * Math.cos(mR), ky - 58 * Math.sin(mR) + 4, 'θ<tspan baseline-shift="sub" font-size="9">R</tspan>', { bold: true, color: RED });
-  b += txt((kx + lx) / 2 - 10, (ky + ly) / 2 - 6, o.lLabel, { anchor: 'end', bold: true, size: 12 });
-  b += txt((kx + rx) / 2 + 10, (ky + ry) / 2 - 6, o.rLabel, { anchor: 'start', bold: true, size: 12 });
+  b += txt(kx + 58 * Math.cos(mL), ky - 58 * Math.sin(mL) + 4, 'θ' + sub('L'), { bold: true, color: RED });
+  b += txt(kx + 58 * Math.cos(mR), ky - 58 * Math.sin(mR) + 4, 'θ' + sub('R'), { bold: true, color: RED });
+  // tension labels 55% of the way up each cord, offset to the outside of the V
+  const labL = 'T' + sub('L') + ' = ' + sig3(o.TL) + ' N', labR = 'T' + sub('R') + ' = ' + sig3(o.TR) + ' N';
+  const wL = labelW(labL, 12), wR = labelW(labR, 12);
+  const pLx = kx - 0.55 * Ll * cL - 12 * sL, pLy = ky - 0.55 * Ll * sL + 12 * cL + 4;
+  const pRx = kx + 0.55 * Lr * cR + 12 * sR, pRy = ky - 0.55 * Lr * sR + 12 * cR + 4;
+  b += txt(Math.max(pLx, wL + 4), Math.max(pLy, 26), labL, { anchor: 'end', bold: true, size: 12 });
+  b += txt(Math.min(pRx, W - wR - 4), Math.max(pRy, 26), labR, { anchor: 'start', bold: true, size: 12 });
   b += '<line x1="' + kx + '" y1="' + ky + '" x2="' + kx + '" y2="' + (ky + 52) + '" stroke="' + INK + '" stroke-width="2.4"/>';
-  b += '<rect x="' + (kx - 40) + '" y="' + (ky + 52) + '" width="80" height="44" rx="3" fill="' + INK + '"/>';
-  b += txt(kx, ky + 79, o.mLabel, { bold: true, color: LCDC, size: 12.5 });
+  const mw = Math.max(80, labelW(o.mLabel, 12.5) + 10);
+  b += '<rect x="' + f1(kx - mw / 2) + '" y="' + (ky + 52) + '" width="' + f1(mw) + '" height="44" rx="3" fill="' + INK + '"/>';
+  b += txt(kx, ky + 79, esc(o.mLabel), { bold: true, color: LCDC, size: 12.5 });
   b += '<circle cx="' + kx + '" cy="' + ky + '" r="4" fill="' + INK + '"/>';
   return svgWrap(W, H, b, 'Mass hanging from two cords');
 }
@@ -1810,7 +1952,7 @@ defineTool('tools-eq', {
     else if (pct <= 5) w.n('Small mismatch: consistent with rounded measurements. In perfect equilibrium the horizontal components would be exactly equal.');
     else w.x('Large mismatch: ΣF<sub>x</sub> ≠ 0, so these tensions and angles can’t hold the mass still. Double-check the measurements.');
     out.m = m; out.HL = HL; out.HR = HR; out.mismatch = mis;
-    c.svg = cordsSVG({ thL: thL, thR: thR, lLabel: 'T = ' + sig3(TL) + ' N', rLabel: 'T = ' + sig3(TR) + ' N', mLabel: sig3(m) + ' kg' });
+    c.svg = cordsSVG({ thL: thL, thR: thR, TL: TL, TR: TR, mLabel: sig3(m) + ' kg' });
   },
 });
 
@@ -1845,9 +1987,9 @@ defineTool('tools-eq', {
     w.r('T<sub>R</sub> ' + eqv(TR, 'N'));
     w.a('T<sub>L</sub> = ' + sig3(TL) + ' N, &nbsp; T<sub>R</sub> = ' + sig3(TR) + ' N');
     w.s('Check horizontals: ' + full(TL * cosD(thL)) + ' N = ' + full(TR * cosD(thR)) + ' N ✓');
-    w.n('The steeper cord (larger angle) carries more of the weight.');
+    w.n(thL === thR ? 'Equal angles, so the two tensions are equal (each is mg / 2 sin θ).' : 'The steeper cord (the ' + (thR > thL ? 'right' : 'left') + ' one, at the larger angle) has the larger tension.');
     out.TL = TL; out.TR = TR;
-    c.svg = cordsSVG({ thL: thL, thR: thR, lLabel: 'T = ' + sig3(TL) + ' N', rLabel: 'T = ' + sig3(TR) + ' N', mLabel: c.raw('m') + ' kg' });
+    c.svg = cordsSVG({ thL: thL, thR: thR, TL: TL, TR: TR, mLabel: c.raw('m') + ' kg' });
   },
 });
 
@@ -1878,7 +2020,7 @@ defineTool('tools-eq', {
       w.r('T ' + eqv(T, 'N'));
       w.a('T = ' + sig3(T) + ' N (each cord)');
       out.T = T;
-      c.svg = cordsSVG({ thL: th, thR: th, lLabel: 'T = ' + sig3(T) + ' N', rLabel: 'T = ' + sig3(T) + ' N', mLabel: c.raw('m') + ' kg' });
+      c.svg = cordsSVG({ thL: th, thR: th, TL: T, TR: T, mLabel: c.raw('m') + ' kg' });
     } else if (k === 'm') {
       const T = c.num('T'), th = c.num('th'), s = sinD(th), m = 2 * T * s / g;
       w.f('m = 2T sin θ / g');
@@ -1887,7 +2029,7 @@ defineTool('tools-eq', {
       w.r('m ' + eqv(m, 'kg'));
       w.a('m = ' + sig3(m) + ' kg');
       out.m = m;
-      c.svg = cordsSVG({ thL: th, thR: th, lLabel: 'T = ' + sig3(T) + ' N', rLabel: 'T = ' + sig3(T) + ' N', mLabel: sig3(m) + ' kg' });
+      c.svg = cordsSVG({ thL: th, thR: th, TL: T, TR: T, mLabel: sig3(m) + ' kg' });
     } else {
       const T = c.num('T'), m = c.num('m'), x = m * g / (2 * T);
       if (x > 1 + 1e-12) fail('The cords can’t hold this mass: even vertical cords (θ = 90°) need T ≥ mg/2 = ' + full(m * g / 2) + ' N.', 'T', 'DOMAIN');
@@ -1898,14 +2040,14 @@ defineTool('tools-eq', {
       w.r('θ ' + eqv(th, '°'));
       w.a('θ = ' + sig3(th) + '° above horizontal');
       out.th = th;
-      c.svg = cordsSVG({ thL: th, thR: th, lLabel: 'T = ' + sig3(T) + ' N', rLabel: 'T = ' + sig3(T) + ' N', mLabel: c.raw('m') + ' kg' });
+      c.svg = cordsSVG({ thL: th, thR: th, TL: T, TR: T, mLabel: c.raw('m') + ' kg' });
     }
     w.n('Each cord supports half the weight vertically. Shallower cords (smaller θ) need more tension.');
   },
 });
 
 function stackSVG(masses, tensions) {
-  const n = masses.length, cordH = 48, boxH = 36, W = 380;
+  const n = masses.length, cordH = 42, boxH = 34, W = 380;
   const H = 30 + n * (cordH + boxH) + 12;
   let b = '<rect x="60" y="10" width="160" height="10" fill="' + DIM + '"/>';
   for (let i = 0; i < 8; i++) b += '<line x1="' + (64 + i * 20) + '" y1="10" x2="' + (54 + i * 20) + '" y2="2" stroke="' + DIM + '" stroke-width="1.4"/>';
@@ -1914,7 +2056,8 @@ function stackSVG(masses, tensions) {
     b += '<line x1="140" y1="' + y + '" x2="140" y2="' + (y + cordH) + '" stroke="' + INK + '" stroke-width="2.4"/>';
     b += txt(156, y + cordH / 2 + 5, 'T' + subN(i + 1) + ' = ' + sig3(tensions[i]) + ' N', { anchor: 'start', bold: true, size: 12.5 });
     y += cordH;
-    b += '<rect x="95" y="' + y + '" width="90" height="' + boxH + '" rx="3" fill="' + INK + '"/>';
+    const bw = Math.min(Math.max(90, labelW(m, 12.5) + 12), 270);
+    b += '<rect x="' + f1(140 - bw / 2) + '" y="' + y + '" width="' + f1(bw) + '" height="' + boxH + '" rx="3" fill="' + INK + '"/>';
     b += txt(140, y + boxH / 2 + 5, esc(m), { bold: true, color: LCDC, size: 12.5 });
     y += boxH;
   });
@@ -1975,24 +2118,27 @@ defineTool('tools-eq', {
     const Fx = clean(F * cosD(th), F), Fy = clean(F * sinD(th), F), W = m * g;
     const N = clean(W - Fy, W);
     if (N < 0) fail('The upward pull (F sin θ = ' + full(Fy) + ' N) is bigger than the weight (' + full(W) + ' N), so the box would lift off the floor. The normal force can’t be negative. Check the values.', ['F', 'th'], 'DOMAIN');
+    if (N === 0 && Fx > 0) fail('The upward pull (F sin θ = ' + full(Fy) + ' N) carries the whole weight, so N = 0 and there is no friction to balance F cos θ. The box can’t move at constant velocity this way. Check the values.', ['F', 'th'], 'DOMAIN');
     w.h('1 · Components of the pull');
     w.s('F<sub>x</sub> = F cos θ = ' + c.q('F') + ' cos(' + c.raw('th') + '°) ' + eqv(Fx, 'N'));
     w.s('F<sub>y</sub> = F sin θ = ' + c.q('F') + ' sin(' + c.raw('th') + '°) ' + eqv(Fy, 'N'));
     w.h('2 · Horizontal: constant velocity ⇒ ΣF<sub>x</sub> = 0');
     w.f('F cos θ − f = 0 &nbsp;⇒&nbsp; f = F cos θ');
-    w.r('f ' + eqv(Fx, 'N') + ' (opposite the motion)');
+    w.r('f ' + eqv(Fx, 'N') + (Fx > 0 ? ' (opposite the motion)' : ''));
     w.h('3 · Vertical: ΣF<sub>y</sub> = 0');
     w.f('N + F sin θ − mg = 0 &nbsp;⇒&nbsp; N = mg − F sin θ');
     w.s('mg = ' + c.q('m') + '(' + gS() + ' m/s²) = ' + full(W) + ' N');
-    w.s('N = ' + full(W) + ' N − ' + P(full(Fy)) + ' N');
+    w.s('N = ' + full(W) + ' N − ' + P(full(Fy) + ' N'));
     w.r('N ' + eqv(N, 'N'));
     w.a('Friction f = ' + sig3(Fx) + ' N · Normal N = ' + sig3(N) + ' N');
     if (N > 0) {
       const mu = Fx / N;
-      w.s('If friction is kinetic: μ<sub>k</sub> = f / N = ' + full(Fx) + ' / ' + full(N) + ' ' + eqv(mu, ''));
+      w.s('If friction is kinetic: μ<sub>k</sub> = f / N = ' + PS(full(Fx)) + ' / ' + PS(full(N)) + ' ' + eqv(mu, ''));
+      if (mu > 2) w.x('μ<sub>k</sub> above about 1–2 is unrealistic for ordinary surfaces. Double-check the numbers.');
       out.mu = mu;
     }
-    w.n(Fy > 0 ? 'N < mg because the pull lifts part of the weight.' : Fy < 0 ? 'N > mg because the force also pushes the box down into the floor.' : 'A horizontal pull leaves N = mg.');
+    w.n(F === 0 ? 'No applied force: N = mg, and friction must be zero for the velocity to stay constant.'
+      : Fy > 0 ? 'N < mg because the pull lifts part of the weight.' : Fy < 0 ? 'N > mg because the force also pushes the box down into the floor.' : 'A horizontal pull leaves N = mg.');
     out.f = Fx; out.N = N; out.W = W;
     const right = true;
     c.svg = fbdSVG([
@@ -2041,7 +2187,7 @@ defineTool('tools-cm', {
     w.s('Σm = ' + rows.map(r => r.raw.m).join(' + ') + ' = ' + full(M) + ' ' + mu);
     w.h('Divide');
     const x = S / M;
-    w.s('x<sub>CM</sub> = ' + full(S) + ' / ' + full(M));
+    w.s('x<sub>CM</sub> = ' + PS(full(S)) + ' ' + mu + '·' + pu + ' / ' + PS(full(M)) + ' ' + mu);
     w.r('x<sub>CM</sub> ' + eqv(x, pu));
     w.a('x<sub>CM</sub> = ' + sig3(x) + ' ' + pu + ' (from your origin)');
     w.h('Distance from each mass to the CM');
@@ -2082,13 +2228,13 @@ defineTool('tools-cm', {
     w.s('Σm = ' + rows.map(r => r.raw.m).join(' + ') + ' = ' + full(M) + ' ' + mu);
     w.h('x-coordinate');
     w.f('x<sub>CM</sub> = Σ(m·x) / Σm');
-    w.s('Σ(m·x) = ' + rows.map(r => '(' + r.raw.m + ')(' + r.raw.x + ')').join(' + ') + ' = ' + full(Sx));
+    w.s('Σ(m·x) = ' + rows.map(r => '(' + r.raw.m + ')(' + r.raw.x + ')').join(' + ') + ' = ' + full(Sx) + ' ' + mu + '·' + pu);
     const x = Sx / M, y = Sy / M;
-    w.r('x<sub>CM</sub> = ' + full(Sx) + ' / ' + full(M) + ' ' + eqv(x, pu));
+    w.r('x<sub>CM</sub> = ' + PS(full(Sx)) + ' / ' + PS(full(M)) + ' ' + eqv(x, pu));
     w.h('y-coordinate');
     w.f('y<sub>CM</sub> = Σ(m·y) / Σm');
-    w.s('Σ(m·y) = ' + rows.map(r => '(' + r.raw.m + ')(' + r.raw.y + ')').join(' + ') + ' = ' + full(Sy));
-    w.r('y<sub>CM</sub> = ' + full(Sy) + ' / ' + full(M) + ' ' + eqv(y, pu));
+    w.s('Σ(m·y) = ' + rows.map(r => '(' + r.raw.m + ')(' + r.raw.y + ')').join(' + ') + ' = ' + full(Sy) + ' ' + mu + '·' + pu);
+    w.r('y<sub>CM</sub> = ' + PS(full(Sy)) + ' / ' + PS(full(M)) + ' ' + eqv(y, pu));
     w.a('CM = (' + sig3(x) + ', ' + sig3(y) + ') ' + pu);
     w.n('Exact values: (' + full(x) + ', ' + full(y) + ') ' + pu + '. Mass units cancel.');
     out.x = x; out.y = y; out.M = M;
@@ -2126,7 +2272,7 @@ defineTool('tools-cm', {
       mm = c.num('mm'); M = c.num('M'); dx = c.num('dx');
       if (mm > M) tooBig();
       dcm = mm / M * dx;
-      w.s('Δx<sub>CM</sub> = (' + c.raw('mm') + ' / ' + c.raw('M') + ') × ' + c.q('dx', pu));
+      w.s('Δx<sub>CM</sub> = (' + PS(c.raw('mm')) + ' / ' + PS(c.raw('M')) + ') × ' + c.q('dx', pu));
       w.s('Δx<sub>CM</sub> = (' + full(mm / M) + ') × ' + P(c.raw('dx')) + ' ' + pu);
       w.r('Δx<sub>CM</sub> ' + eqv(dcm, pu));
       w.a('Δx<sub>CM</sub> = ' + sig3(dcm) + ' ' + pu);
@@ -2136,13 +2282,16 @@ defineTool('tools-cm', {
       if (mm > M) tooBig();
       dx = dcm * M / mm;
       w.f('Δx<sub>moved</sub> = Δx<sub>CM</sub> × M<sub>total</sub> / m<sub>moved</sub>');
-      w.s('Δx<sub>moved</sub> = ' + c.q('dcm', pu) + '(' + c.raw('M') + ') / ' + c.raw('mm'));
+      w.s('Δx<sub>moved</sub> = ' + c.q('dcm', pu) + '(' + c.raw('M') + ') / ' + PS(c.raw('mm')));
       w.r('Δx<sub>moved</sub> ' + eqv(dx, pu));
       w.a('Δx<sub>moved</sub> = ' + sig3(dx) + ' ' + pu);
       out.dx = dx;
     } else if (k === 'mm') {
       dcm = c.num('dcm'); M = c.num('M'); dx = c.num('dx');
-      if (dx === 0) fail('If the mass doesn’t move (Δx<sub>moved</sub> = 0), the CM can’t shift, so the moved mass can’t be found.'.replace(/<\/?sub>/g, ''), 'dx', 'DOMAIN');
+      if (dx === 0) fail(dcm === 0
+        ? 'Nothing moved (Δx_moved = 0 and Δx_CM = 0), so any mass fits: m_moved can’t be determined.'
+        : 'If the mass doesn’t move (Δx_moved = 0), the CM can’t shift, so a nonzero Δx_CM is impossible.', dcm === 0 ? ['dcm', 'dx'] : 'dx', 'DOMAIN');
+      if (dcm === 0) fail('Δx_CM = 0 would mean the moved mass is 0 (nothing moved). Enter a nonzero CM shift.', 'dcm', 'DOMAIN');
       mm = dcm * M / dx;
       if (!(mm > 0)) fail('Δx_CM and Δx_moved must have the same sign: the CM always shifts the same way as the moved mass.', ['dcm', 'dx'], 'DOMAIN');
       if (mm > M * (1 + 1e-12)) fail('That would need a moved mass bigger than the total mass. The CM can shift at most as far as the moved mass itself.', ['dcm', 'dx'], 'DOMAIN');
@@ -2153,7 +2302,9 @@ defineTool('tools-cm', {
       out.mm = mm;
     } else {
       dcm = c.num('dcm'); mm = c.num('mm'); dx = c.num('dx');
-      if (dcm === 0) fail('With Δx_CM = 0 the total mass would have to be infinite. Enter a nonzero shift.', 'dcm', 'DOMAIN');
+      if (dcm === 0) fail(dx === 0
+        ? 'Nothing moved (Δx_moved = 0 and Δx_CM = 0), so any total mass fits: M_total can’t be determined.'
+        : 'Moving a mass always shifts the CM, so Δx_CM = 0 with a nonzero Δx_moved is impossible for any real system. Enter a nonzero CM shift.', dx === 0 ? ['dcm', 'dx'] : 'dcm', 'DOMAIN');
       M = mm * dx / dcm;
       if (!(M > 0)) fail('Δx_CM and Δx_moved must have the same sign: the CM always shifts the same way as the moved mass.', ['dcm', 'dx'], 'DOMAIN');
       if (M < mm * (1 - 1e-12)) fail('That would make the total mass smaller than the moved mass. The CM can’t shift farther than the moved mass does.', ['dcm', 'dx'], 'DOMAIN');
@@ -2200,7 +2351,7 @@ defineTool('tools-cm', {
       xo = c.num('xo'); Mo = c.num('Mo'); ma = c.num('ma'); xa = c.num('xa');
       const fr = ma / (Mo + ma), gap = xa - xo, shift = clean(fr * gap, Math.max(Math.abs(xo), Math.abs(xa), 1));
       xn = xo + shift;
-      w.s('x<sub>new</sub> = ' + c.raw('xo') + ' + [' + c.raw('ma') + ' / (' + c.raw('Mo') + ' + ' + c.raw('ma') + ')](' + c.raw('xa') + ' − ' + P(c.raw('xo')) + ')');
+      w.s('x<sub>new</sub> = ' + c.raw('xo') + ' + [' + PS(c.raw('ma')) + ' / (' + c.raw('Mo') + ' + ' + c.raw('ma') + ')](' + c.raw('xa') + ' − ' + P(c.raw('xo')) + ')');
       w.s('x<sub>new</sub> = ' + c.raw('xo') + ' + (' + full(fr) + ')(' + full(gap) + ')');
       w.s('x<sub>new</sub> = ' + c.raw('xo') + ' + ' + P(full(shift)));
       w.r('x<sub>new</sub> ' + eqv(xn, pu));
@@ -2209,18 +2360,21 @@ defineTool('tools-cm', {
       out.xn = xn;
     } else if (k === 'ma') {
       xo = c.num('xo'); Mo = c.num('Mo'); xa = c.num('xa'); xn = c.num('xn');
-      if (xa === xn) fail('The new CM can’t be exactly at the added mass unless the added mass is infinite.', ['xa', 'xn'], 'DOMAIN');
+      if (xa === xo && xn === xo) fail('x_old, x_added and x_new are all equal, so any added mass gives this result: m_added can’t be determined.', ['xo', 'xa', 'xn'], 'DOMAIN');
+      if (xa === xn) fail('The CM moves toward the added mass but never lands exactly on it (that would need an endless amount of mass). Enter an x_new between x_old and x_added.', ['xa', 'xn'], 'DOMAIN');
       ma = Mo * (xn - xo) / (xa - xn);
       if (!(ma > 0)) fail('Adding mass can only pull the CM toward the added mass, so x_new must lie strictly between x_old and x_added.', ['xn'], 'DOMAIN');
       w.f('m<sub>added</sub> = M<sub>old</sub>(x<sub>new</sub> − x<sub>old</sub>) / (x<sub>added</sub> − x<sub>new</sub>)');
       w.s('m<sub>added</sub> = (' + c.raw('Mo') + ')(' + c.raw('xn') + ' − ' + P(c.raw('xo')) + ') / (' + c.raw('xa') + ' − ' + P(c.raw('xn')) + ')');
-      w.s('m<sub>added</sub> = ' + full(Mo * (xn - xo)) + ' / ' + full(xa - xn));
+      w.s('m<sub>added</sub> = ' + PS(full(Mo * (xn - xo))) + ' / ' + PS(full(xa - xn)));
       w.r('m<sub>added</sub> ' + eqv(ma, mu));
       w.a('m<sub>added</sub> = ' + sig3(ma) + ' ' + mu);
       out.ma = ma;
     } else if (k === 'Mo') {
       xo = c.num('xo'); ma = c.num('ma'); xa = c.num('xa'); xn = c.num('xn');
-      if (xn === xo) fail('If the CM didn’t move, the old mass would have to be infinite (or the mass was added at x_old). Enter a different x_new.', ['xo', 'xn'], 'DOMAIN');
+      if (xn === xo) fail(xa === xo
+        ? 'x_old, x_added and x_new are all equal, so any old mass gives this result: M_old can’t be determined.'
+        : 'Adding mass away from x_old always moves the CM, so x_new can’t equal x_old here. Enter a different x_new.', xa === xo ? ['xo', 'xa', 'xn'] : ['xo', 'xn'], 'DOMAIN');
       Mo = ma * (xa - xn) / (xn - xo);
       if (!(Mo > 0)) fail('Adding mass can only pull the CM toward the added mass, so x_new must lie strictly between x_old and x_added.', ['xn'], 'DOMAIN');
       w.f('M<sub>old</sub> = m<sub>added</sub>(x<sub>added</sub> − x<sub>new</sub>) / (x<sub>new</sub> − x<sub>old</sub>)');
@@ -2257,9 +2411,10 @@ defineTool('tools-cm', {
       w.n('Any positive added mass pulls the CM toward its own position. The size of the mass controls how far, not the direction.');
     }
     out.shift = shift; out.direction = dirWord;
+    const MoL = k === 'Mo' ? sig3(Mo) : c.raw('Mo'), maL = k === 'ma' ? sig3(ma) : c.raw('ma');
     c.svg = numberLineSVG([
-      { x: xo, m: Mo, label: 'old ' + full(Mo) + ' ' + mu },
-      { x: xa, m: ma, label: '+' + full(ma) + ' ' + mu, hl: true },
+      { x: xo, m: Mo, label: 'old ' + MoL + ' ' + mu },
+      { x: xa, m: ma, label: '+' + maL + ' ' + mu, hl: true },
     ], { cm: xn, oldCm: xo, unit: pu, cmLabel: 'new CM = ' + sig3(xn) + ' ' + pu });
   },
 });
@@ -2267,6 +2422,8 @@ defineTool('tools-cm', {
 /* =====================================================================
    8. GLOBAL CONSTANTS BAR
    ===================================================================== */
+/* tools whose answers depend on g or G (directly, or through a g box that follows the top bar) */
+const usesConst = t => /CONST\.|gS\(\)|GS\(\)/.test(String(t.def.solve)) || t.def.fields.some(f => f.link);
 function initConstants() {
   const gi = $('#const-g'), Gi = $('#const-G'), msg = $('#const-msg');
   gi.value = '9.8';
@@ -2274,9 +2431,10 @@ function initConstants() {
   function apply() {
     gi.classList.remove('bad'); Gi.classList.remove('bad');
     let g, G;
-    try { g = evaluate(gi.value); if (!(g > 0)) throw new InputError('must be positive'); }
+    const okRange = v => v > 0 && v >= 1e-30 && v <= 1e30;
+    try { g = evaluate(gi.value); if (!okRange(g)) throw new InputError('must be a positive number (between 1e-30 and 1e30)'); }
     catch (e) { gi.classList.add('bad'); msg.textContent = 'g: ' + e.message + ' (still using ' + full(CONST.g) + ')'; return; }
-    try { G = evaluate(Gi.value); if (!(G > 0)) throw new InputError('must be positive'); }
+    try { G = evaluate(Gi.value); if (!okRange(G)) throw new InputError('must be a positive number (between 1e-30 and 1e30)'); }
     catch (e) { Gi.classList.add('bad'); msg.textContent = 'G: ' + e.message + ' (still using ' + full(CONST.G) + ')'; return; }
     msg.textContent = '';
     CONST.g = g; CONST.G = G;
@@ -2284,7 +2442,7 @@ function initConstants() {
       t.def.fields.forEach(f => {
         if (f.link && t.inputs[f.k].dataset.linked === '1') t.inputs[f.k].value = linkVal(f.link);
       });
-      if (t.lastOk) run(t);      // keep any shown answers in sync with the new constants
+      if (usesConst(t)) rerun(t);   // keep shown answers in sync with the new constants
     });
   }
   [gi, Gi].forEach(inp => {
@@ -2325,6 +2483,7 @@ function initTabs() {
       if (m) { e.preventDefault(); showTab(TAB_IDS[+m[1] - 1]); }
     }
   });
+  window.addEventListener('hashchange', () => { const h = (location.hash || '').replace('#', ''); if (TAB_IDS.includes(h)) showTab(h); });
   let start = (location.hash || '').replace('#', '');
   if (!TAB_IDS.includes(start)) { try { start = localStorage.getItem('phys84.tab') || 'n12'; } catch (e) { start = 'n12'; } }
   showTab(start);
@@ -2340,12 +2499,13 @@ function calcFmt(x) {
   return String(Number(x.toPrecision(10))).replace('-', MINUS);
 }
 function initCalc() {
-  const hist = $('#calc-hist'), inp = $('#calc-in');
-  let last = '';
+  const hist = $('#calc-hist'), inp = $('#calc-in'), pad = $('#calc-keys');
+  const entries = [];
+  let recall = -1, hasAns = false, touch = false;
   function push(exprText, resText, isErr) {
-    const line = el('div', { class: 'he', title: 'Click to reuse this entry' },
-      el('div', { class: 'hx', text: exprText }),
-      el('div', { class: isErr ? 'hr herr' : 'hr', text: resText }));
+    const line = el('button', { type: 'button', class: 'he', title: 'Reuse this entry', 'aria-label': 'Reuse ' + exprText + (isErr ? '' : ', result ' + resText) },
+      el('span', { class: 'hx', text: exprText }),
+      el('span', { class: isErr ? 'hr herr' : 'hr', text: resText }));
     line.addEventListener('click', () => { inp.value = exprText; inp.focus(); });
     hist.append(line);
     hist.scrollTop = hist.scrollHeight;
@@ -2353,21 +2513,25 @@ function initCalc() {
   function enter() {
     const s = inp.value.trim();
     if (!s) return;
-    last = s;
-    try { const v = evaluate(s); ANS = v; push(s, calcFmt(v), false); inp.value = ''; }
+    entries.push(s);
+    recall = -1;
+    try { const v = evaluate(s); ANS = v; hasAns = true; push(s, calcFmt(v), false); inp.value = ''; }
     catch (e) {
-      if (!(e instanceof InputError)) throw e;
-      push(s, 'ERR:' + e.kind + ' ' + e.message, true);
+      if (e instanceof InputError) push(s, 'ERR:' + e.kind + ' ' + e.message, true);
+      else push(s, 'ERR: that expression is too complicated to evaluate.', true);
     }
   }
+  /* keypad taps on a phone must not focus the text box (that would pop up the system keyboard) */
+  const focusInput = () => { if (!touch) inp.focus(); };
+  const caret = () => (touch || inp.selectionStart == null ? [inp.value.length, inp.value.length] : [inp.selectionStart, inp.selectionEnd]);
   function insert(t) {
-    const st = inp.selectionStart != null ? inp.selectionStart : inp.value.length;
-    const en = inp.selectionEnd != null ? inp.selectionEnd : inp.value.length;
-    if (!inp.value && /^[+\-*/^²]/.test(t) && t !== '(−)' && hist.children.length) t = 'Ans' + t;
-    inp.value = inp.value.slice(0, st) + t + inp.value.slice(en);
-    const pos = st + t.length;
-    inp.focus();
-    try { inp.setSelectionRange(pos, pos); } catch (e) { /* ignore */ }
+    const [st, en] = caret();
+    const before = inp.value.slice(0, st);
+    if (!inp.value && hasAns && /^[+\-*/^²]/.test(t)) t = 'Ans' + t;     // TI-84 style: an operator first means "Ans …"
+    if (t === 'E' && !/[\d.]$/.test(before)) t = /[A-Za-z)π²]$/.test(before) ? '*1E' : '1E';
+    inp.value = before + t + inp.value.slice(en);
+    focusInput();
+    if (!touch) { const pos = st + t.length; try { inp.setSelectionRange(pos, pos); } catch (e) { /* ignore */ } }
   }
   const K = [
     ['sin', 'sin('], ['cos', 'cos('], ['tan', 'tan('], ['√', '√('], ['^', '^'],
@@ -2378,29 +2542,46 @@ function initCalc() {
     ['1', '1', 'num'], ['2', '2', 'num'], ['3', '3', 'num'], ['+', '+'], ['g', 'g'],
     ['0', '0', 'num'], ['.', '.', 'num'], ['(−)', '−'], ['G', 'G'], ['ENTER', '#enter'],
   ];
-  const pad = $('#calc-keys');
+  pad.addEventListener('pointerdown', e => { touch = e.pointerType === 'touch' || e.pointerType === 'pen'; });
+  pad.addEventListener('keydown', () => { touch = false; });
   K.forEach(([label, act, kind]) => {
     let cls = 'key';
     if (kind === 'num') cls += ' light num';
     else if (act === '#enter') cls += ' blue';
     else if (act === '#clear' || act === '#del') cls += ' green';
     pad.append(el('button', {
-      class: cls, type: 'button', 'aria-label': label,
+      class: cls, type: 'button', 'aria-label': label === '(−)' ? 'negative' : label,
       onclick: () => {
         if (act === '#enter') enter();
-        else if (act === '#clear') { if (inp.value) inp.value = ''; else hist.innerHTML = ''; inp.focus(); }
+        else if (act === '#clear') { if (inp.value) inp.value = ''; else hist.innerHTML = ''; focusInput(); }
         else if (act === '#del') {
-          const st = inp.selectionStart, en = inp.selectionEnd;
-          if (st != null && st !== en) inp.value = inp.value.slice(0, st) + inp.value.slice(en);
-          else if (st) { inp.value = inp.value.slice(0, st - 1) + inp.value.slice(st); try { inp.setSelectionRange(st - 1, st - 1); } catch (e) { /* ignore */ } }
-          inp.focus();
+          const [st, en] = caret();
+          if (st !== en) inp.value = inp.value.slice(0, st) + inp.value.slice(en);
+          else if (st) {
+            inp.value = inp.value.slice(0, st - 1) + inp.value.slice(st);
+            if (!touch) { try { inp.setSelectionRange(st - 1, st - 1); } catch (e) { /* ignore */ } }
+          }
+          focusInput();
         } else insert(act);
       },
     }, label));
   });
+  inp.addEventListener('pointerdown', () => { touch = false; });
   inp.addEventListener('keydown', e => {
     if (e.key === 'Enter') { e.preventDefault(); enter(); }
-    else if (e.key === 'ArrowUp' && last) { e.preventDefault(); inp.value = last; }
+    else if (e.key === 'ArrowUp' && entries.length) {
+      e.preventDefault();
+      recall = recall < 0 ? entries.length - 1 : Math.max(0, recall - 1);
+      inp.value = entries[recall];
+    } else if (e.key === 'ArrowDown' && recall >= 0) {
+      e.preventDefault();
+      recall++;
+      if (recall >= entries.length) { recall = -1; inp.value = ''; } else inp.value = entries[recall];
+    } else if (!inp.value && hasAns && '+*/^'.includes(e.key) && e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey) {
+      e.preventDefault();
+      touch = false;
+      insert(e.key);
+    }
   });
 }
 
@@ -2483,14 +2664,16 @@ T('1 · Net force', 'unbalanced: ΣF = 6 N, a = 3 m/s²', () => {
 T('1 · Net force', 'no forces entered → error', () => expectErr('net', {}, /at least one force/));
 T('1 · Box', '2.0 kg, 6.0 N push → W 19.6 N, N 19.6 N, f 6.0 N left', () => {
   const r = solveWith('box', { m: '2.0', F: '6.0' });
-  return J([near(r.out.W, 19.6, 'W'), near(r.out.N, 19.6, 'N'), near(r.out.f, 6, 'f'), eq(r.out.fdir, 'left', 'friction direction')]);
+  return J([near(r.out.W, 19.6, 'W'), near(r.out.N, 19.6, 'N'), near(r.out.f, 6, 'f'), eq(r.out.fdir, 'left', 'friction direction'),
+    has(r.text, 'Weight 19.6 N down · Normal 19.6 N up'), has(r.text, 'Friction 6.00 N left')]);
 });
 
 /* 2. Newton's 3rd law */
 T('2 · 3rd law', '10 N, 2 kg & 5 kg → 5 and 2 m/s², opposite', () => {
   const r = solveWith('third', { F: '10', mA: '2', mB: '5', dir: 'right' });
   if (r.out.dirA === r.out.dirB) throw new Error('accelerations should be opposite');
-  return J([near(r.out.aA, 5, 'a(2 kg)'), near(r.out.aB, 2, 'a(5 kg)'), eq(r.out.FonA, r.out.FonB, 'equal forces'), 'directions ' + r.out.dirA + ' / ' + r.out.dirB]);
+  return J([near(r.out.aA, 5, 'a(2 kg)'), near(r.out.aB, 2, 'a(5 kg)'), has(r.text, 'Force on B (by A) = 10 N right'), has(r.text, 'Force on A (by B) = 10 N left'),
+    has(r.text, 'A: 5.00 m/s² left · B: 2.00 m/s² right')]);
 });
 T('2 · 3rd law', 'negative force magnitude → error', () => expectErr('third', { F: '-10', mA: '2', mB: '5' }, /can’t be negative/));
 
@@ -2536,7 +2719,8 @@ T('4 · Components', '90° gives an exact zero; negative angle', () => {
 });
 T('4 · Two cords', '7.5 N at 60°, 9.0 N at 65° → m ≈ 1.50 kg, 3.75 N & 3.80 N', () => {
   const r = solveWith('cords', { TL: '7.5', thL: '60', TR: '9.0', thR: '65' });
-  return J([s3(r.out.m, '1.50', 'm'), s3(r.out.HL, '3.75', 'left horizontal'), s3(r.out.HR, '3.80', 'right horizontal'), s3(r.out.mismatch, '0.0536', 'mismatch')]);
+  return J([s3(r.out.m, '1.50', 'm'), s3(r.out.HL, '3.75', 'left horizontal'), s3(r.out.HR, '3.80', 'right horizontal'), s3(r.out.mismatch, '0.0536', 'mismatch'),
+    has(r.text, 'm = 1.50 kg'), has(r.text, 'left 3.75 N, right 3.80 N')]);
 });
 T('4 · Two cords', 'angle must be above horizontal', () => expectErr('cords', { TL: '7.5', thL: '0', TR: '9', thR: '65' }, /above the horizontal/));
 T('4 · Two cords → T', '1.50 kg at 60° & 65° → about 7.5 N & 9.0 N', () => {
@@ -2555,18 +2739,18 @@ T('4 · Symmetric', 'reverse solves and impossible tension', () => J([
 ]));
 T('4 · Stacked', '7 kg above 4 kg → lower 39.2 N, upper 107.8 N', () => {
   const r = solveWith('stack', { ms: [['7'], ['4']] });
-  return J([near(r.out.T[1], 39.2, 'lower'), near(r.out.T[0], 107.8, 'upper')]);
+  return J([near(r.out.T[1], 39.2, 'lower'), near(r.out.T[0], 107.8, 'upper'), has(r.text, 'T₂ = 39.2 N (lower cord)'), has(r.text, '107.8 N ≈ 108 N')]);
 });
 T('4 · Angled pull', '50 kg, 200 N at 30° → friction ≈ 173 N, normal = 390 N', () => {
   const r = solveWith('pull', { m: '50', F: '200', th: '30' });
-  return J([s3(r.out.f, '173', 'friction'), near(r.out.N, 390, 'normal')]);
+  return J([s3(r.out.f, '173', 'friction'), near(r.out.N, 390, 'normal'), has(r.text, 'Friction f = 173 N · Normal N = 390 N')]);
 });
 T('4 · Angled pull', 'lift-off is rejected', () => expectErr('pull', { m: '1', F: '200', th: '60' }, /lift off/));
 
 /* 5. Center of mass */
 T('5 · CM 1D', '2 kg at 2 m, 6 kg at 8 m → 6.5 m (4.5 m and 1.5 m away)', () => {
   const r = solveWith('cm1', { mu: 'kg', pu: 'm', pts: [['2', '2'], ['6', '8']] });
-  return J([near(r.out.x, 6.5, 'x_CM'), near(r.out.d[0], 4.5, 'from 2 kg'), near(r.out.d[1], 1.5, 'from 6 kg')]);
+  return J([near(r.out.x, 6.5, 'x_CM'), near(r.out.d[0], 4.5, 'from 2 kg'), near(r.out.d[1], 1.5, 'from 6 kg'), has(r.text, 'xCM = 6.50 m')]);
 });
 T('5 · CM 1D', 'cars 1000 kg @5, 500 kg @20, 2000 kg @45 → 30 m', () => near(solveWith('cm1', { mu: 'kg', pu: 'm', pts: [['1000', '5'], ['500', '20'], ['2000', '45']] }).out.x, 30, 'x_CM'));
 T('5 · CM 1D', '40 g @0 cm, 10 g @50 cm → 10 cm', () => {
@@ -2582,7 +2766,7 @@ T('5 · CM 1D', 'validation: mass must be positive; empty list', () => J([
 ]));
 T('5 · CM 2D', '3 kg (1,2), 4 kg (5,3), 1 kg (7,1) → (3.75, 2.375)', () => {
   const r = solveWith('cm2', { mu: 'kg', pu: 'm', pts: [['3', '1', '2'], ['4', '5', '3'], ['1', '7', '1']] });
-  return J([near(r.out.x, 3.75, 'x_CM'), near(r.out.y, 2.375, 'y_CM')]);
+  return J([near(r.out.x, 3.75, 'x_CM'), near(r.out.y, 2.375, 'y_CM'), has(r.text, 'CM = (3.75, 2.38) m')]);
 });
 T('5 · Move a mass', 'Δx_CM = (m/M)Δx: 1 of 2 kg moves 20 cm → 10 cm', () => J([
   near(solveWith('move', { mm: '1', M: '2', dx: '20' }).out.dcm, 10, 'Δx_CM'),
@@ -2603,6 +2787,68 @@ T('5 · Add a mass', 'other unknowns and direction right', () => J([
   near(solveWith('add', { xo: '6.5', Mo: '8', ma: '2', xn: '7.2' }).out.xa, 10, 'x_added'),
   near(solveWith('add', { Mo: '8', ma: '2', xa: '10', xn: '7.2' }).out.xo, 6.5, 'x_old'),
 ]));
+
+/* fixes found in review */
+T('Format', 'half-way rounding, powers of ten, one notation per line', () => J([
+  s3(2.675, '2.68'), s3(1.005, '1.01'), s3(999.5, '1.00 × 10³'), s3(1000, '1.00 × 10³'), s3(0.00099951, '1.00 × 10⁻³'), s3(9800, '9800'),
+  eq(eqv(29.3406, '°'), '= 29.3406° ≈ 29.3°', 'degrees'), eq(eqv(123456, 'N'), '= 1.23456 × 10⁵ N ≈ 1.23 × 10⁵ N', 'notation'),
+]));
+T('Parse', 'typed units are rejected (40 g is not 40 × 9.8); 30° is fine', () => {
+  const msgs = ['40 g', '40g', '50 cm', '2 kg'].map(x => { try { evaluate(x); } catch (e) { if (e instanceof InputError && /units/i.test(e.message)) return '“' + x + '” rejected'; throw e; } throw new Error('“' + x + '” was accepted'); });
+  let inc = false;
+  try { evaluate('2e'); } catch (e) { inc = /Incomplete exponent/.test(e.message); }
+  if (!inc) throw new Error('“2e” should say incomplete exponent');
+  return J(msgs.concat([near(evaluate('30°'), 30, '30°'), near(evaluate('2*g'), 19.6, '2*g'), '“2e” → incomplete exponent']));
+});
+T('Parse', 'grams mode: “40 g” in a CM row gives an error, not 1.24 cm', () => expectErr('cm1', { mu: 'g', pu: 'cm', pts: [['40 g', '0'], ['10', '50']] }, /units/i));
+T('Overflow', 'results too large to compute give an error, never ∞', () => J([
+  expectErr('grav', { m1: '1e200', m2: '1e200', r: '1' }, /too large/),
+  expectErr('net', { forces: [['a', '1e308'], ['b', '1e308']], m: '2' }, /too large/),
+  expectErr('cm1', { pts: [['1e308', '1'], ['1e308', '2']] }, /too large/),
+]));
+T('Diagrams', 'nearly identical positions draw quickly (no freeze)', () => {
+  const t0 = performance.now();
+  const a = solveWith('cm1', { pts: [['0.1', '1e7'], ['0.2', '1e7']] });
+  const b = solveWith('cm2', { pts: [['1', '1e16', '0'], ['1', '1e16+4', '0']] });
+  const ms = performance.now() - t0;
+  if (ms > 1500) throw new Error('took ' + Math.round(ms) + ' ms');
+  if (!TOOLS.cm1.viz.innerHTML.includes('<svg') || !TOOLS.cm2.viz.innerHTML.includes('<svg')) throw new Error('diagram missing');
+  return J([near(a.out.x, 1e7, 'x_CM'), 'both diagrams drawn in ' + Math.round(ms) + ' ms', b.ok ? '2D ok' : '']);
+});
+T('3 · Ratio', 'distance ×√2 → F/2; changes that cancel are “unchanged”', () => {
+  const a = solveWith('ratio', { a: '1', b: '1', d: 'sqrt(2)' });
+  const b = solveWith('ratio', { a: '3', b: '1', d: 'sqrt(3)' });
+  const c2 = solveWith('ratio', { a: '1', b: '1/2', d: '1' });
+  if (c2.text.includes('distance counts')) throw new Error('distance note shown although distance is unchanged');
+  return J([eq(a.out.frac, 'F/2', '√2'), eq(b.out.frac, 'F', '3, √3'), has(b.text, 'unchanged'), eq(solveWith('ratio', { a: '1', b: '1', d: '0.1' }).out.ratio, 100, 'd = 0.1')]);
+});
+T('Display', 'typed scientific notation is kept; “/” operands are parenthesized', () => J([
+  has(solveWith('grav', { F: '1.60e-9', m1: '2.0', m2: '3.0' }).text, '(1.60 × 10⁻⁹ N)'),
+  has(solveWith('gfield', { g: '9.8', r: '6.37e6' }).text, '(3.97654 × 10¹⁴) / (6.67 × 10⁻¹¹)'),
+  has(solveWith('grav', { m1: '2.0', m2: '3.0', r: '0.50' }).text, '(4.002 × 10⁻¹⁰) / 0.25'),
+]));
+T('4 · Angled pull', 'N = 0 with friction is rejected; zero force has no direction words', () => J([
+  expectErr('pull', { m: '1', F: '19.6', th: '30' }, /N = 0/),
+  (() => { const r = solveWith('third', { F: '0', mA: '2', mB: '5' }); if (/m\/s² (left|right)/.test(r.text)) throw new Error('directions shown for zero force'); return 'third law F = 0: no directions'; })(),
+]));
+T('5 · Move/Add', 'cases that can’t be determined say so', () => J([
+  expectErr('move', { dcm: '0', mm: '1', dx: '0' }, /can’t be determined/),
+  expectErr('move', { dcm: '0', M: '2', dx: '20' }, /nonzero CM shift/),
+  expectErr('add', { xo: '2', Mo: '3', xa: '2', xn: '2' }, /can’t be determined/),
+]));
+T('Constants', 'tools use the g from the top bar', () => {
+  const old = CONST.g;
+  try { CONST.g = 10; return J([near(solveWith('box', { m: '2.0', F: '6.0' }).out.W, 20, 'W with g = 10'), near(solveWith('stack', { ms: [['7'], ['4']] }).out.T[0], 110, 'upper with g = 10')]); }
+  finally { CONST.g = old; }
+});
+T('UI', 'changing a unit menu re-solves with the new unit', () => {
+  const t = TOOLS.cm1;
+  t.set({ mu: 'kg', pu: 'm', pts: [['2', '2'], ['6', '8']] });
+  t.solve();
+  t.inputs.pu.value = 'cm';
+  t.inputs.pu.dispatchEvent(new Event('change'));
+  return has(t.screen.textContent, 'CM = 6.50 cm');
+});
 
 /* every example button must solve cleanly */
 T('UI', 'every “Load an example” button solves without error', () => {
