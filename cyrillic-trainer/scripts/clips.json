@@ -1,0 +1,688 @@
+{
+  "clips": [
+    {
+      "id": "name-a",
+      "text": "а",
+      "tts": "а́",
+      "kind": "name"
+    },
+    {
+      "id": "syl-ma",
+      "text": "ма",
+      "tts": "ма",
+      "kind": "syllable"
+    },
+    {
+      "id": "name-b",
+      "text": "бэ",
+      "tts": "бэ",
+      "kind": "name"
+    },
+    {
+      "id": "syl-ba",
+      "text": "ба",
+      "tts": "ба",
+      "kind": "syllable"
+    },
+    {
+      "id": "name-v",
+      "text": "вэ",
+      "tts": "вэ",
+      "kind": "name"
+    },
+    {
+      "id": "syl-va",
+      "text": "ва",
+      "tts": "ва",
+      "kind": "syllable"
+    },
+    {
+      "id": "name-g",
+      "text": "гэ",
+      "tts": "гэ",
+      "kind": "name"
+    },
+    {
+      "id": "syl-ga",
+      "text": "га",
+      "tts": "га",
+      "kind": "syllable"
+    },
+    {
+      "id": "name-d",
+      "text": "дэ",
+      "tts": "дэ",
+      "kind": "name"
+    },
+    {
+      "id": "syl-da",
+      "text": "да",
+      "tts": "да",
+      "kind": "syllable"
+    },
+    {
+      "id": "name-ye",
+      "text": "е",
+      "tts": "е́",
+      "kind": "name"
+    },
+    {
+      "id": "syl-mye",
+      "text": "ме",
+      "tts": "ме",
+      "kind": "syllable"
+    },
+    {
+      "id": "name-yo",
+      "text": "ё",
+      "tts": "ё",
+      "kind": "name"
+    },
+    {
+      "id": "syl-myo",
+      "text": "мё",
+      "tts": "мё",
+      "kind": "syllable"
+    },
+    {
+      "id": "name-zh",
+      "text": "жэ",
+      "tts": "жэ",
+      "kind": "name"
+    },
+    {
+      "id": "syl-zha",
+      "text": "жа",
+      "tts": "жа",
+      "kind": "syllable"
+    },
+    {
+      "id": "name-z",
+      "text": "зэ",
+      "tts": "зэ",
+      "kind": "name"
+    },
+    {
+      "id": "syl-za",
+      "text": "за",
+      "tts": "за",
+      "kind": "syllable"
+    },
+    {
+      "id": "name-i",
+      "text": "и",
+      "tts": "и́",
+      "kind": "name"
+    },
+    {
+      "id": "syl-mi",
+      "text": "ми",
+      "tts": "ми",
+      "kind": "syllable"
+    },
+    {
+      "id": "name-j",
+      "text": "и краткое",
+      "tts": "и краткое",
+      "kind": "name"
+    },
+    {
+      "id": "syl-aj",
+      "text": "ай",
+      "tts": "ай",
+      "kind": "syllable"
+    },
+    {
+      "id": "name-k",
+      "text": "ка",
+      "tts": "ка",
+      "kind": "name"
+    },
+    {
+      "id": "syl-ka",
+      "text": "ка",
+      "tts": "ка",
+      "kind": "syllable"
+    },
+    {
+      "id": "name-l",
+      "text": "эль",
+      "tts": "эль",
+      "kind": "name"
+    },
+    {
+      "id": "syl-la",
+      "text": "ла",
+      "tts": "ла",
+      "kind": "syllable"
+    },
+    {
+      "id": "name-m",
+      "text": "эм",
+      "tts": "эм",
+      "kind": "name"
+    },
+    {
+      "id": "name-n",
+      "text": "эн",
+      "tts": "эн",
+      "kind": "name"
+    },
+    {
+      "id": "syl-na",
+      "text": "на",
+      "tts": "на",
+      "kind": "syllable"
+    },
+    {
+      "id": "name-o",
+      "text": "о",
+      "tts": "о́",
+      "kind": "name"
+    },
+    {
+      "id": "syl-mo",
+      "text": "мо",
+      "tts": "мо",
+      "kind": "syllable"
+    },
+    {
+      "id": "name-p",
+      "text": "пэ",
+      "tts": "пэ",
+      "kind": "name"
+    },
+    {
+      "id": "syl-pa",
+      "text": "па",
+      "tts": "па",
+      "kind": "syllable"
+    },
+    {
+      "id": "name-r",
+      "text": "эр",
+      "tts": "эр",
+      "kind": "name"
+    },
+    {
+      "id": "syl-ra",
+      "text": "ра",
+      "tts": "ра",
+      "kind": "syllable"
+    },
+    {
+      "id": "name-s",
+      "text": "эс",
+      "tts": "эс",
+      "kind": "name"
+    },
+    {
+      "id": "syl-sa",
+      "text": "са",
+      "tts": "са",
+      "kind": "syllable"
+    },
+    {
+      "id": "name-t",
+      "text": "тэ",
+      "tts": "тэ",
+      "kind": "name"
+    },
+    {
+      "id": "syl-ta",
+      "text": "та",
+      "tts": "та",
+      "kind": "syllable"
+    },
+    {
+      "id": "name-u",
+      "text": "у",
+      "tts": "у́",
+      "kind": "name"
+    },
+    {
+      "id": "syl-mu",
+      "text": "му",
+      "tts": "му",
+      "kind": "syllable"
+    },
+    {
+      "id": "name-f",
+      "text": "эф",
+      "tts": "эф",
+      "kind": "name"
+    },
+    {
+      "id": "syl-fa",
+      "text": "фа",
+      "tts": "фа",
+      "kind": "syllable"
+    },
+    {
+      "id": "name-kh",
+      "text": "ха",
+      "tts": "ха",
+      "kind": "name"
+    },
+    {
+      "id": "syl-kha",
+      "text": "ха",
+      "tts": "ха",
+      "kind": "syllable"
+    },
+    {
+      "id": "name-ts",
+      "text": "цэ",
+      "tts": "цэ",
+      "kind": "name"
+    },
+    {
+      "id": "syl-tsa",
+      "text": "ца",
+      "tts": "ца",
+      "kind": "syllable"
+    },
+    {
+      "id": "name-ch",
+      "text": "че",
+      "tts": "чэ",
+      "kind": "name"
+    },
+    {
+      "id": "syl-cha",
+      "text": "ча",
+      "tts": "ча",
+      "kind": "syllable"
+    },
+    {
+      "id": "name-sh",
+      "text": "ша",
+      "tts": "ша",
+      "kind": "name"
+    },
+    {
+      "id": "syl-sha",
+      "text": "ша",
+      "tts": "ша",
+      "kind": "syllable"
+    },
+    {
+      "id": "name-shch",
+      "text": "ща",
+      "tts": "ща",
+      "kind": "name"
+    },
+    {
+      "id": "syl-shcha",
+      "text": "ща",
+      "tts": "ща",
+      "kind": "syllable"
+    },
+    {
+      "id": "name-hard",
+      "text": "твёрдый знак",
+      "tts": "твёрдый знак",
+      "kind": "name"
+    },
+    {
+      "id": "name-y",
+      "text": "ы",
+      "tts": "мы",
+      "kind": "name"
+    },
+    {
+      "id": "syl-vy",
+      "text": "вы",
+      "tts": "вы",
+      "kind": "syllable"
+    },
+    {
+      "id": "name-soft",
+      "text": "мягкий знак",
+      "tts": "мягкий знак",
+      "kind": "name"
+    },
+    {
+      "id": "name-e",
+      "text": "э",
+      "tts": "э́",
+      "kind": "name"
+    },
+    {
+      "id": "syl-me",
+      "text": "мэ",
+      "tts": "мэ",
+      "kind": "syllable"
+    },
+    {
+      "id": "name-yu",
+      "text": "ю",
+      "tts": "ю́",
+      "kind": "name"
+    },
+    {
+      "id": "syl-myu",
+      "text": "мю",
+      "tts": "мю",
+      "kind": "syllable"
+    },
+    {
+      "id": "name-ya",
+      "text": "я",
+      "tts": "я́",
+      "kind": "name"
+    },
+    {
+      "id": "syl-mya",
+      "text": "мя",
+      "tts": "мя",
+      "kind": "syllable"
+    },
+    {
+      "id": "word-arbuz",
+      "text": "арбуз",
+      "tts": "арбуз",
+      "kind": "word"
+    },
+    {
+      "id": "word-banan",
+      "text": "банан",
+      "tts": "банан",
+      "kind": "word"
+    },
+    {
+      "id": "word-voda",
+      "text": "вода",
+      "tts": "вода",
+      "kind": "word"
+    },
+    {
+      "id": "word-gora",
+      "text": "гора",
+      "tts": "гора",
+      "kind": "word"
+    },
+    {
+      "id": "word-dom",
+      "text": "дом",
+      "tts": "дом",
+      "kind": "word"
+    },
+    {
+      "id": "word-yem",
+      "text": "ем",
+      "tts": "ем",
+      "kind": "word"
+    },
+    {
+      "id": "word-yozh",
+      "text": "ёж",
+      "tts": "ёж",
+      "kind": "word"
+    },
+    {
+      "id": "word-zhuk",
+      "text": "жук",
+      "tts": "жук",
+      "kind": "word"
+    },
+    {
+      "id": "word-zima",
+      "text": "зима",
+      "tts": "зима",
+      "kind": "word"
+    },
+    {
+      "id": "word-igra",
+      "text": "игра",
+      "tts": "игра",
+      "kind": "word"
+    },
+    {
+      "id": "word-maj",
+      "text": "май",
+      "tts": "май",
+      "kind": "word"
+    },
+    {
+      "id": "word-kot",
+      "text": "кот",
+      "tts": "кот",
+      "kind": "word"
+    },
+    {
+      "id": "word-lampa",
+      "text": "лампа",
+      "tts": "лампа",
+      "kind": "word"
+    },
+    {
+      "id": "word-mama",
+      "text": "мама",
+      "tts": "мама",
+      "kind": "word"
+    },
+    {
+      "id": "word-nos",
+      "text": "нос",
+      "tts": "нос",
+      "kind": "word"
+    },
+    {
+      "id": "word-okno",
+      "text": "окно",
+      "tts": "окно",
+      "kind": "word"
+    },
+    {
+      "id": "word-papa",
+      "text": "папа",
+      "tts": "папа",
+      "kind": "word"
+    },
+    {
+      "id": "word-ruka",
+      "text": "рука",
+      "tts": "рука",
+      "kind": "word"
+    },
+    {
+      "id": "word-sok",
+      "text": "сок",
+      "tts": "сок",
+      "kind": "word"
+    },
+    {
+      "id": "word-tort",
+      "text": "торт",
+      "tts": "торт",
+      "kind": "word"
+    },
+    {
+      "id": "word-ukho",
+      "text": "ухо",
+      "tts": "ухо",
+      "kind": "word"
+    },
+    {
+      "id": "word-foto",
+      "text": "фото",
+      "tts": "фото",
+      "kind": "word"
+    },
+    {
+      "id": "word-khleb",
+      "text": "хлеб",
+      "tts": "хлеб",
+      "kind": "word"
+    },
+    {
+      "id": "word-tsirk",
+      "text": "цирк",
+      "tts": "цирк",
+      "kind": "word"
+    },
+    {
+      "id": "word-chaj",
+      "text": "чай",
+      "tts": "чай",
+      "kind": "word"
+    },
+    {
+      "id": "word-shkola",
+      "text": "школа",
+      "tts": "школа",
+      "kind": "word"
+    },
+    {
+      "id": "word-shchyotka",
+      "text": "щётка",
+      "tts": "щётка",
+      "kind": "word"
+    },
+    {
+      "id": "word-sel-hard",
+      "text": "съел",
+      "tts": "съел",
+      "kind": "word"
+    },
+    {
+      "id": "word-ryba",
+      "text": "рыба",
+      "tts": "рыба",
+      "kind": "word"
+    },
+    {
+      "id": "word-mat-soft",
+      "text": "мать",
+      "tts": "мать",
+      "kind": "word"
+    },
+    {
+      "id": "word-eto",
+      "text": "это",
+      "tts": "это",
+      "kind": "word"
+    },
+    {
+      "id": "word-yug",
+      "text": "юг",
+      "tts": "юг",
+      "kind": "word"
+    },
+    {
+      "id": "word-yabloko",
+      "text": "яблоко",
+      "tts": "яблоко",
+      "kind": "word"
+    },
+    {
+      "id": "word-tam",
+      "text": "там",
+      "tts": "там",
+      "kind": "word"
+    },
+    {
+      "id": "word-kto",
+      "text": "кто",
+      "tts": "кто",
+      "kind": "word"
+    },
+    {
+      "id": "word-mak",
+      "text": "мак",
+      "tts": "мак",
+      "kind": "word"
+    },
+    {
+      "id": "word-kak",
+      "text": "как",
+      "tts": "как",
+      "kind": "word"
+    },
+    {
+      "id": "word-atom",
+      "text": "атом",
+      "tts": "атом",
+      "kind": "word"
+    },
+    {
+      "id": "word-metro",
+      "text": "метро",
+      "tts": "метро",
+      "kind": "word"
+    },
+    {
+      "id": "word-vot",
+      "text": "вот",
+      "tts": "вот",
+      "kind": "word"
+    },
+    {
+      "id": "word-net",
+      "text": "нет",
+      "tts": "нет",
+      "kind": "word"
+    },
+    {
+      "id": "word-son",
+      "text": "сон",
+      "tts": "сон",
+      "kind": "word"
+    },
+    {
+      "id": "word-khor",
+      "text": "хор",
+      "tts": "хор",
+      "kind": "word"
+    },
+    {
+      "id": "word-sup",
+      "text": "суп",
+      "tts": "суп",
+      "kind": "word"
+    },
+    {
+      "id": "word-da",
+      "text": "да",
+      "tts": "да",
+      "kind": "word"
+    },
+    {
+      "id": "word-les",
+      "text": "лес",
+      "tts": "лес",
+      "kind": "word"
+    },
+    {
+      "id": "word-my",
+      "text": "мы",
+      "tts": "мы",
+      "kind": "word"
+    },
+    {
+      "id": "word-shchi",
+      "text": "щи",
+      "tts": "щи",
+      "kind": "word"
+    },
+    {
+      "id": "word-mysh",
+      "text": "мышь",
+      "tts": "мышь",
+      "kind": "word"
+    },
+    {
+      "id": "word-mat",
+      "text": "мат",
+      "tts": "мат",
+      "kind": "word"
+    },
+    {
+      "id": "word-sel",
+      "text": "сел",
+      "tts": "сел",
+      "kind": "word"
+    }
+  ]
+}
