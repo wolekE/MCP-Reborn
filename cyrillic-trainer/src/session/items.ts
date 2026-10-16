@@ -213,8 +213,8 @@ export function falseFriendItem(target: Letter, rng: Rng): ChoiceItem {
   for (const s of shuffle(ff.wrongSounds, rng)) {
     if (labels.has(s)) continue
     labels.add(s)
-    const asLetter = LETTERS.find((l) => l.sound === s)
-    wrong.push({ label: s, script: 'latin', letterId: asLetter?.id })
+    // A Latin misreading ("y" for У) is not a mix-up with another Cyrillic letter: no letterId.
+    wrong.push({ label: s, script: 'latin' })
   }
   for (const l of shuffle(FALSE_FRIENDS, rng)) {
     if (wrong.length >= 3) break

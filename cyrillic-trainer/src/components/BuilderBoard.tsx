@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { player } from '../audio/player'
 import { sfx } from '../audio/sfx'
 import { useKeys } from '../hooks/useKeys'
@@ -9,7 +9,8 @@ interface Props {
   item: BuilderItem
   /** Records one slot; returns the running streak. */
   record: (letterId: string, correct: boolean, fastMs: number, chosenId?: string) => number
-  onDone: (missed: boolean, streak: number) => void
+  /** `pending` resolves when the last correction (buzz + letter sound) has finished. */
+  onDone: (missed: boolean, streak: number, pending?: Promise<unknown>) => void
   feedback: { correct: boolean } | null
 }
 
@@ -19,6 +20,14 @@ export function BuilderBoard({ item, record, onDone, feedback }: Props) {
   const [missedSlots, setMissedSlots] = useState<number[]>([])
   const [shake, setShake] = useState<number | null>(null)
   const missed = useRef(false)
+  const mounted = useRef(true)
+  const pending = useRef<Promise<unknown> | undefined>(undefined)
+  useEffect(() => {
+    mounted.current = true
+    return () => {
+      mounted.current = false
+    }
+  }, [])
   const { blocked, replay } = useAutoPlay([item.word.audio], item.uid)
   const complete = filled >= item.letters.length
 
@@ -32,12 +41,12 @@ export function BuilderBoard({ item, record, onDone, feedback }: Props) {
       missed.current = true
       setMissedSlots((m) => [...m, filled])
       setShake(tileIndex)
-      // Show the right letter in its slot and play its sound.
-      void sfx.wrong().then(() => player.play(soundClips(expected)))
+      // Show the right letter in its slot and play its sound (unless the word has moved on).
+      pending.current = sfx.wrong().then(() => (mounted.current ? player.play(soundClips(expected)) : undefined))
     }
     const nextFilled = filled + 1
     setFilled(nextFilled)
-    if (nextFilled >= item.letters.length) onDone(missed.current, streak)
+    if (nextFilled >= item.letters.length) onDone(missed.current, streak, pending.current)
   }
 
   const keys: Record<string, () => void> = {}

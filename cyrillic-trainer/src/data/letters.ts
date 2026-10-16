@@ -391,7 +391,7 @@ export const LETTERS: readonly Letter[] = [
   },
   {
     id: 'hard', upper: 'Ъ', lower: 'ъ', cursive: 'Ъъ',
-    name: 'твёрдый знак', nameGloss: 'hard sign', ipa: '∅ (keeps a “j” before е, ё, ю, я)', sound: 'ʺ separates', group: 5, kind: 'sign',
+    name: 'твёрдый знак', nameGloss: 'hard sign', ipa: '∅', sound: 'ʺ separates', group: 5, kind: 'sign',
     hintEn: 'Silent. It separates a consonant from a following е, ё, ю or я, so you hear a clear “y”: съел ≈ “s-yel”.',
     hintPl: 'Like the break in Polish zjeść / objazd: съел ≈ s-jel, and с stays hard.',
     contrastText: ['сел', 'съел'],
@@ -413,7 +413,7 @@ export const LETTERS: readonly Letter[] = [
   },
   {
     id: 'soft', upper: 'Ь', lower: 'ь', cursive: 'Ьь',
-    name: 'мягкий знак', nameGloss: 'soft sign', ipa: 'ʲ (softens the consonant before)', sound: 'ʹ softens', group: 5, kind: 'sign',
+    name: 'мягкий знак', nameGloss: 'soft sign', ipa: 'ʲ', sound: 'ʹ softens', group: 5, kind: 'sign',
     hintEn: 'Silent. It softens the consonant before it: arch your tongue toward the roof of your mouth as if a “y” were coming, but add no vowel — мать is one syllable, never “ma-tee”. After ж, ш, ч, щ it changes nothing: мышь sounds like мыш.',
     hintPl: 'Works like the Polish kreska: конь ≈ koń. But ть / дь are not ć / dź — the tongue tip stays at the teeth, so мать ends in a soft t. After ж, ш, ч, щ it softens nothing: мышь = mysz.',
     contrastText: ['мат', 'мать'],
@@ -592,3 +592,5 @@ export function buildClipRegistry(): ClipSpec[] {
 
 export const CLIPS: readonly ClipSpec[] = buildClipRegistry()
 export const CLIP_TEXT: ReadonlyMap<ClipId, string> = new Map(CLIPS.map((c) => [c.id, c.text]))
+/** What speech engines should say for each clip (see ttsText / nameTts). */
+export const CLIP_TTS: ReadonlyMap<ClipId, string> = new Map(CLIPS.map((c) => [c.id, c.tts]))

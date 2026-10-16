@@ -1,9 +1,9 @@
-import { createContext, useContext, useEffect, useMemo, useReducer, useState, type ReactNode } from 'react'
+import { createContext, useContext, useEffect, useMemo, useReducer, useRef, useState, type ReactNode } from 'react'
 import { player } from '../audio/player'
 import { sfx } from '../audio/sfx'
 import * as A from './actions'
-import { defaultSave, type SaveData, type Settings } from './schema'
-import { loadSave, resetProgress, writeSave, type LoadProblem, type StorageLike } from './storage'
+import { STORAGE_KEY, defaultSave, type SaveData, type Settings } from './schema'
+import { loadSave, parseSave, resetProgress, writeSave, type LoadProblem, type StorageLike } from './storage'
 
 type Action =
   | { type: 'introduce'; ids: readonly string[]; now: number }
@@ -12,6 +12,7 @@ type Action =
   | { type: 'settings'; patch: Partial<Settings> }
   | { type: 'reset'; now: number }
   | { type: 'dismissUnlock' }
+  | { type: 'replace'; save: SaveData }
 
 interface State {
   save: SaveData
@@ -37,6 +38,8 @@ function reducer(state: State, action: Action): State {
       return { save: resetProgress(state.save, action.now), justUnlocked: null }
     case 'dismissUnlock':
       return { ...state, justUnlocked: null }
+    case 'replace':
+      return { ...state, save: action.save }
   }
 }
 
@@ -67,7 +70,25 @@ export function StoreProvider({ children, storage = browserStorage() }: { childr
   const [initial] = useState(() => (storage ? loadSave(storage, Date.now()) : { data: defaultSave(Date.now()), problem: null }))
   const [state, dispatch] = useReducer(reducer, { save: initial.data, justUnlocked: null })
 
+  // Another tab saved: adopt its progress instead of overwriting it with ours later.
+  const fromOtherTab = useRef(false)
   useEffect(() => {
+    const onStorage = (e: StorageEvent) => {
+      if (e.key !== STORAGE_KEY || e.newValue === null) return
+      const { data, problem } = parseSave(e.newValue, Date.now())
+      if (problem) return
+      fromOtherTab.current = true
+      dispatch({ type: 'replace', save: data })
+    }
+    window.addEventListener('storage', onStorage)
+    return () => window.removeEventListener('storage', onStorage)
+  }, [])
+
+  useEffect(() => {
+    if (fromOtherTab.current) {
+      fromOtherTab.current = false // already stored by the other tab
+      return
+    }
     if (storage) writeSave(storage, state.save)
   }, [storage, state.save])
 

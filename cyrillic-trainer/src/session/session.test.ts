@@ -20,7 +20,7 @@ import {
   soundClips,
   type ChoiceItem,
 } from './items'
-import { MAX_RETRIES, RETRY_GAP, insertRetry } from './queue'
+import { MAX_RETRIES, RETRY_GAP, fillersFor, insertRetry } from './queue'
 import { seededRng, shuffle } from './rng'
 
 const T0 = Date.UTC(2026, 5, 1, 8)
@@ -45,6 +45,19 @@ describe('insertRetry: missed items return 2 items later', () => {
     expect(insertRetry(['A', 'B', 'C'], 2, "C'")).toEqual(['A', 'B', 'C', "C'"])
     expect(insertRetry(['A', 'B', 'C'], 1, "B'")).toEqual(['A', 'B', 'C', "B'"])
   })
+  it('tops up the queue so a miss near the end still comes back 2 items later', () => {
+    const key = (s: string) => s[0]
+    for (const missAt of [3, 4]) {
+      const q = ['A1', 'B1', 'C1', 'D1', 'E1']
+      const fill = fillersFor(q, missAt, ['E2', 'A2', 'F1', 'G1', 'H1'], key)
+      const out = insertRetry([...q, ...fill], missAt, `${q[missAt]}'`)
+      expect(out.indexOf(`${q[missAt]}'`) - missAt - 1).toBe(RETRY_GAP)
+      // No filler repeats the missed item or sits next to the same subject.
+      for (let i = 1; i < out.length; i++) expect(key(out[i])).not.toBe(key(out[i - 1]))
+    }
+    expect(fillersFor(['A', 'B', 'C', 'D'], 0, ['X'], (s) => s)).toEqual([])
+  })
+
   it('limits how often an item can come back', () => {
     expect(MAX_RETRIES).toBeGreaterThan(0)
     const rng = seededRng(1)

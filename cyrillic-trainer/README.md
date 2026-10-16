@@ -15,7 +15,7 @@ Letters unlock in batches of 3–5, group by group, once your current group aver
 
 ## Setup
 
-You need **Node.js 20.19+ or 22.12+** (check with `node --version`). It works the same on macOS and Windows:
+You need **Node.js 22.12+ or 24** (the current LTS releases; check with `node --version`). It works the same on macOS and Windows:
 
 ```sh
 cd cyrillic-trainer
@@ -23,7 +23,7 @@ npm install
 npm run dev
 ```
 
-Then open the address it prints (normally <http://localhost:5173>).
+Then open <http://localhost:5173>. The port is fixed on purpose: progress is saved per address, so if 5173 is busy (say, a second `npm run dev`) Vite stops with an error instead of opening an empty copy on another port.
 
 The recorded audio is already in `public/audio/`, so the app works straight away. You only need Python to *regenerate* the clips (see below).
 
@@ -47,15 +47,23 @@ Clips are synthesized with Microsoft's neural voices through [`edge-tts`](https:
 
 ### Regenerating audio
 
-1. Install Python 3.9+ and the one dependency:
+1. Install Python 3.9+, then create a virtual environment with the one dependency. Recent macOS (Homebrew) Pythons refuse a global `pip install`, so a virtual environment is the reliable way on both systems:
 
    ```sh
-   pip install -r scripts/requirements.txt
+   # macOS / Linux
+   python3 -m venv .venv
+   source .venv/bin/activate
+   python -m pip install -r scripts/requirements.txt
    ```
 
-   On Windows use `py -m pip install -r scripts/requirements.txt` if `pip` isn't on your PATH.
+   ```bat
+   :: Windows (Command Prompt; in PowerShell use .venv\Scripts\Activate.ps1)
+   py -m venv .venv
+   .venv\Scripts\activate
+   python -m pip install -r scripts/requirements.txt
+   ```
 
-2. Run:
+2. Run (the launcher finds `.venv` by itself, so activating it is optional later on):
 
    ```sh
    npm run audio
@@ -71,13 +79,15 @@ npm run audio -- --voice dmitry                   # one voice only
 npm run audio -- --prune                          # delete clips no longer in the data
 ```
 
-You can also run the Python script directly: `python scripts/generate_audio.py --help`.
+You can also run the Python script directly: `python3 scripts/generate_audio.py --help` (Windows: `py scripts\generate_audio.py --help`).
 
 **Spot-check pronunciation** on the generated review page, which lists every clip with play buttons and a "Play all" mode. Open <http://localhost:5173/audio/review.html> while `npm run dev` is running, or open `public/audio/review.html` straight from disk.
 
 Notes on the generated audio:
 
-- Text sent to the speech engine carries stress marks (о́, ба́, арбу́з). Without them a bare "о" is read as the unstressed preposition and comes out sounding like "а". This was confirmed by measuring vowel formants and transcribing every clip.
+- Each clip is trimmed to the speech. edge-tts pads short words with about 1.5 s of silence, which made the rapid-fire drills sluggish. The script cuts whole MP3 frames using edge-tts's word timings, so there's no re-encoding and no ffmpeg needed.
+
+- Lone vowels are sent with a stress mark (о́): without it a bare "о" is read as the unstressed preposition and sounds like "а". Syllables and words are sent unmarked, because a mark next to a consonant makes the voice spell the consonant out ("мо́" → "эм-о"). Ч's name is sent as "чэ", because a bare "че" is read as the slang "чё". All of this was confirmed by measuring vowel formants and transcribing every clip.
 - Ы never stands on its own in Russian, and the voices can't say a bare [ɨ] (it comes out as и), so its name is demonstrated in **мы** and its syllable is **вы**. The review page notes "spoken as …" wherever the spoken text differs from the label.
 - Behind a corporate proxy that inspects TLS, point `SSL_CERT_FILE` at the proxy's CA bundle before running the script.
 

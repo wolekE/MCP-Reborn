@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { player } from '../audio/player'
 import { sfx } from '../audio/sfx'
 import { LETTER_BY_ID } from '../data/letters'
 import { href } from '../router'
+import { useKeys } from '../hooks/useKeys'
 import { useStore } from '../state/store'
 
 /** How to get a Russian system voice — shown once when one is needed, and in Settings. */
@@ -22,6 +23,29 @@ export function VoiceHelp() {
         <em>Irina</em> / <em>Pavel</em>). Restart the browser afterwards.
       </p>
       <p className="muted">Chrome and Edge may also offer online Russian voices when you’re connected to the internet.</p>
+    </div>
+  )
+}
+
+/** Takes focus so Enter / Escape close it rather than acting on the page underneath; then gives focus back. */
+function NoVoiceNotice({ onClose }: { onClose: () => void }) {
+  const button = useRef<HTMLButtonElement>(null)
+  useEffect(() => {
+    const previous = document.activeElement as HTMLElement | null
+    button.current?.focus()
+    return () => previous?.focus?.()
+  }, [])
+  useKeys({ Escape: onClose })
+  return (
+    <div className="toast" role="alertdialog" aria-labelledby="novoice-title" aria-describedby="novoice-desc">
+      <h3 id="novoice-title">No Russian voice found</h3>
+      <p className="small" id="novoice-desc">
+        Some audio files are missing, and this browser has no Russian text-to-speech voice to read them instead.
+      </p>
+      <VoiceHelp />
+      <button className="btn" onClick={onClose} ref={button}>
+        Close
+      </button>
     </div>
   )
 }
@@ -51,7 +75,8 @@ export function Notices() {
               </div>
             </div>
             <div className="row">
-              <a className="btn btn-primary" href={href('learn')} onClick={dismissUnlock}>
+              {/* Via #/session so a fresh Learn list is built even if we're already on #/learn. */}
+              <a className="btn btn-primary" href={href('session')} onClick={dismissUnlock}>
                 Learn them
               </a>
               <button className="btn btn-ghost" onClick={dismissUnlock}>
@@ -61,16 +86,7 @@ export function Notices() {
           </div>
         </div>
       )}
-      {noVoice && (
-        <div className="toast" role="alertdialog" aria-labelledby="novoice-title">
-          <h3 id="novoice-title">No Russian voice found</h3>
-          <p className="small">Some audio files are missing, and this browser has no Russian text-to-speech voice to read them instead.</p>
-          <VoiceHelp />
-          <button className="btn" onClick={() => setNoVoice(false)}>
-            Got it
-          </button>
-        </div>
-      )}
+      {noVoice && <NoVoiceNotice onClose={() => setNoVoice(false)} />}
       {showLoadProblem && (
         <div className="toast" role="status">
           <p className="small" style={{ margin: 0 }}>

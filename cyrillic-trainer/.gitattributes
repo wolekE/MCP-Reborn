@@ -1,0 +1,6 @@
+# Keep text files LF on every OS (Windows' autocrlf would otherwise rewrite
+# scripts/clips.json and break the "in sync with letters.ts" test).
+* text=auto eol=lf
+*.mp3 binary
+*.png binary
+*.woff2 binary

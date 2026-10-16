@@ -461,8 +461,18 @@ main {
   border-radius: var(--radius);
   padding: 0.9rem 1rem;
   display: flex;
-  gap: 1rem;
+  flex-wrap: wrap;
+  gap: 0.6rem 1rem;
   align-items: center;
+}
+.feedback > div:not(.big) {
+  flex: 1 1 12rem;
+  min-width: 0;
+}
+@media (max-width: 520px) {
+  .feedback .btn {
+    flex: 1 0 100%;
+  }
 }
 .feedback.good {
   background: var(--good-soft);
@@ -472,9 +482,10 @@ main {
 }
 .feedback .big {
   font-family: var(--font-letter);
-  font-size: 2.6rem;
+  font-size: clamp(1.9rem, 9vw, 2.6rem);
   font-weight: 700;
   line-height: 1;
+  overflow-wrap: anywhere;
 }
 
 .toast-layer {
@@ -646,6 +657,7 @@ main {
 }
 .learn-audio .btn {
   flex: 1 1 8rem;
+  white-space: nowrap;
 }
 
 /* ---------- Drills ---------- */

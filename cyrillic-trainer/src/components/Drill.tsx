@@ -2,10 +2,10 @@ import { useCallback, useEffect, useLayoutEffect, useRef, useState, type ReactNo
 import { player } from '../audio/player'
 import { sfx } from '../audio/sfx'
 import { LETTER_BY_ID, type Letter } from '../data/letters'
-import { useKeys, useSpaceReplay } from '../hooks/useKeys'
+import { useKeys } from '../hooks/useKeys'
 import { href } from '../router'
 import { retryOf, soundClips, type BuilderItem, type ChoiceItem, type Item } from '../session/items'
-import { MAX_RETRIES, insertRetry } from '../session/queue'
+import { MAX_RETRIES, RETRY_GAP, fillersFor, insertRetry } from '../session/queue'
 import { seededRng, type Rng } from '../session/rng'
 import { useStore } from '../state/store'
 import { useAutoPlay } from '../hooks/useAutoPlay'
@@ -49,6 +49,16 @@ interface Feedback {
 
 const STREAK_EVERY = 5
 const ADVANCE_MS = 650
+/** Timed rounds: pause after the tone before the next letter (longer after a miss, to read the answer). */
+const TIMED_ADVANCE_MS = 150
+const TIMED_MISS_MS = 1100
+
+/** What an item asks about: the letter, or the word for Word Builder. */
+const subject = (i: Item) => (i.kind === 'builder' ? `w:${i.word.word}` : `l:${i.target.id}`)
+
+/** The clips that belong to an item once it has been answered. */
+const answerClips = (i: Item): readonly string[] =>
+  i.kind === 'builder' ? [i.word.audio] : i.kind === 'read-word' ? i.clips : soundClips(i.target)
 
 function DrillRound({ title, start, more, timeLimitSec, pool, empty, onAgain }: DrillProps & { onAgain: () => void }) {
   const store = useStore()
@@ -62,6 +72,8 @@ function DrillRound({ title, start, more, timeLimitSec, pool, empty, onAgain }: 
   const shownAt = useRef(0)
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const finished = useRef(false)
+  const alive = useRef(true)
+  const answeredCount = useRef(0)
   const streakRef = useRef(0)
   /** Uids already answered / advanced past: guards against double key presses and late timers. */
   const answered = useRef<string | null>(null)
@@ -79,7 +91,8 @@ function DrillRound({ title, start, more, timeLimitSec, pool, empty, onAgain }: 
     if (timer.current) clearTimeout(timer.current)
     player.stop()
     setDone(true)
-    store.completeSession()
+    // A timed round left running with no answers isn't a session (and doesn't extend the streak).
+    if (answeredCount.current > 0) store.completeSession()
   }, [store])
 
   // Out of items: top up endless modes, otherwise end the round.
@@ -105,13 +118,14 @@ function DrillRound({ title, start, more, timeLimitSec, pool, empty, onAgain }: 
     if (timeLimitSec && timeLeft === 0) finish()
   }, [timeLeft, timeLimitSec, finish])
 
-  useEffect(
-    () => () => {
+  useEffect(() => {
+    alive.current = true
+    return () => {
+      alive.current = false
       if (timer.current) clearTimeout(timer.current)
       player.stop()
-    },
-    [],
-  )
+    }
+  }, [])
 
   /** Moves past item `uid` — once, and only if it is still the current item. */
   const advance = useCallback((uid: string) => {
@@ -122,7 +136,9 @@ function DrillRound({ title, start, more, timeLimitSec, pool, empty, onAgain }: 
     setFeedback(null)
     setIndex((i) => i + 1)
   }, [])
-  const next = () => item && advance(item.uid)
+  const next = () => {
+    if (item) advance(item.uid)
+  }
 
   /** Records one answer for one letter (choice items: one per item; builder: one per slot). */
   const record = useCallback(
@@ -130,6 +146,7 @@ function DrillRound({ title, start, more, timeLimitSec, pool, empty, onAgain }: 
       const responseMs = performance.now() - shownAt.current
       shownAt.current = performance.now()
       store.answer({ letterId, correct, responseMs, fastMs, chosenId })
+      answeredCount.current++
       const streak = correct ? streakRef.current + 1 : 0
       streakRef.current = streak
       setStats((s) => ({
@@ -145,33 +162,44 @@ function DrillRound({ title, start, more, timeLimitSec, pool, empty, onAgain }: 
   )
 
   /** Finishes the current item: misses come back 2 items later. */
+  /**
+   * Finishes the current item. Misses come back exactly RETRY_GAP items later:
+   * near the end of a round the queue is topped up with other items first.
+   * `before` (Word Builder) replaces the tone: the clip waits for it instead.
+   */
   const settle = useCallback(
-    (missed: boolean, clipsAfter: readonly string[], streak: number, playTone = true) => {
+    (missed: boolean, streak: number, before?: Promise<unknown>) => {
       if (!item) return
+      const uid = item.uid
       if (missed && item.retries < MAX_RETRIES) {
         const retry = retryOf(item, pool, rng)
-        setQueue((q) => insertRetry(q, index, retry))
+        const fill = queue.length - index - 1 < RETRY_GAP ? fillersFor(queue, index, (more ?? start)(rng), subject) : []
+        setQueue((q) => insertRetry([...q, ...fill], index, retry))
       }
-      const tone = !playTone
-        ? Promise.resolve()
-        : missed
+      const tone =
+        before ??
+        (missed
           ? sfx.wrong()
           : streak > 0 && streak % STREAK_EVERY === 0
             ? sfx.correct().then(sfx.streak)
-            : sfx.correct()
-      // Wrong answers: after the buzz, play the right letter's clip. Read modes play the audio after any answer.
-      const playAfter = missed || item.kind !== 'listen' ? clipsAfter : []
-      const audio = tone.then(() => (playAfter.length && !finished.current ? player.play(playAfter) : undefined))
-      if (!missed || timeLimitSec) {
-        const uid = item.uid
+            : sfx.correct())
+      // Wrong answers: after the buzz, play the right answer's clip. Read modes play the audio after any answer.
+      const playAfter = missed || item.kind !== 'listen' ? answerClips(item) : []
+      // Only if this item is still on screen: a late clip must never sound over the next question.
+      const stillHere = () => alive.current && !finished.current && itemRef.current?.uid === uid
+      const audio = tone.then(() => (playAfter.length && stillHere() ? player.play(playAfter) : undefined))
+      if (timeLimitSec) {
+        // Rapid fire: move on right after the tone and let the clip finish over the next letter.
+        void tone.then(() => {
+          if (stillHere()) timer.current = setTimeout(() => advance(uid), missed ? TIMED_MISS_MS : TIMED_ADVANCE_MS)
+        })
+      } else if (!missed) {
         void audio.then(() => {
-          if (!finished.current && itemRef.current?.uid === uid) {
-            timer.current = setTimeout(() => advance(uid), missed ? ADVANCE_MS * 2 : ADVANCE_MS)
-          }
+          if (stillHere()) timer.current = setTimeout(() => advance(uid), ADVANCE_MS)
         })
       }
     },
-    [item, index, pool, rng, advance, timeLimitSec],
+    [item, index, queue, pool, rng, more, start, advance, timeLimitSec],
   )
 
   const pick = (choice: number) => {
@@ -181,29 +209,37 @@ function DrillRound({ title, start, more, timeLimitSec, pool, empty, onAgain }: 
     const correct = choice === item.answer
     const streak = record(item.target.id, correct, item.fastMs, item.options[choice].letterId)
     setFeedback({ correct, chosen: choice })
-    settle(!correct, item.kind === 'read-word' ? item.clips : soundClips(item.target), streak)
+    settle(!correct, streak)
   }
 
-  const builderDone = (missed: boolean, streak: number) => {
+  /** `pending`: the last wrong tap's buzz + letter sound, which the word replay waits for. */
+  const builderDone = (missed: boolean, streak: number, pending?: Promise<unknown>) => {
     if (!item || item.kind !== 'builder' || answered.current === item.uid) return
     answered.current = item.uid
     setFeedback({ correct: !missed, chosen: null })
-    // Wrong taps already buzzed; a missed word just replays the word.
-    settle(missed, [item.word.audio], streak, !missed)
+    // Wrong taps already buzzed; a missed word just replays the word, after any correction finishes.
+    settle(missed, streak, missed ? (pending ?? Promise.resolve()) : undefined)
   }
 
-  useSpaceReplay(!done)
+  /** Space replays the current item's audio: the prompt (Listen, Word Builder) or, once answered, its answer. */
+  const replayCurrent = () => {
+    if (!item) return
+    if (item.kind === 'listen') void player.play(item.clips)
+    else if (item.kind === 'builder' || feedback) void player.play(answerClips(item))
+  }
+
+  useKeys({ ' ': replayCurrent }, !done)
   useKeys(
     {
       '1': () => pick(0),
       '2': () => pick(1),
       '3': () => pick(2),
       '4': () => pick(3),
-      Enter: () => feedback && !feedback.correct && next(),
+      Enter: () => (feedback && !feedback.correct ? next() : false),
     },
     !done && item?.kind !== 'builder',
   )
-  useKeys({ Enter: () => feedback && next() }, !done && item?.kind === 'builder' && feedback !== null)
+  useKeys({ Enter: () => (feedback ? next() : false) }, !done && item?.kind === 'builder' && feedback !== null)
 
   if (queue.length === 0) return <>{empty}</>
   if (done) return <Summary title={title} stats={stats} onAgain={onAgain} timed={!!timeLimitSec} />
@@ -255,10 +291,8 @@ const QUESTION: Record<ChoiceItem['kind'], string> = {
 function ChoiceView({ item, feedback, onPick }: { item: ChoiceItem; feedback: Feedback | null; onPick: (i: number) => void }) {
   const isListen = item.kind === 'listen'
   const { blocked, replay } = useAutoPlay(isListen ? item.clips : null, item.uid)
-  const question =
-    isListen && item.target.contrastText
-      ? `Which letter turns ${item.target.contrastText[0]} into ${item.target.contrastText[1]}?`
-      : QUESTION[item.kind]
+  // Ъ / Ь: two words are played; showing their spelling would give the answer away.
+  const question = isListen && item.target.contrastText ? 'You hear two words. Which letter makes the second one different?' : QUESTION[item.kind]
   return (
     <div className="stack">
       <div className="card prompt" data-kind={item.kind} data-clips={item.clips.join(' ')} data-testid="prompt-card">

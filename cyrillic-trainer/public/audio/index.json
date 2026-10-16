@@ -1,4 +1,5 @@
 {
+ "format": 2,
  "voices": {
   "svetlana": {
    "voice": "ru-RU-SvetlanaNeural",

@@ -1,4 +1,8 @@
 {
+  "source": {
+    "file": "src/data/letters.ts",
+    "sha256": "78aa1b3de5233d6c2314c5b0a9550930a1cf6f1b981309adc32c7ad4c5d48c06"
+  },
   "clips": [
     {
       "id": "name-a",

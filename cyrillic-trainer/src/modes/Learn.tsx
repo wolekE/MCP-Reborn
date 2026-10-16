@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { LetterCard } from '../components/LetterCard'
 import { GROUPS, LETTER_BY_ID, type Letter } from '../data/letters'
 import { href, navigate } from '../router'
@@ -48,6 +48,9 @@ function LearnSession() {
 }
 
 function LearnDone({ letters }: { letters: Letter[] }) {
+  // React's autoFocus doesn't apply to links; focus the next step so Enter continues.
+  const next = useRef<HTMLAnchorElement>(null)
+  useEffect(() => next.current?.focus(), [])
   return (
     <div className="card stack" style={{ textAlign: 'center' }} data-testid="learn-done">
       <h1>Nice work!</h1>
@@ -59,7 +62,7 @@ function LearnDone({ letters }: { letters: Letter[] }) {
       </p>
       <p className="muted">Now lock them in: hear a sound, pick the letter.</p>
       <div className="row" style={{ justifyContent: 'center' }}>
-        <a className="btn btn-primary btn-big" href={href(`play/listen/${letters.map((l) => l.id).join(',')}`)}>
+        <a className="btn btn-primary btn-big" href={href(`play/listen/${letters.map((l) => l.id).join(',')}`)} ref={next}>
           Practise them now
         </a>
         <a className="btn" href={href('')}>

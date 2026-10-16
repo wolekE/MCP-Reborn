@@ -28,7 +28,6 @@
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.7",
     "@vitejs/plugin-react": "^6.1.1",
-    "jsdom": "^29.1.1",
     "oxlint": "^1.81.0",
     "tsx": "^4.23.15",
     "typescript": "~6.0.2",
@@ -36,7 +35,7 @@
     "vitest": "^5.0.5"
   },
   "engines": {
-    "node": ">=20.19.0"
+    "node": "^22.12.0 || ^24.0.0 || >=26.0.0"
   },
   "description": "Learn the 33 letters of the Russian alphabet, with sound and Polish comparisons"
 }

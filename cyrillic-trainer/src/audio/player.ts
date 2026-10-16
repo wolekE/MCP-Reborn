@@ -11,7 +11,7 @@
  * dev server answers unknown paths with index.html (200), which the <audio>
  * element rejects as an unsupported source.
  */
-import { CLIP_TEXT, type ClipId } from '../data/letters'
+import { CLIP_TTS, type ClipId } from '../data/letters'
 
 export type VoiceKey = 'svetlana' | 'dmitry'
 export type SpeechRate = 1 | 0.75
@@ -167,7 +167,8 @@ export class AudioPlayer {
   }
 
   private async speak(id: ClipId, gen: number): Promise<PlayOutcome> {
-    const text = CLIP_TEXT.get(id)
+    // The TTS spelling, e.g. Ы's name is demonstrated in "мы" and a lone "о" carries a stress mark.
+    const text = CLIP_TTS.get(id)
     if (!text || typeof speechSynthesis === 'undefined') {
       this.notifyNoVoice()
       return 'silent'

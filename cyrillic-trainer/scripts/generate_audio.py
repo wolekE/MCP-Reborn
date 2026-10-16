@@ -8,17 +8,22 @@ by `npm run audio:manifest`) and writes:
   public/audio/index.json              which clips exist, read by the app's player
   public/audio/review.html             every clip with play buttons, for spot-checks
 
+Each clip is trimmed to the speech (edge-tts pads short utterances with about
+1.5 s of silence, which made rapid-fire drills sluggish). Trimming cuts whole
+MP3 frames using edge-tts's word-boundary timings: no ffmpeg, no re-encoding.
+
 Idempotent: clips that already exist are skipped, so re-running only fills gaps.
 index.json remembers the text each file was made from, so a clip whose text
 changed in letters.ts is regenerated automatically. Use --force to regenerate
 everything (e.g. after an edge-tts voice update), or --only for specific clips.
 
 Usage:
-  pip install -r scripts/requirements.txt
-  python scripts/generate_audio.py                    # both voices
-  python scripts/generate_audio.py --voice svetlana   # just one
-  python scripts/generate_audio.py --only syl-ga word-mat --force
-  python scripts/generate_audio.py --prune            # delete clips no longer in the data
+  python -m pip install -r scripts/requirements.txt   (inside a virtual environment, see README)
+  npm run audio                                       # export clips.json, then run this script
+  python3 scripts/generate_audio.py                   # both voices (Windows: py scripts/generate_audio.py)
+  python3 scripts/generate_audio.py --voice svetlana  # just one
+  python3 scripts/generate_audio.py --only syl-ga word-mat --force
+  python3 scripts/generate_audio.py --prune           # delete clips no longer in the data
 
 Behind a TLS-inspecting proxy, point SSL_CERT_FILE at the proxy's CA bundle.
 """
@@ -27,6 +32,7 @@ from __future__ import annotations
 
 import argparse
 import asyncio
+import hashlib
 import html
 import json
 import os
@@ -47,18 +53,27 @@ VOICES = {
 
 CONCURRENCY = 4
 RETRIES = 4
+# Bump when the way clips are produced changes; older clips are then regenerated.
+FORMAT = 2  # 2 = trimmed to speech
+# Silence kept around the speech when trimming (seconds).
+LEAD_IN = 0.0  # word boundaries already start ~0.12 s before the voice
+TAIL = 0.12
 
 
 def load_clips() -> list[dict]:
     if not MANIFEST.exists():
         sys.exit(f"Missing {MANIFEST.relative_to(ROOT)}. Run `npm run audio:manifest` first.")
-    if LETTERS_TS.exists() and LETTERS_TS.stat().st_mtime > MANIFEST.stat().st_mtime:
-        print(
-            "warning: src/data/letters.ts is newer than scripts/clips.json; "
-            "run `npm run audio:manifest` (or `npm run audio`) to refresh it.",
-            file=sys.stderr,
-        )
-    clips = json.loads(MANIFEST.read_text(encoding="utf-8"))["clips"]
+    manifest = json.loads(MANIFEST.read_text(encoding="utf-8"))
+    recorded = manifest.get("source", {}).get("sha256")
+    if LETTERS_TS.exists() and recorded:
+        text = LETTERS_TS.read_text(encoding="utf-8").replace("\r\n", "\n")
+        if hashlib.sha256(text.encode("utf-8")).hexdigest() != recorded:
+            print(
+                "warning: src/data/letters.ts changed since scripts/clips.json was exported; "
+                "run `npm run audio:manifest` (or `npm run audio`) to refresh it.",
+                file=sys.stderr,
+            )
+    clips = manifest["clips"]
     ids = [c["id"] for c in clips]
     if len(ids) != len(set(ids)):
         sys.exit("scripts/clips.json contains duplicate clip ids")
@@ -77,6 +92,49 @@ def trust_extra_ca() -> None:
         ctx.load_verify_locations(cafile=cafile)
 
 
+# MPEG audio header tables (Layer III only — what edge-tts produces).
+_BITRATES = {
+    "1": [0, 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320],
+    "2": [0, 8, 16, 24, 32, 40, 48, 56, 64, 80, 96, 112, 128, 144, 160],
+}
+_SAMPLE_RATES = {3: [44100, 48000, 32000], 2: [22050, 24000, 16000], 0: [11025, 12000, 8000]}
+
+
+def mp3_frames(data: bytes) -> list[tuple[int, int, float]]:
+    """(offset, length, seconds) of each MPEG Layer III frame; [] if the data isn't plain frames."""
+    frames = []
+    pos = 0
+    while pos + 4 <= len(data):
+        b1, b2 = data[pos + 1], data[pos + 2]
+        version = (b1 >> 3) & 3
+        if data[pos] != 0xFF or (b1 & 0xE0) != 0xE0 or version == 1 or ((b1 >> 1) & 3) != 1:
+            return []
+        bitrate = _BITRATES["1" if version == 3 else "2"][(b2 >> 4) & 0xF] * 1000
+        rate_index = (b2 >> 2) & 3
+        if bitrate == 0 or rate_index == 3:
+            return []
+        rate = _SAMPLE_RATES[version][rate_index]
+        samples = 1152 if version == 3 else 576
+        length = samples // 8 * bitrate // rate + ((b2 >> 1) & 1)
+        frames.append((pos, length, samples / rate))
+        pos += length
+    return frames if pos == len(data) else []
+
+
+def trim_to_speech(data: bytes, start: float, end: float) -> bytes:
+    """Keeps the frames overlapping [start, end] seconds; returns data unchanged if it can't parse it."""
+    frames = mp3_frames(data)
+    if not frames or end <= start:
+        return data
+    kept = bytearray()
+    t = 0.0
+    for offset, length, seconds in frames:
+        if t + seconds > start and t < end:
+            kept += data[offset : offset + length]
+        t += seconds
+    return bytes(kept) or data
+
+
 async def synthesize(text: str, voice: str, dest: Path) -> None:
     import edge_tts
 
@@ -84,9 +142,20 @@ async def synthesize(text: str, voice: str, dest: Path) -> None:
     delay = 2.0
     for attempt in range(1, RETRIES + 1):
         try:
-            await edge_tts.Communicate(text, voice).save(str(tmp))
-            if tmp.stat().st_size == 0:
+            audio = bytearray()
+            spans: list[tuple[float, float]] = []
+            async for chunk in edge_tts.Communicate(text, voice, boundary="WordBoundary").stream():
+                if chunk["type"] == "audio":
+                    audio += chunk["data"]
+                elif chunk["type"] in ("WordBoundary", "SentenceBoundary"):
+                    start = chunk["offset"] / 1e7  # 100-ns units
+                    spans.append((start, start + chunk["duration"] / 1e7))
+            if not audio:
                 raise RuntimeError("empty audio")
+            data = bytes(audio)
+            if spans:
+                data = trim_to_speech(data, min(s for s, _ in spans) - LEAD_IN, max(e for _, e in spans) + TAIL)
+            tmp.write_bytes(data)
             tmp.replace(dest)  # atomic: an interrupted run never leaves a half-written clip
             return
         except Exception as exc:  # network hiccups, throttling
@@ -98,9 +167,15 @@ async def synthesize(text: str, voice: str, dest: Path) -> None:
 
 
 def recorded_texts() -> dict[str, dict[str, str]]:
-    """voice -> {clip id -> text it was generated from}, from the previous index.json."""
+    """voice -> {clip id -> text it was generated from}, from the previous index.json.
+
+    Empty when the index is missing or was written by an older FORMAT, so those
+    clips are regenerated.
+    """
     try:
         index = json.loads((AUDIO_DIR / "index.json").read_text(encoding="utf-8"))
+        if index.get("format") != FORMAT:
+            return {}
         return {k: dict(v.get("clips", {})) for k, v in index.get("voices", {}).items()}
     except (OSError, ValueError, AttributeError):
         return {}
@@ -117,7 +192,7 @@ async def generate(
         nonlocal made, skipped
         dest = AUDIO_DIR / voice_key / f"{clip['id']}.mp3"
         was = recorded.get(voice_key, {}).get(clip["id"])
-        up_to_date = dest.exists() and dest.stat().st_size > 0 and was in (None, clip["tts"])
+        up_to_date = dest.exists() and dest.stat().st_size > 0 and was == clip["tts"]
         if up_to_date and not force:
             skipped += 1
             return
@@ -145,13 +220,13 @@ def existing(voice_key: str) -> set[str]:
 
 def write_index(clips: list[dict], recorded: dict[str, dict[str, str]]) -> None:
     """Lists the clips present per voice (read by the app) with the TTS text each was made from."""
-    index: dict = {"voices": {}}
+    index: dict = {"format": FORMAT, "voices": {}}
     for key, name in VOICES.items():
         have = existing(key)
         texts = recorded.get(key, {})
         index["voices"][key] = {
             "voice": name,
-            "clips": {c["id"]: texts.get(c["id"], c["tts"]) for c in clips if c["id"] in have},
+            "clips": {c["id"]: texts[c["id"]] for c in clips if c["id"] in have and c["id"] in texts},
         }
     (AUDIO_DIR / "index.json").write_text(json.dumps(index, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
 
@@ -194,7 +269,7 @@ def write_review(clips: list[dict]) -> None:
 </style></head><body>
 <h1>Audio review</h1>
 <p>{len(clips)} clips × {len(VOICES)} voices. Click ▶ to hear a clip, or play a whole voice in order.
-Regenerate a bad clip with <code>python scripts/generate_audio.py --only &lt;id&gt; --force</code>.</p>
+Regenerate a bad clip with <code>npm run audio -- --only &lt;id&gt; --force</code>.</p>
 <div class="bar">{''.join(f'<button data-all="{k}">Play all: {k}</button>' for k in VOICES)}<button data-stop>Stop</button></div>
 {''.join(sections)}
 <script>
@@ -256,7 +331,13 @@ def main() -> int:
     try:
         import edge_tts  # noqa: F401
     except ImportError:
-        sys.exit("edge-tts is not installed. Run: pip install -r scripts/requirements.txt")
+        sys.exit(
+            f"edge-tts is not installed for {sys.executable}.\n"
+            "Create the project's virtual environment once and install it there:\n"
+            "  macOS/Linux: python3 -m venv .venv && .venv/bin/python -m pip install -r scripts/requirements.txt\n"
+            "  Windows:     py -m venv .venv && .venv\\Scripts\\python -m pip install -r scripts/requirements.txt\n"
+            "Then run `npm run audio` again (it uses .venv automatically)."
+        )
     trust_extra_ca()
 
     print(f"{len(todo)} clips × {len(voices)} voice(s) → {AUDIO_DIR.relative_to(ROOT)}")

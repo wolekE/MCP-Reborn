@@ -51,6 +51,7 @@ describe('generated audio', () => {
   })
 
   it('keeps scripts/clips.json in sync with the data (run npm run audio:manifest)', () => {
-    expect(readFileSync(`${root}scripts/clips.json`, 'utf8')).toBe(clipsJson())
+    // Line endings don't matter (a Windows checkout may use CRLF).
+    expect(readFileSync(`${root}scripts/clips.json`, 'utf8').replace(/\r\n/g, '\n')).toBe(clipsJson())
   })
 })
