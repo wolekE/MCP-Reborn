@@ -50,7 +50,9 @@ function LearnSession() {
 function LearnDone({ letters }: { letters: Letter[] }) {
   // React's autoFocus doesn't apply to links; focus the next step so Enter continues.
   const next = useRef<HTMLAnchorElement>(null)
-  useEffect(() => next.current?.focus(), [])
+  useEffect(() => {
+    next.current?.focus()
+  }, [])
   return (
     <div className="card stack" style={{ textAlign: 'center' }} data-testid="learn-done">
       <h1>Nice work!</h1>

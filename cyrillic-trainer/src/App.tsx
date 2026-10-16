@@ -33,7 +33,10 @@ export default function App() {
     }
   }, [])
 
-  useEffect(() => window.scrollTo(0, 0), [page, sub])
+  // Braces matter: newer browsers return a Promise from scrollTo, which React would treat as a cleanup.
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [page, sub])
 
   let content: ReactNode
   switch (page) {

@@ -56,7 +56,7 @@ export function Notices() {
   const [noVoice, setNoVoice] = useState(false)
   const [showLoadProblem, setShowLoadProblem] = useState(loadProblem !== null)
 
-  useEffect(() => player.onNotice((n) => n.kind === 'no-russian-voice' && setNoVoice(true)), [])
+  useEffect(() => player.onNotice((n) => n.kind === 'no-russian-voice' && setNoVoice(true)), []) // returns its unsubscribe
 
   const unlockKey = justUnlocked?.join(',')
   useEffect(() => {
