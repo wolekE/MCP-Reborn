@@ -1,0 +1,503 @@
+/* ==========================================================================
+   Home dashboard (#/) — hero, stat tiles, unlock progress, letter map.
+   Only design tokens from index.css; works in light and dark mode.
+   ========================================================================== */
+
+.home {
+  gap: 0.9rem;
+}
+
+.home h2 {
+  margin: 0;
+}
+
+/* ---------- Hero ---------- */
+
+.home-hero {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(140deg, var(--accent-soft) 0%, var(--surface) 72%);
+}
+.home-hero > :not(.home-hero-glyph) {
+  position: relative;
+}
+.home-hero-glyph {
+  position: absolute;
+  right: 0.15em;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: clamp(8rem, 34vw, 12rem);
+  color: color-mix(in srgb, var(--accent) 11%, transparent);
+  pointer-events: none;
+  user-select: none;
+}
+.home-greeting {
+  margin: 0 0 0.3rem;
+  font-weight: 700;
+}
+.home-greeting [lang='ru'] {
+  font-size: 1.15rem;
+  color: var(--accent);
+}
+.home-hero h1 {
+  margin-bottom: 0.4rem;
+}
+.home-plan {
+  margin: 0;
+  max-width: 34rem;
+}
+.home-actions {
+  margin-top: 1.15rem;
+}
+.home-actions > .btn {
+  flex: 1 1 11rem;
+}
+.home-actions > .btn-primary {
+  flex: 2 1 14rem;
+}
+@media (min-width: 640px) {
+  .home-actions > .btn,
+  .home-actions > .btn-primary {
+    flex: 0 1 auto;
+  }
+  .home-actions > .btn-primary {
+    min-width: 15rem;
+  }
+}
+.home-arrow {
+  flex: none;
+}
+.home-count {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.05rem 0.55rem;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: 0.85rem;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Letter chips (hero plan, unlock card) */
+.home-chips {
+  list-style: none;
+  margin: 0.65rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+.home-chip {
+  display: inline-grid;
+  place-items: center;
+  min-width: 2.4rem;
+  height: 2.4rem;
+  padding: 0 0.4rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid transparent;
+  font-size: 1.4rem;
+}
+.home-chip-plain,
+.home-chip-more {
+  background: var(--surface);
+  border-color: var(--border);
+  color: var(--text);
+}
+.home-chip-more {
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: var(--muted);
+}
+.home-chips-small {
+  margin: 0;
+  gap: 0.3rem;
+}
+.home-chips-small .home-chip {
+  min-width: 2rem;
+  height: 2rem;
+  font-size: 1.15rem;
+}
+.home-chip-locked {
+  background: transparent;
+  border: 1.5px dashed color-mix(in srgb, var(--muted) 55%, transparent);
+  color: var(--muted);
+}
+
+/* ---------- Stat tiles ---------- */
+
+/* Rows (label, value, bar, sub) are shared by the three tiles through subgrid, so
+   the big numbers stay level even when one tile's label or sub-line wraps. */
+.home-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-rows: repeat(4, auto);
+  column-gap: 0.6rem;
+  row-gap: 0;
+}
+.home-stat.card {
+  display: grid;
+  grid-row: span 4;
+  grid-template-rows: subgrid;
+  row-gap: 0.15rem;
+  align-content: start;
+  min-width: 0;
+  padding: 0.8rem 0.85rem;
+}
+.home .home-stat-label {
+  grid-row: 1;
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: var(--muted);
+}
+.home-stat-value {
+  grid-row: 2;
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 800;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+.home-stat-value small {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--muted);
+}
+.home-stat.is-hot .home-stat-value {
+  color: var(--accent);
+}
+.home-stat-bar {
+  grid-row: 3;
+  height: 6px;
+  margin: 0.3rem 0 0.15rem;
+}
+.home-stat-sub {
+  grid-row: 4;
+  margin: 0;
+  padding-top: 0.15rem;
+  font-size: 0.8rem;
+  line-height: 1.3;
+  color: var(--muted);
+}
+/* Narrow tiles: "Done today" and "best 5" on their own lines instead of an awkward wrap. */
+@media (max-width: 639px) {
+  .home-stat-sub-split > span {
+    display: block;
+  }
+  .home-stat-sub-split > .home-stat-sep {
+    display: none;
+  }
+}
+/* Phones: ~70px per tile. Keep "Day streak" on one line and "12" from pushing
+   its "days" unit onto a line of its own (the label already says "Day streak"). */
+@media (max-width: 479px) {
+  .home-stat.card {
+    padding: 0.75rem 0.7rem;
+  }
+  .home .home-stat-label {
+    font-size: 0.75rem;
+  }
+  .home-stat-unit {
+    display: none;
+  }
+}
+@media (min-width: 640px) {
+  .home-stats {
+    gap: 0.9rem;
+  }
+  .home-stat.card {
+    padding: 1rem 1.2rem;
+  }
+  .home-stat-value {
+    font-size: 2.5rem;
+  }
+  .home .home-stat-label {
+    font-size: 0.85rem;
+  }
+  .home-stat-sub {
+    font-size: 0.85rem;
+  }
+}
+
+/* ---------- Unlock progress ---------- */
+
+.home-unlock {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+.home-eyebrow {
+  margin: 0 0 0.2rem;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.home-unlock-text {
+  margin: 0.2rem 0 0;
+}
+.home-unlock-head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.25rem;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+.home-next {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+@media (min-width: 640px) {
+  .home-next {
+    align-items: flex-end;
+    text-align: right;
+  }
+}
+.home-meter {
+  position: relative;
+  padding: 5px 0;
+  margin-top: 0.2rem;
+}
+.home-meter .progress {
+  height: 10px;
+}
+.home-meter .progress > span.is-good {
+  background: var(--good);
+}
+.home-meter-target {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  margin-left: -1.5px;
+  border-radius: 2px;
+  background: var(--text);
+  box-shadow: 0 0 0 1.5px var(--surface);
+}
+.home-meter-legend {
+  margin-top: -0.25rem;
+}
+.home-inline-letters {
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+}
+.home-todo {
+  margin: 0;
+  padding: 0.6rem 0.8rem;
+  list-style: none;
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+  display: grid;
+  gap: 0.3rem;
+}
+.home-unlock-note {
+  margin: 0;
+  padding: 0.6rem 0.8rem;
+  border-radius: var(--radius-sm);
+  background: var(--good-soft);
+}
+
+/* ---------- Letter map ---------- */
+
+.home-map-head {
+  align-items: flex-start;
+  margin-bottom: 0.9rem;
+}
+.home-map-hint {
+  margin: 0.15rem 0 0;
+}
+
+.home-seg {
+  display: inline-flex;
+  gap: 2px;
+  padding: 3px;
+  border-radius: 999px;
+  background: var(--surface-2);
+}
+.home-seg button {
+  min-height: 2.2rem;
+  padding: 0.3rem 0.85rem;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+/* Accent tint rather than plain --surface: in dark mode --surface is darker than
+   the track and the shadow vanishes, so the selected segment read as a hole. */
+.home-seg button[aria-pressed='true'] {
+  background: var(--accent-soft);
+  color: var(--accent);
+  box-shadow: var(--shadow);
+}
+/* An outline, so the pressed segment's box-shadow can't hide the focus ring. */
+.home-seg button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+.home-seg [lang='ru'] {
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.home-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(2.3rem, 1fr));
+  gap: 0.4rem;
+}
+@media (min-width: 720px) {
+  .home-grid {
+    grid-template-columns: repeat(11, minmax(0, 1fr));
+    gap: 0.5rem;
+  }
+}
+
+.home-tile {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.06em;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border: 1.5px solid transparent;
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  container-type: inline-size;
+  transition: transform 0.1s ease;
+}
+.home-tile:hover {
+  transform: translateY(-2px);
+}
+.home-tile:focus-visible {
+  position: relative;
+  z-index: 1;
+  box-shadow:
+    0 0 0 2px var(--surface),
+    0 0 0 4.5px var(--accent);
+}
+.home-tile-up {
+  font-size: 1.3rem;
+  font-size: 44cqi;
+}
+.home-tile-lo {
+  font-size: 0.7rem;
+  font-size: 25cqi;
+  opacity: 0.78;
+}
+.home-tile.is-locked {
+  background: transparent;
+  color: var(--muted);
+  border-style: dashed;
+  border-color: color-mix(in srgb, var(--muted) 50%, transparent);
+}
+.home-tile.is-locked .home-tile-up,
+.home-tile.is-locked .home-tile-lo {
+  opacity: 0.7;
+}
+.home-tile-lock {
+  position: absolute;
+  top: 7%;
+  right: 7%;
+  width: 22cqi;
+  height: 22cqi;
+  min-width: 9px;
+  min-height: 9px;
+  opacity: 0.75;
+}
+.home-tile-due {
+  position: absolute;
+  top: -3px;
+  right: -3px;
+  width: 0.6rem;
+  height: 0.6rem;
+  border-radius: 50%;
+  background: var(--bad);
+  box-shadow: 0 0 0 2px var(--surface);
+}
+
+.home-map-group + .home-map-group {
+  margin-top: 1rem;
+}
+.home-map-group h3 {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.25rem 0.5rem;
+  margin: 0 0 0.5rem;
+  font-size: 0.95rem;
+}
+.home-map-group-num {
+  display: inline-grid;
+  place-items: center;
+  width: 1.4rem;
+  height: 1.4rem;
+  border-radius: 50%;
+  background: var(--surface-2);
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-weight: 800;
+}
+.home-map-group-count {
+  font-weight: 700;
+}
+
+.home-legend {
+  list-style: none;
+  margin: 1rem 0 0;
+  padding: 0.85rem 0 0;
+  border-top: 1px solid var(--border);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem 1.1rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+.home-legend li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.home-legend-count {
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+.home-swatch {
+  display: inline-grid;
+  place-items: center;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 4px;
+}
+.home-swatch.is-locked {
+  border: 1.5px dashed color-mix(in srgb, var(--muted) 60%, transparent);
+  color: var(--muted);
+}
+.home-swatch.is-locked svg {
+  width: 0.6rem;
+  height: 0.6rem;
+}
+.home-swatch-dot {
+  width: 0.6rem;
+  height: 0.6rem;
+  margin: 0 0.2rem;
+  border-radius: 50%;
+  background: var(--bad);
+}
+
+@media (max-width: 520px) {
+  .home-hero.card,
+  .home-unlock.card,
+  .home-map.card {
+    padding: 1.1rem 1rem;
+  }
+}

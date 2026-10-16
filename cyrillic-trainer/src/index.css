@@ -37,7 +37,8 @@
   --radius: 16px;
   --radius-sm: 10px;
   --shadow: 0 1px 2px rgb(30 27 24 / 6%), 0 6px 20px rgb(30 27 24 / 6%);
-  --focus: 0 0 0 3px color-mix(in srgb, var(--accent) 45%, transparent);
+  /* A gap in the page colour, then a solid accent ring: visible on any button colour. */
+  --focus: 0 0 0 2px var(--bg), 0 0 0 4px var(--accent);
 
   color-scheme: light;
 }
@@ -246,6 +247,16 @@ kbd {
   }
   .nav a {
     padding: 0.35rem 0.5rem;
+  }
+}
+@media (max-width: 380px) {
+  .topbar-inner {
+    gap: 0.4rem;
+    padding-inline: 10px;
+  }
+  .nav a {
+    padding: 0.35rem 0.4rem;
+    font-size: 0.82rem;
   }
 }
 
@@ -701,4 +712,12 @@ main {
 }
 .tile {
   min-height: 4.6rem;
+}
+
+code {
+  font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  font-size: 0.88em;
+  padding: 0.05em 0.35em;
+  border-radius: 6px;
+  background: var(--surface-2);
 }

@@ -13,16 +13,8 @@ import {
 } from '../session/items'
 import type { Rng } from '../session/rng'
 import { useStore } from '../state/store'
+import { MODES, type PlayMode } from './modes'
 
-export const MODES = {
-  listen: { title: 'Listen & Pick', blurb: 'Hear a syllable, pick the letter.' },
-  read: { title: 'Read', blurb: 'See a letter or word, pick how it sounds.' },
-  'false-friends': { title: 'False Friends', blurb: '45 seconds, rapid fire: В Е Н Р С У Х — what do they really say?' },
-  builder: { title: 'Word Builder', blurb: 'Hear a word, tap its letters in order.' },
-  review: { title: 'Daily review', blurb: 'Everything that’s due, across all modes.' },
-} as const
-
-export type PlayMode = keyof typeof MODES
 
 const FALSE_FRIENDS_SECONDS = 45
 

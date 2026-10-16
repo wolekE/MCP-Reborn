@@ -1,0 +1,326 @@
+/* ---------- Mode picker (#/modes) ---------- */
+
+.modes {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+.modes-head h1 {
+  margin-bottom: 0.3rem;
+}
+.modes-head p {
+  margin: 0;
+}
+
+.modes-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.85rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+@media (min-width: 680px) {
+  .modes-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+  }
+}
+.modes-grid > li {
+  display: flex;
+  min-width: 0;
+}
+
+/* Card ----------------------------------------------------------------- */
+
+.mode-card {
+  --tone: var(--accent);
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  min-width: 0;
+  padding: 1.1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  color: var(--text);
+  text-decoration: none;
+  transition:
+    border-color 0.15s ease,
+    transform 0.12s ease,
+    box-shadow 0.15s ease;
+}
+.mode-card[data-tone='good'] {
+  --tone: var(--good);
+}
+.mode-card[data-tone='bad'] {
+  --tone: var(--bad);
+}
+.mode-card[data-tone='warn'] {
+  --tone: var(--warn);
+}
+.mode-card[data-tone='neutral'] {
+  --tone: var(--muted);
+}
+.mode-card:hover {
+  border-color: color-mix(in srgb, var(--tone) 60%, var(--border));
+}
+/* Lift only where hover is real (a tap on a phone would leave it stuck). */
+@media (hover: hover) {
+  .mode-card:hover {
+    transform: translateY(-2px);
+  }
+}
+.mode-card:active {
+  transform: translateY(0) scale(0.99);
+}
+.mode-card:focus-visible {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: var(--focus), var(--shadow);
+}
+
+.mode-icon {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 5rem;
+  height: 5rem;
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--tone) 14%, var(--surface));
+  color: color-mix(in srgb, var(--tone) 85%, var(--text));
+  line-height: 1;
+  overflow: hidden;
+}
+
+.mode-body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.25rem;
+}
+.mode-title {
+  margin: 0;
+  padding-right: 2rem;
+  font-size: 1.25rem;
+  font-weight: 800;
+}
+.mode-blurb {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+.mode-key {
+  position: absolute;
+  top: 0.95rem;
+  right: 0.95rem;
+  min-width: 1.6rem;
+  text-align: center;
+  font-size: 0.8rem;
+}
+.mode-card:hover .mode-key,
+.mode-card:focus-visible .mode-key {
+  color: var(--text);
+  border-color: color-mix(in srgb, var(--tone) 50%, var(--border));
+}
+
+/* Status line ---------------------------------------------------------- */
+
+/* A short pill plus optional extra text; they wrap as whole pieces. */
+.mode-meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.3rem 0.55rem;
+  max-width: 100%;
+  margin-top: 0.4rem;
+}
+.mode-meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  max-width: 100%;
+  padding: 0.2rem 0.65rem;
+  border-radius: 999px;
+  background: var(--surface-2);
+  color: var(--muted);
+  font-size: 0.8rem;
+  font-weight: 700;
+  line-height: 1.35;
+}
+.mode-meta.is-hot {
+  background: color-mix(in srgb, var(--tone) 15%, var(--surface));
+  color: color-mix(in srgb, var(--tone) 75%, var(--text));
+}
+.mode-meta svg {
+  flex: none;
+}
+.mode-meta-extra {
+  color: var(--muted);
+  font-size: 0.8rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.mode-meta-letters {
+  font-size: 1.15rem;
+  letter-spacing: 0.12em;
+  color: color-mix(in srgb, var(--tone) 85%, var(--text));
+}
+
+/* Icons ------------------------------------------------------------------ */
+
+.mi-learn {
+  font-size: 2.6rem;
+}
+.mi-lower {
+  font-size: 0.8em;
+  margin-left: 0.04em;
+}
+
+.mi-speaker {
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+.mi-read,
+.mi-ff {
+  display: flex;
+  align-items: baseline;
+  gap: 0.12rem;
+}
+.mi-read .glyph-print,
+.mi-ff .glyph-print {
+  font-size: 2.1rem;
+}
+.mi-arrow {
+  font-size: 1rem;
+  font-weight: 700;
+  opacity: 0.75;
+}
+.mi-latin {
+  font-family: var(--font-ui);
+  font-weight: 800;
+  font-size: 1.3rem;
+}
+.mi-ff .mi-latin {
+  font-size: 1.85rem;
+  font-weight: 700;
+}
+.mi-neq {
+  font-size: 1.3rem;
+  font-weight: 800;
+  margin: 0 0.05rem;
+}
+
+.mi-tiles {
+  display: flex;
+  align-items: center;
+}
+.mi-tiles > span {
+  display: grid;
+  place-items: center;
+  width: 1.6rem;
+  height: 1.9rem;
+  border-radius: 6px;
+  border: 1.5px solid color-mix(in srgb, currentColor 60%, transparent);
+  border-bottom-width: 3px;
+  background: var(--surface);
+  color: var(--text);
+  font-size: 1.3rem;
+  font-weight: 700;
+  line-height: 1;
+}
+.mi-tiles > span + span {
+  margin-left: -0.2rem;
+}
+.mi-tiles > span:nth-child(1) {
+  transform: rotate(-8deg) translateY(1px);
+}
+.mi-tiles > span:nth-child(2) {
+  position: relative;
+  transform: translateY(-3px);
+}
+.mi-tiles > span:nth-child(3) {
+  transform: rotate(7deg) translateY(2px);
+}
+
+.mi-review {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+}
+.mi-count {
+  font-size: 2.2rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+.mi-count-label {
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  opacity: 0.8;
+}
+
+/* Help line ------------------------------------------------------------ */
+
+.modes-help {
+  margin: 0;
+  text-align: center;
+  line-height: 2;
+}
+.modes-help > span {
+  white-space: nowrap;
+}
+
+/* Phones --------------------------------------------------------------- */
+
+@media (max-width: 420px) {
+  .mode-card {
+    gap: 0.85rem;
+    padding: 1rem 0.95rem;
+  }
+  .mode-icon {
+    width: 4.25rem;
+    height: 4.25rem;
+    border-radius: 12px;
+  }
+  .mi-learn {
+    font-size: 2.2rem;
+  }
+  .mi-read .glyph-print,
+  .mi-ff .glyph-print {
+    font-size: 1.8rem;
+  }
+  .mi-latin {
+    font-size: 1.1rem;
+  }
+  .mi-ff .mi-latin {
+    font-size: 1.6rem;
+  }
+  .mi-neq {
+    font-size: 1.1rem;
+  }
+  .mi-tiles > span {
+    width: 1.4rem;
+    height: 1.65rem;
+    font-size: 1.1rem;
+  }
+  .mi-speaker {
+    width: 2.2rem;
+    height: 2.2rem;
+  }
+  .mi-count {
+    font-size: 1.9rem;
+  }
+  .mode-title {
+    font-size: 1.15rem;
+  }
+}

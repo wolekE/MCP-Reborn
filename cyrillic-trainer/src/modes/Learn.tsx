@@ -3,7 +3,7 @@ import { LetterCard } from '../components/LetterCard'
 import { GROUPS, LETTER_BY_ID, type Letter } from '../data/letters'
 import { href, navigate } from '../router'
 import { lettersToLearn } from '../session/items'
-import { unlockedIds } from '../srs/scheduler'
+import { BATCHES, unlockedIds } from '../srs/scheduler'
 import { useStore } from '../state/store'
 
 /** Learn: one big card at a time. With a letter id, shows just that letter (from the progress map). */
@@ -71,11 +71,15 @@ function LearnDone({ letters }: { letters: Letter[] }) {
 }
 
 function NothingNew() {
+  const { save } = useStore()
+  const allOpen = save.unlockedBatches >= BATCHES.length
   return (
     <div className="card stack" style={{ textAlign: 'center' }}>
-      <h1>All caught up</h1>
+      <h1>{allOpen ? 'You’ve met all 33 letters' : 'All caught up'}</h1>
       <p className="muted">
-        You’ve met every unlocked letter. New ones unlock when your current group averages 80% or better — keep practising!
+        {allOpen
+          ? 'Every letter is unlocked. Keep them fresh with the daily review, or open any letter’s card from the progress map.'
+          : 'You’ve met every unlocked letter. New ones unlock when your current group averages 80% or better — keep practising!'}
       </p>
       <div className="row" style={{ justifyContent: 'center' }}>
         <a className="btn btn-primary" href={href('session')}>

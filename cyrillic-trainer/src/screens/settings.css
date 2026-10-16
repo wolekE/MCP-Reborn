@@ -1,0 +1,383 @@
+/* ==========================================================================
+   Settings (#/settings) — segmented radio groups, tones switch, audio help,
+   keyboard shortcuts and the reset-progress danger zone.
+   Only design tokens from index.css; works in light and dark mode.
+   ========================================================================== */
+
+.settings {
+  gap: 1rem;
+}
+
+.settings-head h1 {
+  margin-bottom: 0.2rem;
+}
+.settings-head p {
+  margin: 0;
+}
+
+.settings-section {
+  --section-gap: 1.35rem;
+  display: flex;
+  flex-direction: column;
+  gap: var(--section-gap);
+}
+/* Always-present live regions: take no room (cancel the flex gap) until they have something to say. */
+.settings-live:empty {
+  margin-top: calc(-1 * var(--section-gap));
+}
+.settings-section h2 {
+  margin: 0;
+}
+
+/* ---------- Field (fieldset + legend) ---------- */
+
+.settings-field {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+}
+.settings-field legend {
+  padding: 0;
+  margin-bottom: 0.1rem;
+  font-weight: 800;
+  font-size: 1.02rem;
+}
+.settings-hint {
+  margin: 0 0 0.6rem;
+}
+
+/* ---------- Segmented control (real radios underneath) ---------- */
+
+.segmented {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+  gap: 4px;
+  max-width: 30rem;
+  padding: 4px;
+  border-radius: calc(var(--radius-sm) + 4px);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+}
+.segment {
+  position: relative;
+  display: flex;
+  min-width: 0;
+  cursor: pointer;
+}
+.segment input {
+  /* Invisible but real: it covers the whole segment, so it takes clicks and focus. */
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+.segment-face {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-width: 0;
+  min-height: 3.1rem;
+  padding: 0.4rem 0.5rem;
+  border-radius: var(--radius-sm);
+  color: var(--muted);
+  font-weight: 800;
+  text-align: center;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+.segment-face svg {
+  flex: none;
+}
+.segment-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  line-height: 1.15;
+}
+.segment-label {
+  font-size: 1rem;
+}
+.segment-sub {
+  font-size: 0.75rem;
+  font-weight: 700;
+  opacity: 0.85;
+}
+.segment:hover .segment-face {
+  color: var(--text);
+  background: color-mix(in srgb, var(--surface) 55%, transparent);
+}
+.segment input:checked + .segment-face {
+  background: var(--accent);
+  color: var(--accent-ink);
+  box-shadow: var(--shadow);
+}
+.segment input:focus-visible + .segment-face {
+  /* A solid ring with a gap, so focus is clear on the accent-filled selected segment too. */
+  box-shadow: 0 0 0 2px var(--surface-2), 0 0 0 4px var(--accent);
+}
+@media (max-width: 420px) {
+  .segment-face:has(svg) {
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+}
+
+/* ---------- Voice sample ---------- */
+
+.settings-sample {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem 1rem;
+  max-width: 30rem;
+  padding: 0.65rem;
+  border-radius: calc(var(--radius-sm) + 4px);
+  border: 1px dashed var(--border);
+}
+.settings-sample-word {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.1rem 0.6rem;
+  margin: 0;
+}
+.settings-sample-word [lang='ru'] {
+  font-size: 1.6rem;
+  font-weight: 700;
+  line-height: 1.1;
+}
+.settings-sample + .settings-live:not(:empty) {
+  margin-top: -0.6rem;
+}
+.settings-note {
+  max-width: 30rem;
+  margin: 0;
+  padding: 0.55rem 0.8rem;
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--warn) 16%, var(--surface));
+  border: 1px solid color-mix(in srgb, var(--warn) 40%, transparent);
+}
+
+/* ---------- Switch (checkbox underneath) ---------- */
+
+.settings-tones {
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--border);
+}
+.switch {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.8rem;
+  cursor: pointer;
+  font-weight: 800;
+}
+.switch input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 3.2rem;
+  height: 1.85rem;
+  z-index: 1;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+.switch-track {
+  flex: none;
+  position: relative;
+  width: 3.2rem;
+  height: 1.85rem;
+  border-radius: 999px;
+  background: var(--surface-2);
+  border: 2px solid var(--border);
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+.switch-thumb {
+  position: absolute;
+  top: 50%;
+  left: 3px;
+  width: 1.2rem;
+  height: 1.2rem;
+  border-radius: 50%;
+  background: var(--muted);
+  transform: translateY(-50%);
+  transition: transform 0.18s ease, background-color 0.15s ease;
+}
+.switch input:checked + .switch-track {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+.switch input:checked + .switch-track .switch-thumb {
+  background: var(--accent-ink);
+  transform: translate(1.3rem, -50%);
+}
+.switch input:focus-visible + .switch-track {
+  box-shadow: var(--focus);
+}
+.switch-label {
+  padding-top: 0.12rem;
+  line-height: 1.35;
+}
+.switch-label .muted {
+  font-weight: 600;
+}
+.settings-tones .settings-hint {
+  margin: 0.4rem 0 0.75rem calc(3.2rem + 0.8rem);
+}
+.settings-tones > .row {
+  margin-left: calc(3.2rem + 0.8rem);
+}
+@media (max-width: 420px) {
+  .settings-tones .settings-hint,
+  .settings-tones > .row {
+    margin-left: 0;
+  }
+}
+
+/* ---------- Audio help ---------- */
+
+.settings-help {
+  padding: 0;
+}
+.settings-help summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  border-radius: var(--radius);
+  font-size: 1.15rem;
+  font-weight: 800;
+  cursor: pointer;
+  list-style: none;
+}
+.settings-help summary::-webkit-details-marker {
+  display: none;
+}
+.settings-help summary:hover {
+  color: var(--accent);
+}
+.settings-chevron {
+  flex: none;
+  width: 0.6rem;
+  height: 0.6rem;
+  margin-right: 0.2rem;
+  border-right: 2.5px solid currentColor;
+  border-bottom: 2.5px solid currentColor;
+  transform: translateY(-25%) rotate(45deg);
+  transition: transform 0.15s ease;
+}
+.settings-help[open] .settings-chevron {
+  transform: translateY(25%) rotate(-135deg);
+}
+.settings-help-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 0 1.25rem 1.25rem;
+}
+.settings-help-body p {
+  margin: 0;
+}
+.settings-help-body code {
+  padding: 0.05em 0.35em;
+  border-radius: 6px;
+  background: var(--surface-2);
+  font-size: 0.9em;
+}
+
+/* ---------- Keyboard shortcuts ---------- */
+
+.settings-keys {
+  margin: 0;
+  display: grid;
+}
+.settings-keys > div {
+  display: grid;
+  grid-template-columns: 6.2rem minmax(0, 1fr);
+  gap: 0.9rem;
+  align-items: baseline;
+  padding: 0.55rem 0;
+  border-top: 1px solid var(--border);
+}
+.settings-keys > div:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+.settings-keys > div:last-child {
+  padding-bottom: 0;
+}
+.settings-keys dt {
+  white-space: nowrap;
+  color: var(--muted);
+}
+.settings-keys kbd {
+  font-size: 0.8rem;
+}
+.settings-keys dd {
+  margin: 0;
+}
+@media (max-width: 520px) {
+  .settings-keys > div {
+    grid-template-columns: 4.3rem minmax(0, 1fr);
+    gap: 0.6rem;
+  }
+}
+
+/* ---------- Danger zone ---------- */
+
+.settings-danger {
+  --section-gap: 1rem;
+  border-color: color-mix(in srgb, var(--bad) 35%, var(--border));
+}
+.settings-danger h2 {
+  color: var(--bad);
+}
+.settings-danger-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem 1.25rem;
+}
+.settings-nowrap {
+  white-space: nowrap;
+}
+.settings-danger-row h3 {
+  margin: 0 0 0.2rem;
+}
+.settings-confirm {
+  padding: 0.9rem 1rem;
+  border-radius: var(--radius-sm);
+  background: var(--bad-soft);
+  border: 1px solid color-mix(in srgb, var(--bad) 35%, transparent);
+}
+.settings-confirm p {
+  margin: 0 0 0.75rem;
+}
+.settings .btn-danger-solid {
+  background: var(--bad);
+  border-color: var(--bad);
+  color: var(--surface);
+}
+.settings .btn-danger-solid:hover {
+  background: color-mix(in srgb, var(--bad) 85%, var(--text));
+}
+.settings-done {
+  margin: 0;
+  padding: 0.6rem 0.85rem;
+  border-radius: var(--radius-sm);
+  background: var(--good-soft);
+  font-weight: 700;
+}
+.settings-done span {
+  color: var(--good);
+}

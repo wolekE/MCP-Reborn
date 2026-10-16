@@ -233,6 +233,10 @@ def prune(clips: list[dict]) -> int:
 
 
 def main() -> int:
+    # Windows consoles/redirects may use cp1252, which can't encode Cyrillic: never crash on a print.
+    for stream in (sys.stdout, sys.stderr):
+        if hasattr(stream, "reconfigure"):
+            stream.reconfigure(errors="replace")
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--voice", choices=sorted(VOICES), action="append", help="only this voice (repeatable)")
     parser.add_argument("--only", nargs="+", metavar="CLIP_ID", help="only these clip ids")

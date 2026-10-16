@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react'
 import { player } from '../audio/player'
 import { sfx } from '../audio/sfx'
 import { LETTER_BY_ID, type Letter } from '../data/letters'
@@ -63,8 +63,15 @@ function DrillRound({ title, start, more, timeLimitSec, pool, empty, onAgain }: 
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const finished = useRef(false)
   const streakRef = useRef(0)
+  /** Uids already answered / advanced past: guards against double key presses and late timers. */
+  const answered = useRef<string | null>(null)
+  const advanced = useRef<string | null>(null)
 
   const item = queue[index] as Item | undefined
+  const itemRef = useRef(item)
+  useLayoutEffect(() => {
+    itemRef.current = item
+  })
 
   const finish = useCallback(() => {
     if (finished.current) return
@@ -78,8 +85,10 @@ function DrillRound({ title, start, more, timeLimitSec, pool, empty, onAgain }: 
   // Out of items: top up endless modes, otherwise end the round.
   useEffect(() => {
     if (done || queue.length === 0 || index < queue.length) return
-    if (more) setQueue((q) => [...q, ...more(rng)])
-    else finish()
+    if (more) {
+      const extra = more(rng)
+      setQueue((q) => [...q, ...extra])
+    } else finish()
   }, [index, queue.length, more, rng, done, finish])
 
   useEffect(() => {
@@ -104,12 +113,16 @@ function DrillRound({ title, start, more, timeLimitSec, pool, empty, onAgain }: 
     [],
   )
 
-  const next = useCallback(() => {
+  /** Moves past item `uid` — once, and only if it is still the current item. */
+  const advance = useCallback((uid: string) => {
+    if (itemRef.current?.uid !== uid || advanced.current === uid) return
+    advanced.current = uid
     if (timer.current) clearTimeout(timer.current)
     timer.current = null
     setFeedback(null)
     setIndex((i) => i + 1)
   }, [])
+  const next = () => item && advance(item.uid)
 
   /** Records one answer for one letter (choice items: one per item; builder: one per slot). */
   const record = useCallback(
@@ -136,7 +149,8 @@ function DrillRound({ title, start, more, timeLimitSec, pool, empty, onAgain }: 
     (missed: boolean, clipsAfter: readonly string[], streak: number, playTone = true) => {
       if (!item) return
       if (missed && item.retries < MAX_RETRIES) {
-        setQueue((q) => insertRetry(q, index, retryOf(item, pool, rng)))
+        const retry = retryOf(item, pool, rng)
+        setQueue((q) => insertRetry(q, index, retry))
       }
       const tone = !playTone
         ? Promise.resolve()
@@ -149,16 +163,21 @@ function DrillRound({ title, start, more, timeLimitSec, pool, empty, onAgain }: 
       const playAfter = missed || item.kind !== 'listen' ? clipsAfter : []
       const audio = tone.then(() => (playAfter.length && !finished.current ? player.play(playAfter) : undefined))
       if (!missed || timeLimitSec) {
+        const uid = item.uid
         void audio.then(() => {
-          if (!finished.current) timer.current = setTimeout(next, missed ? ADVANCE_MS * 2 : ADVANCE_MS)
+          if (!finished.current && itemRef.current?.uid === uid) {
+            timer.current = setTimeout(() => advance(uid), missed ? ADVANCE_MS * 2 : ADVANCE_MS)
+          }
         })
       }
     },
-    [item, index, pool, rng, next, timeLimitSec],
+    [item, index, pool, rng, advance, timeLimitSec],
   )
 
   const pick = (choice: number) => {
-    if (!item || item.kind === 'builder' || feedback || done) return
+    if (!item || item.kind === 'builder' || feedback || done || answered.current === item.uid) return
+    if (choice >= item.options.length) return
+    answered.current = item.uid
     const correct = choice === item.answer
     const streak = record(item.target.id, correct, item.fastMs, item.options[choice].letterId)
     setFeedback({ correct, chosen: choice })
@@ -166,7 +185,8 @@ function DrillRound({ title, start, more, timeLimitSec, pool, empty, onAgain }: 
   }
 
   const builderDone = (missed: boolean, streak: number) => {
-    if (!item || item.kind !== 'builder') return
+    if (!item || item.kind !== 'builder' || answered.current === item.uid) return
+    answered.current = item.uid
     setFeedback({ correct: !missed, chosen: null })
     // Wrong taps already buzzed; a missed word just replays the word.
     settle(missed, [item.word.audio], streak, !missed)

@@ -16,6 +16,8 @@ export function useRoute(): string[] {
 
 export const href = (path: string) => `#/${path}`
 
-export function navigate(path: string) {
-  window.location.hash = `/${path}`
+/** Go to a route. `replace` swaps the current history entry (for redirects, so Back doesn't bounce). */
+export function navigate(path: string, { replace = false } = {}) {
+  if (replace) window.location.replace(`#/${path}`)
+  else window.location.hash = `/${path}`
 }
