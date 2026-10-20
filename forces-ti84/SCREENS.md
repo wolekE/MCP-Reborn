@@ -145,8 +145,8 @@ Keys: ATWOOD > FIND A AND T > 6 > 4
 |M1G=58.8 N      |
 |M2G=39.2 N      |
 |T=47.04 N       |
-|M2G<T<M1G: OK   |
-|                |
+|M2G<T<M1G       |
+|CHECK OK        |
 |                |
 |                |
 +----------------+
@@ -173,8 +173,8 @@ Keys: ATWOOD > FIND A AND T > 3 > 5
 |M1G=29.4 N      |
 |M2G=49 N        |
 |T=36.75 N       |
-|M1G<T<M2G: OK   |
-|                |
+|M1G<T<M2G       |
+|CHECK OK        |
 |                |
 |                |
 +----------------+
@@ -186,7 +186,7 @@ Keys: ATWOOD > #2 > 1.96 > 6 > HEAVIER
 
 ```
 +----------------+
-|+=HEAVY DOWN    |
+|+=HVY DN,LGT UP |
 |HEAVY: MG-T=MA  |
 |LIGHT: T-MG=MA  |
 |OTHER=4 KG      |
@@ -203,14 +203,14 @@ Keys: TABLE > 3 > 2 > 0
 
 ```
 +----------------+
-|+=TOWARD PULLEY |
+|+=TO PULLEY AND |
+|HANGER DOWN     |
 |HANG: MG-T=MA   |
 |TABLE: T=MA     |
 |A=3.92 M/S²     |
 |T=11.76 N       |
-|HANGER: DOWN    |
+|HANGER MOVES DN |
 |TABLE: TO PULLEY|
-|                |
 +----------------+
 
 +----------------+
@@ -232,13 +232,24 @@ Keys: TABLE > 5 > 1 > 0.1 > 0.3
 ```
 +----------------+
 |BLOCK STAYS PUT |
+|+=TO PULLEY AND |
+|HANGER DOWN     |
+|HANG: MG-T=0    |
+|TABLE: T-FS=0   |
 |HANG WT≤MUS*N   |
+|                |
+|                |
++----------------+
+
++----------------+
+|STATIC FRIC:    |
 |A=0 M/S²        |
 |T=9.8 N         |
 |FS=9.8 N        |
 |FS MAX=14.7 N   |
 |FS POINTS AWAY  |
 |FROM PULLEY     |
+|                |
 +----------------+
 ```
 
@@ -318,11 +329,22 @@ Keys: INCLINE > AT REST > 5 > 30 > 0.5
 |+X=UPHILL       |
 |FS-MGSINθ=0     |
 |N-MGCOSθ=0      |
-|MGSINθ=24.5 N   |
-|MGCOSθ=42.435 N |
 |N=42.435 N      |
 |FS=24.5 N       |
 |FS POINTS UPHILL|
+|                |
+|                |
++----------------+
+
++----------------+
+|COMPONENTS:     |
+|MGSINθ=24.5 N   |
+|SIN: DOWNHILL   |
+|MGCOSθ=42.435 N |
+|COS: INTO SLOPE |
+|                |
+|                |
+|                |
 +----------------+
 
 +----------------+
@@ -331,7 +353,7 @@ Keys: INCLINE > AT REST > 5 > 30 > 0.5
 |MUS*N=21.218 N  |
 |MIN MUS=.577    |
 |NO: WILL SLIDE  |
-|                |
+|USE SLIDING MUK |
 |                |
 |                |
 +----------------+
@@ -356,12 +378,12 @@ Keys: INCLINE > SLIDING > 2 > 30 > 0.2
 +----------------+
 |COMPONENTS:     |
 |MGSINθ=9.8 N    |
+|SIN: DOWNHILL   |
 |MGCOSθ=16.974 N |
+|COS: INTO SLOPE |
 |N=16.974 N      |
 |FK=3.395 N      |
 |FK=MUK*N        |
-|                |
-|                |
 +----------------+
 ```
 
@@ -376,9 +398,20 @@ Keys: INCLINE > FRICTIONLESS > 2 > 30
 |A=GSINθ         |
 |A=4.9 M/S²      |
 |ACCEL: DOWNHILL |
-|MGSINθ=9.8 N    |
-|MGCOSθ=16.974 N |
 |N=16.974 N      |
+|                |
+|                |
++----------------+
+
++----------------+
+|COMPONENTS:     |
+|MGSINθ=9.8 N    |
+|SIN: DOWNHILL   |
+|MGCOSθ=16.974 N |
+|COS: INTO SLOPE |
+|                |
+|                |
+|                |
 +----------------+
 ```
 
@@ -393,9 +426,20 @@ Keys: INCLINE > MIN MUS > 1 > 30
 |N=MGCOSθ        |
 |MUS≥FS/N=TANθ   |
 |MIN MUS=.577    |
-|MGSINθ=4.9 N    |
-|MGCOSθ=8.487 N  |
 |(MASS CANCELS)  |
+|                |
+|                |
++----------------+
+
++----------------+
+|COMPONENTS:     |
+|MGSINθ=4.9 N    |
+|SIN: DOWNHILL   |
+|MGCOSθ=8.487 N  |
+|COS: INTO SLOPE |
+|                |
+|                |
+|                |
 +----------------+
 ```
 
@@ -410,7 +454,7 @@ Keys: 3RD LAW > 1 > 2 > 10
 |F=10 N          |
 |AB=5 M/S²       |
 |AA=⁻10 M/S²     |
-|AA/AB=MB/MA     |
+|SIZE AA/AB=MB/MA|
 |RATIO=2         |
 |LIGHTER: MORE A |
 +----------------+
@@ -671,8 +715,8 @@ Keys: ATWOOD > FIND A AND T > 6 > 4
 |M1G=58.8 N                |
 |M2G=39.2 N                |
 |T=47.04 N                 |
-|M2G<T<M1G: OK             |
-|                          |
+|M2G<T<M1G                 |
+|CHECK OK                  |
 |                          |
 |                          |
 |                          |
@@ -703,8 +747,8 @@ Keys: ATWOOD > FIND A AND T > 3 > 5
 |M1G=29.4 N                |
 |M2G=49 N                  |
 |T=36.75 N                 |
-|M1G<T<M2G: OK             |
-|                          |
+|M1G<T<M2G                 |
+|CHECK OK                  |
 |                          |
 |                          |
 |                          |
@@ -718,7 +762,7 @@ Keys: ATWOOD > #2 > 1.96 > 6 > HEAVIER
 
 ```
 +--------------------------+
-|+=HEAVY DOWN              |
+|+=HEAVY DOWN, LIGHT UP    |
 |HEAVY: MG-T=MA            |
 |LIGHT: T-MG=MA            |
 |OTHER MASS=4 KG           |
@@ -737,13 +781,13 @@ Keys: TABLE > 3 > 2 > 0
 
 ```
 +--------------------------+
-|+=TOWARD PULLEY           |
+|+=TO PULLEY, HANGER DOWN  |
 |HANG: MG-T=MA             |
 |TABLE: T=MA               |
 |A=3.92 M/S²               |
 |T=11.76 N                 |
-|HANGER: DOWN              |
-|TABLE: TOWARD PULLEY      |
+|HANGER MOVES DOWN         |
+|TABLE MOVES TOWARD PULLEY |
 |N ON TABLE=29.4 N         |
 |FK (KINETIC)=0 N          |
 |(FK=MUK*N, OPPOSES MOTION)|
@@ -757,15 +801,15 @@ Keys: TABLE > 5 > 1 > 0.1 > 0.3
 ```
 +--------------------------+
 |BLOCK STAYS PUT           |
+|+=TO PULLEY, HANGER DOWN  |
+|HANG: MG-T=0              |
+|TABLE: T-FS=0             |
 |HANGER WEIGHT ≤ MUS*N     |
 |A=0 M/S²                  |
 |T=9.8 N                   |
 |FS (STATIC)=9.8 N         |
 |FS MAX = MUS*N=14.7 N     |
 |FS POINTS AWAY FROM PULLEY|
-|                          |
-|                          |
-|                          |
 +--------------------------+
 ```
 
@@ -829,13 +873,13 @@ Keys: INCLINE > AT REST > 5 > 30 > 0.5
 |+X=UPHILL                 |
 |FS-MGSINθ=0               |
 |N-MGCOSθ=0                |
-|MGSINθ=24.5 N             |
-|MGCOSθ=42.435 N           |
 |N=42.435 N                |
-|FS=24.5 N                 |
+|FS NEEDED=24.5 N          |
 |FS POINTS UPHILL          |
-|                          |
-|                          |
+|MGSINθ=24.5 N             |
+|MGSINθ POINTS DOWNHILL    |
+|MGCOSθ=42.435 N           |
+|MGCOSθ PRESSES INTO SLOPE |
 +--------------------------+
 
 +--------------------------+
@@ -844,7 +888,7 @@ Keys: INCLINE > AT REST > 5 > 30 > 0.5
 |FS MAX = MUS*N=21.218 N   |
 |MIN MUS = TANθ=0.577      |
 |NO: WILL SLIDE            |
-|                          |
+|SO USE SLIDING W/ MUK     |
 |                          |
 |                          |
 |                          |
@@ -873,12 +917,12 @@ Keys: INCLINE > SLIDING > 2 > 30 > 0.2
 +--------------------------+
 |COMPONENTS:               |
 |MGSINθ=9.8 N              |
+|MGSINθ POINTS DOWNHILL    |
 |MGCOSθ=16.974 N           |
+|MGCOSθ PRESSES INTO SLOPE |
 |N=16.974 N                |
 |FK=3.395 N                |
 |FK=MUK*N                  |
-|                          |
-|                          |
 |                          |
 |                          |
 +--------------------------+
@@ -895,11 +939,11 @@ Keys: INCLINE > FRICTIONLESS > 2 > 30
 |A=GSINθ                   |
 |A=4.9 M/S²                |
 |ACCEL: DOWNHILL           |
-|MGSINθ=9.8 N              |
-|MGCOSθ=16.974 N           |
 |N=16.974 N                |
-|                          |
-|                          |
+|MGSINθ=9.8 N              |
+|MGSINθ POINTS DOWNHILL    |
+|MGCOSθ=16.974 N           |
+|MGCOSθ PRESSES INTO SLOPE |
 +--------------------------+
 ```
 
@@ -914,11 +958,11 @@ Keys: INCLINE > MIN MUS > 1 > 30
 |N=MGCOSθ                  |
 |FS ≤ MUS*N, SO MUS ≥ TANθ |
 |MIN MUS=0.577             |
-|MGSINθ=4.9 N              |
-|MGCOSθ=8.487 N            |
 |(MASS CANCELS: ANY M OK)  |
-|                          |
-|                          |
+|MGSINθ=4.9 N              |
+|MGSINθ POINTS DOWNHILL    |
+|MGCOSθ=8.487 N            |
+|MGCOSθ PRESSES INTO SLOPE |
 +--------------------------+
 ```
 

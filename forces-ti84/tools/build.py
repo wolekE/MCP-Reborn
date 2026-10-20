@@ -34,7 +34,7 @@ PROFILES = {
 }
 
 # Characters allowed inside string literals (uppercase only, keypad glyphs).
-STRING_CHARS = set("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 +-*/=<>(),.?!:≤≥≠θ²")
+STRING_CHARS = set("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 +-*/=<>(),.?!:≤≥≠θ²⁻")
 ALLOWED_VARS = set("ABCDEFGHIJKLMNOPQRSTUVWXYZθ") | {f"Str{i}" for i in range(1, 10)}
 LABEL_RE = re.compile(r"^[A-Z0-9θ]{1,2}$")
 
@@ -43,7 +43,7 @@ LABEL_RE = re.compile(r"^[A-Z0-9θ]{1,2}$")
 # in Str9 so each answer row can place its unit right after the number with
 # Output(row,col+expr(Str9),"UNIT").  The string holds function tokens, so this
 # one line is tokenized with maximal munch.
-UNIT_COL = ("2+(X<0)+int(log(max(1,abs(X))))"
+UNIT_COL = ("2+(X<0)+int(log(max(1,abs(X))))-(0<abs(X) and abs(X)<1)"
             "+(fPart(X)≠0)(2+(fPart(10X)≠0)+(fPart(100X)≠0))")
 UNIT_COL_LINE = f'"{UNIT_COL}"→Str9'
 
@@ -67,8 +67,13 @@ def split_fields(body, n):
 
 
 def expand_input(body):
-    var, prompt, cond, err = split_fields(body, 4)
-    out = [f"Repeat {cond}", f'Input "{prompt}",{var}']
+    """Validated Input.  The variable is first set to a failing value (field 5,
+    default ⁻1) so a blank ENTER that leaves it unchanged is asked again."""
+    fields = body.split(";")
+    if len(fields) == 4:
+        fields.append("⁻1")
+    var, prompt, cond, err, bad = split_fields(";".join(fields), 5)
+    out = [f"{bad}→{var}", f"Repeat {cond}", f'Input "{prompt}",{var}']
     if err:
         out += [f"If not({cond})", f'Disp "{err}"']
     return out + ["End"]
@@ -98,10 +103,14 @@ def value_lines(row, label, unit, expr, p, profile):
     col = len(label) + 2                  # first column of the number
     out = [f"round({expr},3)→X", f'Output({row},1,"{label}=")']
     if unit:
-        # unit first: a number too long for the row overwrites the unit,
-        # never the other way round
         width = p["row1"] if row == 1 else p["cols"]   # pause indicator
         last = width + 1 - len(unit)
+        if len(label) + len(unit) > 6:
+            # long label: a value of 1000 or more with decimals would push
+            # the unit off the row, so show it as a whole number instead
+            out += [f"If {col}+expr(Str9)>{last}", "round(X,0)→X"]
+        # unit first: a number too long for the row overwrites the unit,
+        # never the other way round
         out.append(f'Output({row},min({last},{col}+expr(Str9)),"{unit}")')
     return out + [f"Output({row},{col},X)"]
 

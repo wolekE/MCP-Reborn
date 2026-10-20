@@ -2,8 +2,10 @@
 """Reference (Python) version of every solver in the FORCES TI-BASIC program.
 
 The math, sign conventions, validation rules and the words shown on screen
-match the calculator program line for line, so this file doubles as a
-readable spec and as the oracle the TI-BASIC simulator tests compare against.
+match the calculator program, so this file doubles as a readable spec and as
+the oracle the TI-BASIC simulator tests compare against.  Where the
+calculator takes ENTER alone or 0 to mean "not given" (μs, the 3rd-law F,
+unused ΣF forces), pass None or 0 here.
 
     python3 reference.py          # run the test suite (required + extra cases)
     python3 reference.py -v       # verbose test output
@@ -168,7 +170,7 @@ def table_hanger(M, m, muk=0.0, mus=None, g=G):
     """
     _require(M > 0 and m > 0, "MUST BE >0")
     _require(muk >= 0, "MUST BE >=0")
-    if mus is None:
+    if not mus:                       # None or 0 (ENTER alone) -> use muk
         mus = muk
     _require(mus >= muk, "NEED MUS>=MUK")
     n = M * g
@@ -223,7 +225,7 @@ def flat_pull(m, F, theta, mode, value=None, g=G):
 # ---------------------------------------------------------------- 5 INCLINE
 def _incline_parts(m, theta, g):
     _require(m > 0, "MUST BE >0")
-    _require(0 <= theta < 90, "USE 0<=THETA<90")
+    _require(0 < theta < 90, "USE 0<THETA<90")
     return m * g * _sin(theta), m * g * _cos(theta)
 
 
@@ -232,7 +234,7 @@ def incline_rest(m, theta, mus=None, g=G):
     down, into = _incline_parts(m, theta, g)
     out = {"mg_sin": down, "mg_cos": into, "N": into, "fs": down,
            "mus_min": _tan(theta)}
-    if mus is not None:
+    if mus:                           # None or 0 (ENTER alone) skips the check
         _require(mus >= 0, "MUST BE >=0")
         out["fs_max"] = mus * into
         out["holds"] = down <= mus * into
@@ -266,7 +268,7 @@ def third_law(mA, mB, F=None):
     """6 equal and opposite forces; + = direction of the force on B."""
     _require(mA > 0 and mB > 0, "MUST BE >0")
     out = {"ratio": mB / mA}          # |aA| / |aB|
-    if F is not None:
+    if F:                             # None or 0 (ENTER alone): ratio only
         F = abs(F)
         out.update(F=F, aB=F / mB, aA=-F / mA)
     return out

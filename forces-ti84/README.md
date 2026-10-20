@@ -42,16 +42,22 @@ the CE instead: it runs unchanged in the top-left corner of the screen.
 2. Connect the calculator and turn it on.
 3. Drag the right `FORCES.8xp` onto the calculator in TI Connect CE
    (*Calculator Explorer*), or use *Actions → Send to Calculators*.
-4. **TI-84 Plus:** the program must sit in RAM to run. If you archived it,
-   press `2nd` `MEM` `2:Mem Mgmt/Del` `7:Prgm`, select FORCES and press
-   `ENTER` to clear the `*`. A CE on OS 5.3+ can run it straight from Archive.
-   The mono program is about 13.7 KB of the TI-84 Plus's ~24 KB of RAM.
+4. **TI-84 Plus:** the program is about 15 KB and must sit in RAM to run
+   (the calculator has about 24 KB). Before sending, check `2nd` `MEM`
+   `2:Mem Mgmt/Del` `1:All`. If **RAM FREE** is under about 16,000 bytes,
+   archive or delete programs and lists you aren't using (archive: select
+   the item and press `ENTER` so a `*` appears), then send again. If you
+   archived FORCES itself, go to `7:Prgm`, select it and press `ENTER` to
+   clear the `*`. ERR:MEMORY when unarchiving means the same thing: free
+   more RAM. A CE on OS 5.3+ can run FORCES straight from Archive.
 5. Run it: `PRGM`, pick `FORCES`, press `ENTER` twice.
 
 ### Before you run it
 
-* **Negative numbers:** type them with the `(-)` key, not the minus key
-  (minus at the start of an entry means "Ans minus …").
+* **Negative numbers:** type them with the `(-)` key, not the minus key.
+  Minus at the start of an entry means "Ans minus …". Prompts that take a
+  signed value show `NEG: USE (⁻) KEY` and use the ⁻ sign
+  (`AY (+UP/⁻DN)=`).
 * **Variables:** FORCES stores into A–Z, θ and Str1–Str9 (your old values there
   are overwritten). It never touches lists (L1–L6 or named lists) or matrices.
 * **g is kept in G** and remembered between runs. It is checked at start: if G
@@ -74,8 +80,8 @@ Main menu **NEWTON SOLVER** (CE wording in brackets where it differs):
 
 | Option | Asks for | Shows |
 |--------|----------|-------|
-| FIND SCALE N | mass M (kg), size of a (m/s², no sign); then the **acceleration direction** UP / DOWN / ZERO, or **FROM MOTION >** to pick MOVING UP / MOVING DOWN / AT REST and then SPEEDING UP / SLOWING DOWN / CONSTANT V | `N-MG=MA`, the reason for the direction (e.g. `A OPPOSITE TO V`), aᵧ with sign, N = m(g + aᵧ), true weight mg, `ACCEL: UP/DOWN/NONE`, and `HEAVIER (N>MG)` / `LIGHTER (N<MG)` / `NORMAL (N=MG)` / `WEIGHTLESS (N=0)`. If aᵧ < −g: `N<0: LIFTS OFF`, the scale reads 0. |
-| ACCEL FROM N [FIND ACCEL FROM SCALE] | mass M, scale reading N (≥ 0); after the first screen, the **velocity direction** UP / DOWN / UNKNOWN | aᵧ = (N − mg)/m with sign and direction, mg; then `SPEEDING UP` or `SLOWING DOWN`. If UNKNOWN it lists both possibilities (`DOWN+SPEEDING OR UP+SLOWING`). If a = 0: constant velocity or at rest. |
+| FIND SCALE N | mass M (kg), size of a (m/s², no sign); then the **acceleration direction** UP / DOWN / ZERO, or **FROM MOTION >** to pick MOVING UP / MOVING DOWN / STAYS AT REST and then SPEEDING UP / SLOWING DOWN / CONSTANT V | `N-MG=MA`, the reason for the direction (e.g. `A OPPOSITE TO V`), aᵧ with sign, N = m(g + aᵧ), true weight mg, `ACCEL: UP/DOWN/NONE`, and `HEAVIER (N>MG)` / `LIGHTER (N<MG)` / `NORMAL (N=MG)` / `WEIGHTLESS (N=0)`. If you typed a nonzero a but then picked ZERO, STAYS AT REST or CONSTANT V, it says `A=0 (A IGNORED)`. "Starts from rest and speeds up" is MOVING UP/DOWN + SPEEDING UP. If aᵧ < −g: `N<0: LIFTS OFF`, the scale reads 0. |
+| ACCEL FROM N [FIND ACCEL FROM SCALE] | mass M, scale reading N (≥ 0); after the first screen, the **velocity direction** UP / DOWN / UNKNOWN | aᵧ = (N − mg)/m with sign and direction, mg; then `SPEEDING UP` or `SLOWING DOWN`. If UNKNOWN it lists both possibilities (`DOWN+SPEEDING OR UP+SLOWING`). If a = 0: constant velocity (or at rest, when V is unknown). |
 | FREE FALL | nothing | N = 0, aᵧ = −g, `ACCEL: DOWN`, `WEIGHTLESS`. |
 | FIND MASS | scale reading N (> 0), signed aᵧ | m = N/(g + aᵧ), mg. If aᵧ ≤ −g: `IMPOSSIBLE`. |
 
@@ -83,20 +89,23 @@ Main menu **NEWTON SOLVER** (CE wording in brackets where it differs):
 
 | Option | Asks for | Shows |
 |--------|----------|-------|
-| FIND A AND T | M1, M2 (kg) | The heavier mass is picked automatically. Both equations (e.g. `M1G-T=M1A`, `T-M2G=M2A`), a = (M−m)g/(M+m), T = m(g+a), which mass goes DOWN and which goes UP, then a check screen with M1G, M2G, T and `M2G<T<M1G: OK`. Equal masses: a = 0, T = mg, `EQUILIBRIUM`. |
-| FIND 2ND MASS [FIND OTHER MASS FROM A] | a (m/s²), known mass (kg), then whether the known mass is the HEAVIER (DOWN) or LIGHTER (UP) one | The other mass (light = heavy·(g−a)/(g+a) or heavy = light·(g+a)/(g−a)), T, both masses. If a ≥ g: `IMPOSSIBLE`. |
+| FIND A AND T | M1, M2 (kg) | The heavier mass is picked automatically. Both equations (e.g. `M1G-T=M1A`, `T-M2G=M2A`), a = (M−m)g/(M+m), T = m(g+a), which mass goes DOWN and which goes UP, then a check screen with M1G, M2G, T, `M2G<T<M1G` and `CHECK OK`. Equal masses: a = 0, T = mg, `EQUILIBRIUM`. |
+| FIND 2ND MASS [FIND OTHER MASS FROM A] | a (m/s²), known mass (kg), then whether the known mass is the HEAVIER (DOWN) or LIGHTER (UP) one | The other mass (light = heavy·(g−a)/(g+a) or heavy = light·(g+a)/(g−a)), T, both masses, `HEAVY GOES DOWN`. If a = 0 the masses are equal: `EQUILIBRIUM`. If a ≥ g: `IMPOSSIBLE`. |
 
 ### 3 TABLE + HANGER — toward the pulley / down is positive
 
 Asks for the table mass, the hanging mass, μk (0 = frictionless), then, only if
 μk > 0, μs (ENTER alone or 0 = use μk; μs must be ≥ μk).
 
+Both screens start with `+=TO PULLEY AND HANGER DOWN`.
+
 * **Moves** (frictionless, or mg > μs·Mg): `HANG: MG-T=MA`,
   `TABLE: T=MA` or `TABLE: T-FK=MA`, a = (mg − μk·Mg)/(M + m), T = m(g − a),
-  `HANGER: DOWN`, `TABLE: TO PULLEY`, then N on the table = Mg and
+  `HANGER MOVES DOWN`, `TABLE: TO PULLEY`, then N on the table = Mg and
   fk = μk·N.
-* **Stays put** (mg ≤ μs·Mg): `BLOCK STAYS PUT`, a = 0, T = mg, static
-  friction fs = mg (pointing away from the pulley), fs max = μs·N.
+* **Stays put** (mg ≤ μs·Mg): `BLOCK STAYS PUT`, `HANG: MG-T=0`,
+  `TABLE: T-FS=0`, a = 0, T = mg, static friction fs = mg (pointing away
+  from the pulley), fs max = μs·N.
 
 ### 4 FLAT SURF PULL [FLAT SURFACE PULL] — level floor, aᵧ = 0, +x = pull direction
 
@@ -111,18 +120,22 @@ negative = pushing down at an angle, −90 to 90). Then, what you know:
 | ACCEL AX | aₓ (signed) | f = F cos θ − m·aₓ |
 
 Shows `N+FSINθ-MG=0`, `FCOSθ-FRIC=MA`, Fx, Fy, N = mg − F sin θ, the
-friction, aₓ and its direction. Special messages: `N<0: LIFTS OFF`; friction
-< 0 means `NOT POSSIBLE`; friction > Fx means `IF AT REST, THE BLOCK STAYS PUT;
-IF MOVING, IT SLOWS DOWN`.
+friction and its direction (`FRIC POINTS LEFT`, or `NO FRICTION`), and aₓ
+with its direction. Special messages:
 
-### 5 INCLINE (submenu) — each asks for m and the slope angle θ (0 ≤ θ < 90)
+* `N<0: LIFTS OFF`.
+* Friction < 0: it would have to point right. That only happens if the box
+  slides left; if it moves right, that aₓ is impossible.
+* Friction > Fx: if at rest, the block stays put; if moving, it slows down.
 
-Every option shows the components mg sin θ (downhill) and mg cos θ (into the
-slope).
+### 5 INCLINE (submenu) — each asks for m and the slope angle θ (0 < θ < 90)
+
+Every option shows the components with their directions: `MGSINθ=…` with
+`SIN: DOWNHILL` and `MGCOSθ=…` with `COS: INTO SLOPE`.
 
 | Option | Extra input | Shows |
 |--------|-------------|-------|
-| AT REST | μs (ENTER alone or 0 = skip the check) | `+X=UPHILL`, `FS-MGSINθ=0`, `N-MGCOSθ=0`, N = mg cos θ, fs = mg sin θ (`FS POINTS UPHILL`); with μs: fs max = μs·N and `YES: STAYS PUT` or `NO: WILL SLIDE`; always the minimum μs = tan θ |
+| AT REST | μs (ENTER alone or 0 = skip the check) | `+X=UPHILL`, `FS-MGSINθ=0`, `N-MGCOSθ=0`, N = mg cos θ, the friction needed to hold it fs = mg sin θ (`FS POINTS UPHILL`); with μs: fs max = μs·N and `YES: STAYS PUT`, or `NO: WILL SLIDE` + `USE SLIDING MUK`; always the minimum μs = tan θ |
 | SLIDING W/ MUK [SLIDING DOWN WITH MUK] | μk | `+X=DOWNHILL`, `MGSINθ-FK=MA`, a = g(sin θ − μk cos θ), fk = μk·N uphill. If a < 0 it says it slows down (and would not start sliding from rest). |
 | FRICTIONLESS | — | a = g sin θ downhill, N |
 | MIN MUS (HOLD) [MIN MUS TO HOLD AT REST] | — (m is asked only for the components) | μs min = tan θ (mass cancels) |
@@ -130,8 +143,8 @@ slope).
 ### 6 3RD LAW — + is the direction of the force on B
 
 Asks for mA, mB and F (ENTER alone or 0 = just the ratio). Shows
-`FAB=-FBA` (equal and opposite), aB = F/mB, aA = −F/mA, and the size ratio
-aA/aB = mB/mA, then a reminder screen: N and mg are not a third-law pair; the
+`FAB=-FBA` (equal and opposite), aB = F/mB, aA = −F/mA, and
+`SIZE AA/AB=MB/MA` with the ratio, then a reminder screen: N and mg are not a third-law pair; the
 partner of Earth's pull on you is your pull on Earth; pairs act on different
 objects, so they never cancel on one diagram.
 
@@ -144,8 +157,8 @@ objects, so they never cancel on one diagram.
     whether T > mg or T < mg. T < 0 means `ROPE SLACK`.
   * SUM F=MA: up to 4 signed forces (ENTER alone or 0 = none) and m → net
     force, a, `NET F: + DIR/- DIR/ZERO`, `EQUILIBRIUM: YES/NO`.
-* **CONCEPT CHECK**: pick MOVING UP / DOWN / RIGHT / LEFT, AT REST, or
-  V=0 1 INSTANT, then SPEEDING UP / SLOWING DOWN / CONSTANT V. Shows the
+* **CONCEPT CHECK**: pick MOVING UP / DOWN / RIGHT / LEFT (then SPEEDING
+  UP / SLOWING DOWN / CONSTANT V), AT REST, or V=0 1 INSTANT. Shows the
   acceleration direction, net force direction and whether it is in
   equilibrium. `V=0 1 INSTANT`: equilibrium is **not** guaranteed (top of a
   toss: a = g down).
@@ -158,31 +171,33 @@ After the last one you are back at the main menu.
 ## Cheat sheet: which menu answers which question
 
 ```
-QUESTION                                   MENU PATH
-Scale reading in an elevator (a given)     ELEVATOR > FIND SCALE N > m, a > UP/DOWN
-...from "moving down, slowing" etc.        ELEVATOR > FIND SCALE N > m, a > FROM MOTION
-Acceleration from a scale reading          ELEVATOR > ACCEL FROM N > m, N > V dir
-Speeding up or slowing down?               ELEVATOR > ACCEL FROM N (pick V dir)
-Free fall / weightless                     ELEVATOR > FREE FALL
-Mass from scale reading + a                ELEVATOR > FIND MASS
-Atwood: a, T, who goes up                  ATWOOD > FIND A AND T
-Atwood: find a mass from a                 ATWOOD > FIND 2ND MASS
-Table block + hanging mass (a, T, stuck?)  TABLE + HANGER
-Pull/push at an angle on a level floor     FLAT SURF PULL > (friction / MUK / CONST V / AX)
-Friction & N for constant velocity         FLAT SURF PULL > CONSTANT V
-Block resting on a slope (N, fs, slips?)   INCLINE > AT REST
-Sliding down a slope with friction         INCLINE > SLIDING W/ MUK
-Frictionless slope                         INCLINE > FRICTIONLESS
-Minimum mus to hold on a slope             INCLINE > MIN MUS (HOLD)
-Collision / push forces and accelerations  3RD LAW
-Rope tension, hanging at rest              MORE > SIMPLE CASES > HANGING, REST
-Terminal velocity (air resistance)         MORE > SIMPLE CASES > TERMINAL VEL.
-Tension, mass accelerating on a rope       MORE > SIMPLE CASES > HANG + ACCEL
-Any 1-D problem: add forces, get a         MORE > SIMPLE CASES > SUM F=MA
-"Which way is a / net F? Equilibrium?"     MORE > CONCEPT CHECK
-Teacher uses g = 10 (or 9.81)              MORE > SETTINGS (G)
+QUESTION                                  KEYS (menu option numbers)
+Scale reading in an elevator, a given     1 ELEVATOR > 1 FIND SCALE N > UP/DOWN
+...from "moving down, slowing" etc.       1 > 1 > 4 FROM MOTION > motion > change
+Acceleration from a scale reading         1 ELEVATOR > 2 ACCEL FROM N
+Speeding up or slowing down?              1 > 2 > (then pick the V direction)
+Free fall / weightless                    1 ELEVATOR > 3 FREE FALL
+Mass from scale reading + a               1 ELEVATOR > 4 FIND MASS
+Atwood: a, T, who goes up/down            2 ATWOOD > 1 FIND A AND T
+Atwood: find a mass from a                2 ATWOOD > 2 FIND 2ND MASS
+Table block + hanging mass (stuck?)       3 TABLE + HANGER
+Pull/push at an angle, level floor        4 FLAT PULL > 1 FRICTION / 2 MUK / 4 AX
+Friction & N for constant velocity        4 FLAT PULL > 3 CONSTANT V
+Block at rest on a slope (N, fs, slips?)  5 INCLINE > 1 AT REST
+Sliding down a slope with friction        5 INCLINE > 2 SLIDING W/ MUK
+Frictionless slope                        5 INCLINE > 3 FRICTIONLESS
+Minimum mus to hold on a slope            5 INCLINE > 4 MIN MUS
+Collision/push: forces & accelerations    6 3RD LAW
+Rope tension, hanging at rest             7 MORE > 1 SIMPLE > 1 HANGING, REST
+Terminal velocity (air resistance)        7 MORE > 1 SIMPLE > 2 TERMINAL VEL.
+Tension, mass accelerating on a rope      7 MORE > 1 SIMPLE > 3 HANG + ACCEL
+Any 1-D problem: add forces, get a        7 MORE > 1 SIMPLE > 4 SUM F=MA
+Which way is a / net F? Equilibrium?      7 MORE > 2 CONCEPT CHECK
+Teacher uses g = 10 (or 9.81)             7 MORE > 3 SETTINGS (G)
 ```
-
+The option numbers are the same on both calculators. The CE menus just
+spell the names out (for example `FLAT SURFACE PULL`, `FIND OTHER MASS
+FROM A`). Press the number key to pick an option.
 ## Typing it in by hand
 
 `FORCES.txt` has one command per line (no `:` chains) and is exactly what the
@@ -203,6 +218,7 @@ pressing `ENTER` at the end of each one. Key guide:
 | `round( abs( int( fPart( max( min(` | `MATH` NUM tab |
 | `length( sub( expr(` | `2nd` `CATALOG` |
 | `Degree Radian Float Normal Full` | `MODE` screen while editing, or `2nd` `CATALOG` |
+| `"` / `:` / `?` / space | `ALPHA` `+` / `ALPHA` `.` / `ALPHA` `(-)` / `ALPHA` `0` |
 
 The mono program's line 6 stores a formula **inside a string**
 (`"2+(X<0)+int(log(max(1,abs(X))))+…"→Str9`). Type the functions inside the
@@ -246,14 +262,27 @@ part of the command, so you don't type it.
   `Goto`/`Menu(` runs inside a block. It also reports any text that scrolls
   away, gets cleared or is hidden by a menu before you could read it, any
   text past the screen edge, and anything under the mono pause indicator.
-* `tools/test_program.py` runs the real `.8xp` files through it. It runs the
-  12 required cases on both calculators (and both mono number styles, `.5`
-  and `0.5`), every error and impossible-setup path, wrong-input re-prompts,
-  blank-ENTER behavior both ways, mode restore, g settings, a 30-problem
-  session (no leaks), and random problems compared with `reference.py`. It
-  finishes by confirming **every line of both programs ran at least once**.
+* `tools/test_program.py` runs the real `.8xp` files through it. It runs:
+  * the 12 required cases on both calculators, with both mono number styles
+    (`.5` and `0.5`);
+  * every error and impossible-setup path;
+  * wrong inputs, checking that each one is refused and asked again;
+  * blank ENTER handled both ways a calculator might treat it;
+  * mode restore, the g settings, and a 30-problem session (no leaks);
+  * random problems for every solver. Every answer row on every screen is
+    compared with `reference.py`.
+
+  It finishes by confirming **every line of both programs ran at least
+  once**.
+* The finished program was also reviewed by independent agents (physics,
+  real-hardware TI-BASIC, spec compliance, hand traces of all 12 cases,
+  simulator fidelity), and their confirmed findings were fixed.
 * Rebuild and re-test: `pip install tivars`, then
   `python3 tools/build.py && python3 reference.py && python3 tools/test_program.py`.
+
+On the TI-84 Plus a long label (MGSINθ, MGCOSθ, FS MAX, OTHER, HEAVY,
+LIGHT) with a value of 1000 or more is shown as a whole number (for example
+`MGSINθ=1470 N`) so that the unit still fits on the 16-column row.
 
 The programs have been verified in this simulator and against TI's
 documentation, not yet on a physical calculator. If anything looks off on

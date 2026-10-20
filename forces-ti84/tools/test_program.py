@@ -4,13 +4,17 @@
     python3 tools/test_program.py        (after python3 tools/build.py)
 
 Every test runs both builds (TI-84 Plus mono with both number display
-styles, and TI-84 Plus CE), checks the answers on screen against
-reference.py, and fails on any simulator violation: memory leak, text
-scrolled/cleared/hidden before it was seen, text past the screen edge,
-pause indicator overlap, or a calculator error.  The run ends with a line
-coverage report: every line of both programs must execute at least once.
+styles, and TI-84 Plus CE) and fails on any simulator violation: memory
+leak, text scrolled/cleared/hidden before it was seen, text past the screen
+edge, text overwritten, pause indicator overlap, or a calculator error.
+The required cases and path tests check the key answers and words; the
+fuzz test checks EVERY answer row of every solver against reference.py.
+The run ends with a line-coverage check: every line of both programs must
+execute at least once.
 """
 
+import collections
+import math
 import os
 import random
 import sys
@@ -32,6 +36,8 @@ TARGETS = [("mono", "classic"), ("mono", "mathprint"), ("ce", "mathprint")]
 COVER = {p: set() for p in SRC}
 TOL = 0.01          # assignment tolerance
 ROUND_TOL = 0.0011  # TI shows round(x,3); reference.py is unrounded
+# prompts where any number (including the test's "bad" ⁻1) is legal
+OPEN_PROMPTS = ("AY", "AX", "F (N)=", "FORCE F", "F1", "F2", "F3", "F4")
 
 
 def run(profile, keys, style="classic", init=None, quit=True, blank="empty"):
@@ -71,9 +77,18 @@ class Base(unittest.TestCase):
     def each(self):
         return TARGETS
 
+    @staticmethod
+    def tol(m, label, unit, want, base=ROUND_TOL):
+        """Allowed difference for a displayed value.  On the mono screen a
+        long label (MGSINθ, FS MAX, OTHER, ...) with a value of 1000 or more
+        is shown as a whole number so its unit still fits."""
+        if m.profile == "mono" and len(label) + len(unit) > 6 and abs(want) >= 999.5:
+            return 0.5 + 1e-9
+        return base + abs(want) * 1e-9
+
     def expect(self, m, labels, unit, want, tol=TOL):
         got, u = value(m, *labels)
-        self.assertAlmostEqual(got, want, delta=tol,
+        self.assertAlmostEqual(got, want, delta=max(tol, self.tol(m, labels[0], unit, want)),
                                msg=f"{labels} on {m.profile}/{m.style}: {m.pauses}")
         self.assertEqual(u, unit, f"unit for {labels}")
         return got
@@ -97,7 +112,7 @@ class RequiredCases(Base):
             m = run(p, ["INCLINE", "AT REST", "5.0", "30", ""], st)
             check_clean(self, m)
             self.both(m, ("N",), "N", 42.44, r["N"])
-            self.both(m, ("FS",), "N", 24.5, r["fs"])
+            self.both(m, ("FS", "FS NEEDED"), "N", 24.5, r["fs"])
             self.assertTrue(shows(m, "FS POINTS UPHILL"))
 
     def test_02_elevator_down_slowing(self):
@@ -126,7 +141,8 @@ class RequiredCases(Base):
             check_clean(self, m)
             self.both(m, ("A",), "M/S²", 3.92, r["a"])
             self.both(m, ("T",), "N", 11.76, r["T"])
-            self.assertTrue(shows(m, "HANGER: DOWN") and shows(m, "PULLEY"))
+            self.assertTrue(shows(m, "HANGER MOVES") and shows(m, "TO PULLEY"))
+            self.assertTrue(shows(m, "+=TO PULLEY"))
 
     def test_05_atwood_6_4(self):
         r = ref.atwood(6, 4)
@@ -299,7 +315,10 @@ class Paths(Base):
             self.expect(m, ("FRIC",), "N", r["f"], ROUND_TOL)
             m = run(p, ["FLAT", "5", "20", "0", "ACCEL", "5"], st)
             check_clean(self, m)
-            self.assertTrue(shows(m, "NOT") and shows(m, "POSSIBLE"))
+            self.assertTrue(shows(m, "IMPOSSIBLE.") and shows(m, "RIGHT (!)"))
+            m = run(p, ["FLAT", "1", "5", "90", "CONSTANT"], st)
+            check_clean(self, m)
+            self.assertTrue(shows(m, "NO FRICTION"))
             m = run(p, ["FLAT", "5", "5", "0", "MUK", "0.5"], st)
             check_clean(self, m)
             self.assertTrue(shows(m, "STAYS PUT"))
@@ -331,10 +350,11 @@ class Paths(Base):
             check_clean(self, m)
             self.expect(m, ("MIN MUS",), "", ref.incline_min_mus(1, 30)["mus_min"],
                         ROUND_TOL)
-            m = run(p, ["INCLINE", "AT REST", "5", "95", "90", "0", ""], st)
+            m = run(p, ["INCLINE", "AT REST", "5", "95", "90", "0", "30", ""], st)
             check_clean(self, m)
-            self.assertEqual(sum(1 for pr, _ in m.inputs if "θ" in pr), 3)
-            self.expect(m, ("FS",), "N", 0)
+            self.assertEqual(sum(1 for pr, _ in m.inputs if "θ" in pr), 4)
+            self.expect(m, ("FS", "FS NEEDED"), "N", 24.5)
+            self.assertTrue(shows(m, "DOWNHILL") and shows(m, "INTO SLOPE"))
 
     def test_simple_cases(self):
         for p, st in self.each():
@@ -457,6 +477,51 @@ class Paths(Base):
             check_clean(self, m)
             self.assertAlmostEqual(value(m, "RATIO")[0], 2)
 
+    def test_review_fixes(self):
+        """Branches added after the independent review."""
+        for p, st in self.each():
+            m = run(p, ["ELEVATOR", "ACCEL FROM", "50", "490", "#1"], st)
+            check_clean(self, m)                       # a=0, V known
+            self.assertTrue(shows(m, "CONSTANT") and not shows(m, "(OR AT REST)"))
+            m = run(p, ["ATWOOD", "#2", "0", "5", "HEAVIER"], st)
+            check_clean(self, m)
+            self.assertTrue(shows(m, "EQUILIBRIUM") and not shows(m, "HEAVY GOES"))
+            m = run(p, ["ELEVATOR", "FIND SCALE", "60", "2", "MOTION", "AT REST"], st)
+            check_clean(self, m)
+            self.assertTrue(shows(m, "IGNORED"))
+            m = run(p, ["TABLE", "5", "1", "0.1", "0.3"], st)
+            check_clean(self, m)
+            self.assertTrue(shows(m, "HANG: MG-T=0") and shows(m, "TABLE: T-FS=0"))
+            m = run(p, ["INCLINE", "AT REST", "5", "30", "0.5"], st)
+            check_clean(self, m)
+            self.assertTrue(shows(m, "SLIDING"))
+            # long labels with 4-digit values keep their unit (mono rounds)
+            for keys in (["INCLINE", "AT REST", "301.75", "33.3", "0.9"],
+                         ["INCLINE", "SLIDING", "301.75", "33.3", "0.1"],
+                         ["INCLINE", "FRICTIONLESS", "301.75", "33.3"],
+                         ["INCLINE", "MIN MUS", "301.75", "33.3"],
+                         ["ATWOOD", "#2", "1.5", "1234.567", "HEAVIER"],
+                         ["ATWOOD", "#2", "1.5", "1234.567", "LIGHTER"],
+                         ["TABLE", "999.99", "100.07", "0.5", "0.6"]):
+                m = run(p, keys, st)
+                check_clean(self, m)
+                for label, v, unit in values(m.pauses):
+                    if label in ("MGSINθ", "MGCOSθ", "FS MAX", "OTHER", "HEAVY", "LIGHT"):
+                        self.assertTrue(unit in ("N", "KG"), (label, v, unit, m.pauses))
+
+    def test_numeric_blank_keeps_old_value(self):
+        """If a blank ENTER at a numeric Input leaves the variable unchanged,
+        every validated prompt asks again instead of using a stale value."""
+        for p, st in self.each():
+            m = run(p, ["ATWOOD", "FIND A AND T", "", "6", "", "4"], st,
+                    init={"P": 99, "Q": 99}, blank="unchanged")
+            check_clean(self, m)
+            self.expect(m, ("A",), "M/S²", 1.96)
+            m = run(p, ["MORE", "SIMPLE", "#3", "2", ""], st, init={"Y": 50},
+                    blank="unchanged")
+            check_clean(self, m)
+            self.expect(m, ("T",), "N", 19.6)          # AY blank means 0
+
     def test_every_validation_message(self):
         """Answer every numeric prompt wrongly once; the program must
         re-ask (never crash, never accept) and then finish normally."""
@@ -485,6 +550,11 @@ class Paths(Base):
                 COVER[p] |= m.hit
                 check_clean(self, m)
                 self.assertTrue(m.pauses, path)
+                asked = collections.Counter(pr for pr, _ in m.inputs)
+                for prompt in seen:
+                    if not any(k in prompt for k in OPEN_PROMPTS):
+                        self.assertGreaterEqual(asked[prompt], 2,
+                                                f"{prompt!r} accepted a bad value")
 
     def test_only_allowed_variables(self):
         allowed = set("ABCDEFGHIJKLMNOPQRSTUVWXYZθ") | {f"Str{i}" for i in range(1, 10)}
@@ -495,36 +565,58 @@ class Paths(Base):
 
 # --------------------------------------------------------------- fuzzing
 class Fuzz(Base):
-    """Random inputs on every numeric solver vs reference.py."""
+    """Random inputs on every solver vs reference.py.  Strict: EVERY answer
+    row on every screen must be one the test expects, with the right value
+    and unit (so no displayed number goes unchecked)."""
 
-    N = 40
+    N = 60
 
     def rnd(self, rng, lo, hi, nd=2):
         return round(rng.uniform(lo, hi), nd)
 
-    def compare(self, m, pairs):
+    def mass(self, rng):
+        # mostly classroom sizes, sometimes cars/elevators (4-digit forces)
+        return self.rnd(rng, 0.5, 120) if rng.random() < 0.8 else self.rnd(rng, 300, 2500)
+
+    def compare(self, m, rows):
+        """rows: list of (labels, unit, value).  Every value row on screen
+        must match one of them; every one of them must appear."""
         check_clean(self, m)
-        for labels, unit, want in pairs:
-            self.expect(m, labels, unit, want, ROUND_TOL + abs(want) * 1e-9)
+        used = set()
+        for label, v, unit in values(m.pauses):
+            hit = [i for i, (labels, _, _) in enumerate(rows) if label in labels]
+            self.assertTrue(hit, f"unexpected answer row {label}={v} on {m.profile}: "
+                                 f"{m.pauses}")
+            labels, want_unit, want = rows[hit[0]]
+            self.assertEqual(unit, want_unit, f"unit of {label}")
+            self.assertAlmostEqual(v, want, delta=self.tol(m, label, unit, want),
+                                   msg=f"{label} on {m.profile}/{m.style}: {m.pauses}")
+            used.update(hit)
+        missing = [rows[i][0] for i in range(len(rows)) if i not in used]
+        self.assertEqual(missing, [], f"rows not shown on {m.profile}: {m.pauses}")
 
     def test_fuzz(self):
         rng = random.Random(84)
+        AY, MG = ("AY", "ACCEL AY"), ("MG", "TRUE WEIGHT MG")
         for p, st in self.each():
             for _ in range(self.N):
-                mass = self.rnd(rng, 0.5, 120)
+                mass = self.mass(rng)
                 a = self.rnd(rng, 0, 9)
                 d = rng.choice(["UP", "DOWN"])
                 r = ref.elevator_scale(mass, a, direction=d)
-                if not r["lifts_off"]:
-                    m = run(p, ["ELEVATOR", "FIND SCALE", num(mass), num(a),
-                                "#1" if d == "UP" else "#2"], st)
-                    self.compare(m, [(("N", "SCALE N"), "N", r["N"]),
-                                     (("AY", "ACCEL AY"), "M/S²", r["ay"])])
+                m = run(p, ["ELEVATOR", "FIND SCALE", num(mass), num(a),
+                            "#1" if d == "UP" else "#2"], st)
+                self.compare(m, [(AY, "M/S²", r["ay"]), (("N", "SCALE N"), "N", r["N"]),
+                                 (MG, "N", r["mg"])])
                 n = self.rnd(rng, 0, 1500, 1)
                 r = ref.elevator_accel(mass, n)
                 m = run(p, ["ELEVATOR", "ACCEL FROM", num(mass), num(n), "#3"], st)
-                self.compare(m, [(("AY", "ACCEL AY"), "M/S²", r["ay"]),
-                                 (("MG", "TRUE WEIGHT MG"), "N", r["mg"])])
+                self.compare(m, [(AY, "M/S²", r["ay"]), (MG, "N", r["mg"])])
+                ay = self.rnd(rng, -9, 9)
+                r = ref.elevator_mass(n + 1, ay)
+                m = run(p, ["ELEVATOR", "FIND MASS", num(n + 1), num(ay)], st)
+                self.compare(m, [(("M", "MASS M"), "KG", r["m"]), (MG, "N", r["mg"])])
+
                 m1, m2 = self.rnd(rng, 0.1, 50), self.rnd(rng, 0.1, 50)
                 if m1 != m2:
                     r = ref.atwood(m1, m2)
@@ -532,43 +624,97 @@ class Fuzz(Base):
                     self.compare(m, [(("A",), "M/S²", r["a"]), (("T",), "N", r["T"]),
                                      (("M1G",), "N", m1 * 9.8), (("M2G",), "N", m2 * 9.8)])
                     self.assertTrue(shows(m, "CHECK OK"))
-                big, small = self.rnd(rng, 0.5, 40), self.rnd(rng, 0.5, 40)
+                acc, known = self.rnd(rng, 0, 9.7), self.mass(rng)
+                heavy = rng.random() < 0.5
+                r = ref.atwood_other_mass(acc, known, heavy)
+                m = run(p, ["ATWOOD", "#2", num(acc), num(known),
+                            "HEAVIER" if heavy else "LIGHTER"], st)
+                self.compare(m, [(("OTHER", "OTHER MASS"), "KG", r["other"]),
+                                 (("T",), "N", r["T"]),
+                                 (("HEAVY", "HEAVY MASS"), "KG", r["heavy"]),
+                                 (("LIGHT", "LIGHT MASS"), "KG", r["light"])])
+
+                big, small = self.mass(rng), self.mass(rng)
                 muk = rng.choice([0, self.rnd(rng, 0, 0.8)])
                 r = ref.table_hanger(big, small, muk)
                 keys = ["TABLE", num(big), num(small), num(muk)] + ([""] if muk else [])
                 m = run(p, keys, st)
                 if r["moves"]:
-                    self.compare(m, [(("A",), "M/S²", r["a"]), (("T",), "N", r["T"])])
+                    self.compare(m, [(("A",), "M/S²", r["a"]), (("T",), "N", r["T"]),
+                                     (("N", "N ON TABLE"), "N", r["N"]),
+                                     (("FK", "FK (KINETIC)"), "N", r["fk"])])
                 else:
-                    self.compare(m, [(("FS", "FS (STATIC)"), "N", r["fs"])])
+                    self.compare(m, [(("A",), "M/S²", 0), (("T",), "N", r["T"]),
+                                     (("FS", "FS (STATIC)"), "N", r["fs"]),
+                                     (("FS MAX", "FS MAX = MUS*N"), "N", r["fs_max"])])
+
                 F, th = self.rnd(rng, 0, 200), self.rnd(rng, -60, 60, 1)
-                fr = self.rnd(rng, 0, 30)
-                r = ref.flat_pull(mass, F, th, "FRICTION", fr)
-                m = run(p, ["FLAT", num(mass), num(F), num(th), "FRICTION",
-                            num(fr)], st)
+                mode = rng.choice(["FRICTION", "MUK", "CONSTANT", "ACCEL"])
+                val = {"FRICTION": self.rnd(rng, 0, 30), "MUK": self.rnd(rng, 0, 0.9),
+                       "CONSTANT": None, "ACCEL": self.rnd(rng, -3, 6)}[mode]
+                r = ref.flat_pull(mass, F, th, mode, val)
+                keys = ["FLAT", num(mass), num(F), num(th), mode]
+                keys += [] if val is None else [num(val)]
+                m = run(p, keys, st)
                 if r["lifts_off"]:
-                    check_clean(self, m)
+                    self.compare(m, [(("FY",), "N", r["Fy"]), (("MG",), "N", r["mg"])])
                     self.assertTrue(shows(m, "LIFTS OFF"))
                 else:
-                    self.compare(m, [(("N",), "N", r["N"]), (("AX",), "M/S²", r["ax"]),
-                                     (("FX",), "N", r["Fx"]), (("FY",), "N", r["Fy"])])
-                th = self.rnd(rng, 0, 89, 1)
-                k = self.rnd(rng, 0, 1)
+                    rows = [(("N",), "N", r["N"]), (("AX",), "M/S²", r["ax"]),
+                            (("FX",), "N", r["Fx"]), (("FY",), "N", r["Fy"]),
+                            (("FRIC",), "N", r["f"])]
+                    if "mu_needed" in r:
+                        rows.append((("MU", "MU NEEDED"), "", r["mu_needed"]))
+                    self.compare(m, rows)
+
+                th = self.rnd(rng, 0.1, 89, 1)
+                k = rng.choice([0, self.rnd(rng, 0.01, 1)])
+                parts = [(("MGSINθ",), "N", mass * 9.8 * math.sin(math.radians(th))),
+                         (("MGCOSθ",), "N", mass * 9.8 * math.cos(math.radians(th)))]
                 r = ref.incline_slide(mass, th, k)
                 m = run(p, ["INCLINE", "SLIDING", num(mass), num(th), num(k)], st)
-                self.compare(m, [(("A",), "M/S²", r["a"]),
-                                 (("MGSINθ",), "N", r["mg_sin"]),
-                                 (("MGCOSθ",), "N", r["mg_cos"])])
-                r = ref.incline_rest(mass, th, k)
+                self.compare(m, parts + [(("A",), "M/S²", r["a"]), (("N",), "N", r["N"]),
+                                         (("FK",), "N", r["fk"])])
+                r = ref.incline_rest(mass, th, k or None)
                 m = run(p, ["INCLINE", "AT REST", num(mass), num(th), num(k)], st)
-                self.compare(m, [(("FS",), "N", r["fs"]), (("N",), "N", r["N"])])
-                self.assertTrue(shows(m, r["verdict"].split(":")[0] + ":"))
-                ma, mb, f = self.rnd(rng, 0.1, 9), self.rnd(rng, 0.1, 9), self.rnd(rng, 0, 99)
-                r = ref.third_law(ma, mb, f)
+                rows = parts + [(("N",), "N", r["N"]), (("FS", "FS NEEDED"), "N", r["fs"]),
+                                (("MIN MUS", "MIN MUS = TANθ"), "", r["mus_min"])]
+                if k:
+                    rows.append((("MUS*N", "FS MAX = MUS*N"), "N", r["fs_max"]))
+                    self.assertTrue(shows(m, r["verdict"].split(":")[0] + ":"))
+                self.compare(m, rows)
+                r = ref.incline_frictionless(mass, th)
+                m = run(p, ["INCLINE", "FRICTIONLESS", num(mass), num(th)], st)
+                self.compare(m, parts + [(("A",), "M/S²", r["a"]), (("N",), "N", r["N"])])
+                r = ref.incline_min_mus(mass, th)
+                m = run(p, ["INCLINE", "MIN MUS", num(mass), num(th)], st)
+                self.compare(m, parts + [(("MIN MUS",), "", r["mus_min"])])
+
+                ma, mb = self.rnd(rng, 0.1, 9), self.rnd(rng, 0.1, 9)
+                f = rng.choice([0, self.rnd(rng, 0.1, 99)])
+                r = ref.third_law(ma, mb, f or None)
                 m = run(p, ["3RD LAW", num(ma), num(mb), num(f)], st)
-                self.compare(m, [(("AA", "AA=-F/MA"), "M/S²", r["aA"]),
-                                 (("AB", "AB=F/MB"), "M/S²", r["aB"]),
-                                 (("RATIO",), "", r["ratio"])])
+                rows = [(("RATIO",), "", r["ratio"])]
+                if f:
+                    rows += [(("F", "F (EACH)"), "N", r["F"]),
+                             (("AA", "AA=-F/MA"), "M/S²", r["aA"]),
+                             (("AB", "AB=F/MB"), "M/S²", r["aB"])]
+                self.compare(m, rows)
+
+                ay = self.rnd(rng, -9.7, 9)
+                r = ref.hanging_accel(mass, ay)
+                m = run(p, ["MORE", "SIMPLE", "#3", num(mass), num(ay)], st)
+                self.compare(m, [(("T",), "N", r["T"]), (("MG",), "N", r["mg"]),
+                                 (("AY",), "M/S²", ay)])
+                forces = [self.rnd(rng, -50, 50) for _ in range(rng.randint(1, 4))]
+                r = ref.net_force(forces, mass)
+                keys = [num(x) for x in forces] + [""] * (4 - len(forces))
+                m = run(p, ["MORE", "SIMPLE", "SUM"] + keys + [num(mass)], st)
+                self.compare(m, [(("FNET",), "N", r["Fnet"]), (("A",), "M/S²", r["a"])])
+                m = run(p, ["MORE", "SIMPLE", "#1", num(mass)], st)
+                self.compare(m, [(("T",), "N", mass * 9.8)])
+                m = run(p, ["MORE", "SIMPLE", "#2", num(mass)], st)
+                self.compare(m, [(("FAIR",), "N", mass * 9.8), (("A",), "M/S²", 0)])
 
 
 # -------------------------------------------------------------- coverage

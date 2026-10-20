@@ -611,6 +611,10 @@ class Machine:
                     self.set(var, typed)
             else:
                 if typed == "":
+                    if self.blank == "unchanged":
+                        s.seen()
+                        self.pc += 1
+                        return
                     raise TIError("ERR:SYNTAX (blank numeric Input)")
                 v = self.ev(parse_expr(typed))
                 self.set(var, v)
@@ -701,5 +705,10 @@ def values(pages):
             m = re.match(r"^(.*)=" + num + r"(?:\s*(\S.*))?$", row)
             if m:
                 v = float(m.group(2).replace("⁻", "-").replace("ᴇ", "e"))
+                if v == 0 and not m.group(3) and any(c in m.group(1) for c in "+-"):
+                    continue                    # an equation such as T-MG=0
+                if m.group(1).startswith("(") or ":" in m.group(1) or \
+                        (m.group(3) or "").startswith(")"):
+                    continue                    # a note such as (A=0)
                 out.append((m.group(1), v, m.group(3) or ""))
     return out

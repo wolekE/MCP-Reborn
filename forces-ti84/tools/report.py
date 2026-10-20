@@ -24,7 +24,7 @@ CASES = [
     ("Incline at rest, 5.0 kg, 30°", "INCLINE > AT REST > 5.0 > 30 > ENTER",
      ["INCLINE", "AT REST", "5.0", "30", ""], [
          ("N", ("N",), 42.44, ref.incline_rest(5, 30)["N"]),
-         ("fs", ("FS",), 24.5, ref.incline_rest(5, 30)["fs"])]),
+         ("fs", ("FS", "FS NEEDED"), 24.5, ref.incline_rest(5, 30)["fs"])]),
     ("Elevator, 60 kg, moving down, slowing at 1.5", "ELEVATOR > FIND SCALE N > 60 > 1.5 > FROM MOTION > MOVING DOWN > SLOWING DOWN",
      ["ELEVATOR", "FIND SCALE", "60", "1.5", "MOTION", "MOVING DOWN", "SLOWING"], [
          ("N", ("N", "SCALE N"), 678,

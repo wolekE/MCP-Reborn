@@ -3,7 +3,7 @@ Degree
 Float
 Normal
 Full
-"2+(X<0)+int(log(max(1,abs(X))))+(fPart(X)≠0)(2+(fPart(10X)≠0)+(fPart(100X)≠0))"→Str9
+"2+(X<0)+int(log(max(1,abs(X))))-(0<abs(X) and abs(X)<1)+(fPart(X)≠0)(2+(fPart(10X)≠0)+(fPart(100X)≠0))"→Str9
 ClrHome
 If G≠9.8 and G≠9.81 and G≠10
 9.8→G
@@ -26,12 +26,14 @@ Menu("ELEVATOR","FIND SCALE N",EA,"ACCEL FROM N",EB,"FREE FALL",EC,"FIND MASS",E
 Lbl EA
 ClrHome
 Disp "FIND SCALE N"
+⁻1→M
 Repeat M>0
 Input "M (KG)=",M
 If not(M>0)
 Disp "MUST BE >0"
 End
 Disp "SIZE OF A ONLY"
+⁻1→A
 Repeat A≥0
 Input "A (M/S²)=",A
 If not(A≥0)
@@ -49,9 +51,11 @@ Goto E9
 Lbl E3
 0→Y
 "CONST V: A=0"→Str2
+If A≠0
+"A=0 (A IGNORED)"→Str2
 Goto E9
 Lbl E4
-Menu("ELEVATOR IS","MOVING UP",E5,"MOVING DOWN",E6,"AT REST",E3)
+Menu("ELEVATOR IS","MOVING UP",E5,"MOVING DOWN",E6,"STAYS AT REST",E3)
 Lbl E5
 1→V
 Goto E7
@@ -120,17 +124,19 @@ Goto 0
 Lbl EB
 ClrHome
 Disp "ACCEL FROM N"
+⁻1→M
 Repeat M>0
 Input "M (KG)=",M
 If not(M>0)
 Disp "MUST BE >0"
 End
+⁻1→N
 Repeat N≥0
 Input "SCALE N (N)=",N
 If not(N≥0)
 Disp "MUST BE ≥0"
 End
-(N-MG)/M→Y
+round((N-MG)/M,9)→Y
 "ACCEL: NONE"→Str1
 If Y>0
 "ACCEL: UP"→Str1
@@ -172,6 +178,8 @@ Then
 "A=0, SO V IS"→Str2
 "CONSTANT"→Str3
 "(OR AT REST)"→Str4
+If V
+" "→Str4
 "EQUILIBRIUM"→Str5
 Else
 If V=0
@@ -227,12 +235,15 @@ Goto 0
 Lbl ED
 ClrHome
 Disp "FIND MASS"
+⁻1→N
 Repeat N>0
 Input "SCALE N (N)=",N
 If not(N>0)
 Disp "MUST BE >0"
 End
-Input "AY (+UP/-DN)=",Y
+Disp "NEG: USE (⁻) KEY"
+0→Y
+Input "AY (+UP/⁻DN)=",Y
 "ACCEL: NONE"→Str1
 If Y>0
 "ACCEL: UP"→Str1
@@ -245,7 +256,7 @@ Output(1,1,"+ = UP")
 Output(2,1,"N-MG=MA")
 Output(3,1,"IMPOSSIBLE:")
 Output(4,1,"N>0 NEEDS")
-Output(5,1,"AY>-G")
+Output(5,1,"AY>⁻G")
 Pause 
 Else
 N/(G+Y)→M
@@ -270,11 +281,13 @@ Menu("ATWOOD(2 HANG)","FIND A AND T",AA,"FIND 2ND MASS",AB,"BACK",0)
 Lbl AA
 ClrHome
 Disp "ATWOOD: A, T"
+⁻1→P
 Repeat P>0
 Input "M1 (KG)=",P
 If not(P>0)
 Disp "MUST BE >0"
 End
+⁻1→Q
 Repeat Q>0
 Input "M2 (KG)=",Q
 If not(Q>0)
@@ -355,11 +368,13 @@ Goto 0
 Lbl AB
 ClrHome
 Disp "FIND 2ND MASS"
+⁻1→A
 Repeat A≥0
 Input "A (M/S²)=",A
 If not(A≥0)
 Disp "MUST BE ≥0"
 End
+⁻1→K
 Repeat K>0
 Input "KNOWN M (KG)=",K
 If not(K>0)
@@ -391,12 +406,17 @@ K(G+A)/(G-A)→H
 H→U
 End
 L(G+A)→T
+"HEAVY GOES DOWN"→Str1
+If A=0
+"A=0: EQUILIBRIUM"→Str1
 ClrHome
-Output(1,1,"+=HEAVY DOWN")
+Output(1,1,"+=HVY DN,LGT UP")
 Output(2,1,"HEAVY: MG-T=MA")
 Output(3,1,"LIGHT: T-MG=MA")
 round(U,3)→X
 Output(4,1,"OTHER=")
+If 7+expr(Str9)>15
+round(X,0)→X
 Output(4,min(15,7+expr(Str9)),"KG")
 Output(4,7,X)
 round(T,3)→X
@@ -405,29 +425,36 @@ Output(5,min(16,3+expr(Str9)),"N")
 Output(5,3,X)
 round(H,3)→X
 Output(6,1,"HEAVY=")
+If 7+expr(Str9)>15
+round(X,0)→X
 Output(6,min(15,7+expr(Str9)),"KG")
 Output(6,7,X)
 round(L,3)→X
 Output(7,1,"LIGHT=")
+If 7+expr(Str9)>15
+round(X,0)→X
 Output(7,min(15,7+expr(Str9)),"KG")
 Output(7,7,X)
-Output(8,1,"HEAVY GOES DOWN")
+Output(8,1,Str1)
 Pause 
 End
 Goto 0
 Lbl T
 ClrHome
 Disp "TABLE + HANGER"
+⁻1→M
 Repeat M>0
 Input "TABLE M (KG)=",M
 If not(M>0)
 Disp "MUST BE >0"
 End
+⁻1→H
 Repeat H>0
 Input "HANG M (KG)=",H
 If not(H>0)
 Disp "MUST BE >0"
 End
+⁻1→K
 Repeat K≥0
 Input "MUK (0=NONE)=",K
 If not(K≥0)
@@ -463,19 +490,20 @@ KN→F
 If K=0
 "TABLE: T=MA"→Str1
 ClrHome
-Output(1,1,"+=TOWARD PULLEY")
-Output(2,1,"HANG: MG-T=MA")
-Output(3,1,Str1)
+Output(1,1,"+=TO PULLEY AND")
+Output(2,1,"HANGER DOWN")
+Output(3,1,"HANG: MG-T=MA")
+Output(4,1,Str1)
 round(A,3)→X
-Output(4,1,"A=")
-Output(4,min(13,3+expr(Str9)),"M/S²")
-Output(4,3,X)
-round(T,3)→X
-Output(5,1,"T=")
-Output(5,min(16,3+expr(Str9)),"N")
+Output(5,1,"A=")
+Output(5,min(13,3+expr(Str9)),"M/S²")
 Output(5,3,X)
-Output(6,1,"HANGER: DOWN")
-Output(7,1,"TABLE: TO PULLEY")
+round(T,3)→X
+Output(6,1,"T=")
+Output(6,min(16,3+expr(Str9)),"N")
+Output(6,3,X)
+Output(7,1,"HANGER MOVES DN")
+Output(8,1,"TABLE: TO PULLEY")
 Pause 
 ClrHome
 Output(1,1,"TABLE MASS:")
@@ -496,36 +524,47 @@ HG→T
 HG→F
 ClrHome
 Output(1,1,"BLOCK STAYS PUT")
-Output(2,1,"HANG WT≤MUS*N")
+Output(2,1,"+=TO PULLEY AND")
+Output(3,1,"HANGER DOWN")
+Output(4,1,"HANG: MG-T=0")
+Output(5,1,"TABLE: T-FS=0")
+Output(6,1,"HANG WT≤MUS*N")
+Pause 
+ClrHome
+Output(1,1,"STATIC FRIC:")
 round(0,3)→X
-Output(3,1,"A=")
-Output(3,min(13,3+expr(Str9)),"M/S²")
-Output(3,3,X)
+Output(2,1,"A=")
+Output(2,min(13,3+expr(Str9)),"M/S²")
+Output(2,3,X)
 round(T,3)→X
-Output(4,1,"T=")
-Output(4,min(16,3+expr(Str9)),"N")
-Output(4,3,X)
+Output(3,1,"T=")
+Output(3,min(16,3+expr(Str9)),"N")
+Output(3,3,X)
 round(F,3)→X
-Output(5,1,"FS=")
-Output(5,min(16,4+expr(Str9)),"N")
-Output(5,4,X)
+Output(4,1,"FS=")
+Output(4,min(16,4+expr(Str9)),"N")
+Output(4,4,X)
 round(SN,3)→X
-Output(6,1,"FS MAX=")
-Output(6,min(16,8+expr(Str9)),"N")
-Output(6,8,X)
-Output(7,1,"FS POINTS AWAY")
-Output(8,1,"FROM PULLEY")
+Output(5,1,"FS MAX=")
+If 8+expr(Str9)>16
+round(X,0)→X
+Output(5,min(16,8+expr(Str9)),"N")
+Output(5,8,X)
+Output(6,1,"FS POINTS AWAY")
+Output(7,1,"FROM PULLEY")
 Pause 
 End
 Goto 0
 Lbl F
 ClrHome
 Disp "FLAT SURF PULL"
+⁻1→M
 Repeat M>0
 Input "M (KG)=",M
 If not(M>0)
 Disp "MUST BE >0"
 End
+⁻1→P
 Repeat P≥0
 Input "PULL F (N)=",P
 If not(P≥0)
@@ -533,14 +572,17 @@ Disp "MUST BE ≥0"
 End
 Disp "θ ABOVE HORIZ."
 Disp "NEG=PUSH DOWN"
+Disp "NEG: USE (⁻) KEY"
+91→θ
 Repeat abs(θ)≤90
 Input "θ (DEG)=",θ
 If not(abs(θ)≤90)
-Disp "USE -90 TO 90"
+Disp "USE ⁻90 TO 90"
 End
 Menu("FRICTION INFO","FRICTION (N)",F1,"MUK",F2,"CONSTANT V",F3,"ACCEL AX",F4)
 Lbl F1
 ClrHome
+⁻1→F
 Repeat F≥0
 Input "FRICTION (N)=",F
 If not(F≥0)
@@ -550,6 +592,7 @@ End
 Goto F9
 Lbl F2
 ClrHome
+⁻1→K
 Repeat K≥0
 Input "MUK=",K
 If not(K≥0)
@@ -563,6 +606,8 @@ Lbl F3
 Goto F9
 Lbl F4
 ClrHome
+Disp "NEG: USE (⁻) KEY"
+0→A
 Input "AX (+=PULL)=",A
 4→W
 Lbl F9
@@ -591,9 +636,14 @@ Else
 If W=2
 KN→F
 If W≤2
-(U-F)/M→A
+round((U-F)/M,9)→A
 If W≥3
-U-MA→F
+round(U-MA,9)→F
+"FRIC POINTS LEFT"→Str2
+If F<0
+"FRIC: RIGHT (!)"→Str2
+If F=0
+"NO FRICTION"→Str2
 "ACCEL: NONE"→Str1
 If A>0
 "ACCEL: RIGHT"→Str1
@@ -626,15 +676,18 @@ Output(3,1,"AX=")
 Output(3,min(13,4+expr(Str9)),"M/S²")
 Output(3,4,X)
 Output(4,1,Str1)
-Output(5,1,"FRIC POINTS LEFT")
+Output(5,1,Str2)
 Pause 
 If W=4 and F<0
 Then
 ClrHome
-Output(1,1,"FRIC<0: NOT")
-Output(2,1,"POSSIBLE. THE")
-Output(3,1,"PULL IS TOO")
-Output(4,1,"SMALL FOR AX")
+Output(1,1,"FRIC<0 MEANS IT")
+Output(2,1,"POINTS RIGHT.")
+Output(3,1,"ONLY POSSIBLE IF")
+Output(4,1,"BOX SLIDES LEFT.")
+Output(5,1,"IF IT MOVES")
+Output(6,1,"RIGHT, THIS AX")
+Output(7,1,"IS IMPOSSIBLE.")
 Pause 
 End
 If W≤2 and A<0
@@ -676,15 +729,17 @@ Lbl ID
 Lbl I0
 ClrHome
 Disp "INCLINE"
+⁻1→M
 Repeat M>0
 Input "M (KG)=",M
 If not(M>0)
 Disp "MUST BE >0"
 End
-Repeat θ≥0 and θ<90
+⁻1→θ
+Repeat θ>0 and θ<90
 Input "θ (DEG)=",θ
-If not(θ≥0 and θ<90)
-Disp "USE 0≤θ<90"
+If not(θ>0 and θ<90)
+Disp "USE 0<θ<90"
 End
 MGsin(θ)→U
 MGcos(θ)→V
@@ -707,29 +762,42 @@ S>0→C
 U→F
 SN→D
 "YES: STAYS PUT"→Str1
-If F>D
+" "→Str2
+If round(F-D,9)>0
+Then
 "NO: WILL SLIDE"→Str1
+"USE SLIDING MUK"→Str2
+End
 ClrHome
 Output(1,1,"+X=UPHILL")
 Output(2,1,"FS-MGSINθ=0")
 Output(3,1,"N-MGCOSθ=0")
+round(N,3)→X
+Output(4,1,"N=")
+Output(4,min(16,3+expr(Str9)),"N")
+Output(4,3,X)
+round(F,3)→X
+Output(5,1,"FS=")
+Output(5,min(16,4+expr(Str9)),"N")
+Output(5,4,X)
+Output(6,1,"FS POINTS UPHILL")
+Pause 
+ClrHome
+Output(1,1,"COMPONENTS:")
 round(U,3)→X
-Output(4,1,"MGSINθ=")
+Output(2,1,"MGSINθ=")
+If 8+expr(Str9)>16
+round(X,0)→X
+Output(2,min(16,8+expr(Str9)),"N")
+Output(2,8,X)
+Output(3,1,"SIN: DOWNHILL")
+round(V,3)→X
+Output(4,1,"MGCOSθ=")
+If 8+expr(Str9)>16
+round(X,0)→X
 Output(4,min(16,8+expr(Str9)),"N")
 Output(4,8,X)
-round(V,3)→X
-Output(5,1,"MGCOSθ=")
-Output(5,min(16,8+expr(Str9)),"N")
-Output(5,8,X)
-round(N,3)→X
-Output(6,1,"N=")
-Output(6,min(16,3+expr(Str9)),"N")
-Output(6,3,X)
-round(F,3)→X
-Output(7,1,"FS=")
-Output(7,min(16,4+expr(Str9)),"N")
-Output(7,4,X)
-Output(8,1,"FS POINTS UPHILL")
+Output(5,1,"COS: INTO SLOPE")
 Pause 
 If C
 Then
@@ -747,6 +815,7 @@ round(tan(θ),3)→X
 Output(4,1,"MIN MUS=")
 Output(4,9,X)
 Output(5,1,Str1)
+Output(6,1,Str2)
 Pause 
 Else
 ClrHome
@@ -760,12 +829,13 @@ End
 End
 If W=2
 Then
+⁻1→K
 Repeat K≥0
 Input "MUK=",K
 If not(K≥0)
 Disp "MUST BE ≥0"
 End
-G(sin(θ)-Kcos(θ))→A
+round(G(sin(θ)-Kcos(θ)),9)→A
 KN→F
 If A>0
 "ACCEL: DOWNHILL"→Str1
@@ -786,21 +856,27 @@ ClrHome
 Output(1,1,"COMPONENTS:")
 round(U,3)→X
 Output(2,1,"MGSINθ=")
+If 8+expr(Str9)>16
+round(X,0)→X
 Output(2,min(16,8+expr(Str9)),"N")
 Output(2,8,X)
+Output(3,1,"SIN: DOWNHILL")
 round(V,3)→X
-Output(3,1,"MGCOSθ=")
-Output(3,min(16,8+expr(Str9)),"N")
-Output(3,8,X)
+Output(4,1,"MGCOSθ=")
+If 8+expr(Str9)>16
+round(X,0)→X
+Output(4,min(16,8+expr(Str9)),"N")
+Output(4,8,X)
+Output(5,1,"COS: INTO SLOPE")
 round(N,3)→X
-Output(4,1,"N=")
-Output(4,min(16,3+expr(Str9)),"N")
-Output(4,3,X)
+Output(6,1,"N=")
+Output(6,min(16,3+expr(Str9)),"N")
+Output(6,3,X)
 round(F,3)→X
-Output(5,1,"FK=")
-Output(5,min(16,4+expr(Str9)),"N")
-Output(5,4,X)
-Output(6,1,"FK=MUK*N")
+Output(7,1,"FK=")
+Output(7,min(16,4+expr(Str9)),"N")
+Output(7,4,X)
+Output(8,1,"FK=MUK*N")
 Pause 
 If A<0
 Then
@@ -827,18 +903,27 @@ Output(4,1,"A=")
 Output(4,min(13,3+expr(Str9)),"M/S²")
 Output(4,3,X)
 Output(5,1,Str1)
-round(U,3)→X
-Output(6,1,"MGSINθ=")
-Output(6,min(16,8+expr(Str9)),"N")
-Output(6,8,X)
-round(V,3)→X
-Output(7,1,"MGCOSθ=")
-Output(7,min(16,8+expr(Str9)),"N")
-Output(7,8,X)
 round(N,3)→X
-Output(8,1,"N=")
-Output(8,min(16,3+expr(Str9)),"N")
-Output(8,3,X)
+Output(6,1,"N=")
+Output(6,min(16,3+expr(Str9)),"N")
+Output(6,3,X)
+Pause 
+ClrHome
+Output(1,1,"COMPONENTS:")
+round(U,3)→X
+Output(2,1,"MGSINθ=")
+If 8+expr(Str9)>16
+round(X,0)→X
+Output(2,min(16,8+expr(Str9)),"N")
+Output(2,8,X)
+Output(3,1,"SIN: DOWNHILL")
+round(V,3)→X
+Output(4,1,"MGCOSθ=")
+If 8+expr(Str9)>16
+round(X,0)→X
+Output(4,min(16,8+expr(Str9)),"N")
+Output(4,8,X)
+Output(5,1,"COS: INTO SLOPE")
 Pause 
 End
 If W=4
@@ -852,26 +937,37 @@ Output(4,1,"MUS≥FS/N=TANθ")
 round(S,3)→X
 Output(5,1,"MIN MUS=")
 Output(5,9,X)
+Output(6,1,"(MASS CANCELS)")
+Pause 
+ClrHome
+Output(1,1,"COMPONENTS:")
 round(U,3)→X
-Output(6,1,"MGSINθ=")
-Output(6,min(16,8+expr(Str9)),"N")
-Output(6,8,X)
+Output(2,1,"MGSINθ=")
+If 8+expr(Str9)>16
+round(X,0)→X
+Output(2,min(16,8+expr(Str9)),"N")
+Output(2,8,X)
+Output(3,1,"SIN: DOWNHILL")
 round(V,3)→X
-Output(7,1,"MGCOSθ=")
-Output(7,min(16,8+expr(Str9)),"N")
-Output(7,8,X)
-Output(8,1,"(MASS CANCELS)")
+Output(4,1,"MGCOSθ=")
+If 8+expr(Str9)>16
+round(X,0)→X
+Output(4,min(16,8+expr(Str9)),"N")
+Output(4,8,X)
+Output(5,1,"COS: INTO SLOPE")
 Pause 
 End
 Goto 0
 Lbl L
 ClrHome
 Disp "NEWTON 3RD LAW"
+⁻1→P
 Repeat P>0
 Input "MA (KG)=",P
 If not(P>0)
 Disp "MUST BE >0"
 End
+⁻1→Q
 Repeat Q>0
 Input "MB (KG)=",Q
 If not(Q>0)
@@ -903,7 +999,7 @@ round(⁻F/P,3)→X
 Output(5,1,"AA=")
 Output(5,min(13,4+expr(Str9)),"M/S²")
 Output(5,4,X)
-Output(6,1,"AA/AB=MB/MA")
+Output(6,1,"SIZE AA/AB=MB/MA")
 round(Q/P,3)→X
 Output(7,1,"RATIO=")
 Output(7,7,X)
@@ -916,7 +1012,7 @@ Output(2,1,"FAB=-FBA")
 Output(3,1,"SAME SIZE F,")
 Output(4,1,"OPPOSITE DIRS")
 Output(5,1,"A=F/M, SO")
-Output(6,1,"AA/AB=MB/MA")
+Output(6,1,"SIZE AA/AB=MB/MA")
 round(Q/P,3)→X
 Output(7,1,"RATIO=")
 Output(7,7,X)
@@ -949,6 +1045,7 @@ Menu("SIMPLE CASES","HANGING, REST",SA,"TERMINAL VEL.",SB,"HANG + ACCEL",SC,"SUM
 Lbl SA
 ClrHome
 Disp "HANGING AT REST"
+⁻1→M
 Repeat M>0
 Input "M (KG)=",M
 If not(M>0)
@@ -970,6 +1067,7 @@ Goto 0
 Lbl SB
 ClrHome
 Disp "TERMINAL VEL."
+⁻1→M
 Repeat M>0
 Input "M (KG)=",M
 If not(M>0)
@@ -995,12 +1093,15 @@ Goto 0
 Lbl SC
 ClrHome
 Disp "HANGING + ACCEL"
+⁻1→M
 Repeat M>0
 Input "M (KG)=",M
 If not(M>0)
 Disp "MUST BE >0"
 End
-Input "AY (+UP/-DN)=",Y
+Disp "NEG: USE (⁻) KEY"
+0→Y
+Input "AY (+UP/⁻DN)=",Y
 M(G+Y)→T
 "ACCEL: NONE"→Str1
 If Y>0
@@ -1020,7 +1121,7 @@ Output(2,1,"T-MG=MA")
 Output(3,1,"T<0: ROPE SLACK")
 Output(4,1,"A ROPE CANNOT")
 Output(5,1,"PUSH, SO AY")
-Output(6,1,"MUST BE ≥ -G")
+Output(6,1,"MUST BE ≥ ⁻G")
 Pause 
 Else
 ClrHome
@@ -1049,6 +1150,7 @@ ClrHome
 Disp "SUM F=MA"
 Disp "+ = YOUR CHOICE"
 Disp "0 OR ENTER=NONE"
+Disp "NEG: USE (⁻) KEY"
 0→F
 "0"→Str8
 Input "F1 (N)=",Str8
@@ -1074,6 +1176,7 @@ If not(length(Str8))
 "0"→Str8
 expr(Str8)→D
 F+D→F
+⁻1→M
 Repeat M>0
 Input "M (KG)=",M
 If not(M>0)
