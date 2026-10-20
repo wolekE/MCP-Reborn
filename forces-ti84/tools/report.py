@@ -72,7 +72,7 @@ WORDS = {
     "Elevator, 50 kg, scale 390": ["ACCEL: DOWN", "DOWN+SPEEDING", "UP+SLOWING"],
     "Elevator, 50 kg, scale 415, moving up": ["SLOWING DOWN"],
     "Atwood 3 and 5": ["M2 (HEAVY): DOWN", "M1 (LIGHT): UP"],
-    "Atwood 6 and 4": ["M2G<T<M1G: OK"],
+    "Atwood 6 and 4": ["M2G<T<M1G", "CHECK OK"],
 }
 
 

@@ -295,7 +295,9 @@ Str1+"G-T="+Str1+"A"→Str3
 "T-"+Str2+"G="+Str2+"A"→Str4
 Str1+" (HEAVY): DOWN"→Str6
 Str2+" (LIGHT): UP"→Str7
-Str2+"G<T<"+Str1+"G: "+sub("NOOK",1+2(LG<T and T<HG),2)→Str8
+Str2+"G<T<"+Str1+"G"→Str8
+LG<T and T<HG→C
+"CHECK "+sub("FAILOK",1+4C,4-2C)→Str1
 @SCREEN
 @S Str5
 @S Str3
@@ -311,6 +313,7 @@ Str2+"G<T<"+Str1+"G: "+sub("NOOK",1+2(LG<T and T<HG),2)→Str8
 @V M2G;N;QG
 @V T;N;T
 @S Str8
+@S Str1
 @END
 End
 Goto 0

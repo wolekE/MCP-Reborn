@@ -135,7 +135,7 @@ class RequiredCases(Base):
             check_clean(self, m)
             self.both(m, ("A",), "M/S²", 1.96, r["a"])
             self.both(m, ("T",), "N", 47.04, r["T"])
-            self.assertTrue(shows(m, "M2G<T<M1G: OK"))
+            self.assertTrue(shows(m, "M2G<T<M1G") and shows(m, "CHECK OK"))
             self.assertTrue(shows(m, "M1G-T=M1A") and shows(m, "T-M2G=M2A"))
 
     def test_06_flat_constant_velocity(self):
@@ -531,7 +531,7 @@ class Fuzz(Base):
                     m = run(p, ["ATWOOD", "FIND A AND T", num(m1), num(m2)], st)
                     self.compare(m, [(("A",), "M/S²", r["a"]), (("T",), "N", r["T"]),
                                      (("M1G",), "N", m1 * 9.8), (("M2G",), "N", m2 * 9.8)])
-                    self.assertTrue(shows(m, ": OK"))
+                    self.assertTrue(shows(m, "CHECK OK"))
                 big, small = self.rnd(rng, 0.5, 40), self.rnd(rng, 0.5, 40)
                 muk = rng.choice([0, self.rnd(rng, 0, 0.8)])
                 r = ref.table_hanger(big, small, muk)

@@ -274,7 +274,9 @@ Str1+"G-T="+Str1+"A"→Str3
 "T-"+Str2+"G="+Str2+"A"→Str4
 Str1+" (HEAVY): DOWN"→Str6
 Str2+" (LIGHT): UP"→Str7
-Str2+"G<T<"+Str1+"G: "+sub("NOOK",1+2(LG<T and T<HG),2)→Str8
+Str2+"G<T<"+Str1+"G"→Str8
+LG<T and T<HG→C
+"CHECK "+sub("FAILOK",1+4C,4-2C)→Str1
 ClrHome
 Output(1,1,Str5)
 Output(2,1,Str3)
@@ -291,6 +293,7 @@ Output(2,1,"M1G="+toString(round(PG,3),1)+" N")
 Output(3,1,"M2G="+toString(round(QG,3),1)+" N")
 Output(4,1,"T="+toString(round(T,3),1)+" N")
 Output(5,1,Str8)
+Output(6,1,Str1)
 Pause 
 End
 Goto 0
