@@ -35,9 +35,11 @@ separate status bar. The mono version places each unit right after the number
 with `Output(` and a column formula, and keeps every line to 16 characters.
 The CE version uses `toString(` to print `LABEL=value UNIT` lines with longer,
 clearer labels (`SCALE N=678 N`, `TRUE WEIGHT MG=588 N`). If your CE's OS is
-older than 5.2 (check with `2nd` `MEM` `1:About`), use the TI-84 Plus file on
-the CE instead: it runs unchanged in the top-left corner of the screen, but
-without the CE-only solvers.
+older than 5.2 (check with `2nd` `MEM` `1:About`), update it for free: get
+the latest TI-84 Plus CE OS from education.ti.com and send it with TI
+Connect CE. As a last resort the TI-84 Plus file also runs on a CE, but it
+has no MOTION, ROPE, FIND PULL F or SAME A, so it can't directly do the
+worksheet's vertical 6 and 8 or horizontal 1–3, 5, 6 and 7b.
 
 The CE shows answers with `round(X,3)`, except that small values keep 3
 significant figures, so a 2.0×10⁻⁴ kg spider shows as `2ᴇ⁻4`, not 0. Type
@@ -67,9 +69,10 @@ numbers like that with the `EE` key: `2` `.` `0` `2nd` `EE` `(-)` `4`.
   Minus at the start of an entry means "Ans minus …". Prompts that take a
   signed value show `USE (⁻) FOR NEG` and use the ⁻ sign
   (`AY (+UP/⁻DN)=`).
-* **Variables:** FORCES overwrites A, C, D, F, G, H, K, L, M, N, P, Q, S–Z
-  (X only on the TI-84 Plus), θ and Str1–Str8 (plus Str9 on the TI-84
-  Plus). It never touches lists (L1–L6 or named lists) or matrices.
+* **Variables:** FORCES overwrites A–H, K–N, P, Q, S–Z, θ and Str1–Str9 on
+  the TI-84 Plus CE (the TI-84 Plus version also leaves B and E alone; I, J,
+  O and R are never touched). It never touches lists (L1–L6 or named lists)
+  or matrices.
 * **g is kept in G** and remembered between runs. It is checked at start: if G
   is not 9.8, 9.81 or 10, it is reset to 9.8. When it is 9.81 or 10, a NOTE
   screen reminds you on start-up.

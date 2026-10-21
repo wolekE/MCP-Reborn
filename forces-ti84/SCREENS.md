@@ -495,7 +495,7 @@ Keys: INCLINE > PUSHED > 5 > 30 > 40 > 0.2
 
 ## Slope + hanger: 4 kg block, 30 deg, 3 kg hanger, muk 0.2
 
-Keys: INCLINE > HANGER > 4 > 30 > 3 > 0.2 > 
+Keys: INCLINE > HANGER > 4 > 30 > 3 > 0.2 > ENTER
 
 ```
 +----------------+
@@ -668,7 +668,7 @@ Keys: MORE > SIMPLE > #3 > 2 > ⁻1
 
 ## Sum F = ma: 10, -4, 6 N on 2 kg
 
-Keys: MORE > SIMPLE > SUM > 10 > ⁻4 > 6 >  > 2
+Keys: MORE > SIMPLE > SUM > 10 > ⁻4 > 6 > ENTER > 2
 
 ```
 +----------------+
@@ -982,7 +982,7 @@ Keys: TABLE > 5 > 1 > 0.1 > 0.3
 
 ## Flat pull: 5 kg, 25 N horizontal, constant velocity
 
-Keys: FLAT > 5 > 25 > 0 > CONSTANT
+Keys: FLAT > PULL F KNOWN > 5 > 25 > 0 > CONSTANT
 
 ```
 +--------------------------+
@@ -1014,7 +1014,7 @@ Keys: FLAT > 5 > 25 > 0 > CONSTANT
 
 ## Flat pull: 5 kg, 20 N at 30 deg, friction 12 N
 
-Keys: FLAT > 5 > 20 > 30 > FRICTION > 12
+Keys: FLAT > PULL F KNOWN > 5 > 20 > 30 > FRICTION > 12
 
 ```
 +--------------------------+
@@ -1219,7 +1219,7 @@ Keys: INCLINE > PUSHED > 5 > 30 > 40 > 0.2
 
 ## Slope + hanger: 4 kg block, 30 deg, 3 kg hanger, muk 0.2
 
-Keys: INCLINE > HANGER > 4 > 30 > 3 > 0.2 > 
+Keys: INCLINE > HANGER > 4 > 30 > 3 > 0.2 > ENTER
 
 ```
 +--------------------------+
@@ -1418,7 +1418,7 @@ Keys: MORE > SIMPLE > #3 > 2 > ⁻1
 
 ## Sum F = ma: 10, -4, 6 N on 2 kg
 
-Keys: MORE > SIMPLE > SUM > 10 > ⁻4 > 6 >  > 2
+Keys: MORE > SIMPLE > SUM > 10 > ⁻4 > 6 > ENTER > 2
 
 ```
 +--------------------------+
@@ -1602,7 +1602,7 @@ Keys: MORE > MOTION > VERTICAL, MOVING UP > M/S > V0, V, D > 25 > 45 > 100 > 70
 
 ## Vertical 8a: backpack, a from the graph (0 to 2 m/s in 16 s)
 
-Keys: MORE > MOTION > HORIZONTAL > M/S > V0, V, T > 0 > 2 > 16 > 
+Keys: MORE > MOTION > HORIZONTAL > M/S > V0, V, T > 0 > 2 > 16 > ENTER
 
 ```
 +--------------------------+
@@ -1621,7 +1621,7 @@ Keys: MORE > MOTION > HORIZONTAL > M/S > V0, V, T > 0 > 2 > 16 >
 
 ## Vertical 8b: backpack, 2 kg pulled at 30 deg, a = 0.125, ice
 
-Keys: FLAT>F > 2 > 30 > 0.125 > NONE
+Keys: FLAT > FIND PULL F > 2 > 30 > 0.125 > NONE
 
 ```
 +--------------------------+
@@ -1676,8 +1676,8 @@ Keys: MORE > MOTION > HORIZONTAL > KM/H > V0, V, T > 90 > 0 > 8 > 1100
 |FNET: OPPOSITE THE MOTION |
 |A=⁻3.125 M/S²             |
 |M=1100 KG                 |
-|                          |
-|                          |
+|PULLED AT AN ANGLE θ? FIND|
+|F WITH FLAT > FIND PULL F |
 |                          |
 |                          |
 +--------------------------+
@@ -1704,7 +1704,7 @@ Keys: MORE > ROPE > TOWING > 700 > 1500 > 25
 
 ## Horizontal 2b: 0 to 30 km/h at 2.1 m/s^2
 
-Keys: MORE > MOTION > HORIZONTAL > KM/H > V0, V, A > 0 > 30 > 2.1 > 
+Keys: MORE > MOTION > HORIZONTAL > KM/H > V0, V, A > 0 > 30 > 2.1 > ENTER
 
 ```
 +--------------------------+
@@ -1746,8 +1746,8 @@ Keys: MORE > MOTION > HORIZONTAL > M/S > V0, V, T > 0 > 26.3 > 0.59 > 875
 |FNET: ALONG THE MOTION    |
 |A=44.576 M/S²             |
 |M=875 KG                  |
-|                          |
-|                          |
+|PULLED AT AN ANGLE θ? FIND|
+|F WITH FLAT > FIND PULL F |
 |                          |
 |                          |
 +--------------------------+
@@ -1755,7 +1755,7 @@ Keys: MORE > MOTION > HORIZONTAL > M/S > V0, V, T > 0 > 26.3 > 0.59 > 875
 
 ## Horizontal 3b: car 875 kg vs driver 68 kg
 
-Keys: MORE > SIMPLE > SAME A > 875 > 68 > 
+Keys: MORE > SIMPLE > SAME A > 875 > 68 > ENTER
 
 ```
 +--------------------------+
@@ -1774,7 +1774,7 @@ Keys: MORE > SIMPLE > SAME A > 875 > 68 >
 
 ## Horizontal 4: dogs, 42 N right, 35 N left, 2.5 kg bone
 
-Keys: MORE > SIMPLE > SUM > 42 > ⁻35 >  >  > 2.5
+Keys: MORE > SIMPLE > SUM > 42 > ⁻35 > ENTER > ENTER > 2.5
 
 ```
 +--------------------------+
@@ -1816,8 +1816,8 @@ Keys: MORE > MOTION > HORIZONTAL > M/S > V0, V, T > 30 > 0 > 0.005 > 0.145
 |FNET: OPPOSITE THE MOTION |
 |A=⁻6000 M/S²              |
 |M=0.145 KG                |
-|                          |
-|                          |
+|PULLED AT AN ANGLE θ? FIND|
+|F WITH FLAT > FIND PULL F |
 |                          |
 |                          |
 +--------------------------+
@@ -1848,8 +1848,8 @@ Keys: MORE > MOTION > HORIZONTAL > M/S > V0, V, D > 12 > 0 > 15 > 2000
 |FNET: OPPOSITE THE MOTION |
 |A=⁻4.8 M/S²               |
 |M=2000 KG                 |
-|                          |
-|                          |
+|PULLED AT AN ANGLE θ? FIND|
+|F WITH FLAT > FIND PULL F |
 |                          |
 |                          |
 +--------------------------+
@@ -1857,7 +1857,7 @@ Keys: MORE > MOTION > HORIZONTAL > M/S > V0, V, D > 12 > 0 > 15 > 2000
 
 ## Horizontal 7a: 20 kg box, 50 N at 45 deg, frictionless
 
-Keys: FLAT > 20 > 50 > 45 > FRICTION > 0
+Keys: FLAT > PULL F KNOWN > 20 > 50 > 45 > FRICTION > 0
 
 ```
 +--------------------------+
@@ -1876,7 +1876,7 @@ Keys: FLAT > 20 > 50 > 45 > FRICTION > 0
 
 ## Horizontal 7b: velocity after 2.0 s at a = 1.768
 
-Keys: MORE > MOTION > HORIZONTAL > M/S > V0, A, T > 0 > 1.768 > 2 > 
+Keys: MORE > MOTION > HORIZONTAL > M/S > V0, A, T > 0 > 1.768 > 2 > ENTER
 
 ```
 +--------------------------+

@@ -453,7 +453,7 @@ Disp "{θ ABOVE HORIZ.|θ = ANGLE ABOVE HORIZONTAL}"
 Disp "{NEG=PUSH DOWN|(NEGATIVE = PUSHING DOWN)}"
 Disp "{USE (⁻) FOR NEG|NEGATIVE: USE THE (⁻) KEY}"
 @IN θ;θ (DEG)=;abs(θ)≤90;USE ⁻90 TO 90;91
-Menu("{FRICTION INFO|WHAT DO YOU KNOW?}","{FRICTION (N)|FRICTION FORCE (N)}",F1,"{MUK|MUK (FK = MUK*N)}",F2,"{CONSTANT V|CONSTANT V (EQUILIBRIUM)}",F3,"{ACCEL AX|ACCELERATION AX}",F4)
+Menu("{FRICTION INFO|WHAT DO YOU KNOW?}","{FRICTION (N)|FRICTION F (N) (0=NONE)}",F1,"{MUK|MUK (FK = MUK*N)}",F2,"{CONSTANT V|CONSTANT V (EQUILIBRIUM)}",F3,"{ACCEL AX|ACCELERATION AX}",F4)
 Lbl F1
 ClrHome
 @IN F;{FRICTION (N)=|FRICTION FORCE (N)=};F≥0;MUST BE ≥0
@@ -589,7 +589,7 @@ ClrHome
 Lbl FJ
 cos(θ)+Ksin(θ)→D
 0→E
-If round(D,9)≤0
+If round(D,9)=0 or D<0 and MA+F+KMG>0
 1→E
 If not(E)
 Then
@@ -599,10 +599,10 @@ Psin(θ)→V
 round(MG-V,9)→N
 If W=3
 KN→F
-If P<0
-2→E
 If N<0
 3→E
+If P<0
+2→E
 End
 If E=1
 Then
@@ -1147,7 +1147,7 @@ Disp "FOR JUST THE RATIO"
 If A≠0
 Then
 @SCREEN
-@T + = DIRECTION OF A
+@T + = YOUR CHOSEN DIRECTION
 @T F1=M1*A, F2=M2*A
 @V A;M/S²;A
 @V F1;N;PA
@@ -1208,7 +1208,11 @@ If W=3 or W=4 or W=6
 Then
 Disp "A: + SPEEDS UP, ⁻ SLOWS"
 0→A
+Repeat P>0 or A≥0
 Input "A (M/S²)=",A
+If not(P>0 or A≥0)
+Disp "FROM REST: A MUST BE ≥0"
+End
 End
 If W=1 or W=3 or W=5
 Then
@@ -1288,12 +1292,14 @@ End
 End
 round(A,9)→A
 If Q<0
-"(V<0: IT TURNED AROUND)"→Str4
+"(TURNED: D = DISPLACEMENT)"→Str4
 "ACCEL: SPEEDING UP"→Str3
 If A<0
 "ACCEL: SLOWING DOWN"→Str3
 If A=0
 "NO ACCEL: CONSTANT V"→Str3
+If Q<0
+"SLOWED, THEN SPED UP BACK"→Str3
 If E
 Then
 "V0=V=0, YET IT MOVED D."→Str1
@@ -1312,6 +1318,11 @@ If E=4
 Then
 "A=0, SO THE SPEED NEVER"→Str1
 "CHANGES FROM V0 TO V."→Str2
+If P=Q
+Then
+"V0=V AND A=0: CONSTANT V,"→Str1
+"T AND D CANNOT BE FOUND."→Str2
+End
 End
 If E=5
 Then
@@ -1354,6 +1365,8 @@ Then
 @S Str5
 @V A;M/S²;A
 @V M;KG;M
+@T PULLED AT AN ANGLE θ? FIND
+@T F WITH FLAT > FIND PULL F
 @END
 End
 If M>0 and B=1
@@ -1442,7 +1455,10 @@ If round(T-L,9)>0
 "BREAKS: T NEEDED > TMAX"→Str1
 " "→Str2
 If T<0
+Then
+"ROPE GOES SLACK (T=0):"→Str1
 "(T<0: A<⁻G NOT POSSIBLE)"→Str2
+End
 @SCREEN
 @T + = UP
 @T T-MG=MA

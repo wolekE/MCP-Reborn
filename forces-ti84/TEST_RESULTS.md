@@ -78,4 +78,4 @@ Keyed into the CE program; the answer column is what the worksheet prints (it ro
 ## Test suites
 
 - `python3 reference.py`: Ran 36 tests in 0.002s / OK
-- `python3 tools/test_program.py`: Ran 52 tests in 18.926s / OK
+- `python3 tools/test_program.py`: Ran 52 tests in 16.129s / OK

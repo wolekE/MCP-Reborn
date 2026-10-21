@@ -329,7 +329,8 @@ def pull_force(m, theta, a, friction="NONE", value=0.0, g=G):
     f = value if friction == "FORCE" else 0.0
     _require(k >= 0 and f >= 0, "MUST BE >=0")
     den = _cos(theta) + k * _sin(theta)
-    _require(round(den, 9) > 0, "NO F IS ENOUGH")
+    _require(round(den, 9) > 0 or (round(den, 9) < 0 and m * a + f + k * m * g <= 0),
+             "NO F IS ENOUGH")
     F = _clean((m * a + f + k * m * g) / den)
     n = _clean(m * g - F * _sin(theta))
     if friction == "MUK":
@@ -351,6 +352,7 @@ def kinematics(known, v0, v=None, a=None, t=None, d=None):
     Returns v0, v, a, t, d.
     """
     _require(v0 >= 0, "MUST BE >=0")
+    _require(not (v0 == 0 and a is not None and a < 0), "FROM REST: A MUST BE >=0")
     if known == "VVT":
         a = (v - v0) / t
         d = (v0 + v) * t / 2
@@ -405,7 +407,8 @@ def rope_hold(m, Tmax, a, g=G):
     """Tension needed for acceleration a (+ up) and whether the rope holds."""
     _require(m > 0 and Tmax > 0, "MUST BE >0")
     t = m * (g + a)
-    return {"T": t, "holds": round(t - Tmax, 9) <= 0, "a_max": _clean(Tmax / m - g)}
+    return {"T": t, "holds": 0 <= t and round(t - Tmax, 9) <= 0,
+            "slack": t < 0, "a_max": _clean(Tmax / m - g)}
 
 
 def tow_max(m, Tmax, f_opp=0.0):

@@ -349,6 +349,10 @@ class CEPaths(Base):
             m = run(p, ["FLAT>F", "5", "0", "⁻1", "MUK", "0.5"], st)
             check_clean(self, m)
             self.assertTrue(shows(m, "SLOWING") and shows(m, "BACKWARD"))
+            r = ref.pull_force(5, -80, -12, "MUK", 1)        # den<0 but F>0 exists
+            m = run(p, ["FLAT>F", "5", "⁻80", "⁻12", "MUK", "1"], st)
+            check_clean(self, m)
+            self.expect(m, ("F",), "N", r["F"], ROUND_TOL)
             m = run(p, ["FLAT>F", "5", "⁻80", "1", "MUK", "1"], st)
             check_clean(self, m)
             self.assertTrue(shows(m, "NO F IS ENOUGH."))
@@ -376,7 +380,15 @@ class CEPaths(Base):
                     self.expect(m, (lab,), unit, r[lab.lower()], ROUND_TOL)
             self.assertTrue(shows(m, "SPEEDING UP"))
             m = run(p, MOTION + ["HORIZONTAL", "M/S", "V0, A, T", "5", "⁻2", "4", ""], st)
-            self.assertTrue(shows(m, "TURNED AROUND"))
+            self.assertTrue(shows(m, "TURNED: D = DISPLACEMENT")
+                            and shows(m, "SLOWED, THEN SPED UP BACK"))
+            m = run(p, MOTION + ["HORIZONTAL", "M/S", "V0, A, T", "0", "⁻9.8", "9.8",
+                                 "2", ""], st)             # from rest: a<0 refused
+            check_clean(self, m)
+            self.assertEqual(sum(1 for pr, _ in m.inputs if pr.startswith("A (")), 2)
+            m = run(p, MOTION + ["HORIZONTAL", "M/S", "V0, V, A", "3", "3", "0"], st)
+            check_clean(self, m)
+            self.assertTrue(shows(m, "CONSTANT V,") and shows(m, "CANNOT BE FOUND"))
             for keys, word in ((["V0, V, D", "0", "0", "5"], "YET IT MOVED"),
                                (["V0, A, D", "4", "⁻1", "20"], "STOPS BEFORE"),
                                (["V0, A, D", "0", "0", "5"], "NEVER MOVES"),
@@ -412,6 +424,9 @@ class CEPaths(Base):
             m = run(p, ["MORE", "ROPE", "WILL IT HOLD", "15", "230", "⁻12"], st)
             check_clean(self, m)
             self.assertTrue(shows(m, "NOT POSSIBLE"))
+            m = run(p, ["MORE", "ROPE", "WILL IT HOLD", "15", "230", "⁻12"], st)
+            check_clean(self, m)
+            self.assertTrue(shows(m, "ROPE GOES SLACK") and not shows(m, "HOLDS:"))
             m = run(p, ["MORE", "ROPE", "TOWING", "700", "100", "150"], st)
             check_clean(self, m)
             self.assertTrue(shows(m, "NO SPEEDUP"))

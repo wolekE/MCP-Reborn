@@ -96,7 +96,7 @@ def main():
                         init={"G": 9.8}).run()
             assert not m.violations and m.status == "stopped", (title, m.violations)
             print(f"## {title}\n")
-            print("Keys: " + " > ".join(keys) + "\n")
+            print("Keys: " + " > ".join(k or "ENTER" for k in calc_keys(profile, keys)) + "\n")
             print("```")
             print("\n\n".join(box(p, cols) for p in m.pauses))
             print("```\n")
