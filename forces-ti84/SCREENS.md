@@ -237,18 +237,18 @@ Keys: TABLE > 5 > 1 > 0.1 > 0.3
 |HANG: MG-T=0    |
 |TABLE: T-FS=0   |
 |HANG WT≤MUS*N   |
-|                |
-|                |
+|A=0 M/S²        |
+|T=9.8 N         |
 +----------------+
 
 +----------------+
 |STATIC FRIC:    |
-|A=0 M/S²        |
-|T=9.8 N         |
 |FS=9.8 N        |
-|FS MAX=14.7 N   |
+|FSMAX=14.7 N    |
 |FS POINTS AWAY  |
 |FROM PULLEY     |
+|                |
+|                |
 |                |
 +----------------+
 ```
@@ -331,8 +331,8 @@ Keys: INCLINE > AT REST > 5 > 30 > 0.5
 |N-MGCOSθ=0      |
 |N=42.435 N      |
 |FS=24.5 N       |
+|(NEEDED TO HOLD)|
 |FS POINTS UPHILL|
-|                |
 |                |
 +----------------+
 

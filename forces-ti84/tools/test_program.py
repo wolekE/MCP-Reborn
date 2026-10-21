@@ -302,7 +302,7 @@ class Paths(Base):
             self.assertTrue(any(pr == "MUS=" for pr, _ in m.inputs))
             self.assertTrue(shows(m, "BLOCK STAYS PUT"))
             self.expect(m, ("FS", "FS (STATIC)"), "N", 9.8)
-            self.expect(m, ("FS MAX", "FS MAX = MUS*N"), "N", 14.7)
+            self.expect(m, ("FSMAX", "FS MAX = MUS*N"), "N", 14.7)
 
     def test_flat_paths(self):
         for p, st in self.each():
@@ -464,7 +464,7 @@ class Paths(Base):
                         lab == "F" for lab, _, _ in values(m.pauses)))
                     m = run(p, ["TABLE", "5", "1", "0.3", ""], st, init, blank=blank)
                     check_clean(self, m)
-                    self.expect(m, ("FS MAX", "FS MAX = MUS*N"), "N", 14.7)
+                    self.expect(m, ("FSMAX", "FS MAX = MUS*N"), "N", 14.7)
                     m = run(p, ["INCLINE", "AT REST", "5", "30", ""], st, init,
                             blank=blank)
                     check_clean(self, m)
@@ -506,7 +506,7 @@ class Paths(Base):
                 m = run(p, keys, st)
                 check_clean(self, m)
                 for label, v, unit in values(m.pauses):
-                    if label in ("MGSINθ", "MGCOSθ", "FS MAX", "OTHER", "HEAVY", "LIGHT"):
+                    if label in ("MGSINθ", "MGCOSθ", "FSMAX", "OTHER", "HEAVY", "LIGHT"):
                         self.assertTrue(unit in ("N", "KG"), (label, v, unit, m.pauses))
 
     def test_numeric_blank_keeps_old_value(self):
@@ -646,7 +646,7 @@ class Fuzz(Base):
                 else:
                     self.compare(m, [(("A",), "M/S²", 0), (("T",), "N", r["T"]),
                                      (("FS", "FS (STATIC)"), "N", r["fs"]),
-                                     (("FS MAX", "FS MAX = MUS*N"), "N", r["fs_max"])])
+                                     (("FSMAX", "FS MAX = MUS*N"), "N", r["fs_max"])])
 
                 F, th = self.rnd(rng, 0, 200), self.rnd(rng, -60, 60, 1)
                 mode = rng.choice(["FRICTION", "MUK", "CONSTANT", "ACCEL"])

@@ -6,10 +6,14 @@ apparent weight, Atwood machines, table + hanging mass, pulls on a level
 floor, inclines, Newton's third law, and quick concept checks. Every result
 screen shows the setup as well as the numbers:
 
-1. the positive direction (`+ = UP`, `+=TOWARD PULLEY`, `+X=DOWNHILL`, …)
+1. the positive direction (`+ = UP`, `+=TO PULLEY AND` / `HANGER DOWN`, `+X=DOWNHILL`, …)
 2. the force equation (`N-MG=MA`, `M1G-T=M1A`, `FCOSθ-FRIC=MA`, …)
 3. the answers, rounded with `round(X,3)`, with units (`N=678 N`, `AY=⁻2 M/S²`)
-4. the direction in words (`ACCEL: UP`, `HANGER: DOWN`, `TABLE: TO PULLEY`)
+4. the direction in words (`ACCEL: UP`, `HANGER MOVES DN`, `TABLE: TO PULLEY`)
+
+Screen text quoted below is the TI-84 Plus wording. The CE shows the same
+rows with longer wording (for example `HANGER MOVES DOWN`), as listed in
+`SCREENS.md`.
 
 ## Files
 
@@ -56,15 +60,17 @@ the CE instead: it runs unchanged in the top-left corner of the screen.
 
 * **Negative numbers:** type them with the `(-)` key, not the minus key.
   Minus at the start of an entry means "Ans minus …". Prompts that take a
-  signed value show `NEG: USE (⁻) KEY` and use the ⁻ sign
+  signed value show `USE (⁻) FOR NEG` and use the ⁻ sign
   (`AY (+UP/⁻DN)=`).
-* **Variables:** FORCES stores into A–Z, θ and Str1–Str9 (your old values there
-  are overwritten). It never touches lists (L1–L6 or named lists) or matrices.
+* **Variables:** FORCES overwrites A, C, D, F, G, H, K, L, M, N, P, Q, S–Z
+  (X only on the TI-84 Plus), θ and Str1–Str8 (plus Str9 on the TI-84
+  Plus). It never touches lists (L1–L6 or named lists) or matrices.
 * **g is kept in G** and remembered between runs. It is checked at start: if G
   is not 9.8, 9.81 or 10, it is reset to 9.8. When it is 9.81 or 10, a NOTE
   screen reminds you on start-up.
 * **Modes:** FORCES sets Degree, Float, Normal and Full. On QUIT it restores
-  your previous angle mode (Degree/Radian). It does not restore Float/Normal.
+  your previous angle mode (Degree/Radian). It does not restore Float, Normal
+  or Full.
 * **MathPrint OS on the TI-84 Plus (2.53MP/2.55MP):** keep *Answers* on AUTO
   or DEC in the MODE screen. FRAC could print answers as fractions.
 * **Leaving a prompt blank:** the optional prompts (μs, the 3rd-law force,
@@ -97,11 +103,13 @@ Main menu **NEWTON SOLVER** (CE wording in brackets where it differs):
 Asks for the table mass, the hanging mass, μk (0 = frictionless), then, only if
 μk > 0, μs (ENTER alone or 0 = use μk; μs must be ≥ μk).
 
-Both screens start with `+=TO PULLEY AND HANGER DOWN`.
+Both result screens give the + direction as `+=TO PULLEY AND` / `HANGER DOWN`
+(CE: `+=TO PULLEY, HANGER DOWN`). On the stays-put screen it comes right
+after `BLOCK STAYS PUT`.
 
 * **Moves** (frictionless, or mg > μs·Mg): `HANG: MG-T=MA`,
   `TABLE: T=MA` or `TABLE: T-FK=MA`, a = (mg − μk·Mg)/(M + m), T = m(g − a),
-  `HANGER MOVES DOWN`, `TABLE: TO PULLEY`, then N on the table = Mg and
+  `HANGER MOVES DN`, `TABLE: TO PULLEY`, then N on the table = Mg and
   fk = μk·N.
 * **Stays put** (mg ≤ μs·Mg): `BLOCK STAYS PUT`, `HANG: MG-T=0`,
   `TABLE: T-FS=0`, a = 0, T = mg, static friction fs = mg (pointing away
@@ -144,7 +152,7 @@ Every option shows the components with their directions: `MGSINθ=…` with
 
 Asks for mA, mB and F (ENTER alone or 0 = just the ratio). Shows
 `FAB=-FBA` (equal and opposite), aB = F/mB, aA = −F/mA, and
-`SIZE AA/AB=MB/MA` with the ratio, then a reminder screen: N and mg are not a third-law pair; the
+`SIZE AA/AB=MB/MA` with the ratio, then two reminder screens: N and mg are not a third-law pair; the
 partner of Earth's pull on you is your pull on Earth; pairs act on different
 objects, so they never cancel on one diagram.
 
@@ -221,9 +229,10 @@ pressing `ENTER` at the end of each one. Key guide:
 | `"` / `:` / `?` / space | `ALPHA` `+` / `ALPHA` `.` / `ALPHA` `(-)` / `ALPHA` `0` |
 
 The mono program's line 6 stores a formula **inside a string**
-(`"2+(X<0)+int(log(max(1,abs(X))))+…"→Str9`). Type the functions inside the
-quotes with their keys (`int(` from MATH NUM, `log(` from the LOG key, etc.),
-not as separate letters. It is the rule that places each unit right after
+(`"2+(X<0)+int(log(max(1,abs(X))))-(0<abs(X) and abs(X)<1)+…"→Str9`).
+Type the functions inside the quotes with their keys, not as separate
+letters: `int(` from MATH NUM, `log(` from the LOG key, `and` from `2nd`
+`TEST` LOGIC, and so on. The `!` in a few messages is `MATH` PRB `4`. It is the rule that places each unit right after
 its number. In the listing, `Pause ` is followed by a space. That space is
 part of the command, so you don't type it.
 
@@ -247,8 +256,9 @@ part of the command, so you don't type it.
     If-Then/For/While/Repeat block, so nothing jumps out of a block;
   * no conditional `Goto`;
   * `Menu(` has at most 7 options, with title and option widths checked;
-  * every `Disp`/`Output(` line fits the screen, with row 1 kept to 15
-    columns on the mono version;
+  * every `Disp`/`Output(` line fits the screen. On the mono version, text
+    that lands on row 1 (an `Output(` to row 1, or the first `Disp` after
+    `ClrHome`) is kept to 15 columns, clear of the pause indicator;
   * strings are uppercase only, using only keypad characters;
   * only A–Z, θ and Str1–Str9 are used, with no lists or matrices.
 
@@ -280,9 +290,14 @@ part of the command, so you don't type it.
 * Rebuild and re-test: `pip install tivars`, then
   `python3 tools/build.py && python3 reference.py && python3 tools/test_program.py`.
 
-On the TI-84 Plus a long label (MGSINθ, MGCOSθ, FS MAX, OTHER, HEAVY,
-LIGHT) with a value of 1000 or more is shown as a whole number (for example
-`MGSINθ=1470 N`) so that the unit still fits on the 16-column row.
+On the TI-84 Plus a value next to a long label (MGSINθ, MGCOSθ, OTHER,
+HEAVY, LIGHT) is rounded to a whole number when it would push its unit off
+the 16-column row. For example, 1733.055 is shown as `MGCOSθ=1733 N`. This
+only happens for values of 1000 or more.
+
+The unit placement assumes the TI-84 Plus prints numbers below 1 without a
+leading zero (`.5`), as TI's guidebook shows. If your OS prints `0.5`, the
+unit just sits right against the number (`0.5M/S²`); the tests cover both.
 
 The programs have been verified in this simulator and against TI's
 documentation, not yet on a physical calculator. If anything looks off on

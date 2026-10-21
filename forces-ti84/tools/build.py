@@ -291,9 +291,12 @@ def lint(lines, profile):
                     err(i, f"menu option {o!r} longer than {p['menu_opt']}")
             targets += [(i, t) for t in rest[1::2]]
         elif line.startswith("Disp "):
+            first_row = i > 0 and lines[i - 1] == "ClrHome"
+            width = p["row1"] if first_row else p["cols"]
             for s in strings_in(line):
-                if len(s) > p["cols"]:
-                    err(i, f"Disp text longer than {p['cols']}")
+                if len(s) > width:
+                    err(i, f"Disp text longer than {width}"
+                           + (" (row 1: pause indicator)" if first_row else ""))
         elif line.startswith("Input "):
             prompt = strings_in(line)[0]
             if len(prompt) > p["cols"] - 3:

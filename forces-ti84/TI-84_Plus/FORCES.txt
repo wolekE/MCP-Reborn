@@ -241,7 +241,7 @@ Input "SCALE N (N)=",N
 If not(N>0)
 Disp "MUST BE >0"
 End
-Disp "NEG: USE (⁻) KEY"
+Disp "USE (⁻) FOR NEG"
 0→Y
 Input "AY (+UP/⁻DN)=",Y
 "ACCEL: NONE"→Str1
@@ -529,29 +529,27 @@ Output(3,1,"HANGER DOWN")
 Output(4,1,"HANG: MG-T=0")
 Output(5,1,"TABLE: T-FS=0")
 Output(6,1,"HANG WT≤MUS*N")
+round(0,3)→X
+Output(7,1,"A=")
+Output(7,min(13,3+expr(Str9)),"M/S²")
+Output(7,3,X)
+round(T,3)→X
+Output(8,1,"T=")
+Output(8,min(16,3+expr(Str9)),"N")
+Output(8,3,X)
 Pause 
 ClrHome
 Output(1,1,"STATIC FRIC:")
-round(0,3)→X
-Output(2,1,"A=")
-Output(2,min(13,3+expr(Str9)),"M/S²")
-Output(2,3,X)
-round(T,3)→X
-Output(3,1,"T=")
-Output(3,min(16,3+expr(Str9)),"N")
-Output(3,3,X)
 round(F,3)→X
-Output(4,1,"FS=")
-Output(4,min(16,4+expr(Str9)),"N")
-Output(4,4,X)
+Output(2,1,"FS=")
+Output(2,min(16,4+expr(Str9)),"N")
+Output(2,4,X)
 round(SN,3)→X
-Output(5,1,"FS MAX=")
-If 8+expr(Str9)>16
-round(X,0)→X
-Output(5,min(16,8+expr(Str9)),"N")
-Output(5,8,X)
-Output(6,1,"FS POINTS AWAY")
-Output(7,1,"FROM PULLEY")
+Output(3,1,"FSMAX=")
+Output(3,min(16,7+expr(Str9)),"N")
+Output(3,7,X)
+Output(4,1,"FS POINTS AWAY")
+Output(5,1,"FROM PULLEY")
 Pause 
 End
 Goto 0
@@ -572,7 +570,7 @@ Disp "MUST BE ≥0"
 End
 Disp "θ ABOVE HORIZ."
 Disp "NEG=PUSH DOWN"
-Disp "NEG: USE (⁻) KEY"
+Disp "USE (⁻) FOR NEG"
 91→θ
 Repeat abs(θ)≤90
 Input "θ (DEG)=",θ
@@ -606,7 +604,7 @@ Lbl F3
 Goto F9
 Lbl F4
 ClrHome
-Disp "NEG: USE (⁻) KEY"
+Disp "USE (⁻) FOR NEG"
 0→A
 Input "AX (+=PULL)=",A
 4→W
@@ -780,7 +778,8 @@ round(F,3)→X
 Output(5,1,"FS=")
 Output(5,min(16,4+expr(Str9)),"N")
 Output(5,4,X)
-Output(6,1,"FS POINTS UPHILL")
+Output(6,1,"(NEEDED TO HOLD)")
+Output(7,1,"FS POINTS UPHILL")
 Pause 
 ClrHome
 Output(1,1,"COMPONENTS:")
@@ -1099,7 +1098,7 @@ Input "M (KG)=",M
 If not(M>0)
 Disp "MUST BE >0"
 End
-Disp "NEG: USE (⁻) KEY"
+Disp "USE (⁻) FOR NEG"
 0→Y
 Input "AY (+UP/⁻DN)=",Y
 M(G+Y)→T
@@ -1150,7 +1149,7 @@ ClrHome
 Disp "SUM F=MA"
 Disp "+ = YOUR CHOICE"
 Disp "0 OR ENTER=NONE"
-Disp "NEG: USE (⁻) KEY"
+Disp "USE (⁻) FOR NEG"
 0→F
 "0"→Str8
 Input "F1 (N)=",Str8
