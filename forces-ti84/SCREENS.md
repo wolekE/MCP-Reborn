@@ -1405,13 +1405,13 @@ Keys: MORE > SIMPLE > #3 > 2 > ⁻1
 +--------------------------+
 |+ = UP                    |
 |T-MG=MA                   |
+|(T = ROPE, LIFT OR THRUST)|
 |T=M(G+AY)                 |
 |T=17.6 N                  |
 |MG=19.6 N                 |
 |AY=⁻1 M/S²                |
 |ACCEL: DOWN               |
 |T<MG                      |
-|                          |
 |                          |
 +--------------------------+
 ```
@@ -1469,6 +1469,426 @@ Keys: MORE > CONCEPT > V=0
 |EQUILIBRIUM: NO           |
 |                          |
 |                          |
+|                          |
++--------------------------+
+```
+
+## Vertical 1: 4500 kg helicopter, a = 2 up (lift)
+
+Keys: MORE > SIMPLE > UP FORCE > 4500 > 2
+
+```
++--------------------------+
+|+ = UP                    |
+|T-MG=MA                   |
+|(T = ROPE, LIFT OR THRUST)|
+|T=M(G+AY)                 |
+|T=53100 N                 |
+|MG=44100 N                |
+|AY=2 M/S²                 |
+|ACCEL: UP                 |
+|T>MG                      |
+|                          |
++--------------------------+
+```
+
+## Vertical 2: 15 kg groceries, bag max 230 N, a = 7 up
+
+Keys: MORE > ROPE > WILL IT HOLD > 15 > 230 > 7
+
+```
++--------------------------+
+|+ = UP                    |
+|T-MG=MA                   |
+|SO T=M(G+A)               |
+|T NEEDED=252 N            |
+|TMAX=230 N                |
+|BREAKS: T NEEDED > TMAX   |
+|AMAX UP=5.533 M/S²        |
+|                          |
+|                          |
+|                          |
++--------------------------+
+```
+
+## Vertical 3: 10 kg, string max 100 N
+
+Keys: MORE > ROPE > MAX A, LIFTING > 10 > 100
+
+```
++--------------------------+
+|+ = UP                    |
+|TMAX-MG=MA                |
+|SO AMAX=TMAX/M-G          |
+|TMAX=100 N                |
+|MG=98 N                   |
+|AMAX UP=0.2 M/S²          |
+|ACCEL UP MORE THAN AMAX:  |
+|IT BREAKS. LESS: IT HOLDS.|
+|                          |
+|                          |
++--------------------------+
+```
+
+## Vertical 4: 42 kg bucket, rope max 450 N
+
+Keys: MORE > ROPE > MAX A, LIFTING > 42 > 450
+
+```
++--------------------------+
+|+ = UP                    |
+|TMAX-MG=MA                |
+|SO AMAX=TMAX/M-G          |
+|TMAX=450 N                |
+|MG=411.6 N                |
+|AMAX UP=0.914 M/S²        |
+|ACCEL UP MORE THAN AMAX:  |
+|IT BREAKS. LESS: IT HOLDS.|
+|                          |
+|                          |
++--------------------------+
+```
+
+## Vertical 5: 2.0E-4 kg spider, strand max 2.0E-3 N
+
+Keys: MORE > ROPE > MAX A, LIFTING > 2.0ᴇ⁻4 > 2.0ᴇ⁻3
+
+```
++--------------------------+
+|+ = UP                    |
+|TMAX-MG=MA                |
+|SO AMAX=TMAX/M-G          |
+|TMAX=0.002 N              |
+|MG=0.00196 N              |
+|AMAX UP=0.2 M/S²          |
+|ACCEL UP MORE THAN AMAX:  |
+|IT BREAKS. LESS: IT HOLDS.|
+|                          |
+|                          |
++--------------------------+
+```
+
+## Vertical 6: 70 kg rocket, 25 to 45 m/s in 100 m
+
+Keys: MORE > MOTION > VERTICAL, MOVING UP > M/S > V0, V, D > 25 > 45 > 100 > 70
+
+```
++--------------------------+
+|+ = DIRECTION OF MOTION   |
+|A=(V²-V0²)/(2D)           |
+|T=2D/(V0+V)               |
+|V0=25 M/S                 |
+|V=45 M/S                  |
+|A=7 M/S²                  |
+|T=2.857 S                 |
+|D=100 M                   |
+|ACCEL: SPEEDING UP        |
+|                          |
++--------------------------+
+
++--------------------------+
+|+ = UP (THE MOTION)       |
+|F-MG=MA (F = LIFT, THRUST,|
+|ROPE TENSION OR NORMAL F) |
+|SO F=M(G+A)               |
+|F UP=1176 N               |
+|MG=686 N                  |
+|FNET=490 N                |
+|FNET: ALONG THE MOTION    |
+|                          |
+|                          |
++--------------------------+
+```
+
+## Vertical 8a: backpack, a from the graph (0 to 2 m/s in 16 s)
+
+Keys: MORE > MOTION > HORIZONTAL > M/S > V0, V, T > 0 > 2 > 16 > 
+
+```
++--------------------------+
+|+ = DIRECTION OF MOTION   |
+|A=(V-V0)/T                |
+|D=(V0+V)T/2               |
+|V0=0 M/S                  |
+|V=2 M/S                   |
+|A=0.125 M/S²              |
+|T=16 S                    |
+|D=16 M                    |
+|ACCEL: SPEEDING UP        |
+|                          |
++--------------------------+
+```
+
+## Vertical 8b: backpack, 2 kg pulled at 30 deg, a = 0.125, ice
+
+Keys: FLAT>F > 2 > 30 > 0.125 > NONE
+
+```
++--------------------------+
+|+X=PULL DIR,+Y=UP         |
+|FCOSθ-FRIC=MA             |
+|N+FSINθ-MG=0              |
+|SO F=MA/COSθ              |
+|F=0.289 N                 |
+|FX=0.25 N                 |
+|FY=0.144 N                |
+|N=19.456 N                |
+|FRIC=0 N                  |
+|AX=0.125 M/S²             |
++--------------------------+
+
++--------------------------+
+|ACCEL: PULL DIRECTION     |
+|NO FRICTION               |
+|F IS THE APPLIED FORCE    |
+|                          |
+|                          |
+|                          |
+|                          |
+|                          |
+|                          |
+|                          |
++--------------------------+
+```
+
+## Horizontal 1: stop an 1100 kg car from 90 km/h in 8.0 s
+
+Keys: MORE > MOTION > HORIZONTAL > KM/H > V0, V, T > 90 > 0 > 8 > 1100
+
+```
++--------------------------+
+|+ = DIRECTION OF MOTION   |
+|A=(V-V0)/T                |
+|D=(V0+V)T/2               |
+|V0=25 M/S                 |
+|V=0 M/S                   |
+|A=⁻3.125 M/S²             |
+|T=8 S                     |
+|D=100 M                   |
+|ACCEL: SLOWING DOWN       |
+|                          |
++--------------------------+
+
++--------------------------+
+|+ = DIRECTION OF MOTION   |
+|FNET=MA                   |
+|FNET=⁻3437.5 N            |
+|FNET: OPPOSITE THE MOTION |
+|A=⁻3.125 M/S²             |
+|M=1100 KG                 |
+|                          |
+|                          |
+|                          |
+|                          |
++--------------------------+
+```
+
+## Horizontal 2a: 700 kg car, towrope max 1500 N, wind 25 N
+
+Keys: MORE > ROPE > TOWING > 700 > 1500 > 25
+
+```
++--------------------------+
+|+ = FORWARD (TOW DIR)     |
+|TMAX-F OPP=MA             |
+|SO AMAX=(TMAX-F OPP)/M    |
+|TMAX=1500 N               |
+|F OPP=25 N                |
+|AMAX=2.107 M/S²           |
+|MORE THAN AMAX: IT BREAKS |
+|                          |
+|                          |
+|                          |
++--------------------------+
+```
+
+## Horizontal 2b: 0 to 30 km/h at 2.1 m/s^2
+
+Keys: MORE > MOTION > HORIZONTAL > KM/H > V0, V, A > 0 > 30 > 2.1 > 
+
+```
++--------------------------+
+|+ = DIRECTION OF MOTION   |
+|T=(V-V0)/A                |
+|D=(V²-V0²)/(2A)           |
+|V0=0 M/S                  |
+|V=8.333 M/S               |
+|A=2.1 M/S²                |
+|T=3.968 S                 |
+|D=16.534 M                |
+|ACCEL: SPEEDING UP        |
+|                          |
++--------------------------+
+```
+
+## Horizontal 3a: 875 kg car, 0 to 26.3 m/s in 0.59 s
+
+Keys: MORE > MOTION > HORIZONTAL > M/S > V0, V, T > 0 > 26.3 > 0.59 > 875
+
+```
++--------------------------+
+|+ = DIRECTION OF MOTION   |
+|A=(V-V0)/T                |
+|D=(V0+V)T/2               |
+|V0=0 M/S                  |
+|V=26.3 M/S                |
+|A=44.576 M/S²             |
+|T=0.59 S                  |
+|D=7.759 M                 |
+|ACCEL: SPEEDING UP        |
+|                          |
++--------------------------+
+
++--------------------------+
+|+ = DIRECTION OF MOTION   |
+|FNET=MA                   |
+|FNET=39004.237 N          |
+|FNET: ALONG THE MOTION    |
+|A=44.576 M/S²             |
+|M=875 KG                  |
+|                          |
+|                          |
+|                          |
+|                          |
++--------------------------+
+```
+
+## Horizontal 3b: car 875 kg vs driver 68 kg
+
+Keys: MORE > SIMPLE > SAME A > 875 > 68 > 
+
+```
++--------------------------+
+|SAME A FOR BOTH OBJECTS   |
+|F=MA, SO F1/F2=M1/M2      |
+|F1/F2=12.868              |
+|(F1 IS THAT MANY TIMES F2)|
+|                          |
+|                          |
+|                          |
+|                          |
+|                          |
+|                          |
++--------------------------+
+```
+
+## Horizontal 4: dogs, 42 N right, 35 N left, 2.5 kg bone
+
+Keys: MORE > SIMPLE > SUM > 42 > ⁻35 >  >  > 2.5
+
+```
++--------------------------+
+|+ = YOUR CHOICE           |
+|SUM F=MA                  |
+|A=(SUM F)/M               |
+|FNET=7 N                  |
+|A=2.8 M/S²                |
+|NET FORCE: + DIRECTION    |
+|EQUILIBRIUM: NO           |
+|                          |
+|                          |
+|                          |
++--------------------------+
+```
+
+## Horizontal 5: 0.145 kg baseball, 30 to 0 m/s in 0.005 s
+
+Keys: MORE > MOTION > HORIZONTAL > M/S > V0, V, T > 30 > 0 > 0.005 > 0.145
+
+```
++--------------------------+
+|+ = DIRECTION OF MOTION   |
+|A=(V-V0)/T                |
+|D=(V0+V)T/2               |
+|V0=30 M/S                 |
+|V=0 M/S                   |
+|A=⁻6000 M/S²              |
+|T=0.005 S                 |
+|D=0.075 M                 |
+|ACCEL: SLOWING DOWN       |
+|                          |
++--------------------------+
+
++--------------------------+
+|+ = DIRECTION OF MOTION   |
+|FNET=MA                   |
+|FNET=⁻870 N               |
+|FNET: OPPOSITE THE MOTION |
+|A=⁻6000 M/S²              |
+|M=0.145 KG                |
+|                          |
+|                          |
+|                          |
+|                          |
++--------------------------+
+```
+
+## Horizontal 6: 2000 kg truck, 12 m/s to stop in 15 m
+
+Keys: MORE > MOTION > HORIZONTAL > M/S > V0, V, D > 12 > 0 > 15 > 2000
+
+```
++--------------------------+
+|+ = DIRECTION OF MOTION   |
+|A=(V²-V0²)/(2D)           |
+|T=2D/(V0+V)               |
+|V0=12 M/S                 |
+|V=0 M/S                   |
+|A=⁻4.8 M/S²               |
+|T=2.5 S                   |
+|D=15 M                    |
+|ACCEL: SLOWING DOWN       |
+|                          |
++--------------------------+
+
++--------------------------+
+|+ = DIRECTION OF MOTION   |
+|FNET=MA                   |
+|FNET=⁻9600 N              |
+|FNET: OPPOSITE THE MOTION |
+|A=⁻4.8 M/S²               |
+|M=2000 KG                 |
+|                          |
+|                          |
+|                          |
+|                          |
++--------------------------+
+```
+
+## Horizontal 7a: 20 kg box, 50 N at 45 deg, frictionless
+
+Keys: FLAT > 20 > 50 > 45 > FRICTION > 0
+
+```
++--------------------------+
+|+X=RIGHT,+Y=UP            |
+|FCOSθ-FRIC=MA             |
+|N+FSINθ-MG=0              |
+|FX=35.355 N               |
+|FY=35.355 N               |
+|N=160.645 N               |
+|FRIC=0 N                  |
+|AX=1.768 M/S²             |
+|ACCEL: RIGHT              |
+|NO FRICTION               |
++--------------------------+
+```
+
+## Horizontal 7b: velocity after 2.0 s at a = 1.768
+
+Keys: MORE > MOTION > HORIZONTAL > M/S > V0, A, T > 0 > 1.768 > 2 > 
+
+```
++--------------------------+
+|+ = DIRECTION OF MOTION   |
+|V=V0+AT                   |
+|D=V0T+AT²/2               |
+|V0=0 M/S                  |
+|V=3.536 M/S               |
+|A=1.768 M/S²              |
+|T=2 S                     |
+|D=3.536 M                 |
+|ACCEL: SPEEDING UP        |
 |                          |
 +--------------------------+
 ```

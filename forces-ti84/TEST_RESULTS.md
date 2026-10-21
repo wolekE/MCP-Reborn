@@ -49,7 +49,33 @@ Key presses for each case:
 11. 3rd law, mB = 2·mA (mA = 1, mB = 2, F blank): `3RD LAW > 1 > 2 > ENTER`
 12. Flat pull, 5 kg, 20 N at 30°, f = 12: `FLAT SURF PULL > 5 > 20 > 30 > FRICTION (N) > 12`
 
+## Non-Equilibrium Problems worksheets (TI-84 Plus CE)
+
+Keyed into the CE program; the answer column is what the worksheet prints (it rounds, so a 1-4% match counts).
+
+| Problem | Keys | Worksheet | reference.py | TI-84 Plus CE shows | Pass |
+|---------|------|----------:|-------------:|---------------------|:----:|
+| V1 helicopter lift | `MORE > SIMPLE > UP FORCE > 4500 > 2` | 53100 | 5.31e+04 | `T=53100 N` | ✅ |
+| V2 grocery bag (holds?) | `MORE > ROPE > WILL IT HOLD > 15 > 230 > 7` | 252 | 252 | `T NEEDED=252 N` | ✅ |
+| V3 string max a | `MORE > ROPE > MAX A, LIFTING > 10 > 100` | 0.2 | 0.2 | `AMAX UP=0.2 M/S²` | ✅ |
+| V4 bucket max a | `MORE > ROPE > MAX A, LIFTING > 42 > 450` | 0.914 | 0.9143 | `AMAX UP=0.914 M/S²` | ✅ |
+| V5 spider max a | `MORE > ROPE > MAX A, LIFTING > 2.0ᴇ⁻4 > 2.0ᴇ⁻3` | 0.2 | 0.2 | `AMAX UP=0.2 M/S²` | ✅ |
+| V6a rocket a | `MORE > MOTION > VERTICAL, MOVING UP > M/S > V0, V, D > 25 > 45 > 100 > 70` | 7 | 7 | `A=7 M/S²` | ✅ |
+| V6c rocket engine force | `MORE > MOTION > VERTICAL, MOVING UP > M/S > V0, V, D > 25 > 45 > 100 > 70` | 1176 | 1176 | `F UP=1176 N` | ✅ |
+| V8 backpack a (graph) | `MORE > MOTION > HORIZONTAL > M/S > V0, V, T > 0 > 2 > 16 > ENTER` | 0.125 | 0.125 | `A=0.125 M/S²` | ✅ |
+| V8 backpack pull F | `FLAT > FIND PULL F > 2 > 30 > 0.125 > NONE` | 0.289 | 0.2887 | `F=0.289 N` | ✅ |
+| H1 stop the car | `MORE > MOTION > HORIZONTAL > KM/H > V0, V, T > 90 > 0 > 8 > 1100` | -3440 | -3438 | `FNET=⁻3437.5 N` | ✅ |
+| H2a towrope max a | `MORE > ROPE > TOWING > 700 > 1500 > 25` | 2.1 | 2.107 | `AMAX=2.107 M/S²` | ✅ |
+| H2b time to 30 km/h | `MORE > MOTION > HORIZONTAL > KM/H > V0, V, A > 0 > 30 > 2.1 > ENTER` | 3.97 | 3.968 | `T=3.968 S` | ✅ |
+| H3a dragster net force | `MORE > MOTION > HORIZONTAL > M/S > V0, V, T > 0 > 26.3 > 0.59 > 875` | 39000 | 3.9e+04 | `FNET=39004.237 N` | ✅ |
+| H3b car vs driver force | `MORE > SIMPLE > SAME A > 875 > 68 > ENTER` | 13 | 12.87 | `F1/F2=12.868` | ✅ |
+| H4 dogs and bone | `MORE > SIMPLE > SUM > 42 > ⁻35 > ENTER > ENTER > 2.5` | 2.8 | 2.8 | `A=2.8 M/S²` | ✅ |
+| H5 baseball | `MORE > MOTION > HORIZONTAL > M/S > V0, V, T > 30 > 0 > 0.005 > 0.145` | -870 | -870 | `FNET=⁻870 N` | ✅ |
+| H6 truck | `MORE > MOTION > HORIZONTAL > M/S > V0, V, D > 12 > 0 > 15 > 2000` | -9600 | -9600 | `FNET=⁻9600 N` | ✅ |
+| H7 box a | `FLAT > PULL F KNOWN > 20 > 50 > 45 > FRICTION > 0` | 1.77 | 1.768 | `AX=1.768 M/S²` | ✅ |
+| H7 box v after 2.0 s | `MORE > MOTION > HORIZONTAL > M/S > V0, A, T > 0 > 1.768 > 2 > ENTER` | 3.54 | 3.536 | `V=3.536 M/S` | ✅ |
+
 ## Test suites
 
-- `python3 reference.py`: Ran 24 tests in 0.001s / OK
-- `python3 tools/test_program.py`: Ran 34 tests in 7.435s / OK
+- `python3 reference.py`: Ran 36 tests in 0.002s / OK
+- `python3 tools/test_program.py`: Ran 52 tests in 18.926s / OK

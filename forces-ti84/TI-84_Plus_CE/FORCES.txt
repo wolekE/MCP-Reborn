@@ -3,6 +3,7 @@ Degree
 Float
 Normal
 Full
+"round(X,max(3,min(9,2-int(log(abs(X)+not(X))))))"→Str9
 ClrHome
 If G≠9.8 and G≠9.81 and G≠10
 9.8→G
@@ -10,7 +11,8 @@ If G≠9.8
 Then
 ClrHome
 Output(1,1,"NOTE: NOT THE USUAL G")
-Output(2,1,"G="+toString(round(G,3),1)+" M/S²")
+G→X
+Output(2,1,"G="+toString(expr(Str9),1)+" M/S²")
 Output(3,1,"CHANGE IT IN MORE >")
 Output(4,1,"SETTINGS (G)")
 Pause 
@@ -88,7 +90,8 @@ Output(2,1,"N-MG=MA")
 Output(3,1,"N<0: LIFTS OFF")
 Output(4,1,"ACCEL IS MORE THAN G DOWN,")
 Output(5,1,"SO YOU FLOAT OFF THE SCALE")
-Output(6,1,"SCALE READS="+toString(round(0,3),1)+" N")
+0→X
+Output(6,1,"SCALE READS="+toString(expr(Str9),1)+" N")
 Pause 
 Else
 ClrHome
@@ -96,9 +99,12 @@ Output(1,1,"+ = UP")
 Output(2,1,"N-MG=MA")
 Output(3,1,"SO N=M(G+AY)")
 Output(4,1,Str2)
-Output(5,1,"ACCEL AY="+toString(round(Y,3),1)+" M/S²")
-Output(6,1,"SCALE N="+toString(round(N,3),1)+" N")
-Output(7,1,"TRUE WEIGHT MG="+toString(round(MG,3),1)+" N")
+Y→X
+Output(5,1,"ACCEL AY="+toString(expr(Str9),1)+" M/S²")
+N→X
+Output(6,1,"SCALE N="+toString(expr(Str9),1)+" N")
+MG→X
+Output(7,1,"TRUE WEIGHT MG="+toString(expr(Str9),1)+" N")
 Output(8,1,Str1)
 Output(9,1,Str3)
 Pause 
@@ -129,8 +135,10 @@ ClrHome
 Output(1,1,"+ = UP")
 Output(2,1,"N-MG=MA")
 Output(3,1,"AY=(N-MG)/M")
-Output(4,1,"ACCEL AY="+toString(round(Y,3),1)+" M/S²")
-Output(5,1,"TRUE WEIGHT MG="+toString(round(MG,3),1)+" N")
+Y→X
+Output(4,1,"ACCEL AY="+toString(expr(Str9),1)+" M/S²")
+MG→X
+Output(5,1,"TRUE WEIGHT MG="+toString(expr(Str9),1)+" N")
 Output(6,1,Str1)
 Output(7,1,"NEXT: PICK THE VELOCITY")
 Pause 
@@ -196,8 +204,10 @@ ClrHome
 Output(1,1,"+ = UP")
 Output(2,1,"N-MG=MA WITH N=0")
 Output(3,1,"SO -MG=MA AND A=-G")
-Output(4,1,"SCALE N="+toString(round(0,3),1)+" N")
-Output(5,1,"ACCEL AY="+toString(round(⁻G,3),1)+" M/S²")
+0→X
+Output(4,1,"SCALE N="+toString(expr(Str9),1)+" N")
+⁻G→X
+Output(5,1,"ACCEL AY="+toString(expr(Str9),1)+" M/S²")
 Output(6,1,"ACCEL: DOWN")
 Output(7,1,"WEIGHTLESS")
 Output(8,1,"(MASS AND MG UNCHANGED)")
@@ -235,8 +245,10 @@ ClrHome
 Output(1,1,"+ = UP")
 Output(2,1,"N-MG=MA")
 Output(3,1,"M=N/(G+AY)")
-Output(4,1,"MASS M="+toString(round(M,3),1)+" KG")
-Output(5,1,"TRUE WEIGHT MG="+toString(round(MG,3),1)+" N")
+M→X
+Output(4,1,"MASS M="+toString(expr(Str9),1)+" KG")
+MG→X
+Output(5,1,"TRUE WEIGHT MG="+toString(expr(Str9),1)+" N")
 Output(6,1,Str1)
 Pause 
 End
@@ -268,8 +280,10 @@ ClrHome
 Output(1,1,"+ = UP (EITHER)")
 Output(2,1,"T-MG=MA (BOTH)")
 Output(3,1,"EQUAL MASSES")
-Output(4,1,"A="+toString(round(A,3),1)+" M/S²")
-Output(5,1,"T="+toString(round(T,3),1)+" N")
+A→X
+Output(4,1,"A="+toString(expr(Str9),1)+" M/S²")
+T→X
+Output(5,1,"T="+toString(expr(Str9),1)+" N")
 Output(6,1,"T=MG ON EACH")
 Output(7,1,"EQUILIBRIUM")
 Output(8,1,"AT REST OR CONSTANT V")
@@ -295,16 +309,21 @@ Output(1,1,Str5)
 Output(2,1,Str3)
 Output(3,1,Str4)
 Output(4,1,"A=(HEAVY-LIGHT)G/(SUM)")
-Output(5,1,"A="+toString(round(A,3),1)+" M/S²")
-Output(6,1,"T="+toString(round(T,3),1)+" N")
+A→X
+Output(5,1,"A="+toString(expr(Str9),1)+" M/S²")
+T→X
+Output(6,1,"T="+toString(expr(Str9),1)+" N")
 Output(7,1,Str6)
 Output(8,1,Str7)
 Pause 
 ClrHome
 Output(1,1,"CHECK: LIGHT WT<T<HEAVY WT")
-Output(2,1,"M1G="+toString(round(PG,3),1)+" N")
-Output(3,1,"M2G="+toString(round(QG,3),1)+" N")
-Output(4,1,"T="+toString(round(T,3),1)+" N")
+PG→X
+Output(2,1,"M1G="+toString(expr(Str9),1)+" N")
+QG→X
+Output(3,1,"M2G="+toString(expr(Str9),1)+" N")
+T→X
+Output(4,1,"T="+toString(expr(Str9),1)+" N")
 Output(5,1,Str8)
 Output(6,1,Str1)
 Pause 
@@ -358,10 +377,14 @@ ClrHome
 Output(1,1,"+=HEAVY DOWN, LIGHT UP")
 Output(2,1,"HEAVY: MG-T=MA")
 Output(3,1,"LIGHT: T-MG=MA")
-Output(4,1,"OTHER MASS="+toString(round(U,3),1)+" KG")
-Output(5,1,"T="+toString(round(T,3),1)+" N")
-Output(6,1,"HEAVY MASS="+toString(round(H,3),1)+" KG")
-Output(7,1,"LIGHT MASS="+toString(round(L,3),1)+" KG")
+U→X
+Output(4,1,"OTHER MASS="+toString(expr(Str9),1)+" KG")
+T→X
+Output(5,1,"T="+toString(expr(Str9),1)+" N")
+H→X
+Output(6,1,"HEAVY MASS="+toString(expr(Str9),1)+" KG")
+L→X
+Output(7,1,"LIGHT MASS="+toString(expr(Str9),1)+" KG")
 Output(8,1,Str1)
 Pause 
 End
@@ -420,12 +443,16 @@ ClrHome
 Output(1,1,"+=TO PULLEY, HANGER DOWN")
 Output(2,1,"HANG: MG-T=MA")
 Output(3,1,Str1)
-Output(4,1,"A="+toString(round(A,3),1)+" M/S²")
-Output(5,1,"T="+toString(round(T,3),1)+" N")
+A→X
+Output(4,1,"A="+toString(expr(Str9),1)+" M/S²")
+T→X
+Output(5,1,"T="+toString(expr(Str9),1)+" N")
 Output(6,1,"HANGER MOVES DOWN")
 Output(7,1,"TABLE MOVES TOWARD PULLEY")
-Output(8,1,"N ON TABLE="+toString(round(N,3),1)+" N")
-Output(9,1,"FK (KINETIC)="+toString(round(F,3),1)+" N")
+N→X
+Output(8,1,"N ON TABLE="+toString(expr(Str9),1)+" N")
+F→X
+Output(9,1,"FK (KINETIC)="+toString(expr(Str9),1)+" N")
 Output(10,1,"(FK=MUK*N, OPPOSES MOTION)")
 Pause 
 Else
@@ -437,15 +464,21 @@ Output(2,1,"+=TO PULLEY, HANGER DOWN")
 Output(3,1,"HANG: MG-T=0")
 Output(4,1,"TABLE: T-FS=0")
 Output(5,1,"HANGER WEIGHT ≤ MUS*N")
-Output(6,1,"A="+toString(round(0,3),1)+" M/S²")
-Output(7,1,"T="+toString(round(T,3),1)+" N")
-Output(8,1,"FS (STATIC)="+toString(round(F,3),1)+" N")
-Output(9,1,"FS MAX = MUS*N="+toString(round(SN,3),1)+" N")
+0→X
+Output(6,1,"A="+toString(expr(Str9),1)+" M/S²")
+T→X
+Output(7,1,"T="+toString(expr(Str9),1)+" N")
+F→X
+Output(8,1,"FS (STATIC)="+toString(expr(Str9),1)+" N")
+SN→X
+Output(9,1,"FS MAX = MUS*N="+toString(expr(Str9),1)+" N")
 Output(10,1,"FS POINTS AWAY FROM PULLEY")
 Pause 
 End
 Goto 0
 Lbl F
+Menu("FLAT SURFACE PULL","PULL F KNOWN (FIND A)",F0,"FIND PULL F (A KNOWN)",FF,"BACK",0)
+Lbl F0
 ClrHome
 Disp "FLAT SURFACE PULL (AY=0)"
 ⁻1→M
@@ -509,8 +542,10 @@ Then
 ClrHome
 Output(1,1,"+X=RIGHT,+Y=UP")
 Output(2,1,"N+FSINθ-MG=0")
-Output(3,1,"FY="+toString(round(V,3),1)+" N")
-Output(4,1,"MG="+toString(round(MG,3),1)+" N")
+V→X
+Output(3,1,"FY="+toString(expr(Str9),1)+" N")
+MG→X
+Output(4,1,"MG="+toString(expr(Str9),1)+" N")
 Output(5,1,"N<0: LIFTS OFF")
 Output(6,1,"F SINθ > MG, SO THE BOX")
 Output(7,1,"LEAVES THE FLOOR (AY≠0)")
@@ -536,11 +571,16 @@ ClrHome
 Output(1,1,"+X=RIGHT,+Y=UP")
 Output(2,1,"FCOSθ-FRIC=MA")
 Output(3,1,"N+FSINθ-MG=0")
-Output(4,1,"FX="+toString(round(U,3),1)+" N")
-Output(5,1,"FY="+toString(round(V,3),1)+" N")
-Output(6,1,"N="+toString(round(N,3),1)+" N")
-Output(7,1,"FRIC="+toString(round(F,3),1)+" N")
-Output(8,1,"AX="+toString(round(A,3),1)+" M/S²")
+U→X
+Output(4,1,"FX="+toString(expr(Str9),1)+" N")
+V→X
+Output(5,1,"FY="+toString(expr(Str9),1)+" N")
+N→X
+Output(6,1,"N="+toString(expr(Str9),1)+" N")
+F→X
+Output(7,1,"FRIC="+toString(expr(Str9),1)+" N")
+A→X
+Output(8,1,"AX="+toString(expr(Str9),1)+" M/S²")
 Output(9,1,Str1)
 Output(10,1,Str2)
 Pause 
@@ -568,9 +608,151 @@ Then
 ClrHome
 Output(1,1,"CONSTANT V: AX=0, SO")
 Output(2,1,"FRICTION = F COSθ")
-Output(3,1,"MU NEEDED="+toString(round(F/N,3),1))
+F/N→X
+Output(3,1,"MU NEEDED="+toString(expr(Str9),1))
 Pause 
 End
+End
+Goto 0
+Lbl FF
+ClrHome
+Disp "FIND THE PULL F (AY=0)"
+⁻1→M
+Repeat M>0
+Input "M (KG)=",M
+If not(M>0)
+Disp "MUST BE >0"
+End
+Disp "θ = ANGLE ABOVE HORIZONTAL"
+Disp "(NEGATIVE = PUSHING DOWN)"
+Disp "NEGATIVE: USE THE (⁻) KEY"
+91→θ
+Repeat abs(θ)<90
+Input "θ (DEG)=",θ
+If not(abs(θ)<90)
+Disp "USE ⁻90 < θ < 90"
+End
+0→A
+Input "AX (+ = PULL DIR)=",A
+Menu("FRICTION IS","NONE (FRICTIONLESS)",FG,"A FRICTION FORCE (N)",FH,"MUK (FK = MUK*N)",FI)
+Lbl FG
+0→K
+0→F
+1→W
+Goto FJ
+Lbl FH
+ClrHome
+⁻1→F
+Repeat F≥0
+Input "FRICTION FORCE (N)=",F
+If not(F≥0)
+Disp "MUST BE ≥0"
+End
+0→K
+2→W
+Goto FJ
+Lbl FI
+ClrHome
+⁻1→K
+Repeat K≥0
+Input "MUK=",K
+If not(K≥0)
+Disp "MUST BE ≥0"
+End
+0→F
+3→W
+Lbl FJ
+cos(θ)+Ksin(θ)→D
+0→E
+If round(D,9)≤0
+1→E
+If not(E)
+Then
+round((MA+F+KMG)/D,9)→P
+Pcos(θ)→U
+Psin(θ)→V
+round(MG-V,9)→N
+If W=3
+KN→F
+If P<0
+2→E
+If N<0
+3→E
+End
+If E=1
+Then
+ClrHome
+Output(1,1,"CANNOT SOLVE:")
+Output(2,1,"PUSHING DOWN THIS STEEPLY")
+Output(3,1,"ADDS MORE FRICTION THAN")
+Output(4,1,"IT HELPS: NO F IS ENOUGH.")
+Pause 
+End
+If E=2
+Then
+ClrHome
+Output(1,1,"+X=PULL DIR")
+Output(2,1,"FCOSθ-FRIC=MA")
+P→X
+Output(3,1,"F="+toString(expr(Str9),1)+" N")
+Output(4,1,"F<0: NOT POSSIBLE.")
+Output(5,1,"IT NEEDS A PUSH BACKWARD,")
+Output(6,1,"NOT A PULL. CHECK AX SIGN.")
+Pause 
+End
+If E=3
+Then
+ClrHome
+Output(1,1,"+X=PULL DIR,+Y=UP")
+Output(2,1,"N+FSINθ-MG=0")
+P→X
+Output(3,1,"F="+toString(expr(Str9),1)+" N")
+V→X
+Output(4,1,"FY="+toString(expr(Str9),1)+" N")
+MG→X
+Output(5,1,"MG="+toString(expr(Str9),1)+" N")
+Output(6,1,"N<0: LIFTS OFF (FSINθ>MG)")
+Output(7,1,"SO AY≠0: THIS SETUP FAILS.")
+Pause 
+End
+If E=0
+Then
+"SO F=MA/COSθ"→Str1
+If W=2
+"SO F=(MA+FRIC)/COSθ"→Str1
+If W=3
+"F(COSθ+MUK SINθ)=M(A+MUKG)"→Str1
+"FRIC POINTS BACKWARD"→Str2
+If F=0
+"NO FRICTION"→Str2
+"ACCEL: PULL DIRECTION"→Str3
+If A<0
+"ACCEL: BACKWARD (SLOWING)"→Str3
+If A=0
+"ACCEL: NONE (CONSTANT V)"→Str3
+ClrHome
+Output(1,1,"+X=PULL DIR,+Y=UP")
+Output(2,1,"FCOSθ-FRIC=MA")
+Output(3,1,"N+FSINθ-MG=0")
+Output(4,1,Str1)
+P→X
+Output(5,1,"F="+toString(expr(Str9),1)+" N")
+U→X
+Output(6,1,"FX="+toString(expr(Str9),1)+" N")
+V→X
+Output(7,1,"FY="+toString(expr(Str9),1)+" N")
+N→X
+Output(8,1,"N="+toString(expr(Str9),1)+" N")
+F→X
+Output(9,1,"FRIC="+toString(expr(Str9),1)+" N")
+A→X
+Output(10,1,"AX="+toString(expr(Str9),1)+" M/S²")
+Pause 
+ClrHome
+Output(1,1,Str3)
+Output(2,1,Str2)
+Output(3,1,"F IS THE APPLIED FORCE")
+Pause 
 End
 Goto 0
 Lbl I
@@ -640,17 +822,22 @@ ClrHome
 Output(1,1,"+X=UPHILL")
 Output(2,1,"FS-MGSINθ=0")
 Output(3,1,"N-MGCOSθ=0")
-Output(4,1,"N="+toString(round(N,3),1)+" N")
-Output(5,1,"FS NEEDED="+toString(round(F,3),1)+" N")
+N→X
+Output(4,1,"N="+toString(expr(Str9),1)+" N")
+F→X
+Output(5,1,"FS NEEDED="+toString(expr(Str9),1)+" N")
 Output(6,1,"FS POINTS UPHILL")
 Pause 
 If C
 Then
 ClrHome
 Output(1,1,"CHECK: IS FS ≤ MUS*N ?")
-Output(2,1,"FS="+toString(round(F,3),1)+" N")
-Output(3,1,"FS MAX = MUS*N="+toString(round(D,3),1)+" N")
-Output(4,1,"MIN MUS = TANθ="+toString(round(tan(θ),3),1))
+F→X
+Output(2,1,"FS="+toString(expr(Str9),1)+" N")
+D→X
+Output(3,1,"FS MAX = MUS*N="+toString(expr(Str9),1)+" N")
+tan(θ)→X
+Output(4,1,"MIN MUS = TANθ="+toString(expr(Str9),1))
 Output(5,1,Str1)
 Output(6,1,Str2)
 Pause 
@@ -658,7 +845,8 @@ Else
 ClrHome
 Output(1,1,"TO HOLD IT AT REST")
 Output(2,1,"IT NEEDS MUS ≥ TANθ")
-Output(3,1,"MIN MUS="+toString(round(tan(θ),3),1))
+tan(θ)→X
+Output(3,1,"MIN MUS="+toString(expr(Str9),1))
 Pause 
 End
 End
@@ -681,11 +869,14 @@ Output(1,1,"+X=DOWNHILL")
 Output(2,1,"MGSINθ-FK=MA")
 Output(3,1,"N-MGCOSθ=0")
 Output(4,1,"A=G(SINθ-MUK*COSθ)")
-Output(5,1,"A="+toString(round(A,3),1)+" M/S²")
+A→X
+Output(5,1,"A="+toString(expr(Str9),1)+" M/S²")
 Output(6,1,Str1)
 Output(7,1,"FK POINTS UPHILL")
-Output(8,1,"N="+toString(round(N,3),1)+" N")
-Output(9,1,"FK="+toString(round(F,3),1)+" N")
+N→X
+Output(8,1,"N="+toString(expr(Str9),1)+" N")
+F→X
+Output(9,1,"FK="+toString(expr(Str9),1)+" N")
 Output(10,1,"FK=MUK*N")
 Pause 
 If A<0
@@ -707,9 +898,11 @@ ClrHome
 Output(1,1,"+X=DOWNHILL")
 Output(2,1,"MGSINθ=MA")
 Output(3,1,"A=GSINθ")
-Output(4,1,"A="+toString(round(A,3),1)+" M/S²")
+A→X
+Output(4,1,"A="+toString(expr(Str9),1)+" M/S²")
 Output(5,1,Str1)
-Output(6,1,"N="+toString(round(N,3),1)+" N")
+N→X
+Output(6,1,"N="+toString(expr(Str9),1)+" N")
 Pause 
 End
 If W=4
@@ -720,7 +913,8 @@ Output(1,1,"+X=UPHILL")
 Output(2,1,"FS=MGSINθ")
 Output(3,1,"N=MGCOSθ")
 Output(4,1,"FS ≤ MUS*N, SO MUS ≥ TANθ")
-Output(5,1,"MIN MUS="+toString(round(S,3),1))
+S→X
+Output(5,1,"MIN MUS="+toString(expr(Str9),1))
 Output(6,1,"(MASS CANCELS: ANY M OK)")
 Pause 
 End
@@ -752,19 +946,23 @@ Output(1,1,"+X=UPHILL")
 Output(2,1,"F-MGSINθ-FK=MA")
 Output(3,1,"N-MGCOSθ=0")
 Output(4,1,"(F PUSHES ALONG THE SLOPE)")
-Output(5,1,"A="+toString(round(A,3),1)+" M/S²")
+A→X
+Output(5,1,"A="+toString(expr(Str9),1)+" M/S²")
 Output(6,1,Str1)
 Output(7,1,"FK POINTS DOWNHILL")
 Output(8,1,"(BLOCK MOVING UP SLOPE)")
 Pause 
 ClrHome
 Output(1,1,"FRICTION:")
-Output(2,1,"N="+toString(round(N,3),1)+" N")
-Output(3,1,"FK="+toString(round(F,3),1)+" N")
+N→X
+Output(2,1,"N="+toString(expr(Str9),1)+" N")
+F→X
+Output(3,1,"FK="+toString(expr(Str9),1)+" N")
 Output(4,1,"FK=MUK*N")
 Output(5,1,"CONSTANT V UP THE SLOPE")
 Output(6,1,"F = MGSINθ + FK")
-Output(7,1,"F NEEDED="+toString(round(D,3),1)+" N")
+D→X
+Output(7,1,"F NEEDED="+toString(expr(Str9),1)+" N")
 Pause 
 If A<0
 Then
@@ -829,14 +1027,18 @@ Output(1,1,"BLOCK STAYS PUT")
 Output(2,1,"+X=UPHILL")
 Output(3,1,"HANG: T-MG=0")
 Output(4,1,"T+FS-MGSINθ=0")
-Output(5,1,"A="+toString(round(0,3),1)+" M/S²")
-Output(6,1,"T="+toString(round(T,3),1)+" N")
-Output(7,1,"FS="+toString(round(abs(F),3),1)+" N")
+0→X
+Output(5,1,"A="+toString(expr(Str9),1)+" M/S²")
+T→X
+Output(6,1,"T="+toString(expr(Str9),1)+" N")
+abs(F)→X
+Output(7,1,"FS="+toString(expr(Str9),1)+" N")
 Output(8,1,Str1)
 Pause 
 ClrHome
 Output(1,1,"STATIC FRICTION CHECK:")
-Output(2,1,"FS MAX = MUS*N="+toString(round(Q,3),1)+" N")
+Q→X
+Output(2,1,"FS MAX = MUS*N="+toString(expr(Str9),1)+" N")
 Output(3,1,"FS ≤ FS MAX, SO IT HOLDS")
 Pause 
 Else
@@ -863,24 +1065,30 @@ Output(2,1,Str1)
 Output(3,1,Str3)
 Output(4,1,Str2)
 Output(5,1,Str4)
-Output(6,1,"A="+toString(round(A,3),1)+" M/S²")
-Output(7,1,"T="+toString(round(T,3),1)+" N")
+A→X
+Output(6,1,"A="+toString(expr(Str9),1)+" M/S²")
+T→X
+Output(7,1,"T="+toString(expr(Str9),1)+" N")
 Output(8,1,Str5)
 Output(9,1,Str6)
 Pause 
 ClrHome
 Output(1,1,"FRICTION:")
-Output(2,1,"N="+toString(round(N,3),1)+" N")
-Output(3,1,"FK="+toString(round(F,3),1)+" N")
+N→X
+Output(2,1,"N="+toString(expr(Str9),1)+" N")
+F→X
+Output(3,1,"FK="+toString(expr(Str9),1)+" N")
 Output(4,1,"FK=MUK*N")
 Pause 
 End
 End
 ClrHome
 Output(1,1,"COMPONENTS:")
-Output(2,1,"MGSINθ="+toString(round(U,3),1)+" N")
+U→X
+Output(2,1,"MGSINθ="+toString(expr(Str9),1)+" N")
 Output(3,1,"MGSINθ POINTS DOWNHILL")
-Output(4,1,"MGCOSθ="+toString(round(V,3),1)+" N")
+V→X
+Output(4,1,"MGCOSθ="+toString(expr(Str9),1)+" N")
 Output(5,1,"MGCOSθ PRESSES INTO SLOPE")
 Pause 
 Goto 0
@@ -914,11 +1122,15 @@ ClrHome
 Output(1,1,"+=F ON B DIR")
 Output(2,1,"F(A ON B)=-F(B ON A)")
 Output(3,1,"SAME SIZE, OPPOSITE DIRS")
-Output(4,1,"F (EACH)="+toString(round(F,3),1)+" N")
-Output(5,1,"AB=F/MB="+toString(round(F/Q,3),1)+" M/S²")
-Output(6,1,"AA=-F/MA="+toString(round(⁻F/P,3),1)+" M/S²")
+F→X
+Output(4,1,"F (EACH)="+toString(expr(Str9),1)+" N")
+F/Q→X
+Output(5,1,"AB=F/MB="+toString(expr(Str9),1)+" M/S²")
+⁻F/P→X
+Output(6,1,"AA=-F/MA="+toString(expr(Str9),1)+" M/S²")
 Output(7,1,"SIZE RATIO AA/AB = MB/MA")
-Output(8,1,"RATIO="+toString(round(Q/P,3),1))
+Q/P→X
+Output(8,1,"RATIO="+toString(expr(Str9),1))
 Output(9,1,"LIGHTER ONE GETS MORE A")
 Pause 
 Else
@@ -929,7 +1141,8 @@ Output(3,1,"SAME SIZE F,")
 Output(4,1,"OPPOSITE DIRS")
 Output(5,1,"A=F/M, SO SIZE RATIO IS")
 Output(6,1,"AA/AB=MB/MA")
-Output(7,1,"RATIO="+toString(round(Q/P,3),1))
+Q/P→X
+Output(7,1,"RATIO="+toString(expr(Str9),1))
 Output(8,1,"LIGHTER ONE GETS MORE A")
 Pause 
 End
@@ -949,9 +1162,9 @@ Output(4,1,"FREE-BODY DIAGRAM.")
 Pause 
 Goto 0
 Lbl M
-Menu("MORE","SIMPLE CASES",S,"CONCEPT CHECK",C,"SETTINGS (G)",G,"QUIT",Q,"BACK",0)
+Menu("MORE","SIMPLE CASES",S,"CONCEPT CHECK",C,"MOTION (V,T,D): A AND F",K,"ROPE / MAX FORCE",R,"SETTINGS (G)",G,"QUIT",Q,"BACK",0)
 Lbl S
-Menu("SIMPLE CASES","HANGING AT REST (T=MG)",SA,"TERMINAL VELOCITY",SB,"HANGING, ACCELERATING",SC,"SUM OF FORCES = MA",SD,"BACK",0)
+Menu("SIMPLE CASES","HANGING AT REST (T=MG)",SA,"TERMINAL VELOCITY",SB,"UP FORCE (T, LIFT) + A",SC,"SUM OF FORCES = MA",SD,"SAME A: FORCE RATIO",SE,"BACK",0)
 Lbl SA
 ClrHome
 Disp "HANGING AT REST ON A ROPE"
@@ -965,7 +1178,8 @@ ClrHome
 Output(1,1,"+ = UP")
 Output(2,1,"T-MG=0")
 Output(3,1,"SO T=MG")
-Output(4,1,"T="+toString(round(MG,3),1)+" N")
+MG→X
+Output(4,1,"T="+toString(expr(Str9),1)+" N")
 Output(5,1,"T UP, MG DOWN")
 Output(6,1,"EQUILIBRIUM")
 Output(7,1,"(A=0)")
@@ -984,8 +1198,10 @@ ClrHome
 Output(1,1,"+ = UP")
 Output(2,1,"FAIR-MG=0")
 Output(3,1,"SO FAIR=MG")
-Output(4,1,"FAIR="+toString(round(MG,3),1)+" N")
-Output(5,1,"A="+toString(round(0,3),1)+" M/S²")
+MG→X
+Output(4,1,"FAIR="+toString(expr(Str9),1)+" N")
+0→X
+Output(5,1,"A="+toString(expr(Str9),1)+" M/S²")
 Output(6,1,"AIR FORCE UP, V DOWN")
 Output(7,1,"EQUILIBRIUM")
 Output(8,1,"(CONSTANT V)")
@@ -993,7 +1209,7 @@ Pause
 Goto 0
 Lbl SC
 ClrHome
-Disp "HANGING MASS, ACCELERATING"
+Disp "UP FORCE (ROPE OR LIFT)"
 ⁻1→M
 Repeat M>0
 Input "M (KG)=",M
@@ -1027,12 +1243,16 @@ Else
 ClrHome
 Output(1,1,"+ = UP")
 Output(2,1,"T-MG=MA")
-Output(3,1,"T=M(G+AY)")
-Output(4,1,"T="+toString(round(T,3),1)+" N")
-Output(5,1,"MG="+toString(round(MG,3),1)+" N")
-Output(6,1,"AY="+toString(round(Y,3),1)+" M/S²")
-Output(7,1,Str1)
-Output(8,1,Str2)
+Output(3,1,"(T = ROPE, LIFT OR THRUST)")
+Output(4,1,"T=M(G+AY)")
+T→X
+Output(5,1,"T="+toString(expr(Str9),1)+" N")
+MG→X
+Output(6,1,"MG="+toString(expr(Str9),1)+" N")
+Y→X
+Output(7,1,"AY="+toString(expr(Str9),1)+" M/S²")
+Output(8,1,Str1)
+Output(9,1,Str2)
 Pause 
 End
 Goto 0
@@ -1086,11 +1306,441 @@ ClrHome
 Output(1,1,"+ = YOUR CHOICE")
 Output(2,1,"SUM F=MA")
 Output(3,1,"A=(SUM F)/M")
-Output(4,1,"FNET="+toString(round(F,3),1)+" N")
-Output(5,1,"A="+toString(round(A,3),1)+" M/S²")
+F→X
+Output(4,1,"FNET="+toString(expr(Str9),1)+" N")
+A→X
+Output(5,1,"A="+toString(expr(Str9),1)+" M/S²")
 Output(6,1,Str1)
 Output(7,1,Str2)
 Pause 
+Goto 0
+Lbl SE
+ClrHome
+Disp "SAME ACCELERATION:"
+Disp "F=MA, SO F1/F2 = M1/M2"
+⁻1→P
+Repeat P>0
+Input "M1 (KG)=",P
+If not(P>0)
+Disp "MUST BE >0"
+End
+⁻1→Q
+Repeat Q>0
+Input "M2 (KG)=",Q
+If not(Q>0)
+Disp "MUST BE >0"
+End
+Disp "A? TYPE 0 OR PRESS ENTER"
+Disp "FOR JUST THE RATIO"
+"0"→Str8
+Input "A (M/S²)=",Str8
+If not(length(Str8))
+"0"→Str8
+expr(Str8)→A
+ClrHome
+Output(1,1,"SAME A FOR BOTH OBJECTS")
+Output(2,1,"F=MA, SO F1/F2=M1/M2")
+P/Q→X
+Output(3,1,"F1/F2="+toString(expr(Str9),1))
+Output(4,1,"(F1 IS THAT MANY TIMES F2)")
+Pause 
+If A≠0
+Then
+ClrHome
+Output(1,1,"+ = DIRECTION OF A")
+Output(2,1,"F1=M1*A, F2=M2*A")
+A→X
+Output(3,1,"A="+toString(expr(Str9),1)+" M/S²")
+PA→X
+Output(4,1,"F1="+toString(expr(Str9),1)+" N")
+QA→X
+Output(5,1,"F2="+toString(expr(Str9),1)+" N")
+Pause 
+End
+Goto 0
+Lbl K
+Menu("THE MOTION IS","HORIZONTAL",K1,"VERTICAL, MOVING UP",K2,"VERTICAL, MOVING DOWN",K3,"BACK",0)
+Lbl K1
+0→B
+Goto K4
+Lbl K2
+1→B
+Goto K4
+Lbl K3
+⁻1→B
+Lbl K4
+Menu("SPEEDS ARE IN","M/S",K5,"KM/H (CHANGED TO M/S)",K6)
+Lbl K5
+1→U
+Goto K7
+Lbl K6
+1/3.6→U
+Lbl K7
+Menu("YOU KNOW","V0, V, T  (FIND A, D)",K8,"V0, V, D  (FIND A, T)",K9,"V0, A, T  (FIND V, D)",KA,"V0, A, D  (FIND V, T)",KB,"V0, T, D  (FIND A, V)",KC,"V0, V, A  (FIND T, D)",KD,"BACK",0)
+Lbl K8
+1→W
+Goto KE
+Lbl K9
+2→W
+Goto KE
+Lbl KA
+3→W
+Goto KE
+Lbl KB
+4→W
+Goto KE
+Lbl KC
+5→W
+Goto KE
+Lbl KD
+6→W
+Lbl KE
+ClrHome
+Disp "+ = DIRECTION OF MOTION"
+Disp "V0 = START, V = END SPEED"
+⁻1→P
+Repeat P≥0
+Input "V0 (START SPEED)=",P
+If not(P≥0)
+Disp "MUST BE ≥0"
+End
+UP→P
+If W=1 or W=2 or W=6
+Then
+⁻1→Q
+Repeat Q≥0
+Input "V (END SPEED)=",Q
+If not(Q≥0)
+Disp "MUST BE ≥0"
+End
+UQ→Q
+End
+If W=3 or W=4 or W=6
+Then
+Disp "A: + SPEEDS UP, ⁻ SLOWS"
+0→A
+Input "A (M/S²)=",A
+End
+If W=1 or W=3 or W=5
+Then
+⁻1→T
+Repeat T>0
+Input "T (S)=",T
+If not(T>0)
+Disp "MUST BE >0"
+End
+End
+If W=2 or W=4 or W=5
+Then
+⁻1→D
+Repeat D>0
+Input "D (M)=",D
+If not(D>0)
+Disp "MUST BE >0"
+End
+End
+0→E
+" "→Str4
+If W=1
+Then
+"A=(V-V0)/T"→Str1
+"D=(V0+V)T/2"→Str2
+(Q-P)/T→A
+(P+Q)T/2→D
+End
+If W=2
+Then
+"A=(V²-V0²)/(2D)"→Str1
+"T=2D/(V0+V)"→Str2
+(Q²-P²)/(2D)→A
+If P+Q=0
+1→E
+If not(E)
+2D/(P+Q)→T
+End
+If W=3
+Then
+"V=V0+AT"→Str1
+"D=V0T+AT²/2"→Str2
+P+AT→Q
+PT+AT²/2→D
+End
+If W=4
+Then
+"V²=V0²+2AD"→Str1
+"T=(V-V0)/A"→Str2
+P²+2AD→H
+If round(H,9)<0
+2→E
+If A=0 and P=0
+3→E
+If not(E)
+Then
+√(max(0,H))→Q
+If A≠0
+(Q-P)/A→T
+If A=0
+Then
+"T=D/V0"→Str2
+D/P→T
+End
+End
+End
+If W=5
+Then
+"A=2(D-V0T)/T²"→Str1
+"V=V0+AT"→Str2
+2(D-PT)/T²→A
+P+AT→Q
+End
+If W=6
+Then
+"T=(V-V0)/A"→Str1
+"D=(V²-V0²)/(2A)"→Str2
+If A=0
+4→E
+If not(E)
+Then
+(Q-P)/A→T
+(Q²-P²)/(2A)→D
+If T<0
+5→E
+End
+End
+round(A,9)→A
+If Q<0
+"(V<0: IT TURNED AROUND)"→Str4
+"ACCEL: SPEEDING UP"→Str3
+If A<0
+"ACCEL: SLOWING DOWN"→Str3
+If A=0
+"NO ACCEL: CONSTANT V"→Str3
+If E
+Then
+"V0=V=0, YET IT MOVED D."→Str1
+"CHECK THE NUMBERS."→Str2
+If E=2
+Then
+"IT STOPS BEFORE GOING D."→Str1
+"STOP DISTANCE=V0²/(⁻2A)"→Str2
+End
+If E=3
+Then
+"V0=0 AND A=0:"→Str1
+"IT NEVER MOVES."→Str2
+End
+If E=4
+Then
+"A=0, SO THE SPEED NEVER"→Str1
+"CHANGES FROM V0 TO V."→Str2
+End
+If E=5
+Then
+"WITH THIS SIGN OF A, IT"→Str1
+"NEVER REACHES V (T<0)."→Str2
+End
+ClrHome
+Output(1,1,"CANNOT SOLVE:")
+Output(2,1,Str1)
+Output(3,1,Str2)
+Pause 
+Else
+ClrHome
+Output(1,1,"+ = DIRECTION OF MOTION")
+Output(2,1,Str1)
+Output(3,1,Str2)
+P→X
+Output(4,1,"V0="+toString(expr(Str9),1)+" M/S")
+Q→X
+Output(5,1,"V="+toString(expr(Str9),1)+" M/S")
+A→X
+Output(6,1,"A="+toString(expr(Str9),1)+" M/S²")
+T→X
+Output(7,1,"T="+toString(expr(Str9),1)+" S")
+D→X
+Output(8,1,"D="+toString(expr(Str9),1)+" M")
+Output(9,1,Str3)
+Output(10,1,Str4)
+Pause 
+ClrHome
+Disp "FORCE: ENTER THE MASS"
+Disp "(0 OR ENTER = SKIP)"
+Repeat M≥0
+"0"→Str8
+Input "MASS (KG)=",Str8
+If not(length(Str8))
+"0"→Str8
+expr(Str8)→M
+If not(M≥0)
+Disp "MUST BE ≥0"
+End
+"FNET: ALONG THE MOTION"→Str5
+If A<0
+"FNET: OPPOSITE THE MOTION"→Str5
+If A=0
+"FNET: ZERO (EQUILIBRIUM)"→Str5
+If M>0 and B=0
+Then
+ClrHome
+Output(1,1,"+ = DIRECTION OF MOTION")
+Output(2,1,"FNET=MA")
+MA→X
+Output(3,1,"FNET="+toString(expr(Str9),1)+" N")
+Output(4,1,Str5)
+A→X
+Output(5,1,"A="+toString(expr(Str9),1)+" M/S²")
+M→X
+Output(6,1,"M="+toString(expr(Str9),1)+" KG")
+Pause 
+End
+If M>0 and B=1
+Then
+" "→Str6
+If G+A<0
+"(F<0: NEEDS A PUSH DOWN)"→Str6
+ClrHome
+Output(1,1,"+ = UP (THE MOTION)")
+Output(2,1,"F-MG=MA (F = LIFT, THRUST,")
+Output(3,1,"ROPE TENSION OR NORMAL F)")
+Output(4,1,"SO F=M(G+A)")
+M(G+A)→X
+Output(5,1,"F UP="+toString(expr(Str9),1)+" N")
+MG→X
+Output(6,1,"MG="+toString(expr(Str9),1)+" N")
+MA→X
+Output(7,1,"FNET="+toString(expr(Str9),1)+" N")
+Output(8,1,Str5)
+Output(9,1,Str6)
+Pause 
+End
+If M>0 and B=⁻1
+Then
+" "→Str6
+If G-A<0
+"(F<0: NEEDS A PUSH DOWN)"→Str6
+ClrHome
+Output(1,1,"+ = DOWN (THE MOTION)")
+Output(2,1,"MG-F=MA (F = THE UPWARD")
+Output(3,1,"FORCE: ROPE, LIFT, DRAG)")
+Output(4,1,"SO F=M(G-A)")
+M(G-A)→X
+Output(5,1,"F UP="+toString(expr(Str9),1)+" N")
+MG→X
+Output(6,1,"MG="+toString(expr(Str9),1)+" N")
+MA→X
+Output(7,1,"FNET="+toString(expr(Str9),1)+" N")
+Output(8,1,Str5)
+Output(9,1,Str6)
+Pause 
+End
+End
+Goto 0
+Lbl R
+Menu("ROPE / MAX FORCE","MAX A, LIFTING UP",R1,"WILL IT HOLD? (LIFTING)",R2,"MAX A, TOWING (LEVEL)",R3,"BACK",0)
+Lbl R1
+1→W
+Goto R4
+Lbl R2
+2→W
+Goto R4
+Lbl R3
+3→W
+Lbl R4
+ClrHome
+Disp "ROPE, STRING OR BAG LIMIT"
+⁻1→M
+Repeat M>0
+Input "MASS (KG)=",M
+If not(M>0)
+Disp "MUST BE >0"
+End
+⁻1→L
+Repeat L>0
+Input "MAX FORCE (N)=",L
+If not(L>0)
+Disp "MUST BE >0"
+End
+If W=1
+Then
+round(L/M-G,9)→A
+"ACCEL UP MORE THAN AMAX:"→Str1
+"IT BREAKS. LESS: IT HOLDS."→Str2
+If A<0
+Then
+"MG > TMAX: IT BREAKS EVEN"→Str1
+"AT REST (CANNOT HOLD M)."→Str2
+End
+ClrHome
+Output(1,1,"+ = UP")
+Output(2,1,"TMAX-MG=MA")
+Output(3,1,"SO AMAX=TMAX/M-G")
+L→X
+Output(4,1,"TMAX="+toString(expr(Str9),1)+" N")
+MG→X
+Output(5,1,"MG="+toString(expr(Str9),1)+" N")
+A→X
+Output(6,1,"AMAX UP="+toString(expr(Str9),1)+" M/S²")
+Output(7,1,Str1)
+Output(8,1,Str2)
+Pause 
+End
+If W=2
+Then
+Disp "NEGATIVE: USE THE (⁻) KEY"
+0→A
+Input "A (+ UP, ⁻ DOWN)=",A
+M(G+A)→T
+round(L/M-G,9)→H
+"HOLDS: T NEEDED ≤ TMAX"→Str1
+If round(T-L,9)>0
+"BREAKS: T NEEDED > TMAX"→Str1
+" "→Str2
+If T<0
+"(T<0: A<⁻G NOT POSSIBLE)"→Str2
+ClrHome
+Output(1,1,"+ = UP")
+Output(2,1,"T-MG=MA")
+Output(3,1,"SO T=M(G+A)")
+T→X
+Output(4,1,"T NEEDED="+toString(expr(Str9),1)+" N")
+L→X
+Output(5,1,"TMAX="+toString(expr(Str9),1)+" N")
+Output(6,1,Str1)
+H→X
+Output(7,1,"AMAX UP="+toString(expr(Str9),1)+" M/S²")
+Output(8,1,Str2)
+Pause 
+End
+If W=3
+Then
+Disp "OPPOSING FORCE (WIND,"
+Disp "FRICTION): 0 OR ENTER=NONE"
+Repeat F≥0
+"0"→Str8
+Input "OPPOSING F (N)=",Str8
+If not(length(Str8))
+"0"→Str8
+expr(Str8)→F
+If not(F≥0)
+Disp "MUST BE ≥0"
+End
+round((L-F)/M,9)→A
+"MORE THAN AMAX: IT BREAKS"→Str1
+If A≤0
+"TMAX ≤ F OPP: NO SPEEDUP"→Str1
+ClrHome
+Output(1,1,"+ = FORWARD (TOW DIR)")
+Output(2,1,"TMAX-F OPP=MA")
+Output(3,1,"SO AMAX=(TMAX-F OPP)/M")
+L→X
+Output(4,1,"TMAX="+toString(expr(Str9),1)+" N")
+F→X
+Output(5,1,"F OPP="+toString(expr(Str9),1)+" N")
+A→X
+Output(6,1,"AMAX="+toString(expr(Str9),1)+" M/S²")
+Output(7,1,Str1)
+Pause 
+End
 Goto 0
 Lbl C
 Menu("THE OBJECT IS","MOVING UP",C1,"MOVING DOWN",C2,"MOVING RIGHT",C3,"MOVING LEFT",C4,"AT REST (STAYING)",C5,"V=0 FOR ONE INSTANT",C6)
@@ -1167,7 +1817,8 @@ Lbl G
 ClrHome
 Output(1,1,"SETTINGS")
 Output(2,1,"CURRENT G:")
-Output(3,1,"G="+toString(round(G,3),1)+" M/S²")
+G→X
+Output(3,1,"G="+toString(expr(Str9),1)+" M/S²")
 Output(4,1,"PICK A NEW G NEXT")
 Output(5,1,"(KEPT BETWEEN RUNS)")
 Pause 
@@ -1184,7 +1835,8 @@ Lbl G4
 ClrHome
 Output(1,1,"SETTINGS")
 Output(2,1,"NEW G SAVED:")
-Output(3,1,"G="+toString(round(G,3),1)+" M/S²")
+G→X
+Output(3,1,"G="+toString(expr(Str9),1)+" M/S²")
 Pause 
 Goto 0
 Lbl Q

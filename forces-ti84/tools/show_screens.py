@@ -13,7 +13,7 @@ import sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 
-from test_program import SRC  # noqa: E402
+from test_program import SRC, calc_keys  # noqa: E402
 from tisim import Machine  # noqa: E402
 
 TOUR = [
@@ -59,6 +59,29 @@ TOUR = [
 ]
 
 
+MOTION = ["MORE", "MOTION"]
+CE_TOUR = [   # the 'Non-Equilibrium Problems' worksheets (CE only)
+    ("Vertical 1: 4500 kg helicopter, a = 2 up (lift)", ["MORE", "SIMPLE", "UP FORCE", "4500", "2"]),
+    ("Vertical 2: 15 kg groceries, bag max 230 N, a = 7 up", ["MORE", "ROPE", "WILL IT HOLD", "15", "230", "7"]),
+    ("Vertical 3: 10 kg, string max 100 N", ["MORE", "ROPE", "MAX A, LIFTING", "10", "100"]),
+    ("Vertical 4: 42 kg bucket, rope max 450 N", ["MORE", "ROPE", "MAX A, LIFTING", "42", "450"]),
+    ("Vertical 5: 2.0E-4 kg spider, strand max 2.0E-3 N", ["MORE", "ROPE", "MAX A, LIFTING", "2.0ᴇ⁻4", "2.0ᴇ⁻3"]),
+    ("Vertical 6: 70 kg rocket, 25 to 45 m/s in 100 m", MOTION + ["VERTICAL, MOVING UP", "M/S", "V0, V, D", "25", "45", "100", "70"]),
+    ("Vertical 8a: backpack, a from the graph (0 to 2 m/s in 16 s)", MOTION + ["HORIZONTAL", "M/S", "V0, V, T", "0", "2", "16", ""]),
+    ("Vertical 8b: backpack, 2 kg pulled at 30 deg, a = 0.125, ice", ["FLAT>F", "2", "30", "0.125", "NONE"]),
+    ("Horizontal 1: stop an 1100 kg car from 90 km/h in 8.0 s", MOTION + ["HORIZONTAL", "KM/H", "V0, V, T", "90", "0", "8", "1100"]),
+    ("Horizontal 2a: 700 kg car, towrope max 1500 N, wind 25 N", ["MORE", "ROPE", "TOWING", "700", "1500", "25"]),
+    ("Horizontal 2b: 0 to 30 km/h at 2.1 m/s^2", MOTION + ["HORIZONTAL", "KM/H", "V0, V, A", "0", "30", "2.1", ""]),
+    ("Horizontal 3a: 875 kg car, 0 to 26.3 m/s in 0.59 s", MOTION + ["HORIZONTAL", "M/S", "V0, V, T", "0", "26.3", "0.59", "875"]),
+    ("Horizontal 3b: car 875 kg vs driver 68 kg", ["MORE", "SIMPLE", "SAME A", "875", "68", ""]),
+    ("Horizontal 4: dogs, 42 N right, 35 N left, 2.5 kg bone", ["MORE", "SIMPLE", "SUM", "42", "⁻35", "", "", "2.5"]),
+    ("Horizontal 5: 0.145 kg baseball, 30 to 0 m/s in 0.005 s", MOTION + ["HORIZONTAL", "M/S", "V0, V, T", "30", "0", "0.005", "0.145"]),
+    ("Horizontal 6: 2000 kg truck, 12 m/s to stop in 15 m", MOTION + ["HORIZONTAL", "M/S", "V0, V, D", "12", "0", "15", "2000"]),
+    ("Horizontal 7a: 20 kg box, 50 N at 45 deg, frictionless", ["FLAT", "20", "50", "45", "FRICTION", "0"]),
+    ("Horizontal 7b: velocity after 2.0 s at a = 1.768", MOTION + ["HORIZONTAL", "M/S", "V0, A, T", "0", "1.768", "2", ""]),
+]
+
+
 def box(page, cols):
     edge = "+" + "-" * cols + "+"
     return "\n".join([edge] + ["|" + row.ljust(cols) + "|" for row in page] + [edge])
@@ -68,8 +91,8 @@ def main():
     for profile, name, cols in (("mono", "TI-84 Plus (16x8)", 16),
                                 ("ce", "TI-84 Plus CE (26x10)", 26)):
         print(f"# {name}\n")
-        for title, keys in TOUR:
-            m = Machine(SRC[profile], profile, keys + ["MORE", "QUIT"],
+        for title, keys in TOUR + (CE_TOUR if profile == "ce" else []):
+            m = Machine(SRC[profile], profile, calc_keys(profile, keys) + ["MORE", "QUIT"],
                         init={"G": 9.8}).run()
             assert not m.violations and m.status == "stopped", (title, m.violations)
             print(f"## {title}\n")

@@ -316,6 +316,113 @@ def third_law(mA, mB, F=None):
     return out
 
 
+# ------------------------------------------------- 4B FIND THE PULL (CE only)
+def pull_force(m, theta, a, friction="NONE", value=0.0, g=G):
+    """Applied force F at theta above horizontal that gives acceleration a on
+    a level floor (a_y = 0).  friction: 'NONE', 'FORCE' (value = friction in
+    N) or 'MUK' (value = muk, fk = muk*N with N = mg - F sin).
+        F cos - f = ma   ->   F = (ma + f)/cos   or   m(a + muk g)/(cos + muk sin)
+    """
+    _require(m > 0, "MUST BE >0")
+    _require(-90 < theta < 90, "USE -90<THETA<90")
+    k = value if friction == "MUK" else 0.0
+    f = value if friction == "FORCE" else 0.0
+    _require(k >= 0 and f >= 0, "MUST BE >=0")
+    den = _cos(theta) + k * _sin(theta)
+    _require(round(den, 9) > 0, "NO F IS ENOUGH")
+    F = _clean((m * a + f + k * m * g) / den)
+    n = _clean(m * g - F * _sin(theta))
+    if friction == "MUK":
+        f = k * n
+    _require(F >= 0, "F<0: NEEDS A PUSH BACKWARD")
+    _require(n >= 0, "N<0: LIFTS OFF")
+    return {"F": F, "Fx": F * _cos(theta), "Fy": F * _sin(theta), "N": n,
+            "f": f, "ax": a}
+
+
+# ----------------------------------------------- MORE > MOTION (CE only)
+KMH = 1 / 3.6                         # km/h -> m/s
+
+
+def kinematics(known, v0, v=None, a=None, t=None, d=None):
+    """Constant acceleration, + = direction of motion, speeds in m/s.
+
+    known: 'VVT', 'VVD', 'VAT', 'VAD', 'VTD' or 'VVA' (v0 is always known).
+    Returns v0, v, a, t, d.
+    """
+    _require(v0 >= 0, "MUST BE >=0")
+    if known == "VVT":
+        a = (v - v0) / t
+        d = (v0 + v) * t / 2
+    elif known == "VVD":
+        _require(v0 + v > 0, "V0=V=0 YET IT MOVED")
+        a = (v * v - v0 * v0) / (2 * d)
+        t = 2 * d / (v0 + v)
+    elif known == "VAT":
+        v = v0 + a * t
+        d = v0 * t + a * t * t / 2
+    elif known == "VAD":
+        h = v0 * v0 + 2 * a * d
+        _require(round(h, 9) >= 0, "STOPS BEFORE D")
+        _require(not (a == 0 and v0 == 0), "NEVER MOVES")
+        v = math.sqrt(max(0.0, h))
+        t = (v - v0) / a if a else d / v0
+    elif known == "VTD":
+        a = 2 * (d - v0 * t) / (t * t)
+        v = v0 + a * t
+    elif known == "VVA":
+        _require(a != 0, "A=0: SPEED NEVER CHANGES")
+        t = (v - v0) / a
+        _require(t >= 0, "NEVER REACHES V")
+        d = (v * v - v0 * v0) / (2 * a)
+    else:
+        raise ValueError(known)
+    return {"v0": v0, "v": v, "a": _clean(a), "t": t, "d": d}
+
+
+def motion_force(m, a, motion="HORIZONTAL", g=G):
+    """Net force from a, plus the upward force for vertical motion.
+    motion: 'HORIZONTAL', 'UP' (+ up: F - mg = ma) or 'DOWN' (+ down:
+    mg - F = ma)."""
+    _require(m > 0, "MUST BE >0")
+    out = {"Fnet": m * a, "mg": m * g}
+    if motion == "UP":
+        out["F_up"] = m * (g + a)
+    elif motion == "DOWN":
+        out["F_up"] = m * (g - a)
+    return out
+
+
+# ------------------------------------------- MORE > ROPE / MAX FORCE (CE only)
+def rope_max_lift(m, Tmax, g=G):
+    """Largest upward acceleration before the rope breaks: Tmax - mg = ma."""
+    _require(m > 0 and Tmax > 0, "MUST BE >0")
+    return {"a_max": _clean(Tmax / m - g), "mg": m * g,
+            "breaks_at_rest": Tmax < m * g}
+
+
+def rope_hold(m, Tmax, a, g=G):
+    """Tension needed for acceleration a (+ up) and whether the rope holds."""
+    _require(m > 0 and Tmax > 0, "MUST BE >0")
+    t = m * (g + a)
+    return {"T": t, "holds": round(t - Tmax, 9) <= 0, "a_max": _clean(Tmax / m - g)}
+
+
+def tow_max(m, Tmax, f_opp=0.0):
+    """Largest forward acceleration when towing: Tmax - f_opp = ma."""
+    _require(m > 0 and Tmax > 0 and f_opp >= 0, "BAD INPUT")
+    return {"a_max": _clean((Tmax - f_opp) / m)}
+
+
+def force_ratio(m1, m2, a=None):
+    """Same acceleration for both, so F1/F2 = m1/m2."""
+    _require(m1 > 0 and m2 > 0, "MUST BE >0")
+    out = {"ratio": m1 / m2}
+    if a:
+        out.update(F1=m1 * a, F2=m2 * a)
+    return out
+
+
 # ----------------------------------------------------------- 7 SIMPLE CASES
 def hanging_rest(m, g=G):
     _require(m > 0, "MUST BE >0")
@@ -426,6 +533,67 @@ class RequiredCases(unittest.TestCase):
         r = flat_pull(5, 20, 30, "FRICTION", 12)
         self.assertAlmostEqual(r["N"], 39.0, delta=TOL)
         self.assertAlmostEqual(r["ax"], 1.064, delta=TOL)
+
+
+class WorksheetCases(unittest.TestCase):
+    """The two 'Non-Equilibrium Problems' worksheets (answers as printed)."""
+
+    def close(self, got, sheet, rel=0.01):
+        self.assertAlmostEqual(got, sheet, delta=max(0.01, abs(sheet) * rel))
+
+    # Fnet = ma in the VERTICAL direction
+    def test_v1_helicopter_lift(self):
+        self.close(hanging_accel(4500, 2)["T"], 53100)
+
+    def test_v2_grocery_bag(self):
+        r = rope_hold(15, 230, 7)
+        self.close(r["T"], 252)
+        self.assertFalse(r["holds"])
+
+    def test_v3_v4_v5_max_acceleration(self):
+        self.close(rope_max_lift(10, 100)["a_max"], 0.2)
+        self.close(rope_max_lift(42, 450)["a_max"], 0.914)
+        self.close(rope_max_lift(2.0e-4, 2.0e-3)["a_max"], 0.20)
+
+    def test_v6_rocket(self):
+        r = kinematics("VVD", 25, v=45, d=100)
+        self.close(r["a"], 7)
+        self.close(motion_force(70, r["a"], "UP")["F_up"], 1176)
+
+    def test_v8_backpack(self):
+        a = kinematics("VVT", 0, v=2, t=16)["a"]          # from the v-t graph
+        self.close(pull_force(2, 30, a)["F"], 0.289)
+
+    # Fnet = ma in the HORIZONTAL direction
+    def test_h1_stop_car(self):
+        a = kinematics("VVT", 90 * KMH, v=0, t=8)["a"]
+        self.close(motion_force(1100, a)["Fnet"], -3.44e3)
+
+    def test_h2_towrope(self):
+        a = tow_max(700, 1500, 25)["a_max"]
+        self.close(a, 2.1)
+        self.close(kinematics("VVA", 0, v=30 * KMH, a=2.1)["t"], 3.97)
+
+    def test_h3_dragster(self):
+        a = kinematics("VVT", 0, v=26.3, t=0.59)["a"]
+        self.close(motion_force(875, a)["Fnet"], 3.9e4)
+        self.close(force_ratio(875, 68)["ratio"], 13, rel=0.04)
+
+    def test_h4_dogs(self):
+        self.close(net_force([42, -35], 2.5)["a"], 2.8)
+
+    def test_h5_baseball(self):
+        a = kinematics("VVT", 30, v=0, t=0.005)["a"]
+        self.close(motion_force(0.145, a)["Fnet"], -870)
+
+    def test_h6_truck(self):
+        a = kinematics("VVD", 12, v=0, d=15)["a"]
+        self.close(motion_force(2000, a)["Fnet"], -9600)
+
+    def test_h7_box_45(self):
+        a = flat_pull(20, 50, 45, "FRICTION", 0)["ax"]
+        self.close(a, 1.77)
+        self.close(kinematics("VAT", 0, a=a, t=2)["v"], 3.54)
 
 
 class ExtraCases(unittest.TestCase):

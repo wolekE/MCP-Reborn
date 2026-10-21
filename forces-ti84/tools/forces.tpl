@@ -441,6 +441,10 @@ Goto 0
 
 # =================================================== 4 FLAT SURFACE PULL
 Lbl F
+@IFCE
+Menu("FLAT SURFACE PULL","PULL F KNOWN (FIND A)",F0,"FIND PULL F (A KNOWN)",FF,"BACK",0)
+Lbl F0
+@ENDIF
 ClrHome
 Disp "{FLAT SURF PULL|FLAT SURFACE PULL (AY=0)}"
 @IN M;M (KG)=;M>0;MUST BE >0
@@ -552,6 +556,120 @@ Then
 End
 End
 Goto 0
+
+@IFCE
+# ---- 4B find the applied force from the acceleration (CE only)
+Lbl FF
+ClrHome
+Disp "FIND THE PULL F (AY=0)"
+@IN M;M (KG)=;M>0;MUST BE >0
+Disp "θ = ANGLE ABOVE HORIZONTAL"
+Disp "(NEGATIVE = PUSHING DOWN)"
+Disp "NEGATIVE: USE THE (⁻) KEY"
+@IN θ;θ (DEG)=;abs(θ)<90;USE ⁻90 < θ < 90;91
+0→A
+Input "AX (+ = PULL DIR)=",A
+Menu("FRICTION IS","NONE (FRICTIONLESS)",FG,"A FRICTION FORCE (N)",FH,"MUK (FK = MUK*N)",FI)
+Lbl FG
+0→K
+0→F
+1→W
+Goto FJ
+Lbl FH
+ClrHome
+@IN F;FRICTION FORCE (N)=;F≥0;MUST BE ≥0
+0→K
+2→W
+Goto FJ
+Lbl FI
+ClrHome
+@IN K;MUK=;K≥0;MUST BE ≥0
+0→F
+3→W
+Lbl FJ
+cos(θ)+Ksin(θ)→D
+0→E
+If round(D,9)≤0
+1→E
+If not(E)
+Then
+round((MA+F+KMG)/D,9)→P
+Pcos(θ)→U
+Psin(θ)→V
+round(MG-V,9)→N
+If W=3
+KN→F
+If P<0
+2→E
+If N<0
+3→E
+End
+If E=1
+Then
+@SCREEN
+@T CANNOT SOLVE:
+@T PUSHING DOWN THIS STEEPLY
+@T ADDS MORE FRICTION THAN
+@T IT HELPS: NO F IS ENOUGH.
+@END
+End
+If E=2
+Then
+@SCREEN
+@T +X=PULL DIR
+@T FCOSθ-FRIC=MA
+@V F;N;P
+@T F<0: NOT POSSIBLE.
+@T IT NEEDS A PUSH BACKWARD,
+@T NOT A PULL. CHECK AX SIGN.
+@END
+End
+If E=3
+Then
+@SCREEN
+@T +X=PULL DIR,+Y=UP
+@T N+FSINθ-MG=0
+@V F;N;P
+@V FY;N;V
+@V MG;N;MG
+@T N<0: LIFTS OFF (FSINθ>MG)
+@T SO AY≠0: THIS SETUP FAILS.
+@END
+End
+If E=0
+Then
+"SO F=MA/COSθ"→Str1
+If W=2
+"SO F=(MA+FRIC)/COSθ"→Str1
+If W=3
+"F(COSθ+MUK SINθ)=M(A+MUKG)"→Str1
+"FRIC POINTS BACKWARD"→Str2
+If F=0
+"NO FRICTION"→Str2
+"ACCEL: PULL DIRECTION"→Str3
+If A<0
+"ACCEL: BACKWARD (SLOWING)"→Str3
+If A=0
+"ACCEL: NONE (CONSTANT V)"→Str3
+@SCREEN
+@T +X=PULL DIR,+Y=UP
+@T FCOSθ-FRIC=MA
+@T N+FSINθ-MG=0
+@S Str1
+@V F;N;P
+@V FX;N;U
+@V FY;N;V
+@V N;N;N
+@V FRIC;N;F
+@V AX;M/S²;A
+@BR
+@S Str3
+@S Str2
+@T F IS THE APPLIED FORCE
+@END
+End
+Goto 0
+@ENDIF
 
 # ============================================================= 5 INCLINE
 Lbl I
@@ -883,11 +1001,21 @@ Goto 0
 
 # ================================================================ 7 MORE
 Lbl M
+@IFMONO
 Menu("MORE","SIMPLE CASES",S,"CONCEPT CHECK",C,"SETTINGS (G)",G,"QUIT",Q,"BACK",0)
+@ENDIF
+@IFCE
+Menu("MORE","SIMPLE CASES",S,"CONCEPT CHECK",C,"MOTION (V,T,D): A AND F",K,"ROPE / MAX FORCE",R,"SETTINGS (G)",G,"QUIT",Q,"BACK",0)
+@ENDIF
 
 # ------------------------------------------------------- simple cases
 Lbl S
-Menu("SIMPLE CASES","{HANGING, REST|HANGING AT REST (T=MG)}",SA,"{TERMINAL VEL.|TERMINAL VELOCITY}",SB,"{HANG + ACCEL|HANGING, ACCELERATING}",SC,"{SUM F=MA|SUM OF FORCES = MA}",SD,"BACK",0)
+@IFMONO
+Menu("SIMPLE CASES","HANGING, REST",SA,"TERMINAL VEL.",SB,"HANG + ACCEL",SC,"SUM F=MA",SD,"BACK",0)
+@ENDIF
+@IFCE
+Menu("SIMPLE CASES","HANGING AT REST (T=MG)",SA,"TERMINAL VELOCITY",SB,"UP FORCE (T, LIFT) + A",SC,"SUM OF FORCES = MA",SD,"SAME A: FORCE RATIO",SE,"BACK",0)
+@ENDIF
 
 Lbl SA
 ClrHome
@@ -922,7 +1050,7 @@ Goto 0
 
 Lbl SC
 ClrHome
-Disp "{HANGING + ACCEL|HANGING MASS, ACCELERATING}"
+Disp "{HANGING + ACCEL|UP FORCE (ROPE OR LIFT)}"
 @IN M;M (KG)=;M>0;MUST BE >0
 Disp "{USE (⁻) FOR NEG|NEGATIVE: USE THE (⁻) KEY}"
 0→Y
@@ -952,6 +1080,7 @@ Else
 @SCREEN
 @T + = UP
 @T T-MG=MA
+@CE @T (T = ROPE, LIFT OR THRUST)
 @T T=M(G+AY)
 @V T;N;T
 @V MG;N;MG
@@ -997,6 +1126,355 @@ If F=0
 @S Str2
 @END
 Goto 0
+
+@IFCE
+# ---- SIMPLE > SAME A: FORCE RATIO (CE only)
+Lbl SE
+ClrHome
+Disp "SAME ACCELERATION:"
+Disp "F=MA, SO F1/F2 = M1/M2"
+@IN P;M1 (KG)=;P>0;MUST BE >0
+@IN Q;M2 (KG)=;Q>0;MUST BE >0
+Disp "A? TYPE 0 OR PRESS ENTER"
+Disp "FOR JUST THE RATIO"
+@OPT A;A (M/S²)=;1;
+@SCREEN
+@T SAME A FOR BOTH OBJECTS
+@T F=MA, SO F1/F2=M1/M2
+@V F1/F2;;P/Q
+@T (F1 IS THAT MANY TIMES F2)
+@END
+If A≠0
+Then
+@SCREEN
+@T + = DIRECTION OF A
+@T F1=M1*A, F2=M2*A
+@V A;M/S²;A
+@V F1;N;PA
+@V F2;N;QA
+@END
+End
+Goto 0
+
+# ---- MORE > MOTION: constant-acceleration kinematics, then F = MA (CE only)
+Lbl K
+Menu("THE MOTION IS","HORIZONTAL",K1,"VERTICAL, MOVING UP",K2,"VERTICAL, MOVING DOWN",K3,"BACK",0)
+Lbl K1
+0→B
+Goto K4
+Lbl K2
+1→B
+Goto K4
+Lbl K3
+⁻1→B
+Lbl K4
+Menu("SPEEDS ARE IN","M/S",K5,"KM/H (CHANGED TO M/S)",K6)
+Lbl K5
+1→U
+Goto K7
+Lbl K6
+1/3.6→U
+Lbl K7
+Menu("YOU KNOW","V0, V, T  (FIND A, D)",K8,"V0, V, D  (FIND A, T)",K9,"V0, A, T  (FIND V, D)",KA,"V0, A, D  (FIND V, T)",KB,"V0, T, D  (FIND A, V)",KC,"V0, V, A  (FIND T, D)",KD,"BACK",0)
+Lbl K8
+1→W
+Goto KE
+Lbl K9
+2→W
+Goto KE
+Lbl KA
+3→W
+Goto KE
+Lbl KB
+4→W
+Goto KE
+Lbl KC
+5→W
+Goto KE
+Lbl KD
+6→W
+Lbl KE
+ClrHome
+Disp "+ = DIRECTION OF MOTION"
+Disp "V0 = START, V = END SPEED"
+@IN P;V0 (START SPEED)=;P≥0;MUST BE ≥0
+UP→P
+If W=1 or W=2 or W=6
+Then
+@IN Q;V (END SPEED)=;Q≥0;MUST BE ≥0
+UQ→Q
+End
+If W=3 or W=4 or W=6
+Then
+Disp "A: + SPEEDS UP, ⁻ SLOWS"
+0→A
+Input "A (M/S²)=",A
+End
+If W=1 or W=3 or W=5
+Then
+@IN T;T (S)=;T>0;MUST BE >0
+End
+If W=2 or W=4 or W=5
+Then
+@IN D;D (M)=;D>0;MUST BE >0
+End
+0→E
+" "→Str4
+If W=1
+Then
+"A=(V-V0)/T"→Str1
+"D=(V0+V)T/2"→Str2
+(Q-P)/T→A
+(P+Q)T/2→D
+End
+If W=2
+Then
+"A=(V²-V0²)/(2D)"→Str1
+"T=2D/(V0+V)"→Str2
+(Q²-P²)/(2D)→A
+If P+Q=0
+1→E
+If not(E)
+2D/(P+Q)→T
+End
+If W=3
+Then
+"V=V0+AT"→Str1
+"D=V0T+AT²/2"→Str2
+P+AT→Q
+PT+AT²/2→D
+End
+If W=4
+Then
+"V²=V0²+2AD"→Str1
+"T=(V-V0)/A"→Str2
+P²+2AD→H
+If round(H,9)<0
+2→E
+If A=0 and P=0
+3→E
+If not(E)
+Then
+√(max(0,H))→Q
+If A≠0
+(Q-P)/A→T
+If A=0
+Then
+"T=D/V0"→Str2
+D/P→T
+End
+End
+End
+If W=5
+Then
+"A=2(D-V0T)/T²"→Str1
+"V=V0+AT"→Str2
+2(D-PT)/T²→A
+P+AT→Q
+End
+If W=6
+Then
+"T=(V-V0)/A"→Str1
+"D=(V²-V0²)/(2A)"→Str2
+If A=0
+4→E
+If not(E)
+Then
+(Q-P)/A→T
+(Q²-P²)/(2A)→D
+If T<0
+5→E
+End
+End
+round(A,9)→A
+If Q<0
+"(V<0: IT TURNED AROUND)"→Str4
+"ACCEL: SPEEDING UP"→Str3
+If A<0
+"ACCEL: SLOWING DOWN"→Str3
+If A=0
+"NO ACCEL: CONSTANT V"→Str3
+If E
+Then
+"V0=V=0, YET IT MOVED D."→Str1
+"CHECK THE NUMBERS."→Str2
+If E=2
+Then
+"IT STOPS BEFORE GOING D."→Str1
+"STOP DISTANCE=V0²/(⁻2A)"→Str2
+End
+If E=3
+Then
+"V0=0 AND A=0:"→Str1
+"IT NEVER MOVES."→Str2
+End
+If E=4
+Then
+"A=0, SO THE SPEED NEVER"→Str1
+"CHANGES FROM V0 TO V."→Str2
+End
+If E=5
+Then
+"WITH THIS SIGN OF A, IT"→Str1
+"NEVER REACHES V (T<0)."→Str2
+End
+@SCREEN
+@T CANNOT SOLVE:
+@S Str1
+@S Str2
+@END
+Else
+@SCREEN
+@T + = DIRECTION OF MOTION
+@S Str1
+@S Str2
+@V V0;M/S;P
+@V V;M/S;Q
+@V A;M/S²;A
+@V T;S;T
+@V D;M;D
+@S Str3
+@S Str4
+@END
+ClrHome
+Disp "FORCE: ENTER THE MASS"
+Disp "(0 OR ENTER = SKIP)"
+@OPT M;MASS (KG)=;M≥0;MUST BE ≥0
+"FNET: ALONG THE MOTION"→Str5
+If A<0
+"FNET: OPPOSITE THE MOTION"→Str5
+If A=0
+"FNET: ZERO (EQUILIBRIUM)"→Str5
+If M>0 and B=0
+Then
+@SCREEN
+@T + = DIRECTION OF MOTION
+@T FNET=MA
+@V FNET;N;MA
+@S Str5
+@V A;M/S²;A
+@V M;KG;M
+@END
+End
+If M>0 and B=1
+Then
+" "→Str6
+If G+A<0
+"(F<0: NEEDS A PUSH DOWN)"→Str6
+@SCREEN
+@T + = UP (THE MOTION)
+@T F-MG=MA (F = LIFT, THRUST,
+@T ROPE TENSION OR NORMAL F)
+@T SO F=M(G+A)
+@V F UP;N;M(G+A)
+@V MG;N;MG
+@V FNET;N;MA
+@S Str5
+@S Str6
+@END
+End
+If M>0 and B=⁻1
+Then
+" "→Str6
+If G-A<0
+"(F<0: NEEDS A PUSH DOWN)"→Str6
+@SCREEN
+@T + = DOWN (THE MOTION)
+@T MG-F=MA (F = THE UPWARD
+@T FORCE: ROPE, LIFT, DRAG)
+@T SO F=M(G-A)
+@V F UP;N;M(G-A)
+@V MG;N;MG
+@V FNET;N;MA
+@S Str5
+@S Str6
+@END
+End
+End
+Goto 0
+
+# ---- MORE > ROPE / MAX FORCE (CE only)
+Lbl R
+Menu("ROPE / MAX FORCE","MAX A, LIFTING UP",R1,"WILL IT HOLD? (LIFTING)",R2,"MAX A, TOWING (LEVEL)",R3,"BACK",0)
+Lbl R1
+1→W
+Goto R4
+Lbl R2
+2→W
+Goto R4
+Lbl R3
+3→W
+Lbl R4
+ClrHome
+Disp "ROPE, STRING OR BAG LIMIT"
+@IN M;MASS (KG)=;M>0;MUST BE >0
+@IN L;MAX FORCE (N)=;L>0;MUST BE >0
+If W=1
+Then
+round(L/M-G,9)→A
+"ACCEL UP MORE THAN AMAX:"→Str1
+"IT BREAKS. LESS: IT HOLDS."→Str2
+If A<0
+Then
+"MG > TMAX: IT BREAKS EVEN"→Str1
+"AT REST (CANNOT HOLD M)."→Str2
+End
+@SCREEN
+@T + = UP
+@T TMAX-MG=MA
+@T SO AMAX=TMAX/M-G
+@V TMAX;N;L
+@V MG;N;MG
+@V AMAX UP;M/S²;A
+@S Str1
+@S Str2
+@END
+End
+If W=2
+Then
+Disp "NEGATIVE: USE THE (⁻) KEY"
+0→A
+Input "A (+ UP, ⁻ DOWN)=",A
+M(G+A)→T
+round(L/M-G,9)→H
+"HOLDS: T NEEDED ≤ TMAX"→Str1
+If round(T-L,9)>0
+"BREAKS: T NEEDED > TMAX"→Str1
+" "→Str2
+If T<0
+"(T<0: A<⁻G NOT POSSIBLE)"→Str2
+@SCREEN
+@T + = UP
+@T T-MG=MA
+@T SO T=M(G+A)
+@V T NEEDED;N;T
+@V TMAX;N;L
+@S Str1
+@V AMAX UP;M/S²;H
+@S Str2
+@END
+End
+If W=3
+Then
+Disp "OPPOSING FORCE (WIND,"
+Disp "FRICTION): 0 OR ENTER=NONE"
+@OPT F;OPPOSING F (N)=;F≥0;MUST BE ≥0
+round((L-F)/M,9)→A
+"MORE THAN AMAX: IT BREAKS"→Str1
+If A≤0
+"TMAX ≤ F OPP: NO SPEEDUP"→Str1
+@SCREEN
+@T + = FORWARD (TOW DIR)
+@T TMAX-F OPP=MA
+@T SO AMAX=(TMAX-F OPP)/M
+@V TMAX;N;L
+@V F OPP;N;F
+@V AMAX;M/S²;A
+@S Str1
+@END
+End
+Goto 0
+@ENDIF
 
 # ------------------------------------------------------- concept check
 Lbl C

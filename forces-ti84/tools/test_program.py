@@ -40,9 +40,24 @@ ROUND_TOL = 0.0011  # TI shows round(x,3); reference.py is unrounded
 OPEN_PROMPTS = ("AY", "AX", "F (N)=", "FORCE F", "F1", "F2", "F3", "F4")
 
 
+def calc_keys(profile, keys):
+    """The CE's FLAT SURFACE PULL opens a submenu first: "FLAT" means the
+    pull-F-known solver on both calculators, "FLAT>F" the CE's FIND PULL F."""
+    out = []
+    for k in keys:
+        if k == "FLAT":
+            out += ["FLAT"] + (["PULL F KNOWN"] if profile == "ce" else [])
+        elif k == "FLAT>F":
+            out += ["FLAT", "FIND PULL F"]
+        else:
+            out.append(k)
+    return out
+
+
 def run(profile, keys, style="classic", init=None, quit=True, blank="empty"):
     state = {"G": 9.8}
     state.update(init or {})
+    keys = calc_keys(profile, keys)
     m = Machine(SRC[profile], profile, keys + (["MORE", "QUIT"] if quit else []),
                 init=state, style=style, blank=blank).run()
     COVER[profile] |= m.hit
@@ -216,6 +231,229 @@ class RequiredCases(Base):
             self.both(m, ("N",), "N", 39.0, r["N"])
             self.both(m, ("AX",), "M/S²", 1.064, r["ax"])
             self.assertTrue(shows(m, "ACCEL: RIGHT"))
+
+
+# ---------------------------------------------------- worksheet problems
+CE_STYLES = [("ce", "mathprint")]
+MOTION = ["MORE", "MOTION"]
+
+
+class WorksheetCases(Base):
+    """Both 'Non-Equilibrium Problems' worksheets, keyed into the CE program.
+    Each answer is checked against the sheet (1%) and against reference.py."""
+
+    def sheet(self, m, labels, unit, sheet, python, rel=0.01):
+        got = self.expect(m, labels, unit, python, ROUND_TOL)
+        self.assertAlmostEqual(got, sheet, delta=max(0.011, abs(sheet) * rel))
+        return got
+
+    def ce(self, keys):
+        m = run("ce", keys, "mathprint")
+        check_clean(self, m)
+        return m
+
+    # ---- Fnet = ma in the VERTICAL direction
+    def test_v1_helicopter_lift(self):
+        m = self.ce(["MORE", "SIMPLE", "UP FORCE", "4500", "2"])
+        self.sheet(m, ("T",), "N", 53100, ref.hanging_accel(4500, 2)["T"])
+        self.assertTrue(shows(m, "LIFT"))
+
+    def test_v2_grocery_bag(self):
+        m = self.ce(["MORE", "ROPE", "WILL IT HOLD", "15", "230", "7"])
+        self.sheet(m, ("T NEEDED",), "N", 252, ref.rope_hold(15, 230, 7)["T"])
+        self.assertTrue(shows(m, "BREAKS: T NEEDED > TMAX"))
+
+    def test_v3_v4_v5_max_acceleration(self):
+        for mass, tmax, want in (("10", "100", 0.2), ("42", "450", 0.914),
+                                 ("2.0ᴇ⁻4", "2.0ᴇ⁻3", 0.20)):
+            m = self.ce(["MORE", "ROPE", "MAX A, LIFTING", mass, tmax])
+            r = ref.rope_max_lift(float(mass.replace("ᴇ⁻", "e-")),
+                                  float(tmax.replace("ᴇ⁻", "e-")))
+            self.sheet(m, ("AMAX UP",), "M/S²", want, r["a_max"])
+        self.assertTrue(shows(m, "TMAX=0.002 N") and shows(m, "MG=0.00196 N"))
+
+    def test_v6_rocket(self):
+        m = self.ce(MOTION + ["VERTICAL, MOVING UP", "M/S", "V0, V, D", "25", "45",
+                              "100", "70"])
+        r = ref.kinematics("VVD", 25, v=45, d=100)
+        self.sheet(m, ("A",), "M/S²", 7, r["a"])
+        self.sheet(m, ("F UP",), "N", 1176, ref.motion_force(70, 7, "UP")["F_up"])
+
+    def test_v8_backpack(self):
+        m = self.ce(MOTION + ["HORIZONTAL", "M/S", "V0, V, T", "0", "2", "16", ""])
+        self.sheet(m, ("A",), "M/S²", 0.125, 0.125)
+        m = self.ce(["FLAT>F", "2", "30", "0.125", "NONE"])
+        self.sheet(m, ("F",), "N", 0.289, ref.pull_force(2, 30, 0.125)["F"])
+
+    # ---- Fnet = ma in the HORIZONTAL direction
+    def test_h1_stop_car(self):
+        m = self.ce(MOTION + ["HORIZONTAL", "KM/H", "V0, V, T", "90", "0", "8", "1100"])
+        self.sheet(m, ("FNET",), "N", -3437.5, -3437.5)
+        self.assertTrue(shows(m, "OPPOSITE THE MOTION") and shows(m, "V0=25 M/S"))
+
+    def test_h2_towrope(self):
+        m = self.ce(["MORE", "ROPE", "TOWING", "700", "1500", "25"])
+        self.sheet(m, ("AMAX",), "M/S²", 2.1, ref.tow_max(700, 1500, 25)["a_max"])
+        m = self.ce(MOTION + ["HORIZONTAL", "KM/H", "V0, V, A", "0", "30", "2.1", ""])
+        self.sheet(m, ("T",), "S", 3.97, ref.kinematics("VVA", 0, v=30 * ref.KMH, a=2.1)["t"])
+
+    def test_h3_dragster(self):
+        m = self.ce(MOTION + ["HORIZONTAL", "M/S", "V0, V, T", "0", "26.3", "0.59", "875"])
+        a = ref.kinematics("VVT", 0, v=26.3, t=0.59)["a"]
+        self.sheet(m, ("FNET",), "N", 3.9e4, 875 * a, rel=0.01)
+        m = self.ce(["MORE", "SIMPLE", "SAME A", "875", "68", ""])
+        self.sheet(m, ("F1/F2",), "", 13, 875 / 68, rel=0.04)
+
+    def test_h4_dogs(self):
+        m = self.ce(["MORE", "SIMPLE", "SUM", "42", "⁻35", "", "", "2.5"])
+        self.sheet(m, ("A",), "M/S²", 2.8, 2.8)
+
+    def test_h5_baseball(self):
+        m = self.ce(MOTION + ["HORIZONTAL", "M/S", "V0, V, T", "30", "0", "0.005", "0.145"])
+        self.sheet(m, ("FNET",), "N", -870, -870)
+        self.assertTrue(shows(m, "OPPOSITE THE MOTION"))
+
+    def test_h6_truck(self):
+        m = self.ce(MOTION + ["HORIZONTAL", "M/S", "V0, V, D", "12", "0", "15", "2000"])
+        self.sheet(m, ("FNET",), "N", -9600, -9600)
+
+    def test_h7_box_45(self):
+        m = self.ce(["FLAT", "20", "50", "45", "FRICTION", "0"])
+        a = ref.flat_pull(20, 50, 45, "FRICTION", 0)["ax"]
+        self.sheet(m, ("AX",), "M/S²", 1.77, a)
+        m = self.ce(MOTION + ["HORIZONTAL", "M/S", "V0, A, T", "0", "1.768", "2", ""])
+        self.sheet(m, ("V",), "M/S", 3.54, 3.536)
+
+
+class CEPaths(Base):
+    """Every branch of the CE-only solvers."""
+
+    def each(self):
+        return CE_STYLES
+
+    def test_find_pull_branches(self):
+        for p, st in self.each():
+            r = ref.pull_force(5, 30, 1, "FORCE", 4)
+            m = run(p, ["FLAT>F", "5", "30", "1", "FRICTION FORCE", "4"], st)
+            check_clean(self, m)
+            self.expect(m, ("F",), "N", r["F"], ROUND_TOL)
+            r = ref.pull_force(5, -20, 0, "MUK", 0.3)
+            m = run(p, ["FLAT>F", "5", "⁻20", "0", "MUK", "0.3"], st)
+            check_clean(self, m)
+            self.expect(m, ("F",), "N", r["F"], ROUND_TOL)
+            self.expect(m, ("FRIC",), "N", r["f"], ROUND_TOL)
+            self.assertTrue(shows(m, "CONSTANT V"))
+            m = run(p, ["FLAT>F", "5", "0", "⁻1", "NONE"], st)
+            check_clean(self, m)
+            self.assertTrue(shows(m, "F<0: NOT POSSIBLE."))
+            m = run(p, ["FLAT>F", "5", "0", "⁻1", "MUK", "0.5"], st)
+            check_clean(self, m)
+            self.assertTrue(shows(m, "SLOWING") and shows(m, "BACKWARD"))
+            m = run(p, ["FLAT>F", "5", "⁻80", "1", "MUK", "1"], st)
+            check_clean(self, m)
+            self.assertTrue(shows(m, "NO F IS ENOUGH."))
+            m = run(p, ["FLAT>F", "1", "80", "50", "NONE"], st)
+            check_clean(self, m)
+            self.assertTrue(shows(m, "LIFTS OFF"))
+            m = run(p, ["FLAT>F", "2", "90", "30", "0.125", "NONE"], st)
+            check_clean(self, m)                    # 90 is refused, asked again
+            self.assertEqual(sum(1 for pr, _ in m.inputs if "θ" in pr), 2)
+
+    def test_motion_branches(self):
+        cases = [  # keys after the case pick, expected rows
+            (["V0, A, D", "10", "⁻2", "9"], "VAD", dict(v0=10, a=-2, d=9)),
+            (["V0, A, D", "4", "0", "8"], "VAD", dict(v0=4, a=0, d=8)),
+            (["V0, T, D", "2", "4", "20"], "VTD", dict(v0=2, t=4, d=20)),
+            (["V0, A, T", "5", "⁻2", "4"], "VAT", dict(v0=5, a=-2, t=4)),
+            (["V0, V, A", "3", "3.5", "0.5"], "VVA", dict(v0=3, v=3.5, a=0.5)),
+        ]
+        for p, st in self.each():
+            for keys, known, kw in cases:
+                r = ref.kinematics(known, **kw)
+                m = run(p, MOTION + ["HORIZONTAL", "M/S"] + keys + [""], st)
+                check_clean(self, m)
+                for lab, unit in (("A", "M/S²"), ("V", "M/S"), ("T", "S"), ("D", "M")):
+                    self.expect(m, (lab,), unit, r[lab.lower()], ROUND_TOL)
+            self.assertTrue(shows(m, "SPEEDING UP"))
+            m = run(p, MOTION + ["HORIZONTAL", "M/S", "V0, A, T", "5", "⁻2", "4", ""], st)
+            self.assertTrue(shows(m, "TURNED AROUND"))
+            for keys, word in ((["V0, V, D", "0", "0", "5"], "YET IT MOVED"),
+                               (["V0, A, D", "4", "⁻1", "20"], "STOPS BEFORE"),
+                               (["V0, A, D", "0", "0", "5"], "NEVER MOVES"),
+                               (["V0, V, A", "3", "5", "0"], "NEVER"),
+                               (["V0, V, A", "3", "5", "⁻1"], "NEVER REACHES")):
+                m = run(p, MOTION + ["HORIZONTAL", "M/S"] + keys, st)
+                check_clean(self, m)
+                self.assertTrue(shows(m, "CANNOT SOLVE:") and shows(m, word), keys)
+            m = run(p, MOTION + ["VERTICAL, MOVING DOWN", "M/S", "V0, V, T", "2", "8",
+                                 "2", "60"], st)
+            check_clean(self, m)
+            self.expect(m, ("F UP",), "N", 60 * (9.8 - 3), ROUND_TOL)
+            m = run(p, MOTION + ["VERTICAL, MOVING DOWN", "M/S", "V0, V, T", "0", "30",
+                                 "2", "1"], st)
+            check_clean(self, m)
+            self.assertTrue(shows(m, "PUSH DOWN"))
+            m = run(p, MOTION + ["VERTICAL, MOVING UP", "M/S", "V0, V, T", "30", "0",
+                                 "1", "1"], st)
+            check_clean(self, m)
+            self.assertTrue(shows(m, "PUSH DOWN"))
+            m = run(p, MOTION + ["HORIZONTAL", "M/S", "V0, V, T", "5", "5", "2", "3"], st)
+            check_clean(self, m)
+            self.assertTrue(shows(m, "ZERO (EQUILIBRIUM)") and shows(m, "CONSTANT V"))
+
+    def test_rope_branches(self):
+        for p, st in self.each():
+            m = run(p, ["MORE", "ROPE", "MAX A, LIFTING", "20", "100"], st)
+            check_clean(self, m)
+            self.assertTrue(shows(m, "BREAKS EVEN"))
+            m = run(p, ["MORE", "ROPE", "WILL IT HOLD", "15", "230", "2"], st)
+            check_clean(self, m)
+            self.assertTrue(shows(m, "HOLDS: T NEEDED"))
+            m = run(p, ["MORE", "ROPE", "WILL IT HOLD", "15", "230", "⁻12"], st)
+            check_clean(self, m)
+            self.assertTrue(shows(m, "NOT POSSIBLE"))
+            m = run(p, ["MORE", "ROPE", "TOWING", "700", "100", "150"], st)
+            check_clean(self, m)
+            self.assertTrue(shows(m, "NO SPEEDUP"))
+            m = run(p, ["MORE", "ROPE", "TOWING", "700", "1500", ""], st)
+            check_clean(self, m)
+            self.expect(m, ("AMAX",), "M/S²", 1500 / 700, ROUND_TOL)
+
+    def test_same_a_with_acceleration(self):
+        for p, st in self.each():
+            m = run(p, ["MORE", "SIMPLE", "SAME A", "875", "68", "44.576"], st)
+            check_clean(self, m)
+            self.expect(m, ("F1",), "N", 875 * 44.576, ROUND_TOL)
+            self.expect(m, ("F2",), "N", 68 * 44.576, ROUND_TOL)
+
+    def test_ce_validation_messages(self):
+        bad = {"θ (DEG)=": "95"}
+        good = {"θ": "30", "MUS=": "0.5", "MUK": "0.2", "SCALE": "100"}
+        paths = [["FLAT>F", "#3"], ["FLAT>F", "#2"], MOTION + ["#1", "#1", "#1"],
+                 MOTION + ["#1", "#1", "#2"], MOTION + ["#1", "#1", "#4"],
+                 ["MORE", "ROPE", "#1"], ["MORE", "ROPE", "#3"],
+                 ["MORE", "SIMPLE", "SAME A"]]
+        for p, st in self.each():
+            for path in paths:
+                menus = calc_keys(p, path) + ["MORE", "QUIT"]
+                seen = set()
+
+                def answer(kind, info):
+                    if kind == "menu":
+                        return menus.pop(0) if menus else None
+                    if info not in seen:
+                        seen.add(info)
+                        return bad.get(info, "⁻1")
+                    return next((v for k, v in good.items() if k in info), "2")
+
+                m = Machine(SRC[p], p, answer, init={"G": 9.8}, style=st).run()
+                COVER[p] |= m.hit
+                check_clean(self, m)
+                asked = collections.Counter(pr for pr, _ in m.inputs)
+                for prompt in seen:
+                    if not any(k in prompt for k in OPEN_PROMPTS + ("A (M/S²)=", "A (+")):
+                        self.assertGreaterEqual(asked[prompt], 2,
+                                                f"{prompt!r} accepted a bad value")
 
 
 # ------------------------------------------------------- every other path
@@ -574,7 +812,7 @@ class Paths(Base):
                  ["MORE", "SIMPLE", "#3"], ["MORE", "SIMPLE", "#4"]]
         for p, st in self.each():
             for path in paths:
-                menus = path + ["MORE", "QUIT"]
+                menus = calc_keys(p, path) + ["MORE", "QUIT"]
                 seen = set()
 
                 def answer(kind, info):
@@ -775,6 +1013,93 @@ class Fuzz(Base):
                 self.compare(m, [(("T",), "N", mass * 9.8)])
                 m = run(p, ["MORE", "SIMPLE", "#2", num(mass)], st)
                 self.compare(m, [(("FAIR",), "N", mass * 9.8), (("A",), "M/S²", 0)])
+
+
+class FuzzCE(Fuzz):
+    """Random problems for the CE-only solvers, every row checked."""
+
+    def test_fuzz(self):
+        rng = random.Random(1984)
+        p, st = "ce", "mathprint"
+        names = {"VVT": "V0, V, T", "VVD": "V0, V, D", "VAT": "V0, A, T",
+                 "VAD": "V0, A, D", "VTD": "V0, T, D", "VVA": "V0, V, A"}
+        motions = {"HORIZONTAL": "HORIZONTAL", "UP": "VERTICAL, MOVING UP",
+                   "DOWN": "VERTICAL, MOVING DOWN"}
+        done = 0
+        while done < 120:
+            known = rng.choice(list(names))
+            kmh = rng.random() < 0.3
+            unit = ref.KMH if kmh else 1
+            v0, v = self.rnd(rng, 0, 40), self.rnd(rng, 0, 40)
+            a, t, d = self.rnd(rng, -6, 6), self.rnd(rng, 0.2, 20), self.rnd(rng, 1, 200)
+            ins = {"VVT": [v0, v, t], "VVD": [v0, v, d], "VAT": [v0, a, t],
+                   "VAD": [v0, a, d], "VTD": [v0, t, d], "VVA": [v0, v, a]}[known]
+            kw = {"VVT": dict(v=v * unit, t=t), "VVD": dict(v=v * unit, d=d),
+                  "VAT": dict(a=a, t=t), "VAD": dict(a=a, d=d), "VTD": dict(t=t, d=d),
+                  "VVA": dict(v=v * unit, a=a)}[known]
+            try:
+                r = ref.kinematics(known, v0 * unit, **kw)
+            except ref.Impossible:
+                continue
+            done += 1
+            mass = rng.choice([0, self.mass(rng)])
+            motion = rng.choice(list(motions))
+            m = run(p, MOTION + [motions[motion], "KM/H" if kmh else "#1", names[known]]
+                    + [num(x) for x in ins] + [num(mass) if mass else ""], st)
+            rows = [(("V0",), "M/S", r["v0"]), (("V",), "M/S", r["v"]),
+                    (("A",), "M/S²", r["a"]), (("T",), "S", r["t"]), (("D",), "M", r["d"])]
+            if mass:
+                f = ref.motion_force(mass, r["a"], motion)
+                rows += [(("FNET",), "N", f["Fnet"])]
+                if motion == "HORIZONTAL":
+                    rows += [(("M",), "KG", mass)]
+                else:
+                    rows += [(("F UP",), "N", f["F_up"]), (("MG",), "N", f["mg"])]
+            self.compare(m, rows)
+
+            mass, th = self.mass(rng), self.rnd(rng, -60, 60, 1)
+            acc = self.rnd(rng, 0, 5)
+            mode = rng.choice(["NONE", "FORCE", "MUK"])
+            val = {"NONE": 0, "FORCE": self.rnd(rng, 0, 40), "MUK": self.rnd(rng, 0, 0.8)}[mode]
+            try:
+                r = ref.pull_force(mass, th, acc, mode, val)
+            except ref.Impossible:
+                r = None
+            keys = ["FLAT>F", num(mass), num(th), num(acc),
+                    {"NONE": "NONE", "FORCE": "FRICTION FORCE", "MUK": "MUK"}[mode]]
+            keys += [] if mode == "NONE" else [num(val)]
+            m = run(p, keys, st)
+            if r is None:
+                check_clean(self, m)
+                self.assertTrue(shows(m, "CANNOT") or shows(m, "NOT POSSIBLE")
+                                or shows(m, "LIFTS OFF"))
+            else:
+                self.compare(m, [(("F",), "N", r["F"]), (("FX",), "N", r["Fx"]),
+                                 (("FY",), "N", r["Fy"]), (("N",), "N", r["N"]),
+                                 (("FRIC",), "N", r["f"]), (("AX",), "M/S²", acc)])
+
+            tmax, acc = self.rnd(rng, 1, 3000), self.rnd(rng, -9, 9)
+            r = ref.rope_max_lift(mass, tmax)
+            m = run(p, ["MORE", "ROPE", "MAX A, LIFTING", num(mass), num(tmax)], st)
+            self.compare(m, [(("AMAX UP",), "M/S²", r["a_max"]), (("MG",), "N", r["mg"]),
+                             (("TMAX",), "N", tmax)])
+            r = ref.rope_hold(mass, tmax, acc)
+            m = run(p, ["MORE", "ROPE", "WILL IT HOLD", num(mass), num(tmax), num(acc)], st)
+            self.compare(m, [(("T NEEDED",), "N", r["T"]), (("TMAX",), "N", tmax),
+                             (("AMAX UP",), "M/S²", r["a_max"])])
+            self.assertTrue(shows(m, "HOLDS:" if r["holds"] else "BREAKS:"))
+            opp = rng.choice([0, self.rnd(rng, 0, 500)])
+            r = ref.tow_max(mass, tmax, opp)
+            m = run(p, ["MORE", "ROPE", "TOWING", num(mass), num(tmax), num(opp) if opp else ""], st)
+            self.compare(m, [(("AMAX",), "M/S²", r["a_max"]), (("TMAX",), "N", tmax),
+                             (("F OPP",), "N", opp)])
+            m1, m2 = self.mass(rng), self.mass(rng)
+            r = ref.force_ratio(m1, m2, acc or None)
+            m = run(p, ["MORE", "SIMPLE", "SAME A", num(m1), num(m2), num(acc)], st)
+            rows = [(("F1/F2",), "", r["ratio"])]
+            if acc:
+                rows += [(("A",), "M/S²", acc), (("F1",), "N", r["F1"]), (("F2",), "N", r["F2"])]
+            self.compare(m, rows)
 
 
 # -------------------------------------------------------------- coverage

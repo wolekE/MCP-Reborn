@@ -46,6 +46,12 @@ LABEL_RE = re.compile(r"^[A-Z0-9θ]{1,2}$")
 UNIT_COL = ("2+(X<0)+int(log(max(1,abs(X))))-(0<abs(X) and abs(X)<1)"
             "+(fPart(X)≠0)(2+(fPart(10X)≠0)+(fPart(100X)≠0))")
 UNIT_COL_LINE = f'"{UNIT_COL}"→Str9'
+# CE only: the rounding rule for answers, stored once in Str9 and used as
+# toString(expr(Str9),1).  round(X,3), but at least 3 significant figures for
+# small values (2.0E-4 kg shows as 2E-4, not 0).
+SIG_ROUND = "round(X,max(3,min(9,2-int(log(abs(X)+not(X))))))"
+SIG_ROUND_LINE = f'"{SIG_ROUND}"→Str9'
+MAX_MUNCH_LINES = {UNIT_COL_LINE, SIG_ROUND_LINE}
 
 
 class BuildError(Exception):
@@ -99,7 +105,8 @@ def value_lines(row, label, unit, expr, p, profile):
                          f"(max {budget} so a {p['num']}-character number fits)")
     if profile == "ce":
         tail = f'+" {unit}"' if unit else ""
-        return [f'Output({row},1,"{label}="+toString(round({expr},3),1){tail})']
+        return [f"{expr}→X",
+                f'Output({row},1,"{label}="+toString(expr(Str9),1){tail})']
     col = len(label) + 2                  # first column of the number
     out = [f"round({expr},3)→X", f'Output({row},1,"{label}=")']
     if unit:
@@ -149,12 +156,24 @@ def layout_screen(items, p, profile):
 
 def expand(profile):
     p = PROFILES[profile]
-    out, screen = [], None
+    out, screen, only = [], None, None
     with open(TEMPLATE, encoding="utf-8") as fh:
         raw = fh.read().splitlines()
     for n, line in enumerate(raw, start=1):
         line = line.rstrip()
         if not line.strip() or line.lstrip().startswith("#"):
+            continue
+        if line in ("@IFCE", "@IFMONO"):           # block for one calculator
+            if only is not None:
+                raise BuildError(f"forces.tpl:{n}: nested {line}")
+            only = "ce" if line == "@IFCE" else "mono"
+            continue
+        if line == "@ENDIF":
+            if only is None:
+                raise BuildError(f"forces.tpl:{n}: @ENDIF without @IFCE/@IFMONO")
+            only = None
+            continue
+        if only is not None and only != profile:
             continue
         line = resolve_alternatives(line, profile)
         for tag in ("@MONO ", "@CE "):
@@ -181,8 +200,7 @@ def expand(profile):
             elif line == "@SCREEN":
                 screen = []
             elif line == "@UNITCOL":
-                if profile == "mono":
-                    out.append(UNIT_COL_LINE)
+                out.append(UNIT_COL_LINE if profile == "mono" else SIG_ROUND_LINE)
             elif line.startswith("@IN "):
                 out += expand_input(line[4:])
             elif line.startswith("@OPT "):
@@ -195,6 +213,8 @@ def expand(profile):
             raise BuildError(f"forces.tpl:{n}: {e}: {line!r}") from None
     if screen is not None:
         raise BuildError("unterminated @SCREEN")
+    if only is not None:
+        raise BuildError("unterminated @IFCE/@IFMONO")
     return out
 
 
@@ -226,10 +246,13 @@ def lint(lines, profile):
             err(i, "colon-chained statements (keep one per line)")
         if "{" in code or "[" in code or "⌊" in code or "L₁" in code:
             err(i, "list/matrix syntax is not allowed")
-        for s in strings_in(line if line != UNIT_COL_LINE else ""):
+        for s in strings_in(line if line not in MAX_MUNCH_LINES else ""):
             bad = set(s) - STRING_CHARS
             if bad:
                 err(i, f"string has disallowed characters {sorted(bad)}")
+            for seq in ("->", "..."):          # tokenize as → and …
+                if seq in s:
+                    err(i, f"string contains {seq!r}")
         # variables: every capital letter / Str / θ outside strings and keywords
         names = re.sub(r"(Lbl|Goto) \S+", "", code)
         names = re.sub(r"Menu\(.*", "", names)
@@ -329,7 +352,7 @@ def tokenize_and_check(source, profile):
     p = PROFILES[profile]
     trie = p["model"].tokens.tries[None]
     data = b"\x3f".join(
-        encode(line, trie=trie, mode="max" if line == UNIT_COL_LINE else "smart")[0]
+        encode(line, trie=trie, mode="max" if line in MAX_MUNCH_LINES else "smart")[0]
         for line in source.split("\n"))
     prog = TIProgram(name="FORCES")
     prog.load_tokens(decode(data)[0])

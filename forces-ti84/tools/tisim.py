@@ -74,13 +74,13 @@ def ti_format(d, style="classic"):
 
 
 # ------------------------------------------------------------------- lexer
-FUNCS = ["toString(", "length(", "fPart(", "iPart(", "round(", "expr(",
+FUNCS = ["toString(", "length(", "fPart(", "iPart(", "round(", "expr(", "√(",
          "abs(", "sin(", "cos(", "tan(", "max(", "min(", "int(", "log(",
          "not(", "sub("]
 OPS = [" and ", " or ", " xor ", "→", "+", "-", "*", "/", "^", "²", "=", "≠",
        "<", ">", "≤", "≥", "⁻", "(", ")", ","]
 TOKEN_RE = re.compile(
-    r'(?P<str>"[^"]*"?)|(?P<num>\d+\.?\d*|\.\d+)|(?P<strvar>Str\d)|'
+    r'(?P<str>"[^"]*"?)|(?P<num>(?:\d+\.?\d*|\.\d+)(?:ᴇ⁻?\d+)?)|(?P<strvar>Str\d)|'
     r'(?P<func>' + "|".join(re.escape(f) for f in FUNCS) + r')|'
     r'(?P<var>[A-Zθ])|(?P<op>' + "|".join(re.escape(o) for o in OPS) + r')')
 
@@ -188,7 +188,7 @@ class Parser:
     def primary(self):
         kind, val = self.take()
         if kind == "num":
-            return ("num", D(val))
+            return ("num", D(val.replace("ᴇ", "E").replace("⁻", "-")))
         if kind == "str":
             return ("str", val)
         if kind in ("var", "strvar"):
@@ -456,6 +456,10 @@ class Machine:
         x = vals[0]
         if name == "abs(":
             return abs(x)
+        if name == "√(":
+            if x < 0:
+                raise TIError("ERR:NONREAL ANS (√)")
+            return D(x.sqrt())
         if name == "round(":
             n = int(vals[1]) if len(vals) > 1 else 9
             return D(x.quantize(Decimal(1).scaleb(-n), rounding=ROUND_HALF_UP))
@@ -702,7 +706,7 @@ def values(pages):
     num = r"(⁻?(?:\d+\.?\d*|\.\d+)(?:ᴇ⁻?\d+)?)"
     for page in pages:
         for row in page:
-            m = re.match(r"^(.*)=" + num + r"(?:\s*(\S.*))?$", row)
+            m = re.match(r"^(.*)=" + num + r"(?:\s*(N|KG|M/S²|M/S|S|M))?$", row)
             if m:
                 v = float(m.group(2).replace("⁻", "-").replace("ᴇ", "e"))
                 if v == 0 and not m.group(3) and any(c in m.group(1) for c in "+-"):

@@ -21,10 +21,10 @@ rows with longer wording (for example `HANGER MOVES DOWN`), as listed in
 |------|------------|
 | `TI-84_Plus/FORCES.8xp` | Program for the **monochrome TI-84 Plus / Silver Edition** (16×8 screen). Runs on any OS. |
 | `TI-84_Plus/FORCES.txt` | Its readable source, one command per line. |
-| `TI-84_Plus_CE/FORCES.8xp` | Program for the **TI-84 Plus CE** (26×10 screen). Needs CE OS 5.2 or newer (it uses `toString(`). |
+| `TI-84_Plus_CE/FORCES.8xp` | Program for the **TI-84 Plus CE** (26×10 screen). Needs CE OS 5.2 or newer (it uses `toString(`). It also has the **CE-only solvers** for the Non-Equilibrium worksheets (MOTION, ROPE / MAX FORCE, FIND PULL F, SAME A: FORCE RATIO). |
 | `TI-84_Plus_CE/FORCES.txt` | Its readable source. |
 | `reference.py` | Python version of every solver with the same math, plus the test suite (`python3 reference.py`). |
-| `TEST_RESULTS.md` | The 12 required cases: assignment vs. Python vs. what each calculator shows. |
+| `TEST_RESULTS.md` | The 12 required cases (both calculators) and every Non-Equilibrium worksheet problem (CE): answer vs. Python vs. what the calculator shows. |
 | `SCREENS.md` | Every result screen for a tour of example problems, drawn at the real screen size for both calculators. |
 | `tools/` | Build and verification tools (see [How it was built and checked](#how-it-was-built-and-checked)). |
 
@@ -36,7 +36,12 @@ with `Output(` and a column formula, and keeps every line to 16 characters.
 The CE version uses `toString(` to print `LABEL=value UNIT` lines with longer,
 clearer labels (`SCALE N=678 N`, `TRUE WEIGHT MG=588 N`). If your CE's OS is
 older than 5.2 (check with `2nd` `MEM` `1:About`), use the TI-84 Plus file on
-the CE instead: it runs unchanged in the top-left corner of the screen.
+the CE instead: it runs unchanged in the top-left corner of the screen, but
+without the CE-only solvers.
+
+The CE shows answers with `round(X,3)`, except that small values keep 3
+significant figures, so a 2.0×10⁻⁴ kg spider shows as `2ᴇ⁻4`, not 0. Type
+numbers like that with the `EE` key: `2` `.` `0` `2nd` `EE` `(-)` `4`.
 
 ## Sending it to the calculator
 
@@ -117,8 +122,19 @@ after `BLOCK STAYS PUT`.
 
 ### 4 FLAT SURF PULL [FLAT SURFACE PULL] — level floor, aᵧ = 0, +x = pull direction
 
-Asks for m, the applied force F, and θ above horizontal (0 = horizontal,
-negative = pushing down at an angle, −90 to 90). Then, what you know:
+On the CE this opens a short menu first: **1 PULL F KNOWN (FIND A)** is the
+solver below, and **2 FIND PULL F (A KNOWN)** finds the applied force.
+
+* **FIND PULL F** (CE only): asks for m, θ (−90 < θ < 90), aₓ, then the
+  friction: NONE, A FRICTION FORCE (N), or MUK. It solves
+  `FCOSθ-FRIC=MA` with N = mg − F sin θ: F = ma/cos θ, F = (ma + f)/cos θ, or
+  F(cos θ + μk sin θ) = m(a + μk g). It shows F, Fx, Fy, N, friction and aₓ.
+  It says so if no force works, if F would be negative, or if the object
+  would lift off.
+
+**PULL F KNOWN** asks for m, the applied force F, and θ above horizontal
+(0 = horizontal, negative = pushing down at an angle, −90 to 90). Then, what
+you know:
 
 | Option | Extra input | Solves for |
 |--------|-------------|------------|
@@ -172,44 +188,72 @@ objects, so they never cancel on one diagram.
   acceleration direction, net force direction and whether it is in
   equilibrium. `V=0 1 INSTANT`: equilibrium is **not** guaranteed (top of a
   toss: a = g down).
+* **MOTION (V,T,D): A AND F** (CE only): constant-acceleration
+  kinematics, then F = ma.
+  1. Pick HORIZONTAL, VERTICAL MOVING UP, or VERTICAL MOVING DOWN.
+  2. Pick the speed units: M/S, or KM/H (converted to m/s).
+  3. Pick what you know (v₀ is always known):
+     * v₀, v, t: finds a and d
+     * v₀, v, d: finds a and t
+     * v₀, a, t: finds v and d
+     * v₀, a, d: finds v and t
+     * v₀, t, d: finds a and v
+     * v₀, v, a: finds t and d
+  4. It shows the formulas used and all five quantities (+ = direction of
+     motion), and whether it is speeding up or slowing down.
+  5. It then asks for the mass (ENTER alone or 0 = skip) and shows F_net = ma,
+     with `ALONG` or `OPPOSITE THE MOTION`. For vertical motion it also shows
+     the upward force (lift, thrust, tension, normal force): F = m(g + a)
+     when moving up, F = m(g − a) when moving down.
+
+  Impossible inputs (it stops before d, it never reaches v, and so on) get a
+  `CANNOT SOLVE:` screen.
+* **ROPE / MAX FORCE** (CE only): asks for the mass and the maximum force.
+  * MAX A, LIFTING UP: a_max = T_max/m − g (or `BREAKS EVEN AT REST`).
+  * WILL IT HOLD? (LIFTING): asks for a (+ up) and shows T needed = m(g + a)
+    vs T_max, `HOLDS` or `BREAKS`, and a_max.
+  * MAX A, TOWING (LEVEL): asks for an opposing force (wind, friction; ENTER
+    alone = none) and shows a_max = (T_max − F_opp)/m.
 * **SETTINGS (G)**: shows the current g, then pick 9.8, 9.81 or 10 (or KEEP).
 * **QUIT**: restores your angle mode and ends the program.
+
+On the CE, SIMPLE CASES also has **SAME A: FORCE RATIO**: F1/F2 = m1/m2
+(with an optional a, it also shows F1 and F2). Its HANG + ACCEL option is
+called **UP FORCE (T, LIFT) + A**, because T can be a rope, lift or thrust.
 
 Every result screen ends with a pause: press `ENTER` for the next screen.
 After the last one you are back at the main menu.
 
 ## Cheat sheet: which menu answers which question
 
+Menu numbers are for the **TI-84 Plus CE**:
+
 ```
 QUESTION                                  KEYS (menu option numbers)
 Scale reading in an elevator, a given     1 ELEVATOR > 1 FIND SCALE N > UP/DOWN
 ...from "moving down, slowing" etc.       1 > 1 > 4 FROM MOTION > motion > change
-Acceleration from a scale reading         1 ELEVATOR > 2 ACCEL FROM N
-Speeding up or slowing down?              1 > 2 > (then pick the V direction)
-Free fall / weightless                    1 ELEVATOR > 3 FREE FALL
-Mass from scale reading + a               1 ELEVATOR > 4 FIND MASS
-Atwood: a, T, who goes up/down            2 ATWOOD > 1 FIND A AND T
-Atwood: find a mass from a                2 ATWOOD > 2 FIND 2ND MASS
+Acceleration from a scale reading         1 ELEVATOR > 2 (then pick the V dir)
+Free fall / mass from N and a             1 ELEVATOR > 3 FREE FALL / 4 FIND MASS
+Atwood: a, T / find a mass from a         2 ATWOOD > 1 / 2
 Table block + hanging mass (stuck?)       3 TABLE + HANGER
-Pull/push at an angle, level floor        4 FLAT PULL > 1 FRICTION / 2 MUK / 4 AX
-Friction & N for constant velocity        4 FLAT PULL > 3 CONSTANT V
-Block at rest on a slope (N, fs, slips?)  5 INCLINE > 1 AT REST
-Sliding down a slope with friction        5 INCLINE > 2 SLIDING W/ MUK
-Frictionless slope                        5 INCLINE > 3 FRICTIONLESS
-Minimum mus to hold on a slope            5 INCLINE > 4 MIN MUS
-Pushed/pulled up a slope (a, F for const v) 5 INCLINE > 5 PUSHED UP
-Block on slope tied to a hanging mass     5 INCLINE > 6 SLOPE + HANGER
+Pull at an angle: find a or friction      4 FLAT > 1 PULL F KNOWN > friction info
+Pull at an angle: find the pull F         4 FLAT > 2 FIND PULL F
+Slope at rest / sliding / frictionless    5 INCLINE > 1 / 2 / 3
+Min mus / pushed up / slope + hanger      5 INCLINE > 4 / 5 / 6
 Collision/push: forces & accelerations    6 3RD LAW
-Rope tension, hanging at rest             7 MORE > 1 SIMPLE > 1 HANGING, REST
-Terminal velocity (air resistance)        7 MORE > 1 SIMPLE > 2 TERMINAL VEL.
-Tension, mass accelerating on a rope      7 MORE > 1 SIMPLE > 3 HANG + ACCEL
-Any 1-D problem: add forces, get a        7 MORE > 1 SIMPLE > 4 SUM F=MA
+Rope at rest / terminal velocity          7 MORE > 1 SIMPLE > 1 / 2
+Lift, thrust or tension with a given      7 MORE > 1 SIMPLE > 3 UP FORCE
+Add forces (dogs + bone): a               7 MORE > 1 SIMPLE > 4 SUM F=MA
+Same a, two masses: force ratio           7 MORE > 1 SIMPLE > 5 SAME A
 Which way is a / net F? Equilibrium?      7 MORE > 2 CONCEPT CHECK
-Teacher uses g = 10 (or 9.81)             7 MORE > 3 SETTINGS (G)
+Speeds/time/distance -> a and F (km/h ok) 7 MORE > 3 MOTION
+Rope/string/bag max: max a, holds?, tow   7 MORE > 4 ROPE / MAX FORCE
+Teacher uses g = 10 (or 9.81)             7 MORE > 5 SETTINGS (G)
 ```
-The option numbers are the same on both calculators. The CE menus just
-spell the names out (for example `FLAT SURFACE PULL`, `FIND OTHER MASS
-FROM A`). Press the number key to pick an option.
+On the TI-84 Plus, FLAT goes straight to the pull-F-known solver, SIMPLE
+has options 1-4, and MORE is 1 SIMPLE, 2 CONCEPT, 3 SETTINGS, 4 QUIT. It
+has no MOTION, ROPE, FIND PULL F or SAME A solvers. Press the number key to
+pick an option.
 ## Typing it in by hand
 
 `FORCES.txt` has one command per line (no `:` chains) and is exactly what the
