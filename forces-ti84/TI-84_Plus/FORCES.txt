@@ -712,7 +712,7 @@ End
 End
 Goto 0
 Lbl I
-Menu("INCLINE","AT REST",IA,"SLIDING W/ MUK",IB,"FRICTIONLESS",IC,"MIN MUS (HOLD)",ID,"BACK",0)
+Menu("INCLINE","AT REST",IA,"SLIDING W/ MUK",IB,"FRICTIONLESS",IC,"MIN MUS (HOLD)",ID,"PUSHED UP",IE,"SLOPE + HANGER",IG,"BACK",0)
 Lbl IA
 1→W
 Goto I0
@@ -724,9 +724,17 @@ Lbl IC
 Goto I0
 Lbl ID
 4→W
+Goto I0
+Lbl IE
+5→W
+Goto I0
+Lbl IG
+6→W
 Lbl I0
 ClrHome
 Disp "INCLINE"
+If W=6
+Disp "M=BLOCK ON SLOPE"
 ⁻1→M
 Repeat M>0
 Input "M (KG)=",M
@@ -780,23 +788,6 @@ Output(5,min(16,4+expr(Str9)),"N")
 Output(5,4,X)
 Output(6,1,"(NEEDED TO HOLD)")
 Output(7,1,"FS POINTS UPHILL")
-Pause 
-ClrHome
-Output(1,1,"COMPONENTS:")
-round(U,3)→X
-Output(2,1,"MGSINθ=")
-If 8+expr(Str9)>16
-round(X,0)→X
-Output(2,min(16,8+expr(Str9)),"N")
-Output(2,8,X)
-Output(3,1,"SIN: DOWNHILL")
-round(V,3)→X
-Output(4,1,"MGCOSθ=")
-If 8+expr(Str9)>16
-round(X,0)→X
-Output(4,min(16,8+expr(Str9)),"N")
-Output(4,8,X)
-Output(5,1,"COS: INTO SLOPE")
 Pause 
 If C
 Then
@@ -852,30 +843,16 @@ Output(5,1,Str1)
 Output(6,1,"FK POINTS UPHILL")
 Pause 
 ClrHome
-Output(1,1,"COMPONENTS:")
-round(U,3)→X
-Output(2,1,"MGSINθ=")
-If 8+expr(Str9)>16
-round(X,0)→X
-Output(2,min(16,8+expr(Str9)),"N")
-Output(2,8,X)
-Output(3,1,"SIN: DOWNHILL")
-round(V,3)→X
-Output(4,1,"MGCOSθ=")
-If 8+expr(Str9)>16
-round(X,0)→X
-Output(4,min(16,8+expr(Str9)),"N")
-Output(4,8,X)
-Output(5,1,"COS: INTO SLOPE")
+Output(1,1,"FRICTION:")
 round(N,3)→X
-Output(6,1,"N=")
-Output(6,min(16,3+expr(Str9)),"N")
-Output(6,3,X)
+Output(2,1,"N=")
+Output(2,min(16,3+expr(Str9)),"N")
+Output(2,3,X)
 round(F,3)→X
-Output(7,1,"FK=")
-Output(7,min(16,4+expr(Str9)),"N")
-Output(7,4,X)
-Output(8,1,"FK=MUK*N")
+Output(3,1,"FK=")
+Output(3,min(16,4+expr(Str9)),"N")
+Output(3,4,X)
+Output(4,1,"FK=MUK*N")
 Pause 
 If A<0
 Then
@@ -907,23 +884,6 @@ Output(6,1,"N=")
 Output(6,min(16,3+expr(Str9)),"N")
 Output(6,3,X)
 Pause 
-ClrHome
-Output(1,1,"COMPONENTS:")
-round(U,3)→X
-Output(2,1,"MGSINθ=")
-If 8+expr(Str9)>16
-round(X,0)→X
-Output(2,min(16,8+expr(Str9)),"N")
-Output(2,8,X)
-Output(3,1,"SIN: DOWNHILL")
-round(V,3)→X
-Output(4,1,"MGCOSθ=")
-If 8+expr(Str9)>16
-round(X,0)→X
-Output(4,min(16,8+expr(Str9)),"N")
-Output(4,8,X)
-Output(5,1,"COS: INTO SLOPE")
-Pause 
 End
 If W=4
 Then
@@ -938,6 +898,197 @@ Output(5,1,"MIN MUS=")
 Output(5,9,X)
 Output(6,1,"(MASS CANCELS)")
 Pause 
+End
+If W=5
+Then
+⁻1→P
+Repeat P≥0
+Input "PUSH F (N)=",P
+If not(P≥0)
+Disp "MUST BE ≥0"
+End
+⁻1→K
+Repeat K≥0
+Input "MUK (0=NONE)=",K
+If not(K≥0)
+Disp "MUST BE ≥0"
+End
+KN→F
+round((P-U-F)/M,9)→A
+U+F→D
+If A>0
+"ACCEL: UP SLOPE"→Str1
+If A<0
+"A DOWN: SLOWING"→Str1
+If A=0
+"A=0: CONST V"→Str1
+ClrHome
+Output(1,1,"+X=UPHILL")
+Output(2,1,"F-MGSINθ-FK=MA")
+Output(3,1,"N-MGCOSθ=0")
+round(A,3)→X
+Output(4,1,"A=")
+Output(4,min(13,3+expr(Str9)),"M/S²")
+Output(4,3,X)
+Output(5,1,Str1)
+Output(6,1,"FK: DOWNHILL")
+Output(7,1,"(MOVING UP)")
+Pause 
+ClrHome
+Output(1,1,"FRICTION:")
+round(N,3)→X
+Output(2,1,"N=")
+Output(2,min(16,3+expr(Str9)),"N")
+Output(2,3,X)
+round(F,3)→X
+Output(3,1,"FK=")
+Output(3,min(16,4+expr(Str9)),"N")
+Output(3,4,X)
+Output(4,1,"FK=MUK*N")
+Output(5,1,"CONSTANT V UP")
+Output(6,1,"NEEDS F=")
+Output(7,1,"MGSINθ+FK")
+round(D,3)→X
+Output(8,1,"F NEED=")
+If 8+expr(Str9)>16
+round(X,0)→X
+Output(8,min(16,8+expr(Str9)),"N")
+Output(8,8,X)
+Pause 
+If A<0
+Then
+ClrHome
+Output(1,1,"F < MGSINθ+FK:")
+Output(2,1,"IF MOVING UP,")
+Output(3,1,"IT SLOWS DOWN.")
+Output(4,1,"AT REST IT WILL")
+Output(5,1,"NOT START UP")
+Pause 
+End
+End
+If W=6
+Then
+⁻1→H
+Repeat H>0
+Input "HANG M (KG)=",H
+If not(H>0)
+Disp "MUST BE >0"
+End
+⁻1→K
+Repeat K≥0
+Input "MUK (0=NONE)=",K
+If not(K≥0)
+Disp "MUST BE ≥0"
+End
+K→S
+If K>0
+Then
+Disp "MUS? 0 OR ENTER"
+Disp "= SAME AS MUK"
+Repeat S=0 or S≥K
+"0"→Str8
+Input "MUS=",Str8
+If not(length(Str8))
+"0"→Str8
+expr(Str8)→S
+If not(S=0 or S≥K)
+Disp "NEED MUS≥MUK"
+End
+If S=0
+K→S
+End
+HG-U→D
+SN→Q
+0→C
+If round(D-Q,9)>0
+1→C
+If round(⁻D-Q,9)>0
+⁻1→C
+KN→F
+If C=0
+Then
+HG→T
+round(U-T,9)→F
+"FS: NONE NEEDED"→Str1
+If F>0
+"FS POINTS UPHILL"→Str1
+If F<0
+"FS: DOWNHILL"→Str1
+ClrHome
+Output(1,1,"BLOCK STAYS PUT")
+Output(2,1,"+X=UPHILL")
+Output(3,1,"HANG: T-MG=0")
+Output(4,1,"T+FS-MGSINθ=0")
+round(0,3)→X
+Output(5,1,"A=")
+Output(5,min(13,3+expr(Str9)),"M/S²")
+Output(5,3,X)
+round(T,3)→X
+Output(6,1,"T=")
+Output(6,min(16,3+expr(Str9)),"N")
+Output(6,3,X)
+round(abs(F),3)→X
+Output(7,1,"FS=")
+Output(7,min(16,4+expr(Str9)),"N")
+Output(7,4,X)
+Output(8,1,Str1)
+Pause 
+ClrHome
+Output(1,1,"STATIC CHECK:")
+round(Q,3)→X
+Output(2,1,"FSMAX=")
+Output(2,min(16,7+expr(Str9)),"N")
+Output(2,7,X)
+Output(3,1,"FS≤FSMAX: HOLDS")
+Pause 
+Else
+round((CD-F)/(M+H),9)→A
+H(G-CA)→T
+"BLOCK UPHILL:"→Str1
+"T-MGSINθ-FK=MA"→Str3
+"HANGER DOWN:"→Str2
+"MG-T=MA"→Str4
+"BLOCK MOVES UP"→Str5
+"HANGER MOVES DN"→Str6
+If C<0
+Then
+"BLOCK DOWNHILL:"→Str1
+"MGSINθ-T-FK=MA"→Str3
+"HANGER UP:"→Str2
+"T-MG=MA"→Str4
+"BLOCK MOVES DOWN"→Str5
+"HANGER MOVES UP"→Str6
+End
+ClrHome
+Output(1,1,"+ DIRECTION:")
+Output(2,1,Str1)
+Output(3,1,Str3)
+Output(4,1,Str2)
+Output(5,1,Str4)
+round(A,3)→X
+Output(6,1,"A=")
+Output(6,min(13,3+expr(Str9)),"M/S²")
+Output(6,3,X)
+round(T,3)→X
+Output(7,1,"T=")
+Output(7,min(16,3+expr(Str9)),"N")
+Output(7,3,X)
+Output(8,1,Str5)
+Pause 
+ClrHome
+Output(1,1,Str6)
+round(N,3)→X
+Output(2,1,"N=")
+Output(2,min(16,3+expr(Str9)),"N")
+Output(2,3,X)
+round(F,3)→X
+Output(3,1,"FK=")
+Output(3,min(16,4+expr(Str9)),"N")
+Output(3,4,X)
+Output(4,1,"FK=MUK*N")
+Pause 
+End
+End
 ClrHome
 Output(1,1,"COMPONENTS:")
 round(U,3)→X
@@ -955,7 +1106,6 @@ Output(4,min(16,8+expr(Str9)),"N")
 Output(4,8,X)
 Output(5,1,"COS: INTO SLOPE")
 Pause 
-End
 Goto 0
 Lbl L
 ClrHome

@@ -263,6 +263,48 @@ def incline_min_mus(m, theta, g=G):
     return {"mus_min": _tan(theta), "mg_sin": down, "mg_cos": into}
 
 
+def incline_push(m, theta, F, muk=0.0, g=G):
+    """5E pushed or pulled UP the slope by F parallel to it, block moving up.
+
+    + = uphill:  F - mg sin - fk = ma, fk = muk*N (downhill).
+    F_const is the force needed for constant velocity up the slope.
+    """
+    down, into = _incline_parts(m, theta, g)
+    _require(F >= 0, "MUST BE >=0")
+    _require(muk >= 0, "MUST BE >=0")
+    fk = muk * into
+    a = _clean((F - down - fk) / m)
+    return {"mg_sin": down, "mg_cos": into, "N": into, "fk": fk, "a": a,
+            "F_const": down + fk, "slowing": a < 0}
+
+
+def incline_hanger(M, m, theta, muk=0.0, mus=None, g=G):
+    """5F block M on the slope, rope parallel to the slope over a pulley at
+    the top to hanging mass m.  It moves the way the larger of m*g and
+    M*g*sin wins, if that excess beats max static friction mus*N.
+    """
+    down, into = _incline_parts(M, theta, g)
+    _require(m > 0, "MUST BE >0")
+    _require(muk >= 0, "MUST BE >=0")
+    if not mus:                       # None or 0 (ENTER alone) -> use muk
+        mus = muk
+    _require(mus >= muk, "NEED MUS>=MUK")
+    d = m * g - down                  # net pull toward "block up the slope"
+    q = mus * into
+    fk = muk * into
+    c = 1 if round(d - q, 9) > 0 else -1 if round(-d - q, 9) > 0 else 0
+    out = {"mg_sin": down, "mg_cos": into, "N": into}
+    if c == 0:
+        fs = _clean(down - m * g)    # + = uphill
+        out.update(moves=False, a=0.0, T=m * g, fs=abs(fs), fs_max=q,
+                   fs_dir="UPHILL" if fs > 0 else "DOWNHILL" if fs < 0 else "NONE")
+    else:
+        a = _clean((c * d - fk) / (M + m))
+        out.update(moves=True, block="UP" if c > 0 else "DOWN", a=a,
+                   T=m * (g - c * a), fk=fk)
+    return out
+
+
 # ---------------------------------------------------------------- 6 3RD LAW
 def third_law(mA, mB, F=None):
     """6 equal and opposite forces; + = direction of the force on B."""
@@ -457,6 +499,26 @@ class ExtraCases(unittest.TestCase):
         self.assertAlmostEqual(incline_frictionless(2, 30)["a"], 4.9, delta=TOL)
         self.assertAlmostEqual(incline_min_mus(1, 30)["mus_min"], 0.577,
                                delta=TOL)
+
+    def test_incline_push_and_hanger(self):
+        r = incline_push(5, 30, 40, 0.2)
+        self.assertAlmostEqual(r["a"], (40 - 24.5 - 0.2 * 49 * _cos(30)) / 5, delta=TOL)
+        self.assertAlmostEqual(r["F_const"], 24.5 + 0.2 * 49 * _cos(30), delta=TOL)
+        self.assertTrue(incline_push(5, 30, 10, 0.2)["slowing"])
+        r = incline_hanger(4, 3, 30, 0.2)                  # 29.4 N vs 19.6 N
+        self.assertEqual(r["block"], "UP")
+        fk = 0.2 * 39.2 * _cos(30)
+        self.assertAlmostEqual(r["a"], (29.4 - 19.6 - fk) / 7, delta=TOL)
+        self.assertAlmostEqual(r["T"], 3 * (9.8 - r["a"]), delta=TOL)
+        r = incline_hanger(10, 2, 40)                      # frictionless, slides down
+        self.assertEqual(r["block"], "DOWN")
+        self.assertAlmostEqual(r["a"], (98 * _sin(40) - 19.6) / 12, delta=TOL)
+        self.assertAlmostEqual(r["T"], 2 * (9.8 + r["a"]), delta=TOL)
+        r = incline_hanger(4, 2.5, 30, 0.2, 0.4)           # 24.5 vs 19.6: held
+        self.assertFalse(r["moves"])
+        self.assertAlmostEqual(r["fs"], 4.9, delta=TOL)
+        self.assertEqual(r["fs_dir"], "DOWNHILL")
+        self.assertEqual(incline_hanger(2, 1, 30)["fs_dir"], "NONE")
 
     def test_simple_cases(self):
         self.assertAlmostEqual(hanging_rest(2)["T"], 19.6, delta=TOL)

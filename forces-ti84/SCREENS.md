@@ -337,23 +337,23 @@ Keys: INCLINE > AT REST > 5 > 30 > 0.5
 +----------------+
 
 +----------------+
-|COMPONENTS:     |
-|MGSINθ=24.5 N   |
-|SIN: DOWNHILL   |
-|MGCOSθ=42.435 N |
-|COS: INTO SLOPE |
-|                |
-|                |
-|                |
-+----------------+
-
-+----------------+
 |CHECK FS≤MUS*N  |
 |FS=24.5 N       |
 |MUS*N=21.218 N  |
 |MIN MUS=.577    |
 |NO: WILL SLIDE  |
 |USE SLIDING MUK |
+|                |
+|                |
++----------------+
+
++----------------+
+|COMPONENTS:     |
+|MGSINθ=24.5 N   |
+|SIN: DOWNHILL   |
+|MGCOSθ=42.435 N |
+|COS: INTO SLOPE |
+|                |
 |                |
 |                |
 +----------------+
@@ -376,14 +376,25 @@ Keys: INCLINE > SLIDING > 2 > 30 > 0.2
 +----------------+
 
 +----------------+
+|FRICTION:       |
+|N=16.974 N      |
+|FK=3.395 N      |
+|FK=MUK*N        |
+|                |
+|                |
+|                |
+|                |
++----------------+
+
++----------------+
 |COMPONENTS:     |
 |MGSINθ=9.8 N    |
 |SIN: DOWNHILL   |
 |MGCOSθ=16.974 N |
 |COS: INTO SLOPE |
-|N=16.974 N      |
-|FK=3.395 N      |
-|FK=MUK*N        |
+|                |
+|                |
+|                |
 +----------------+
 ```
 
@@ -436,6 +447,162 @@ Keys: INCLINE > MIN MUS > 1 > 30
 |MGSINθ=4.9 N    |
 |SIN: DOWNHILL   |
 |MGCOSθ=8.487 N  |
+|COS: INTO SLOPE |
+|                |
+|                |
+|                |
++----------------+
+```
+
+## Pushed up a slope: 5 kg, 30 deg, F = 40 N, muk 0.2
+
+Keys: INCLINE > PUSHED > 5 > 30 > 40 > 0.2
+
+```
++----------------+
+|+X=UPHILL       |
+|F-MGSINθ-FK=MA  |
+|N-MGCOSθ=0      |
+|A=1.403 M/S²    |
+|ACCEL: UP SLOPE |
+|FK: DOWNHILL    |
+|(MOVING UP)     |
+|                |
++----------------+
+
++----------------+
+|FRICTION:       |
+|N=42.435 N      |
+|FK=8.487 N      |
+|FK=MUK*N        |
+|CONSTANT V UP   |
+|NEEDS F=        |
+|MGSINθ+FK       |
+|F NEED=32.987 N |
++----------------+
+
++----------------+
+|COMPONENTS:     |
+|MGSINθ=24.5 N   |
+|SIN: DOWNHILL   |
+|MGCOSθ=42.435 N |
+|COS: INTO SLOPE |
+|                |
+|                |
+|                |
++----------------+
+```
+
+## Slope + hanger: 4 kg block, 30 deg, 3 kg hanger, muk 0.2
+
+Keys: INCLINE > HANGER > 4 > 30 > 3 > 0.2 > 
+
+```
++----------------+
+|+ DIRECTION:    |
+|BLOCK UPHILL:   |
+|T-MGSINθ-FK=MA  |
+|HANGER DOWN:    |
+|MG-T=MA         |
+|A=.43 M/S²      |
+|T=28.11 N       |
+|BLOCK MOVES UP  |
++----------------+
+
++----------------+
+|HANGER MOVES DN |
+|N=33.948 N      |
+|FK=6.79 N       |
+|FK=MUK*N        |
+|                |
+|                |
+|                |
+|                |
++----------------+
+
++----------------+
+|COMPONENTS:     |
+|MGSINθ=19.6 N   |
+|SIN: DOWNHILL   |
+|MGCOSθ=33.948 N |
+|COS: INTO SLOPE |
+|                |
+|                |
+|                |
++----------------+
+```
+
+## Slope + hanger: 10 kg block, 40 deg, 2 kg hanger, frictionless
+
+Keys: INCLINE > HANGER > 10 > 40 > 2 > 0
+
+```
++----------------+
+|+ DIRECTION:    |
+|BLOCK DOWNHILL: |
+|MGSINθ-T-FK=MA  |
+|HANGER UP:      |
+|T-MG=MA         |
+|A=3.616 M/S²    |
+|T=26.832 N      |
+|BLOCK MOVES DOWN|
++----------------+
+
++----------------+
+|HANGER MOVES UP |
+|N=75.072 N      |
+|FK=0 N          |
+|FK=MUK*N        |
+|                |
+|                |
+|                |
+|                |
++----------------+
+
++----------------+
+|COMPONENTS:     |
+|MGSINθ=62.993 N |
+|SIN: DOWNHILL   |
+|MGCOSθ=75.072 N |
+|COS: INTO SLOPE |
+|                |
+|                |
+|                |
++----------------+
+```
+
+## Slope + hanger: 4 kg block, 30 deg, 2.5 kg hanger, muk 0.2, mus 0.4 (held)
+
+Keys: INCLINE > HANGER > 4 > 30 > 2.5 > 0.2 > 0.4
+
+```
++----------------+
+|BLOCK STAYS PUT |
+|+X=UPHILL       |
+|HANG: T-MG=0    |
+|T+FS-MGSINθ=0   |
+|A=0 M/S²        |
+|T=24.5 N        |
+|FS=4.9 N        |
+|FS: DOWNHILL    |
++----------------+
+
++----------------+
+|STATIC CHECK:   |
+|FSMAX=13.579 N  |
+|FS≤FSMAX: HOLDS |
+|                |
+|                |
+|                |
+|                |
+|                |
++----------------+
+
++----------------+
+|COMPONENTS:     |
+|MGSINθ=19.6 N   |
+|SIN: DOWNHILL   |
+|MGCOSθ=33.948 N |
 |COS: INTO SLOPE |
 |                |
 |                |
@@ -876,10 +1043,10 @@ Keys: INCLINE > AT REST > 5 > 30 > 0.5
 |N=42.435 N                |
 |FS NEEDED=24.5 N          |
 |FS POINTS UPHILL          |
-|MGSINθ=24.5 N             |
-|MGSINθ POINTS DOWNHILL    |
-|MGCOSθ=42.435 N           |
-|MGCOSθ PRESSES INTO SLOPE |
+|                          |
+|                          |
+|                          |
+|                          |
 +--------------------------+
 
 +--------------------------+
@@ -889,6 +1056,19 @@ Keys: INCLINE > AT REST > 5 > 30 > 0.5
 |MIN MUS = TANθ=0.577      |
 |NO: WILL SLIDE            |
 |SO USE SLIDING W/ MUK     |
+|                          |
+|                          |
+|                          |
+|                          |
++--------------------------+
+
++--------------------------+
+|COMPONENTS:               |
+|MGSINθ=24.5 N             |
+|MGSINθ POINTS DOWNHILL    |
+|MGCOSθ=42.435 N           |
+|MGCOSθ PRESSES INTO SLOPE |
+|                          |
 |                          |
 |                          |
 |                          |
@@ -909,9 +1089,9 @@ Keys: INCLINE > SLIDING > 2 > 30 > 0.2
 |A=3.203 M/S²              |
 |ACCEL: DOWNHILL (SPEEDING)|
 |FK POINTS UPHILL          |
-|                          |
-|                          |
-|                          |
+|N=16.974 N                |
+|FK=3.395 N                |
+|FK=MUK*N                  |
 +--------------------------+
 
 +--------------------------+
@@ -920,9 +1100,9 @@ Keys: INCLINE > SLIDING > 2 > 30 > 0.2
 |MGSINθ POINTS DOWNHILL    |
 |MGCOSθ=16.974 N           |
 |MGCOSθ PRESSES INTO SLOPE |
-|N=16.974 N                |
-|FK=3.395 N                |
-|FK=MUK*N                  |
+|                          |
+|                          |
+|                          |
 |                          |
 |                          |
 +--------------------------+
@@ -940,10 +1120,23 @@ Keys: INCLINE > FRICTIONLESS > 2 > 30
 |A=4.9 M/S²                |
 |ACCEL: DOWNHILL           |
 |N=16.974 N                |
+|                          |
+|                          |
+|                          |
+|                          |
++--------------------------+
+
++--------------------------+
+|COMPONENTS:               |
 |MGSINθ=9.8 N              |
 |MGSINθ POINTS DOWNHILL    |
 |MGCOSθ=16.974 N           |
 |MGCOSθ PRESSES INTO SLOPE |
+|                          |
+|                          |
+|                          |
+|                          |
+|                          |
 +--------------------------+
 ```
 
@@ -959,10 +1152,203 @@ Keys: INCLINE > MIN MUS > 1 > 30
 |FS ≤ MUS*N, SO MUS ≥ TANθ |
 |MIN MUS=0.577             |
 |(MASS CANCELS: ANY M OK)  |
+|                          |
+|                          |
+|                          |
+|                          |
++--------------------------+
+
++--------------------------+
+|COMPONENTS:               |
 |MGSINθ=4.9 N              |
 |MGSINθ POINTS DOWNHILL    |
 |MGCOSθ=8.487 N            |
 |MGCOSθ PRESSES INTO SLOPE |
+|                          |
+|                          |
+|                          |
+|                          |
+|                          |
++--------------------------+
+```
+
+## Pushed up a slope: 5 kg, 30 deg, F = 40 N, muk 0.2
+
+Keys: INCLINE > PUSHED > 5 > 30 > 40 > 0.2
+
+```
++--------------------------+
+|+X=UPHILL                 |
+|F-MGSINθ-FK=MA            |
+|N-MGCOSθ=0                |
+|(F PUSHES ALONG THE SLOPE)|
+|A=1.403 M/S²              |
+|ACCEL: UP THE SLOPE       |
+|FK POINTS DOWNHILL        |
+|(BLOCK MOVING UP SLOPE)   |
+|                          |
+|                          |
++--------------------------+
+
++--------------------------+
+|FRICTION:                 |
+|N=42.435 N                |
+|FK=8.487 N                |
+|FK=MUK*N                  |
+|CONSTANT V UP THE SLOPE   |
+|F = MGSINθ + FK           |
+|F NEEDED=32.987 N         |
+|                          |
+|                          |
+|                          |
++--------------------------+
+
++--------------------------+
+|COMPONENTS:               |
+|MGSINθ=24.5 N             |
+|MGSINθ POINTS DOWNHILL    |
+|MGCOSθ=42.435 N           |
+|MGCOSθ PRESSES INTO SLOPE |
+|                          |
+|                          |
+|                          |
+|                          |
+|                          |
++--------------------------+
+```
+
+## Slope + hanger: 4 kg block, 30 deg, 3 kg hanger, muk 0.2
+
+Keys: INCLINE > HANGER > 4 > 30 > 3 > 0.2 > 
+
+```
++--------------------------+
+|+ DIRECTION:              |
+|BLOCK (+ = UPHILL):       |
+|T-MGSINθ-FK=MA            |
+|HANGER (+ = DOWN):        |
+|MG-T=MA                   |
+|A=0.43 M/S²               |
+|T=28.11 N                 |
+|BLOCK MOVES UP            |
+|HANGER MOVES DOWN         |
+|                          |
++--------------------------+
+
++--------------------------+
+|FRICTION:                 |
+|N=33.948 N                |
+|FK=6.79 N                 |
+|FK=MUK*N                  |
+|                          |
+|                          |
+|                          |
+|                          |
+|                          |
+|                          |
++--------------------------+
+
++--------------------------+
+|COMPONENTS:               |
+|MGSINθ=19.6 N             |
+|MGSINθ POINTS DOWNHILL    |
+|MGCOSθ=33.948 N           |
+|MGCOSθ PRESSES INTO SLOPE |
+|                          |
+|                          |
+|                          |
+|                          |
+|                          |
++--------------------------+
+```
+
+## Slope + hanger: 10 kg block, 40 deg, 2 kg hanger, frictionless
+
+Keys: INCLINE > HANGER > 10 > 40 > 2 > 0
+
+```
++--------------------------+
+|+ DIRECTION:              |
+|BLOCK (+ = DOWNHILL):     |
+|MGSINθ-T-FK=MA            |
+|HANGER (+ = UP):          |
+|T-MG=MA                   |
+|A=3.616 M/S²              |
+|T=26.832 N                |
+|BLOCK MOVES DOWN          |
+|HANGER MOVES UP           |
+|                          |
++--------------------------+
+
++--------------------------+
+|FRICTION:                 |
+|N=75.072 N                |
+|FK=0 N                    |
+|FK=MUK*N                  |
+|                          |
+|                          |
+|                          |
+|                          |
+|                          |
+|                          |
++--------------------------+
+
++--------------------------+
+|COMPONENTS:               |
+|MGSINθ=62.993 N           |
+|MGSINθ POINTS DOWNHILL    |
+|MGCOSθ=75.072 N           |
+|MGCOSθ PRESSES INTO SLOPE |
+|                          |
+|                          |
+|                          |
+|                          |
+|                          |
++--------------------------+
+```
+
+## Slope + hanger: 4 kg block, 30 deg, 2.5 kg hanger, muk 0.2, mus 0.4 (held)
+
+Keys: INCLINE > HANGER > 4 > 30 > 2.5 > 0.2 > 0.4
+
+```
++--------------------------+
+|BLOCK STAYS PUT           |
+|+X=UPHILL                 |
+|HANG: T-MG=0              |
+|T+FS-MGSINθ=0             |
+|A=0 M/S²                  |
+|T=24.5 N                  |
+|FS=4.9 N                  |
+|FS POINTS DOWNHILL        |
+|                          |
+|                          |
++--------------------------+
+
++--------------------------+
+|STATIC FRICTION CHECK:    |
+|FS MAX = MUS*N=13.579 N   |
+|FS ≤ FS MAX, SO IT HOLDS  |
+|                          |
+|                          |
+|                          |
+|                          |
+|                          |
+|                          |
+|                          |
++--------------------------+
+
++--------------------------+
+|COMPONENTS:               |
+|MGSINθ=19.6 N             |
+|MGSINθ POINTS DOWNHILL    |
+|MGCOSθ=33.948 N           |
+|MGCOSθ PRESSES INTO SLOPE |
+|                          |
+|                          |
+|                          |
+|                          |
+|                          |
 +--------------------------+
 ```
 

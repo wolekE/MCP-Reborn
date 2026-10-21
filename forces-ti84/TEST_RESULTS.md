@@ -51,5 +51,5 @@ Key presses for each case:
 
 ## Test suites
 
-- `python3 reference.py`: Ran 23 tests in 0.001s / OK
-- `python3 tools/test_program.py`: Ran 33 tests in 5.967s / OK
+- `python3 reference.py`: Ran 24 tests in 0.001s / OK
+- `python3 tools/test_program.py`: Ran 34 tests in 7.435s / OK

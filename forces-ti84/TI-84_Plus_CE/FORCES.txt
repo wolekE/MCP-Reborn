@@ -574,7 +574,7 @@ End
 End
 Goto 0
 Lbl I
-Menu("INCLINE","AT REST",IA,"SLIDING DOWN WITH MUK",IB,"FRICTIONLESS",IC,"MIN MUS TO HOLD AT REST",ID,"BACK",0)
+Menu("INCLINE","AT REST",IA,"SLIDING DOWN WITH MUK",IB,"FRICTIONLESS",IC,"MIN MUS TO HOLD AT REST",ID,"PUSHED/PULLED UP SLOPE",IE,"SLOPE BLOCK + HANGER",IG,"BACK",0)
 Lbl IA
 1→W
 Goto I0
@@ -586,9 +586,17 @@ Lbl IC
 Goto I0
 Lbl ID
 4→W
+Goto I0
+Lbl IE
+5→W
+Goto I0
+Lbl IG
+6→W
 Lbl I0
 ClrHome
 Disp "INCLINE (SLOPE ANGLE θ)"
+If W=6
+Disp "M = THE BLOCK ON THE SLOPE"
 ⁻1→M
 Repeat M>0
 Input "M (KG)=",M
@@ -635,10 +643,6 @@ Output(3,1,"N-MGCOSθ=0")
 Output(4,1,"N="+toString(round(N,3),1)+" N")
 Output(5,1,"FS NEEDED="+toString(round(F,3),1)+" N")
 Output(6,1,"FS POINTS UPHILL")
-Output(7,1,"MGSINθ="+toString(round(U,3),1)+" N")
-Output(8,1,"MGSINθ POINTS DOWNHILL")
-Output(9,1,"MGCOSθ="+toString(round(V,3),1)+" N")
-Output(10,1,"MGCOSθ PRESSES INTO SLOPE")
 Pause 
 If C
 Then
@@ -680,16 +684,9 @@ Output(4,1,"A=G(SINθ-MUK*COSθ)")
 Output(5,1,"A="+toString(round(A,3),1)+" M/S²")
 Output(6,1,Str1)
 Output(7,1,"FK POINTS UPHILL")
-Pause 
-ClrHome
-Output(1,1,"COMPONENTS:")
-Output(2,1,"MGSINθ="+toString(round(U,3),1)+" N")
-Output(3,1,"MGSINθ POINTS DOWNHILL")
-Output(4,1,"MGCOSθ="+toString(round(V,3),1)+" N")
-Output(5,1,"MGCOSθ PRESSES INTO SLOPE")
-Output(6,1,"N="+toString(round(N,3),1)+" N")
-Output(7,1,"FK="+toString(round(F,3),1)+" N")
-Output(8,1,"FK=MUK*N")
+Output(8,1,"N="+toString(round(N,3),1)+" N")
+Output(9,1,"FK="+toString(round(F,3),1)+" N")
+Output(10,1,"FK=MUK*N")
 Pause 
 If A<0
 Then
@@ -713,10 +710,6 @@ Output(3,1,"A=GSINθ")
 Output(4,1,"A="+toString(round(A,3),1)+" M/S²")
 Output(5,1,Str1)
 Output(6,1,"N="+toString(round(N,3),1)+" N")
-Output(7,1,"MGSINθ="+toString(round(U,3),1)+" N")
-Output(8,1,"MGSINθ POINTS DOWNHILL")
-Output(9,1,"MGCOSθ="+toString(round(V,3),1)+" N")
-Output(10,1,"MGCOSθ PRESSES INTO SLOPE")
 Pause 
 End
 If W=4
@@ -729,12 +722,167 @@ Output(3,1,"N=MGCOSθ")
 Output(4,1,"FS ≤ MUS*N, SO MUS ≥ TANθ")
 Output(5,1,"MIN MUS="+toString(round(S,3),1))
 Output(6,1,"(MASS CANCELS: ANY M OK)")
-Output(7,1,"MGSINθ="+toString(round(U,3),1)+" N")
-Output(8,1,"MGSINθ POINTS DOWNHILL")
-Output(9,1,"MGCOSθ="+toString(round(V,3),1)+" N")
-Output(10,1,"MGCOSθ PRESSES INTO SLOPE")
 Pause 
 End
+If W=5
+Then
+⁻1→P
+Repeat P≥0
+Input "F UP THE SLOPE (N)=",P
+If not(P≥0)
+Disp "MUST BE ≥0"
+End
+⁻1→K
+Repeat K≥0
+Input "MUK (0 = FRICTIONLESS)=",K
+If not(K≥0)
+Disp "MUST BE ≥0"
+End
+KN→F
+round((P-U-F)/M,9)→A
+U+F→D
+If A>0
+"ACCEL: UP THE SLOPE"→Str1
+If A<0
+"ACCEL: DOWNHILL (SLOWING)"→Str1
+If A=0
+"ACCEL: NONE (CONSTANT V)"→Str1
+ClrHome
+Output(1,1,"+X=UPHILL")
+Output(2,1,"F-MGSINθ-FK=MA")
+Output(3,1,"N-MGCOSθ=0")
+Output(4,1,"(F PUSHES ALONG THE SLOPE)")
+Output(5,1,"A="+toString(round(A,3),1)+" M/S²")
+Output(6,1,Str1)
+Output(7,1,"FK POINTS DOWNHILL")
+Output(8,1,"(BLOCK MOVING UP SLOPE)")
+Pause 
+ClrHome
+Output(1,1,"FRICTION:")
+Output(2,1,"N="+toString(round(N,3),1)+" N")
+Output(3,1,"FK="+toString(round(F,3),1)+" N")
+Output(4,1,"FK=MUK*N")
+Output(5,1,"CONSTANT V UP THE SLOPE")
+Output(6,1,"F = MGSINθ + FK")
+Output(7,1,"F NEEDED="+toString(round(D,3),1)+" N")
+Pause 
+If A<0
+Then
+ClrHome
+Output(1,1,"F < MG SINθ + FK, SO:")
+Output(2,1,"IF MOVING UP, IT SLOWS.")
+Output(3,1,"IF AT REST, IT WILL NOT")
+Output(4,1,"START UP THE SLOPE.")
+Pause 
+End
+End
+If W=6
+Then
+⁻1→H
+Repeat H>0
+Input "HANGING MASS (KG)=",H
+If not(H>0)
+Disp "MUST BE >0"
+End
+⁻1→K
+Repeat K≥0
+Input "MUK (0 = FRICTIONLESS)=",K
+If not(K≥0)
+Disp "MUST BE ≥0"
+End
+K→S
+If K>0
+Then
+Disp "MUS? TYPE 0 OR PRESS ENTER"
+Disp "TO USE THE MUK VALUE"
+Repeat S=0 or S≥K
+"0"→Str8
+Input "MUS=",Str8
+If not(length(Str8))
+"0"→Str8
+expr(Str8)→S
+If not(S=0 or S≥K)
+Disp "MUS MUST BE ≥ MUK"
+End
+If S=0
+K→S
+End
+HG-U→D
+SN→Q
+0→C
+If round(D-Q,9)>0
+1→C
+If round(⁻D-Q,9)>0
+⁻1→C
+KN→F
+If C=0
+Then
+HG→T
+round(U-T,9)→F
+"FS: NONE NEEDED"→Str1
+If F>0
+"FS POINTS UPHILL"→Str1
+If F<0
+"FS POINTS DOWNHILL"→Str1
+ClrHome
+Output(1,1,"BLOCK STAYS PUT")
+Output(2,1,"+X=UPHILL")
+Output(3,1,"HANG: T-MG=0")
+Output(4,1,"T+FS-MGSINθ=0")
+Output(5,1,"A="+toString(round(0,3),1)+" M/S²")
+Output(6,1,"T="+toString(round(T,3),1)+" N")
+Output(7,1,"FS="+toString(round(abs(F),3),1)+" N")
+Output(8,1,Str1)
+Pause 
+ClrHome
+Output(1,1,"STATIC FRICTION CHECK:")
+Output(2,1,"FS MAX = MUS*N="+toString(round(Q,3),1)+" N")
+Output(3,1,"FS ≤ FS MAX, SO IT HOLDS")
+Pause 
+Else
+round((CD-F)/(M+H),9)→A
+H(G-CA)→T
+"BLOCK (+ = UPHILL):"→Str1
+"T-MGSINθ-FK=MA"→Str3
+"HANGER (+ = DOWN):"→Str2
+"MG-T=MA"→Str4
+"BLOCK MOVES UP"→Str5
+"HANGER MOVES DOWN"→Str6
+If C<0
+Then
+"BLOCK (+ = DOWNHILL):"→Str1
+"MGSINθ-T-FK=MA"→Str3
+"HANGER (+ = UP):"→Str2
+"T-MG=MA"→Str4
+"BLOCK MOVES DOWN"→Str5
+"HANGER MOVES UP"→Str6
+End
+ClrHome
+Output(1,1,"+ DIRECTION:")
+Output(2,1,Str1)
+Output(3,1,Str3)
+Output(4,1,Str2)
+Output(5,1,Str4)
+Output(6,1,"A="+toString(round(A,3),1)+" M/S²")
+Output(7,1,"T="+toString(round(T,3),1)+" N")
+Output(8,1,Str5)
+Output(9,1,Str6)
+Pause 
+ClrHome
+Output(1,1,"FRICTION:")
+Output(2,1,"N="+toString(round(N,3),1)+" N")
+Output(3,1,"FK="+toString(round(F,3),1)+" N")
+Output(4,1,"FK=MUK*N")
+Pause 
+End
+End
+ClrHome
+Output(1,1,"COMPONENTS:")
+Output(2,1,"MGSINθ="+toString(round(U,3),1)+" N")
+Output(3,1,"MGSINθ POINTS DOWNHILL")
+Output(4,1,"MGCOSθ="+toString(round(V,3),1)+" N")
+Output(5,1,"MGCOSθ PRESSES INTO SLOPE")
+Pause 
 Goto 0
 Lbl L
 ClrHome

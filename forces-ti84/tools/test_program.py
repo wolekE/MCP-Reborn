@@ -356,6 +356,44 @@ class Paths(Base):
             self.expect(m, ("FS", "FS NEEDED"), "N", 24.5)
             self.assertTrue(shows(m, "DOWNHILL") and shows(m, "INTO SLOPE"))
 
+    def test_incline_push_and_hanger(self):
+        for p, st in self.each():
+            r = ref.incline_push(5, 30, 40, 0.2)
+            m = run(p, ["INCLINE", "PUSHED", "5", "30", "40", "0.2"], st)
+            check_clean(self, m)
+            self.expect(m, ("A",), "M/S²", r["a"], ROUND_TOL)
+            self.expect(m, ("F NEED", "F NEEDED"), "N", r["F_const"], ROUND_TOL)
+            self.assertTrue(shows(m, "F-MGSINθ-FK=MA") and shows(m, "UP"))
+            m = run(p, ["INCLINE", "PUSHED", "5", "30", "10", "0.2"], st)
+            check_clean(self, m)
+            self.assertTrue(shows(m, "SLOW") and shows(m, "NOT START UP")
+                            or shows(m, "START UP THE SLOPE."))
+            m = run(p, ["INCLINE", "PUSHED", "2", "30", "9.8", "0"], st)
+            check_clean(self, m)
+            self.expect(m, ("A",), "M/S²", 0)
+            self.assertTrue(shows(m, "CONST"))
+
+            r = ref.incline_hanger(4, 3, 30, 0.2)
+            m = run(p, ["INCLINE", "HANGER", "4", "30", "3", "0.2", ""], st)
+            check_clean(self, m)
+            self.expect(m, ("A",), "M/S²", r["a"], ROUND_TOL)
+            self.expect(m, ("T",), "N", r["T"], ROUND_TOL)
+            self.assertTrue(shows(m, "BLOCK MOVES UP") and shows(m, "T-MGSINθ-FK=MA")
+                            and shows(m, "MG-T=MA"))
+            r = ref.incline_hanger(10, 2, 40)
+            m = run(p, ["INCLINE", "HANGER", "10", "40", "2", "0"], st)
+            check_clean(self, m)
+            self.expect(m, ("A",), "M/S²", r["a"], ROUND_TOL)
+            self.assertTrue(shows(m, "BLOCK MOVES DOWN") and shows(m, "HANGER MOVES UP")
+                            and shows(m, "MGSINθ-T-FK=MA"))
+            for keys, word, fs in ((["4", "30", "2.5", "0.2", "0.4"], "DOWNHILL", 4.9),
+                                   (["4", "30", "1.5", "0.2", "0.4"], "UPHILL", 4.9),
+                                   (["2", "30", "1", "0"], "NONE NEEDED", 0)):
+                m = run(p, ["INCLINE", "HANGER"] + keys, st)
+                check_clean(self, m)
+                self.assertTrue(shows(m, "BLOCK STAYS PUT") and shows(m, word), keys)
+                self.expect(m, ("FS",), "N", fs)
+
     def test_simple_cases(self):
         for p, st in self.each():
             m = run(p, ["MORE", "SIMPLE", "HANGING", "2"], st)
@@ -530,7 +568,8 @@ class Paths(Base):
         paths = [["ELEVATOR", "FIND SCALE", "#1"], ["ELEVATOR", "ACCEL FROM", "#1"],
                  ["ELEVATOR", "FIND MASS"], ["ATWOOD", "#1"],
                  ["ATWOOD", "#2", "#1"], ["TABLE"], ["FLAT", "#1"], ["FLAT", "#2"],
-                 ["INCLINE", "#1"], ["INCLINE", "#2"], ["3RD LAW"],
+                 ["INCLINE", "#1"], ["INCLINE", "#2"], ["INCLINE", "#5"],
+                 ["INCLINE", "#6"], ["3RD LAW"],
                  ["MORE", "SIMPLE", "#1"], ["MORE", "SIMPLE", "#2"],
                  ["MORE", "SIMPLE", "#3"], ["MORE", "SIMPLE", "#4"]]
         for p, st in self.each():
@@ -686,6 +725,27 @@ class Fuzz(Base):
                 r = ref.incline_frictionless(mass, th)
                 m = run(p, ["INCLINE", "FRICTIONLESS", num(mass), num(th)], st)
                 self.compare(m, parts + [(("A",), "M/S²", r["a"]), (("N",), "N", r["N"])])
+                F2 = self.rnd(rng, 0, 3) * mass * 9.8
+                r = ref.incline_push(mass, th, F2, k)
+                m = run(p, ["INCLINE", "PUSHED", num(mass), num(th), num(F2), num(k)], st)
+                self.compare(m, parts + [(("A",), "M/S²", r["a"]), (("N",), "N", r["N"]),
+                                         (("FK",), "N", r["fk"]),
+                                         (("F NEED", "F NEEDED"), "N", r["F_const"])])
+                hang = self.mass(rng)
+                ks = rng.choice([0, self.rnd(rng, 0.01, 0.6)])
+                us = rng.choice([0, round(ks + self.rnd(rng, 0, 0.4), 2)]) if ks else 0
+                r = ref.incline_hanger(mass, hang, th, ks, us or None)
+                keys = ["INCLINE", "HANGER", num(mass), num(th), num(hang), num(ks)]
+                keys += [num(us)] if ks else []
+                m = run(p, keys, st)
+                if r["moves"]:
+                    self.compare(m, parts + [(("A",), "M/S²", r["a"]), (("T",), "N", r["T"]),
+                                             (("N",), "N", r["N"]), (("FK",), "N", r["fk"])])
+                    self.assertTrue(shows(m, "BLOCK MOVES " + r["block"]))
+                else:
+                    self.compare(m, parts + [(("A",), "M/S²", 0), (("T",), "N", r["T"]),
+                                             (("FS",), "N", r["fs"]),
+                                             (("FSMAX", "FS MAX = MUS*N"), "N", r["fs_max"])])
                 r = ref.incline_min_mus(mass, th)
                 m = run(p, ["INCLINE", "MIN MUS", num(mass), num(th)], st)
                 self.compare(m, parts + [(("MIN MUS",), "", r["mus_min"])])

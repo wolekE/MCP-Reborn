@@ -46,9 +46,9 @@ the CE instead: it runs unchanged in the top-left corner of the screen.
 2. Connect the calculator and turn it on.
 3. Drag the right `FORCES.8xp` onto the calculator in TI Connect CE
    (*Calculator Explorer*), or use *Actions → Send to Calculators*.
-4. **TI-84 Plus:** the program is about 15 KB and must sit in RAM to run
+4. **TI-84 Plus:** the program is about 16.5 KB and must sit in RAM to run
    (the calculator has about 24 KB). Before sending, check `2nd` `MEM`
-   `2:Mem Mgmt/Del` `1:All`. If **RAM FREE** is under about 16,000 bytes,
+   `2:Mem Mgmt/Del` `1:All`. If **RAM FREE** is under about 18,000 bytes,
    archive or delete programs and lists you aren't using (archive: select
    the item and press `ENTER` so a `*` appears), then send again. If you
    archived FORCES itself, go to `7:Prgm`, select it and press `ENTER` to
@@ -138,8 +138,8 @@ with its direction. Special messages:
 
 ### 5 INCLINE (submenu) — each asks for m and the slope angle θ (0 < θ < 90)
 
-Every option shows the components with their directions: `MGSINθ=…` with
-`SIN: DOWNHILL` and `MGCOSθ=…` with `COS: INTO SLOPE`.
+Every option ends with a components screen: `MGSINθ=…` with `SIN: DOWNHILL`
+and `MGCOSθ=…` with `COS: INTO SLOPE`.
 
 | Option | Extra input | Shows |
 |--------|-------------|-------|
@@ -147,6 +147,8 @@ Every option shows the components with their directions: `MGSINθ=…` with
 | SLIDING W/ MUK [SLIDING DOWN WITH MUK] | μk | `+X=DOWNHILL`, `MGSINθ-FK=MA`, a = g(sin θ − μk cos θ), fk = μk·N uphill. If a < 0 it says it slows down (and would not start sliding from rest). |
 | FRICTIONLESS | — | a = g sin θ downhill, N |
 | MIN MUS (HOLD) [MIN MUS TO HOLD AT REST] | — (m is asked only for the components) | μs min = tan θ (mass cancels) |
+| PUSHED UP [PUSHED/PULLED UP SLOPE] | F (pushing or pulling **up the slope, parallel to it**), μk (0 = none) | Assumes the block moves up. `+X=UPHILL`, `F-MGSINθ-FK=MA`, `N-MGCOSθ=0`, a = (F − mg sin θ − μk·N)/m, fk = μk·N downhill, and the **F needed for constant velocity** = mg sin θ + fk. If a < 0: if moving up it slows down; if at rest it won't start up the slope. |
+| SLOPE + HANGER [SLOPE BLOCK + HANGER] | m is the **block on the slope**; then the hanging mass, μk (0 = frictionless) and, if μk > 0, μs (ENTER alone or 0 = use μk) | Rope parallel to the slope over a pulley at the top. Compares the hanger's weight with mg sin θ and max static friction μs·N. **Block moves up** (`BLOCK UPHILL: T-MGSINθ-FK=MA`, `HANGER DOWN: MG-T=MA`), **block slides down** (`MGSINθ-T-FK=MA`, `T-MG=MA`), or **`BLOCK STAYS PUT`** (`T+FS-MGSINθ=0`, T = mg, fs and its direction, fs max). Shows a, T, N, fk and which way each mass moves. |
 
 ### 6 3RD LAW — + is the direction of the force on B
 
@@ -195,6 +197,8 @@ Block at rest on a slope (N, fs, slips?)  5 INCLINE > 1 AT REST
 Sliding down a slope with friction        5 INCLINE > 2 SLIDING W/ MUK
 Frictionless slope                        5 INCLINE > 3 FRICTIONLESS
 Minimum mus to hold on a slope            5 INCLINE > 4 MIN MUS
+Pushed/pulled up a slope (a, F for const v) 5 INCLINE > 5 PUSHED UP
+Block on slope tied to a hanging mass     5 INCLINE > 6 SLOPE + HANGER
 Collision/push: forces & accelerations    6 3RD LAW
 Rope tension, hanging at rest             7 MORE > 1 SIMPLE > 1 HANGING, REST
 Terminal velocity (air resistance)        7 MORE > 1 SIMPLE > 2 TERMINAL VEL.
