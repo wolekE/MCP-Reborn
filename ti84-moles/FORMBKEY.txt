@@ -1,0 +1,108 @@
+Lbl M
+Menu("UNIT IV FORM B","PART I (MC)",1,"PART II WORK",2,"QUIT",Q)
+Lbl 1
+ClrHome
+Disp "PART I ANSWERS","1:D  2:D  3:C","4:C  5:B  6:C","7:D",""
+Pause "MORE: [ENTER]"
+ClrHome
+Disp "1 D: DIVIDE THE","SUBSCRIPTS BY 2.","P4O10 BECOMES","P2O5."
+Pause "MORE: [ENTER]"
+ClrHome
+Disp "2 D: CH2 = 14.03","g/mol. 70 /","14.03 = 5, SO","C5H10."
+Pause "MORE: [ENTER]"
+ClrHome
+Disp "3 C: NO = 14.01","+ 16.00 = 30.","(N2O2 = 60 IS","NOT A CHOICE.)"
+Pause "MORE: [ENTER]"
+ClrHome
+Disp "4 C: 8 H PER","MOLECULE x 4","MOLECULES = 32","ATOMS. NO","AVOGADRO FACTOR:","THESE ARE","MOLECULES, NOT"
+Pause "MORE: [ENTER]"
+ClrHome
+Disp "MOLES.","5 B: AVOGADROS","NUMBER =","PARTICLES IN ONE","MOLE."
+Pause "MORE: [ENTER]"
+ClrHome
+Disp "6 C: I AND II","ARE TRUE. III IS","FALSE BECAUSE","MOLAR MASSES","DIFFER."
+Pause "MORE: [ENTER]"
+ClrHome
+Disp "7 D: MOLAR MASS","= GRAMS PER ONE","MOLE."
+Pause "DONE: [ENTER]"
+Goto M
+Lbl 2
+Menu("PART II","1 TIN ACETATE",A,"2 Na ATOMS",B,"3 Al IONS",C,"4 EMP/MOLEC",D,"5 HYDRATE",E,"6 SAME MOLES",F,"BACK",M)
+Lbl A
+ClrHome
+Disp "1. MASS OF 4.87","MOL TIN(II)","ACETATE","ANSWER: 1153 g","(1.15ᴇ3 g TO 3","SF)"
+Pause "MORE: [ENTER]"
+ClrHome
+Disp "Sn2+ AND C2H3O2-","GIVE Sn(C2H3O2)2","M = 118.71 +","2[2(12.01) +","3(1.008) +","2(16.00)]"
+Pause "MORE: [ENTER]"
+ClrHome
+Disp "= 118.71 +","2(59.044) =","236.80 g/mol","4.87 mol x","(236.80 g / 1","mol) = 1153 g"
+Pause "DONE: [ENTER]"
+Goto 2
+Lbl B
+ClrHome
+Disp "2. ATOMS IN 5.0","g OF SODIUM","ANSWER: 1.3ᴇ23","ATOMS (2 SF)"
+Pause "MORE: [ENTER]"
+ClrHome
+Disp "5.0 g Na x (1","mol / 22.99 g) x","(6.022ᴇ23 atoms","/ 1 mol)","= 0.2175 mol x","6.022ᴇ23","= 1.31ᴇ23 atoms"
+Pause "DONE: [ENTER]"
+Goto 2
+Lbl C
+ClrHome
+Disp "3. Al3+ IONS IN","550 g Al2(SO4)3","ANSWER: 1.94ᴇ24","IONS (1.9ᴇ24 TO","2 SF)"
+Pause "MORE: [ENTER]"
+ClrHome
+Disp "M = 2(26.98) +","3[32.07 +","4(16.00)]","= 53.96 + 288.21","= 342.17 g/mol"
+Pause "MORE: [ENTER]"
+ClrHome
+Disp "550 g x (1 mol /","342.17 g) x (2","mol Al3+ / 1","mol) x (6.022ᴇ23","/ 1 mol)","= 1.607 mol x 2","= 3.214 mol Al3+"
+Pause "MORE: [ENTER]"
+ClrHome
+Disp "= 1.94ᴇ24 Al3+","IONS"
+Pause "DONE: [ENTER]"
+Goto 2
+Lbl D
+ClrHome
+Disp "4. 60.0% C,","4.48% H, 35.5%","O, MOLECULAR","MASS 540 u"
+Pause "MORE: [ENTER]"
+ClrHome
+Disp "ANSWER:","EMPIRICAL","C9H8O4,","MOLECULAR","C27H24O12","ASSUME 100 g:"
+Pause "MORE: [ENTER]"
+ClrHome
+Disp "C: 60.0 / 12.01","= 4.996 mol","H: 4.48 / 1.008","= 4.444 mol","O: 35.5 / 16.00","= 2.219 mol"
+Pause "MORE: [ENTER]"
+ClrHome
+Disp "DIVIDE BY 2.219:","C 2.25, H 2.00,","O 1","2.25 IS NOT","WHOLE, SO x4: C","9, H 8, O 4 =","C9H8O4"
+Pause "MORE: [ENTER]"
+ClrHome
+Disp "EMPIRICAL MASS =","9(12.01) +","8(1.008) +","4(16.00) =","180.15","540 / 180.15 =","3, SO C27H24O12"
+Pause "DONE: [ENTER]"
+Goto 2
+Lbl E
+ClrHome
+Disp "5. 19.06 g OF","HYDRATED CaSO4","HEATED TO 15.07","g","ANSWER:","CaSO4*2H2O"
+Pause "MORE: [ENTER]"
+ClrHome
+Disp "WATER LOST =","19.06 - 15.07 =","3.99 g","CaSO4: 15.07 g x","(1 mol / 136.15","g) = 0.1107 mol"
+Pause "MORE: [ENTER]"
+ClrHome
+Disp "H2O: 3.99 g x (1","mol / 18.02 g) =","0.2214 mol","RATIO = 0.2214 /","0.1107 = 2.00","SO THE FORMULA","IS CaSO4*2H2O"
+Pause "DONE: [ENTER]"
+Goto 2
+Lbl F
+ClrHome
+Disp "6. H2O MOLECULES","WITH THE SAME","MOLES AS 2.40 g","CO2","ANSWER: 3.28ᴇ22","MOLECULES"
+Pause "MORE: [ENTER]"
+ClrHome
+Disp "CO2 = 12.01 +","2(16.00) = 44.01","g/mol","2.40 g CO2 x (1","mol / 44.01 g) =","0.05453 mol"
+Pause "MORE: [ENTER]"
+ClrHome
+Disp "SAME MOLES OF","H2O, SO:","0.05453 mol x","(6.022ᴇ23","molecules / 1","mol)"
+Pause "MORE: [ENTER]"
+ClrHome
+Disp "= 3.28ᴇ22","molecules H2O"
+Pause "DONE: [ENTER]"
+Goto 2
+Lbl Q
+ClrHome
+Disp "FORM B KEY: BYE"
