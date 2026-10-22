@@ -54,7 +54,7 @@ def check_format():
     cases += [(-v, 4, 0) for v in (1.5, 0.0123, 6.022e23)]
     body = []
     for v, S, T in cases:
-        body.append(f"{ti_number(v)}→X\n{S}→S\n{T}→T\n⁻1→θ\nprgmMOLES\nStr5+Str3+\"{SEP}\"→Str5")
+        body.append(f"{ti_number(v)}→X\n{S}→S\n{T}→T\n⁻1.07→θ\nprgmMOLES\nStr5+Str3+\"{SEP}\"→Str5")
     res = drive("\n".join(body))
     got = res.vars["Str5"].split(SEP)[:-1]
     bad = 0
@@ -70,7 +70,7 @@ def check_format():
 def check_sigfigs():
     texts = ["5.0", "36.0", "550", "4.87", "0.500", "6.022ᴇ23", "100.", "105", "0.00500", "2.40",
              "1.204ᴇ24", "3", "0.0", "1200", "1200.0", "⁻4.50", "19.06", "15.07", "7", "0.03", "10.10ᴇ⁻3"]
-    body = [f"\"{t}\"→Str2\n⁻4→θ\nprgmMOLES\nD→ʟRES({i + 1})" for i, t in enumerate(texts)]
+    body = [f"\"{t}\"→Str2\n⁻4.07→θ\nprgmMOLES\nD→ʟRES({i + 1})" for i, t in enumerate(texts)]
     res = drive("\n".join(body))
     bad = 0
     for t, d in zip(texts, res.vars["ʟRES"]):
@@ -95,11 +95,11 @@ def check_parser():
         ("COCL2", [92]), ("COCL2", [93]), ("SIO2", [92]), ("SCN", [93]), ("NI3", [93]),
         ("PBCL2", [92]), ("SN(C2H3O2)2", [92]), ("CUSO4*5H2O", []), ("MGCL2", []),
         ("FE2O3", []), ("BACL2", []), ("NAHCO3", [93]), ("KMNO4", []), ("HGO", []),
-        ("Ca((OH)2)", []),
+        ("Ca((OH)2)", []), ("PBr3", []), ("SCl2", []), ("BAs", []), ("NBr3", []),
     ]
     body, script = [], []
     for i, (text, keys) in enumerate(cases):
-        body.append(f"\"{text}\"→Str1\n⁻3→θ\nprgmMOLES\nM→ʟRES({i + 1})\nStr5+Str1+\"{SEP}\"→Str5")
+        body.append(f"\"{text}\"→Str1\n⁻3.07→θ\nprgmMOLES\nM→ʟRES({i + 1})\nStr5+Str1+\"{SEP}\"→Str5")
         script += [f"key:{k}" for k in keys]
     res = drive("\n".join(body), script=script)
     got_m, got_s = res.vars["ʟRES"], res.vars["Str5"].split(SEP)[:-1]
@@ -122,7 +122,7 @@ def check_parser_errors():
     bad_inputs = ["2H2O", "H2O*", "*H2O", "Al2(SO4", "Al2SO4)3", "Xx", "Q", "H2O**H2O", "(H2O*H2O)", "Al2#3"]
     bad = 0
     for text in bad_inputs:
-        res = drive(f"\"{text}\"→Str1\n⁻3→θ\nprgmMOLES\nM→ʟRES(1)")
+        res = drive(f"\"{text}\"→Str1\n⁻3.07→θ\nprgmMOLES\nM→ʟRES(1)")
         if res.vars["ʟRES"][0] != 0 or not any("FORMULA ERROR" in l for l in res.displayed()):
             bad += 1
             print(f"  {text!r} was accepted (M={res.vars['ʟRES'][0]})")
@@ -130,7 +130,20 @@ def check_parser_errors():
     return bad
 
 
+def check_stale_theta():
+    """A θ left over by another program must not hijack MOLES's start-up."""
+    bad = 0
+    for theta in ("⁻1", "⁻2", "⁻3", "⁻9", "0", "1.5"):
+        res = run_text(f"{theta}→θ\nprgmMOLES", script=["menu:7"], programs={"MOLES": MOLES_SRC})
+        menus = [e for e in res.transcript if e.get("type") == "menu"]
+        if res.error or not menus or menus[0]["title"] != "MOLE UNIT SOLVER":
+            bad += 1
+            print(f"  θ={theta} at start-up: error={res.error} menus={len(menus)}")
+    print(f"stale θ: {6 - bad}/6 start at the main menu")
+    return bad
+
+
 if __name__ == "__main__":
-    total = check_format() + check_sigfigs() + check_parser() + check_parser_errors()
+    total = check_format() + check_sigfigs() + check_parser() + check_parser_errors() + check_stale_theta()
     print("ALL UNIT CHECKS PASS" if not total else f"{total} mismatches")
     sys.exit(1 if total else 0)

@@ -15,7 +15,7 @@ The same `.8xp` file works on the TI-84 Plus (black and white) and the TI-84 Plu
 
 1. Install **TI Connect CE** (free from education.ti.com). It talks to both the TI-84 Plus and the TI-84 Plus CE.
 2. Connect the calculator with its USB cable and turn it on.
-3. Drag `MOLES.8xp` and `FORMBKEY.8xp` into the *Calculator Explorer* window, or use *Actions → Send to Calculators*. Choose **RAM** as the destination.
+3. Drag `MOLES.8xp` and `FORMBKEY.8xp` into the *Calculator Explorer* window, or use *Actions → Send to Calculators*. Choose **RAM** as the destination. MOLES is about 12.5 KB and FORMBKEY about 3.3 KB. A TI-84 Plus has about 24 KB of RAM for programs, so archive or delete other programs if the transfer fails for lack of memory.
 4. On the calculator press `prgm`, pick `MOLES`, and press `enter`.
 
 **Keep the name `MOLES`.** The program runs copies of itself for its shared routines (wrapping text, formatting numbers, reading formulas), so a renamed copy will fail with `ERR:UNDEFINED`.
@@ -37,7 +37,8 @@ Press `enter` at `MORE: [ENTER]` for the next screen. After every problem, `[ENT
 * **Parentheses**: `Ca3(PO4)2`, `Sn(C2H3O2)2`. Nested parentheses work too.
 * **Hydrates**: use `*` (the × key) or `.` for the dot: `CaSO4*2H2O`, `CuSO4*5H2O`.
 * **Scientific notation**: use the `EE` key (`2nd` `,`): `6.022ᴇ23`. The answer shows the number exactly as you typed it.
-* **Sig figs**: the program counts the significant figures in the number you typed and offers that as the default. Press `enter` (or type `0`) to accept it, or type another number from 1 to 9. Trailing zeros without a decimal point (e.g. `550`) are treated as not significant.
+* **Sig figs**: the program counts the significant figures in the number you typed and offers that as the default. Press `enter` (or type `0`) to accept it, or type another number from 1 to 9. Trailing zeros without a decimal point (e.g. `550`) are treated as not significant. `6.022*10^23` also works; only the part before `*` is counted.
+* **Blank entries**: pressing `enter` without typing anything at an amount prompt simply asks again. A blank or unknown formula or symbol shows a message and returns to the menu.
 
 ### Features
 
@@ -45,7 +46,7 @@ Press `enter` at `MORE: [ENTER]` for the next screen. After every problem, `[ENT
 2. **CONVERSIONS**: g→mol, mol→g, mol→particles, particles→mol, g→particles, particles→g, and g→atoms/ions of one element in the compound. The last one asks which element and multiplies by its total count, so Al in Al2(SO4)3 counts 2 and O counts 12.
 3. **PERCENT COMP**: percent by mass of every element, or percent water in a hydrate (the formula must contain `*`).
 4. **EMPIRICAL FORM**: choose percents or grams, then enter 1–4 symbols and amounts. The work shows moles, division by the smallest, every ratio, and any ×2…×5 trial. A ratio counts as whole if it is within 0.1 of a whole number. You can then enter a molar mass to get n and the molecular formula, or press `enter` to skip.
-5. **HYDRATE (HEAT)**: mass before heating, mass after, and the anhydrous formula. The work shows water lost, moles of each, the ratio, and the final formula, e.g. `CaSO4*2H2O`.
+5. **HYDRATE (HEAT)**: mass before heating, mass after, and the anhydrous formula. The work shows water lost (to the decimal places of the masses you typed), moles of each, the ratio, and the final formula, e.g. `CaSO4*2H2O`. If the ratio isn't within 0.1 of a whole number, a warning tells you to check the data.
 6. **SAME # MOLES**: grams or particles of substance A → moles → grams or particles of substance B.
 
 ### Numbers the program uses
@@ -67,6 +68,36 @@ Press `enter` at `MORE: [ENTER]` for the next screen. After every problem, `[ENT
 
 `PART I (MC)` lists the seven answers and then explains each one. `PART II WORK` has a menu for problems 1–6, each with its factor-label setup and final answer. The pages are 16 characters wide, so they read the same on both calculators.
 
+## How it was tested
+
+There's no calculator in the build environment, so the programs were run in `tools/tisim.py`, a TI-BASIC simulator that reads the same tokens as the `.8xp` files. It models the 16×8 and 26×10 home screens. It flags lines that scroll away before you can see them, `Goto`s that leak memory, and text too wide for the screen.
+
+* `tests/run_sessions.py` has 35 scripted sessions, each run on both screen sizes (70 runs, all passing). They cover:
+  * the four practice cases,
+  * all six Form B Part II problems,
+  * every conversion,
+  * percent composition and percent water,
+  * typing in all caps, including the cobalt-or-carbon question,
+  * error messages,
+  * blank entries,
+  * both menus of the answer key.
+* `tests/test_units.py` calls MOLES's own routines and compares them with `tools/oracle.py`, an independent Python implementation:
+  * the number formatter on 923 value/mode cases,
+  * the sig-fig counter on 21 typed numbers,
+  * the formula reader on 49 formulas, including all-caps and hydrate forms,
+  * 10 malformed formulas, which must be rejected.
+
+  All results agree.
+* An independent review covered TI-84 compatibility, logic, and the spec and chemistry. Each finding was double-checked before acting on it. The confirmed issues are fixed and covered by regression sessions:
+  * blank entries crashed the program,
+  * a leftover θ from another program could stop the menu from opening,
+  * `PBr3`-style formulas triggered the wrong question,
+  * zero subscripts were accepted,
+  * a zero amount caused a divide-by-zero,
+  * trailing zeros were dropped from the shown work.
+
+The simulator can't prove everything about real hardware. Two behaviors were taken from the calculator documentation but not tried on a device: `Input` storing an empty string when you press `enter` on a blank line, and self-calling programs. If anything behaves differently on your calculator, the `.txt` sources are easy to edit.
+
 ## Rebuilding and testing
 
 ```
@@ -74,6 +105,7 @@ pip install tivars
 python3 tools/make_formbkey.py      # regenerate FORMBKEY.txt from the key text
 python3 tools/build.py              # tokenize, lint, write MOLES.8xp and FORMBKEY.8xp
 python3 -I tests/run_sessions.py    # scripted sessions on 16x8 and 26x10 screens
+python3 -I tests/test_units.py      # MOLES routines vs. the Python oracle
 python3 -I tools/oracle.py all      # independent Python answers for the test cases
 ```
 

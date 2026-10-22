@@ -1,4 +1,4 @@
-If θ=⁻2:Then
+If θ=⁻2.07:Then
 0→θ
 0→V
 For(U,0,1)
@@ -41,7 +41,7 @@ End
 End
 Return
 End
-If θ=⁻1:Then
+If θ=⁻1.07:Then
 0→θ
 ""→Str3
 If X<0:"⁻"→Str3
@@ -126,7 +126,7 @@ End
 End
 Return
 End
-If θ=⁻6:Then
+If θ=⁻6.07:Then
 0→θ
 If R+Z>H-1:Then
 Pause "MORE: [ENTER]"
@@ -135,10 +135,10 @@ ClrHome
 End
 Return
 End
-If θ=⁻9:Then
+If θ=⁻9.07:Then
 0→θ
 "SIG FIGS? (ENTER OR 0 = "+sub("0123456789",F+1,1)+")"→Str4
-⁻2→θ
+⁻2.07→θ
 prgmMOLES
 Input Str2
 R+max(1,⁻int(⁻(1+length(Str2))/W))→R
@@ -148,33 +148,36 @@ If Z≥1:min(9,int(Z))→F
 End
 Return
 End
-If θ=⁻8:Then
+If θ=⁻8.07:Then
 0→θ
 A→X
 10→S
 1→T
-⁻1→θ
+⁻1.07→θ
 prgmMOLES
 "UNROUNDED: "+Str3+" "+Str5→Str4
-⁻2→θ
+⁻2.07→θ
 prgmMOLES
-⁻9→θ
+⁻9.07→θ
 prgmMOLES
 A→X
 F→S
 0→T
-⁻1→θ
+⁻1.07→θ
 prgmMOLES
 "ANSWER: "+Str3+" "+Str5+" ("+sub("0123456789",F+1,1)+" SF)"→Str4
-⁻2→θ
+⁻2.07→θ
 prgmMOLES
 Return
 End
-If θ=⁻4:Then
+If θ=⁻4.07:Then
 0→θ
-length(Str2)→U
+length(Str2)+1→U
 inString(Str2,"ᴇ")→K
-If K:K-1→U
+If K:K→U
+inString(Str2,"*")→K
+If K:min(U,K)→U
+U-1→U
 0→D
 0→Y
 0→Z
@@ -194,7 +197,7 @@ If V:D+Y→D
 max(1,min(9,D))→D
 Return
 End
-If θ=⁻7:Then
+If θ=⁻7.07:Then
 0→θ
 0→J
 length(Str2)→U
@@ -220,7 +223,7 @@ End
 End
 Return
 End
-If θ=⁻3:Then
+If θ=⁻3.07:Then
 0→θ
 Str1+"?"→Str8
 length(Str1)→L
@@ -252,6 +255,7 @@ If not(J):Then
 End
 Else
 inString("ABCDEFGHIJKLMNOPQRSTUVWXYZ",Str7)→Y
+If Y:Ynot(inString("abcdefghijklmnopqrstuvwxyz",sub(Str8,I+2,1)))→Y
 If Y:Then
 inString(Str0,Str6+sub("abcdefghijklmnopqrstuvwxyz",Y,1))→J
 If J and inString(Str0,Str6+" ") and inString(Str0,Str7+" "):Then
@@ -294,6 +298,10 @@ I+1→I
 inString("0123456789",sub(Str8,I,1))→U
 End
 Str9+sub(Str8,Y,I-Y)→Str9
+If V and not(Z):Then
+0→M
+"ZERO SUBSCRIPT"→Str4
+End
 If V=1:Z→ʟMRC(C)
 If V=2:Then
 For(Y,E,C)
@@ -395,6 +403,7 @@ Float
 Normal
 Full
 ClrHome
+0→θ
 16→W
 8→H
 If ΔX:Then
@@ -412,13 +421,13 @@ Lbl 1
 ClrHome
 0→R
 Input "FORMULA? ",Str1
-⁻3→θ
+⁻3.07→θ
 prgmMOLES
 If not(M):Goto M
 ClrHome
 0→R
 "MOLAR MASS OF "+Str1+":"→Str4
-⁻2→θ
+⁻2.07→θ
 prgmMOLES
 For(A,1,dim(ʟMEL))
 ʟMEL(A)→J
@@ -426,31 +435,31 @@ sub(Str0,2J-1,1+(sub(Str0,2J,1)≠" "))+": "→Str8
 ʟMCT(A)→X
 10→S
 1→T
-⁻1→θ
+⁻1.07→θ
 prgmMOLES
 Str8+Str3+" x "→Str8
 ʟAMASS(J)→X
 4→S
 0→T
-⁻1→θ
+⁻1.07→θ
 prgmMOLES
 Str8+Str3+" = "→Str8
 ʟMCT(A)ʟAMASS(J)→X
 10→S
 1→T
-⁻1→θ
+⁻1.07→θ
 prgmMOLES
 Str8+Str3+" g"→Str4
-⁻2→θ
+⁻2.07→θ
 prgmMOLES
 End
 M→A
 "g/mol "+Str1→Str5
 min(9,int(log(M))+3)→F
 "TOTAL (SUM OF ABOVE):"→Str4
-⁻2→θ
+⁻2.07→θ
 prgmMOLES
-⁻8→θ
+⁻8.07→θ
 prgmMOLES
 Pause "[ENTER]=MENU"
 Goto M
@@ -480,7 +489,7 @@ Lbl CV
 ClrHome
 0→R
 Input "FORMULA? ",Str1
-⁻3→θ
+⁻3.07→θ
 prgmMOLES
 If not(M):Goto M
 round(M,2)→M
@@ -490,7 +499,7 @@ ClrHome
 If N=7:Then
 Input "ELEMENT? ",Str2
 max(1,⁻int(⁻(9+length(Str2))/W))→R
-⁻7→θ
+⁻7.07→θ
 prgmMOLES
 J→P
 sum((ʟMEL=P)*ʟMCT)→Q
@@ -501,14 +510,16 @@ End
 End
 If N=7 and not(Q):Goto M
 2→Z
-⁻6→θ
+⁻6.07→θ
 prgmMOLES
+Repeat length(Str2)
 If N=1 or N=5 or N=7:Input "GRAMS? ",Str2
 If N=2 or N=3:Input "MOLES? ",Str2
 If N=4 or N=6:Input "PARTICLES? ",Str2
 R+max(1,⁻int(⁻(7+4(N=4 or N=6)+length(Str2))/W))→R
+End
 expr(Str2)→G
-⁻4→θ
+⁻4.07→θ
 prgmMOLES
 D→F
 ClrHome
@@ -516,16 +527,16 @@ ClrHome
 M→X
 2→S
 2→T
-⁻1→θ
+⁻1.07→θ
 prgmMOLES
 Str3→Str9
 If N≠3 and N≠4:Then
 "MOLAR MASS "+Str1+" = "+Str9+" g/mol"→Str4
-⁻2→θ
+⁻2.07→θ
 prgmMOLES
 End
 "SETUP:"→Str4
-⁻2→θ
+⁻2.07→θ
 prgmMOLES
 Str2→Str8
 If N=1 or N=5 or N=7:Str8+" g "+Str1+" x (1 mol / "+Str9+" g)"→Str8
@@ -537,14 +548,14 @@ sub(Str0,2P-1,1+(sub(Str0,2P,1)≠" "))→Str5
 Q→X
 10→S
 1→T
-⁻1→θ
+⁻1.07→θ
 prgmMOLES
 Str8+" x ("+Str3+" mol "+Str5+" / 1 mol "+Str1+")"→Str8
 End
 If N=3 or N=5 or N=7:Str8+" x (6.022ᴇ23 / 1 mol)"→Str8
 If N=6:Str8+" x ("+Str9+" g / 1 mol)"→Str8
 Str8→Str4
-⁻2→θ
+⁻2.07→θ
 prgmMOLES
 G→A
 If N=1 or N=5 or N=7:A/M→A
@@ -556,7 +567,7 @@ If N=1 or N=4:"mol "+Str1→Str5
 If N=2 or N=6:"g "+Str1→Str5
 If N=3 or N=5:"particles "+Str1→Str5
 If N=7:"atoms/ions "+Str5→Str5
-⁻8→θ
+⁻8.07→θ
 prgmMOLES
 Pause "[ENTER]=MENU"
 Goto M
@@ -566,7 +577,7 @@ Lbl P1
 ClrHome
 0→R
 Input "FORMULA? ",Str1
-⁻3→θ
+⁻3.07→θ
 prgmMOLES
 If not(M):Goto M
 round(M,2)→M
@@ -575,14 +586,14 @@ ClrHome
 M→X
 2→S
 2→T
-⁻1→θ
+⁻1.07→θ
 prgmMOLES
 Str3→Str9
 "% BY MASS IN "+Str1+" (M = "+Str9+" g/mol)"→Str4
-⁻2→θ
+⁻2.07→θ
 prgmMOLES
 4→F
-⁻9→θ
+⁻9.07→θ
 prgmMOLES
 For(A,1,dim(ʟMEL))
 ʟMEL(A)→J
@@ -592,32 +603,32 @@ sub(Str0,2J-1,1+(sub(Str0,2J,1)≠" "))→Str5
 ʟMCT(A)→X
 10→S
 1→T
-⁻1→θ
+⁻1.07→θ
 prgmMOLES
 Str8+Str3+" x "→Str8
 ʟAMASS(J)→X
 4→S
 0→T
-⁻1→θ
+⁻1.07→θ
 prgmMOLES
 Str8+Str3+") / "+Str9+" x 100"→Str4
-⁻2→θ
+⁻2.07→θ
 prgmMOLES
 100G/M→X
 10→S
 1→T
-⁻1→θ
+⁻1.07→θ
 prgmMOLES
 "UNROUNDED: "+Str3+" %"→Str4
-⁻2→θ
+⁻2.07→θ
 prgmMOLES
 100G/M→X
 F→S
 0→T
-⁻1→θ
+⁻1.07→θ
 prgmMOLES
 "ANSWER: "+Str3+" % "+Str5+" ("+sub("0123456789",F+1,1)+" SF)"→Str4
-⁻2→θ
+⁻2.07→θ
 prgmMOLES
 End
 Pause "[ENTER]=MENU"
@@ -628,7 +639,7 @@ Disp "TYPE * FOR DOT","EX: CuSO4*5H2O"
 2→R
 Input "HYDRATE? ",Str1
 R+max(1,⁻int(⁻(9+length(Str1))/W))→R
-⁻3→θ
+⁻3.07→θ
 prgmMOLES
 If not(M):Goto M
 If B=M:Then
@@ -642,31 +653,31 @@ M-B→G
 ClrHome
 0→R
 "% WATER IN "+Str1→Str4
-⁻2→θ
+⁻2.07→θ
 prgmMOLES
 M→X
 2→S
 2→T
-⁻1→θ
+⁻1.07→θ
 prgmMOLES
 Str3→Str9
 B→X
-⁻1→θ
+⁻1.07→θ
 prgmMOLES
 "WATER PART = "+Str9+" - "+Str3+" = "→Str8
 G→X
-⁻1→θ
+⁻1.07→θ
 prgmMOLES
 Str8+Str3+" g/mol"→Str4
-⁻2→θ
+⁻2.07→θ
 prgmMOLES
 "% WATER = "+Str3+" / "+Str9+" x 100"→Str4
-⁻2→θ
+⁻2.07→θ
 prgmMOLES
 100G/M→A
 "% water"→Str5
 4→F
-⁻8→θ
+⁻8.07→θ
 prgmMOLES
 Pause "[ENTER]=MENU"
 Goto M
@@ -680,7 +691,9 @@ Lbl E2
 Lbl E3
 ClrHome
 0→R
+Repeat length(Str2)
 Input "# ELEMENTS? ",Str2
+End
 max(1,⁻int(⁻(12+length(Str2))/W))→R
 expr(Str2)→N
 If N<1 or N>4 or N≠int(N):Goto M
@@ -689,26 +702,30 @@ N→dim(ʟMCT)
 N→dim(ʟMRE)
 N→dim(ʟMRC)
 0→C
+","→Str5
 For(A,1,N)
 If not(C):Then
 2→Z
-⁻6→θ
+⁻6.07→θ
 prgmMOLES
 Input "SYMBOL? ",Str2
 R+max(1,⁻int(⁻(8+length(Str2))/W))→R
-⁻7→θ
+⁻7.07→θ
 prgmMOLES
 J→ʟMEL(A)
 If not(J):1→C
 End
 If not(C):Then
 2→Z
-⁻6→θ
+⁻6.07→θ
 prgmMOLES
+Repeat length(Str2)
 If G:Input "PERCENT? ",Str2
 If not(G):Input "GRAMS? ",Str2
 R+max(1,⁻int(⁻(7+2G+length(Str2))/W))→R
+End
 expr(Str2)→ʟMCT(A)
+Str5+Str2+","→Str5
 End
 End
 If C:Then
@@ -716,70 +733,73 @@ Disp "UNKNOWN SYMBOL"
 Pause "[ENTER]"
 End
 If C:Goto M
+If min(ʟMCT)≤0:Then
+Disp "AMOUNTS MUST","BE > 0"
+Pause "[ENTER]"
+End
+If min(ʟMCT)≤0:Goto M
 ClrHome
 0→R
 If G:Then
 "ASSUME 100 g, SO EACH % = g"→Str4
-⁻2→θ
+⁻2.07→θ
 prgmMOLES
 End
 "MOLES = g / ATOMIC MASS:"→Str4
-⁻2→θ
+⁻2.07→θ
 prgmMOLES
+2→I
 For(A,1,N)
 ʟMEL(A)→J
 ʟMCT(A)/ʟAMASS(J)→ʟMRE(A)
 sub(Str0,2J-1,1+(sub(Str0,2J,1)≠" "))+": "→Str8
-ʟMCT(A)→X
-10→S
-1→T
-⁻1→θ
-prgmMOLES
-Str8+Str3+" / "→Str8
+inString(Str5,",",I)→L
+Str8+sub(Str5,I,L-I)+" / "→Str8
+L+1→I
 ʟAMASS(J)→X
 4→S
 0→T
-⁻1→θ
+⁻1.07→θ
 prgmMOLES
 Str8+Str3+" = "→Str8
 ʟMRE(A)→X
 0→T
-⁻1→θ
+⁻1.07→θ
 prgmMOLES
 Str8+Str3+" mol"→Str4
-⁻2→θ
+⁻2.07→θ
 prgmMOLES
 End
 min(ʟMRE)→P
 P→X
 4→S
 0→T
-⁻1→θ
+⁻1.07→θ
 prgmMOLES
 Str3→Str9
 "DIVIDE BY SMALLEST ("+Str9+"):"→Str4
-⁻2→θ
+⁻2.07→θ
 prgmMOLES
 For(A,1,N)
 ʟMRE(A)/P→ʟMRC(A)
 ʟMEL(A)→J
 sub(Str0,2J-1,1+(sub(Str0,2J,1)≠" "))+": "→Str8
 ʟMRE(A)→X
-⁻1→θ
+⁻1.07→θ
 prgmMOLES
 Str8+Str3+" / "+Str9+" = "→Str8
 ʟMRC(A)→X
-⁻1→θ
+⁻1.07→θ
 prgmMOLES
 Str8+Str3→Str4
-⁻2→θ
+⁻2.07→θ
 prgmMOLES
 End
 1→F
 max(abs(ʟMRC-round(ʟMRC,0)))>.1→C
 If C:Then
 "NOT ALL WITHIN 0.1 OF A WHOLE NUMBER, SO MULTIPLY:"→Str4
-⁻2→θ
+⁻2.07→θ
 prgmMOLES
 End
 While C and F<5
@@ -789,18 +809,18 @@ For(A,1,N)
 ʟMEL(A)→J
 Str8+" "+sub(Str0,2J-1,1+(sub(Str0,2J,1)≠" "))+" "→Str8
 FʟMRC(A)→X
-⁻1→θ
+⁻1.07→θ
 prgmMOLES
 Str8+Str3→Str8
 End
 Str8→Str4
-⁻2→θ
+⁻2.07→θ
 prgmMOLES
 max(abs(FʟMRC-round(FʟMRC,0)))>.1→C
 End
 If C:Then
 "NO MULTIPLIER 2-5 WORKS. ROUNDING THE x1 RATIOS."→Str4
-⁻2→θ
+⁻2.07→θ
 prgmMOLES
 1→F
 End
@@ -813,20 +833,20 @@ If ʟMCT(A)≠1:Then
 ʟMCT(A)→X
 10→S
 1→T
-⁻1→θ
+⁻1.07→θ
 prgmMOLES
 Str9+Str3→Str9
 End
 End
 "WHOLE-NUMBER RATIO (x"+sub("0123456789",F+1,1)+") GIVES"→Str4
-⁻2→θ
+⁻2.07→θ
 prgmMOLES
 "EMPIRICAL FORMULA: "+Str9→Str4
-⁻2→θ
+⁻2.07→θ
 prgmMOLES
 round(sum(seq(ʟMCT(Z)ʟAMASS(ʟMEL(Z)),Z,1,N)),2)→Q
 "MOLAR MASS FOR MOLECULAR FORMULA? (ENTER OR 0 = SKIP)"→Str4
-⁻2→θ
+⁻2.07→θ
 prgmMOLES
 Input Str2
 R+max(1,⁻int(⁻(1+length(Str2))/W))→R
@@ -836,25 +856,25 @@ If L>0:Then
 Q→X
 2→S
 2→T
-⁻1→θ
+⁻1.07→θ
 prgmMOLES
 "EMPIRICAL MASS = "+Str3+" g/mol"→Str4
-⁻2→θ
+⁻2.07→θ
 prgmMOLES
 "n = "+Str2+" / "+Str3+" = "→Str8
 L/Q→X
 4→S
 1→T
-⁻1→θ
+⁻1.07→θ
 prgmMOLES
 Str8+Str3+", ROUNDS TO "→Str8
 max(1,round(L/Q,0))→I
 I→X
 10→S
-⁻1→θ
+⁻1.07→θ
 prgmMOLES
 Str8+Str3→Str4
-⁻2→θ
+⁻2.07→θ
 prgmMOLES
 ""→Str9
 For(A,1,N)
@@ -862,13 +882,13 @@ For(A,1,N)
 Str9+sub(Str0,2J-1,1+(sub(Str0,2J,1)≠" "))→Str9
 If IʟMCT(A)≠1:Then
 IʟMCT(A)→X
-⁻1→θ
+⁻1.07→θ
 prgmMOLES
 Str9+Str3→Str9
 End
 End
 "MOLECULAR FORMULA: "+Str9→Str4
-⁻2→θ
+⁻2.07→θ
 prgmMOLES
 End
 Pause "[ENTER]=MENU"
@@ -877,22 +897,26 @@ Lbl 5
 ClrHome
 Disp "HYDRATE HEATING"
 1→R
+Repeat length(Str5)
 Input "g BEFORE? ",Str5
 R+max(1,⁻int(⁻(10+length(Str5))/W))→R
+End
+Repeat length(Str2)
 Input "g AFTER? ",Str2
 R+max(1,⁻int(⁻(9+length(Str2))/W))→R
+End
 Disp "ANHYDROUS SALT"
 R+1→R
 Input "FORMULA? ",Str1
 R+max(1,⁻int(⁻(9+length(Str1))/W))→R
 expr(Str5)→G
 expr(Str2)→A
-If G≤A:Then
-Disp "AFTER MUST BE","LESS THAN BEFORE"
+If G≤A or A≤0:Then
+Disp "NEED BEFORE >","AFTER > 0"
 Pause "[ENTER]"
 End
-If G≤A:Goto M
-⁻3→θ
+If G≤A or A≤0:Goto M
+⁻3.07→θ
 prgmMOLES
 If not(M):Goto M
 round(M,2)→M
@@ -900,92 +924,102 @@ round(2ʟAMASS(1)+ʟAMASS(8),2)→Q
 G-A→N
 A/M→P
 N/Q→L
+inString(Str5,".")→K
+If K:length(Str5)-K→K
+inString(Str2,".")→U
+If U:length(Str2)-U→U
+min(K,U)→O
 ClrHome
 0→R
 "WATER LOST:"→Str4
-⁻2→θ
+⁻2.07→θ
 prgmMOLES
 N→X
-10→S
-1→T
-⁻1→θ
+O→S
+2→T
+⁻1.07→θ
 prgmMOLES
 Str5+" g - "+Str2+" g = "+Str3+" g"→Str4
-⁻2→θ
+⁻2.07→θ
 prgmMOLES
 "MOLES OF "+Str1+":"→Str4
-⁻2→θ
+⁻2.07→θ
 prgmMOLES
 M→X
 2→S
 2→T
-⁻1→θ
+⁻1.07→θ
 prgmMOLES
 Str2+" g x (1 mol / "+Str3+" g) = "→Str8
 P→X
 4→S
 0→T
-⁻1→θ
+⁻1.07→θ
 prgmMOLES
 Str8+Str3+" mol"→Str4
-⁻2→θ
+⁻2.07→θ
 prgmMOLES
 "MOLES OF H2O:"→Str4
-⁻2→θ
+⁻2.07→θ
 prgmMOLES
 N→X
-10→S
-1→T
-⁻1→θ
+O→S
+2→T
+⁻1.07→θ
 prgmMOLES
 Str3+" g x (1 mol / "→Str8
 Q→X
 2→S
 2→T
-⁻1→θ
+⁻1.07→θ
 prgmMOLES
 Str8+Str3+" g) = "→Str8
 L→X
 4→S
 0→T
-⁻1→θ
+⁻1.07→θ
 prgmMOLES
 Str8+Str3+" mol"→Str4
-⁻2→θ
+⁻2.07→θ
 prgmMOLES
 "RATIO = MOL H2O / MOL "+Str1+":"→Str4
-⁻2→θ
+⁻2.07→θ
 prgmMOLES
 Str3+" / "→Str8
 P→X
-⁻1→θ
+⁻1.07→θ
 prgmMOLES
 Str8+Str3+" = "→Str8
 L/P→X
-⁻1→θ
+⁻1.07→θ
 prgmMOLES
 Str8+Str3→Str4
-⁻2→θ
+⁻2.07→θ
 prgmMOLES
 round(L/P,0)→I
 I→X
 10→S
 1→T
-⁻1→θ
+⁻1.07→θ
 prgmMOLES
 "x = "+Str3+" (ROUNDED)"→Str4
-⁻2→θ
+⁻2.07→θ
 prgmMOLES
 If I:Then
 Str1+"*"→Str8
 If I>1:Str8+Str3→Str8
 Str8+"H2O"→Str8
 Else
-"NO WATER FOUND"→Str8
+"NONE (RATIO < 0.5)"→Str8
 End
 "FORMULA: "+Str8→Str4
-⁻2→θ
+⁻2.07→θ
 prgmMOLES
+If abs(L/P-I)>.1:Then
+"WARNING: RATIO IS NOT WITHIN 0.1 OF A WHOLE NUMBER. CHECK THE DATA."→Str4
+⁻2.07→θ
+prgmMOLES
+End
 Pause "[ENTER]=MENU"
 Goto M
 Lbl 6
@@ -1007,25 +1041,27 @@ ClrHome
 0→R
 Input "FORMULA A? ",Str1
 R+max(1,⁻int(⁻(11+length(Str1))/W))→R
-⁻3→θ
+⁻3.07→θ
 prgmMOLES
 If not(M):Goto M
 round(M,2)→M
 2→Z
-⁻6→θ
+⁻6.07→θ
 prgmMOLES
+Repeat length(Str2)
 If N=1:Input "GRAMS A? ",Str2
 If N=2:Input "PARTICLES A? ",Str2
 R+max(1,⁻int(⁻(9+4(N=2)+length(Str2))/W))→R
+End
 expr(Str2)→G
-⁻4→θ
+⁻4.07→θ
 prgmMOLES
 D→F
 If N=1:Then
 M→X
 2→S
 2→T
-⁻1→θ
+⁻1.07→θ
 prgmMOLES
 Str2+" g "+Str1+" x (1 mol / "+Str3+" g)"→Str5
 G/M→G
@@ -1035,11 +1071,11 @@ G/6.022ᴇ23→G
 End
 Str1→Str3
 2→Z
-⁻6→θ
+⁻6.07→θ
 prgmMOLES
 Input "FORMULA B? ",Str1
 R+max(1,⁻int(⁻(11+length(Str1))/W))→R
-⁻3→θ
+⁻3.07→θ
 prgmMOLES
 If not(M):Goto M
 round(M,2)→M
@@ -1047,13 +1083,13 @@ Str5+" x (1 mol "+Str1+" / 1 mol "+Str3+")"→Str5
 ClrHome
 0→R
 "SAME NUMBER OF MOLES OF A AND B:"→Str4
-⁻2→θ
+⁻2.07→θ
 prgmMOLES
 If A=1:Then
 M→X
 2→S
 2→T
-⁻1→θ
+⁻1.07→θ
 prgmMOLES
 Str5+" x ("+Str3+" g "+Str1+" / 1 mol)"→Str4
 GM→A
@@ -1063,17 +1099,17 @@ Str5+" x (6.022ᴇ23 / 1 mol)"→Str4
 6.022ᴇ23G→A
 "particles "+Str1→Str5
 End
-⁻2→θ
+⁻2.07→θ
 prgmMOLES
 G→X
 4→S
 1→T
-⁻1→θ
+⁻1.07→θ
 prgmMOLES
 "(MOLES OF A = MOLES OF B = "+Str3+" mol)"→Str4
-⁻2→θ
+⁻2.07→θ
 prgmMOLES
-⁻8→θ
+⁻8.07→θ
 prgmMOLES
 Pause "[ENTER]=MENU"
 Goto M

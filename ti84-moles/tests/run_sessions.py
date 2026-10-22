@@ -34,9 +34,9 @@ SESSIONS = {
         "ANSWER: 3.01ᴇ23 particles CO2 (3 SF)",
     ]),
     "practice CuSO4 hydrate": (MOLES, ["menu:5", "5.00", "3.20", "CuSO4", QUIT], [
-        "5.00 g - 3.20 g = 1.8 g",
+        "5.00 g - 3.20 g = 1.80 g",
         "3.20 g x (1 mol / 159.62 g) = 0.02005 mol",
-        "1.8 g x (1 mol / 18.02 g) = 0.09989 mol",
+        "1.80 g x (1 mol / 18.02 g) = 0.09989 mol",
         "0.09989 / 0.02005 = 4.983",
         "x = 5",
         "FORMULA: CuSO4*5H2O",
@@ -71,7 +71,7 @@ SESSIONS = {
         "ANSWER: 1.9ᴇ24 atoms/ions Al (2 SF)",
     ]),
     "formB 4 empirical + molecular": (MOLES, ["menu:4", "menu:1", "3", "C", "60.0", "H", "4.48", "O", "35.5", "540", QUIT], [
-        "C: 60 / 12.01 = 4.996 mol",
+        "C: 60.0 / 12.01 = 4.996 mol",
         "H: 4.48 / 1.008 = 4.444 mol",
         "O: 35.5 / 16.00 = 2.219 mol",
         "DIVIDE BY SMALLEST (2.219)",
@@ -142,6 +142,34 @@ SESSIONS = {
     "error: missing paren": (MOLES, ["menu:1", "Al2(SO4", QUIT], ["FORMULA ERROR:", "MISSING )"]),
     "error: element not in formula": (MOLES, ["menu:2", "menu:7", "H2O", "Na", QUIT], ["NOT IN FORMULA"]),
     "nested parens": (MOLES, ["menu:1", "Ca3(PO4)2", "", QUIT], ["UNROUNDED: 310.18 g/mol"]),
+    # regressions for the review findings
+    "blank amount re-asks instead of crashing": (MOLES, ["menu:2", "menu:1", "H2O", "", "36.0", "", QUIT], [
+        "ANSWER: 2.00 mol H2O (3 SF)",
+    ]),
+    "blank empirical inputs re-ask": (MOLES, ["menu:4", "menu:2", "", "2", "C", "", "85.6", "H", "14.4", "", QUIT], [
+        "C: 85.6 / 12.01", "EMPIRICAL FORMULA: CH2",
+    ]),
+    "blank hydrate masses re-ask": (MOLES, ["menu:5", "", "19.06", "", "15.07", "CaSO4", QUIT], [
+        "FORMULA: CaSO4*2H2O",
+    ]),
+    "mixed case PBr3 needs no question": (MOLES, ["menu:1", "PBr3", "", QUIT], [
+        "P: 1 x 30.97", "Br: 3 x 79.90", "UNROUNDED: 270.67 g/mol",
+    ]),
+    "mixed case SCl2 and BAs": (MOLES, ["menu:1", "SCl2", "", "menu:1", "BAs", "", QUIT], [
+        "UNROUNDED: 102.97 g/mol", "UNROUNDED: 85.73 g/mol",
+    ]),
+    "zero subscript is an error": (MOLES, ["menu:1", "C0", QUIT], ["FORMULA ERROR:", "ZERO SUBSCRIPT"]),
+    "6.022*10^23 typed with * counts 4 sig figs": (MOLES, ["menu:2", "menu:4", "H2O", "6.022*10^23", "", QUIT], [
+        "SIG FIGS? (ENTER OR 0 = 4)", "ANSWER: 1.000 mol H2O (4 SF)",
+    ]),
+    "zero empirical amount is rejected": (MOLES, ["menu:4", "menu:2", "2", "C", "0", "H", "1", QUIT], [
+        "AMOUNTS MUST", "BE > 0",
+    ]),
+    "zero mass after heating is rejected": (MOLES, ["menu:5", "5", "0", "CuSO4", QUIT], ["NEED BEFORE >", "AFTER > 0"]),
+    "fractional hydrate ratio warns": (MOLES, ["menu:5", "10.00", "9.380", "CaSO4", QUIT], [
+        "10.00 g - 9.380 g = 0.62 g", "x = 0", "FORMULA: NONE (RATIO < 0.5)",
+        "WARNING: RATIO IS NOT WITHIN 0.1 OF A WHOLE NUMBER",
+    ]),
     "answer key part I": (KEY, ["menu:1", "menu:3"], ["1:D 2:D 3:C", "4:C 5:B 6:C", "7:D"]),
     "answer key part II #4": (KEY, ["menu:2", "menu:4", "menu:7", "menu:3"], ["C27H24O12", "C9H8O4"]),
 }
