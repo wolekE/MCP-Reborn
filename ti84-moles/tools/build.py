@@ -106,6 +106,18 @@ def lint(prog_name, lines):
                     if any(x == '"' for x in raw[k + 1:]):
                         errors.append(f"{prog_name}:{lineno}: store arrow inside a string literal")
                     in_str = False
+            # A command name missing its trailing space (e.g. a bare "Pause") is tokenised as
+            # separate letters, which is a syntax error on the calculator.
+            in_str = False
+            for n in names:
+                if n == '"':
+                    in_str = not in_str
+                elif n == "→":
+                    in_str = False
+                elif not in_str and len(n) == 1 and "a" <= n <= "z":
+                    errors.append(f"{prog_name}:{lineno}: lowercase letter outside a string "
+                                  f"(a command written without its trailing space?): {''.join(names)}")
+                    break
             if first == "Lbl ":
                 lbl = "".join(names[1:])
                 if lbl in labels:

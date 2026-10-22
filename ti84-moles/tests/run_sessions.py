@@ -62,7 +62,7 @@ SESSIONS = {
     ]),
     "formB 2 Na atoms": (MOLES, ["menu:2", "menu:5", "Na", "5.0", "", QUIT], [
         "5.0 g Na x (1 mol / 22.99 g) x (6.022ᴇ23 / 1 mol)",
-        "UNROUNDED: 1.309699869ᴇ23 particles Na",
+        "UNROUNDED: 1.30969987ᴇ23 particles Na",
         "ANSWER: 1.3ᴇ23 particles Na (2 SF)",
     ]),
     "formB 3 Al ions": (MOLES, ["menu:2", "menu:7", "Al2(SO4)3", "Al", "550", "", QUIT], [
@@ -76,12 +76,13 @@ SESSIONS = {
         "O: 35.5 / 16.00 = 2.219 mol",
         "DIVIDE BY SMALLEST (2.219)",
         "C: 4.996 / 2.219 = 2.252",
-        "TRY x2",
-        "TRY x3",
-        "TRY x4: C 9.007 H 8.013 O 4.000",
+        "NOT ALL WITHIN 0.1 OF A WHOLE NUMBER, SO MULTIPLY:",
+        "x2: C 4.503 H 4.006 O 2.000",
+        "x3: C 6.755 H 6.009 O 3.000",
+        "x4: C 9.007 H 8.013 O 4.000",
         "EMPIRICAL FORMULA: C9H8O4",
         "EMPIRICAL MASS = 180.15 g/mol",
-        "n = 540 / 180.15 = 2.997, ROUNDS TO 3",
+        "n = 540 / 180.15 = 2.998, ROUNDS TO 3",
         "MOLECULAR FORMULA: C27H24O12",
     ]),
     "formB 5 hydrate (caps)": (MOLES, ["menu:5", "19.06", "15.07", "CASO4", QUIT], [
@@ -150,18 +151,11 @@ def flat(res, key):
     return res[key] if isinstance(res, dict) else getattr(res, key)
 
 
+PAGE_BREAK = "MORE: [ENTER]"
+
+
 def displayed_text(res):
-    out = []
-    for ev in flat(res, "transcript"):
-        if isinstance(ev, dict):
-            for k in ("text", "line", "prompt", "typed", "value"):
-                if isinstance(ev.get(k), str):
-                    out.append(ev[k])
-            if isinstance(ev.get("lines"), list):
-                out += [x for x in ev["lines"] if isinstance(x, str)]
-        else:
-            out.append(str(ev))
-    return " ".join(out)
+    return " ".join(line for line in res.displayed() if line != PAGE_BREAK)
 
 
 def main():
@@ -191,7 +185,7 @@ def main():
             if verbose:
                 for snap in flat(res, "screens"):
                     print("      +" + "-" * (16 if model == "84p" else 26) + "+")
-                    rows = snap if isinstance(snap, list) else snap.get("rows", [])
+                    rows = snap["rows"]
                     for row in rows:
                         print("      |" + row + "|")
     print(f"\n{failures} failing session(s)")
