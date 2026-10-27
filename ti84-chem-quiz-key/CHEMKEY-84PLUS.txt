@@ -1,0 +1,112 @@
+Full
+Lbl M
+Menu("CHEM QUIZ KEY","GO TO QUESTION",G,"BROWSE ALL",B,"ANSWER LIST",L,"HELP",H,"QUIT",Q)
+Lbl G
+ClrHome
+Disp "QUESTION NUMBER"
+Input "(1-30)? ",N
+If N<1 or N>30 or fPart(N)
+Goto G
+1→P
+Goto V
+Lbl B
+1→N
+1→P
+Lbl V
+If N=1
+"Question 1  (B) (B) 0.005 km                    500 cm = 5 m,   and 5 m / 1000 =0.005 km."→Str9
+If N=2
+"Question 2  (A) (A) 5.80 g/mL                   Density = mass /volume = 16.3 g / 2.81 mL."→Str9
+If N=3
+"Question 3  (B) (B) iron (II)   sulfide                         Sulfide is S²-, so iron is Fe²+.Iron has more   than one        possible charge,so a Roman      numeral is      needed."→Str9
+If N=4
+"Question 4  (B) (B) nickel (II) hydroxide                       Two OH- ions    balance Ni²+.   Ionic compounds do not use      prefixes."→Str9
+If N=5
+"Question 5  (A) (A) CuSO4                       Cu²+ and SO4²-  combine 1 to 1."→Str9
+If N=6
+"Question 6  (C) (C) nitrogen    dioxide                         Molecular       compounds use   prefixes, and   'mono' is       dropped on the  first element."→Str9
+If N=7
+"Question 7  (D) (D) Al2O3                       The 2 to 3 ratiocannot be       reduced. N2O4   reduces to NO2, P4O10 to P2O5,  and C6H12O6 to  CH2O."→Str9
+If N=8
+"Question 8  (B) (B) AsCl4                       Arsenic is As   (Ar is argon).  'Tetra' means 4."→Str9
+If N=9
+"Question 9  (D) (D) 36 protons  and 44 neutrons                 Krypton's atomicnumber is 36,   and 80 - 36 =   44. Electrons   are not in the  nucleus."→Str9
+If N=10
+"Question 10 (B) (B) the number  of neutrons                     Neutrons requirethe mass number as well."→Str9
+If N=11
+"Question 11 (D) (D) 310 g                       3(40.08) +      2(30.97) +      8(16.00) =      310.18 g/mol."→Str9
+If N=12
+"Question 12 (D) (D) H2S, CuCl2, KI                              The other sets  contain elementsor ions."→Str9
+If N=13
+"Question 13 (B) (B) -1          Element 53 is   iodine, a       halogen, which  gains one       electron."→Str9
+If N=14
+"Question 14 (D) (D) 27%                         Carbon is 24.02 g out of 90.04  g/mol, which is 26.7%."→Str9
+If N=15
+"Question 15 (B) (B) atom"→Str9
+If N=16
+"Question 16 (D) (D) sodium      chloride                        Binary means    exactly two     elements. The   other choices   contain oxygen."→Str9
+If N=17
+"Question 17 (C) (C) 10.2%                       (55.2 - 50.1) / 50.1 * 100 =    10.2%."→Str9
+If N=18
+"Question 18 (B) (B) ion"→Str9
+If N=19
+"Question 19 (C) (C) 45.5 amu                    (45 * 0.83) +   (48 * 0.17) =   45.51."→Str9
+If N=20
+"Question 20 (B) (B) 7.26ᴇ16 Hz                  Frequency = c / wavelength =    (3.00ᴇ8 m/s) /  (4.13ᴇ⁻9 m)."→Str9
+If N=21
+"Question 21 (B) (B) 2                           Alkaline earth  metals are in   Group 2."→Str9
+If N=22
+"Question 22 (A) (A) atomic      numbers"→Str9
+If N=23
+"Question 23 (A) (A) anion                       Gaining an      electron makes  it negative."→Str9
+If N=24
+"Question 24 (C) (C) Mn                          Mn is [Ar]4s2   3d5. Cr is an   exception that  ends in 4s1 3d5."→Str9
+If N=25
+"Question 25 (A) (A) 1380 g                      Mg3(PO4)2 is    262.9 g/mol, and5.25 mol * 262.9g/mol = 1380 g."→Str9
+If N=26
+"Question 26 (D) (D) 12                          CH2O is 30      g/mol, and 180 /30 = 6, giving  C6H12O6."→Str9
+If N=27
+"Question 27 (B) (B) 7.34ᴇ23                     100.0 g / 164.1 g/mol = 0.609   mol Ca(NO3)2.   That gives 2 *  0.609 = 1.219   mol NO3-, and   1.219 * 6.022ᴇ23= 7.34ᴇ23 ions."→Str9
+If N=28
+"Question 28 (C) (C) carbonic    acid            Acids from      '-ate' ions are named '-ic      acid'."→Str9
+If N=29
+"Question 29 (C) (C) Beaker                      The short, wide cup with a      pouring spout."→Str9
+If N=30
+"Question 30 (A) (A) Graduated   cylinder                        The tall, narrowcylinder with   volume markings."→Str9
+int((length(Str9)+79)/96)→K
+ClrHome
+Output(1,1,sub(Str9,1,16))
+96(P-1)→A
+Output(2,1,sub(Str9,17+A,min(96,length(Str9)-16-A)))
+Output(8,1,"<PREV")
+Output(8,12,"NEXT>")
+If K>1
+Output(8,7,sub("v^",1+(P=K),1)+sub("123456789",P,1)+"/"+sub("123456789",K,1))
+Repeat max(X={24,25,26,34,45,105})
+getKey→X
+End
+If X=45
+Goto M
+If X=105
+26+8(P<K)→X
+P+(X=34 and P<K)-(X=25 and P>1)→P
+If X=24 or X=26
+1→P
+N+(X=26)-(X=24)→N
+N+30(N<1)-30(N>30)→N
+Goto V
+Lbl L
+ClrHome
+Output(1,1," 1B  2A  3B  4B  5A  6C  7D  8B  9D 10B 11D 12D 13B 14D 15B 16D 17C 18B 19C 20B 21B 22A 23A 24C 25A 26D 27B 28C 29C 30A")
+Repeat getKey
+End
+Goto M
+Lbl H
+ClrHome
+Output(1,1,"HOW TO USE                      LEFT/RIGHT ARROW prev/next ques.UP/DOWN ARROW    scroll a page  ENTER  continue CLEAR  menu")
+Repeat getKey
+End
+Goto M
+Lbl Q
+ClrHome
+DelVar Str9
